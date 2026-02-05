@@ -578,7 +578,7 @@
 
         /* Result Section */
         .result-section {
-            padding: 60px 0;
+            padding: 20px 0;
             display: none;
             text-align: center;
         }
@@ -590,7 +590,7 @@
         .result-card {
             background: #111111;
             border-radius: 30px;
-            padding: 50px 40px;
+            padding: 30px 25px;
             border: 2px solid #E31C25;
             box-shadow: 0 0 40px rgba(227, 28, 37, 0.3);
             max-width: 600px;
@@ -733,30 +733,51 @@
 
         /* Trait Bars */
         .traits-section {
-            margin-top: 40px;
+            margin-top: 25px;
             text-align: left;
         }
 
         .traits-title {
             font-size: 1rem;
             color: var(--text-muted);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
         .trait-item {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .trait-item:hover {
+            transform: translateX(5px);
+        }
+
+        .trait-item:hover .trait-name {
+            color: #E31C25;
         }
 
         .trait-label {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 0.85rem;
             margin-bottom: 6px;
         }
 
         .trait-name {
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .trait-name::after {
+            content: 'ℹ️';
+            font-size: 0.7rem;
+            opacity: 0.6;
         }
 
         .trait-value {
@@ -775,6 +796,139 @@
             background: var(--gradient-primary);
             border-radius: 50px;
             transition: width 0.8s ease;
+        }
+
+        /* Trait Popup */
+        .trait-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .trait-popup.active {
+            display: flex;
+        }
+
+        .trait-popup-content {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            border: 2px solid #E31C25;
+            text-align: center;
+        }
+
+        .trait-popup-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #E31C25;
+            margin-bottom: 15px;
+        }
+
+        .trait-popup-desc {
+            font-size: 1rem;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .trait-popup-close {
+            background: #E31C25;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .trait-popup-close:hover {
+            transform: scale(1.05);
+        }
+
+        /* Analysis Section */
+        .analysis-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .analysis-btn {
+            background: linear-gradient(135deg, #E31C25, #ff4757);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(227, 28, 37, 0.4);
+        }
+
+        .analysis-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(227, 28, 37, 0.5);
+        }
+
+        .analysis-content {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+            background: #0a0a0a;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #333;
+        }
+
+        .analysis-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .analysis-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #E31C25;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .analysis-text {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.7;
+        }
+
+        .analysis-text p {
+            margin-bottom: 12px;
+        }
+
+        .analysis-highlight {
+            background: rgba(227, 28, 37, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #ff6b7a;
+            font-weight: 600;
         }
 
         /* Footer */
@@ -1200,8 +1354,20 @@
                 <p class="result-description" id="resultDescription"></p>
                 
                 <div class="traits-section" id="traitsSection">
-                    <h4 class="traits-title">Öne Çıkan Kişilik Özeliklerin</h4>
+                    <h4 class="traits-title">🧠 Öne Çıkan Kişilik Özeliklerin</h4>
+                    <p style="font-size: 0.75rem; color: #666; margin-bottom: 12px; text-align: center;">Detay için özelliklere tıkla</p>
                     <div id="traitsContainer"></div>
+                </div>
+
+                <div class="analysis-section">
+                    <button class="analysis-btn" onclick="showAnalysis()">
+                        <span>🔮</span>
+                        Analizin Devamı
+                    </button>
+                    <div class="analysis-content" id="analysisContent">
+                        <div class="analysis-title">✨ Neden Bu Karaktere Benziyorsun?</div>
+                        <div class="analysis-text" id="analysisText"></div>
+                    </div>
                 </div>
 
                 <div class="similar-section">
@@ -1229,6 +1395,15 @@
         </div>
     </section>
 
+    <!-- Trait Popup -->
+    <div class="trait-popup" id="traitPopup">
+        <div class="trait-popup-content">
+            <div class="trait-popup-title" id="traitPopupTitle"></div>
+            <div class="trait-popup-desc" id="traitPopupDesc"></div>
+            <button class="trait-popup-close" onclick="closeTraitPopup()">Anladım</button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -1245,6 +1420,67 @@
         let currentQuestion = 0;
         let userTraitScores = {};
         let traitsInfo = {};
+        let currentCharacter = null;
+
+        // Trait descriptions for popup
+        const traitDescriptions = {
+            leadership: {
+                title: "Liderlik",
+                desc: "Başkalarını yönlendirme, ilham verme ve sorumluluk alma yeteneğin. Yüksek liderlik skoru, insanların seni doğal olarak takip ettiğini ve zor kararları almaktan çekinmediğini gösterir."
+            },
+            logic: {
+                title: "Mantık", 
+                desc: "Analitik düşünme ve rasyonel karar verme kapasiten. Yüksek mantık skoru, duygulardan çok verilere dayandığını ve stratejik planlar yapabildiğini gösterir."
+            },
+            empathy: {
+                title: "Empati",
+                desc: "Başkalarının duygularını anlama ve onlarla bağ kurma yeteneğin. Yüksek empati, insanların sana açıldığını ve güvendiklerini gösterir."
+            },
+            ambition: {
+                title: "Hırs",
+                desc: "Hedeflerine ulaşma kararlılığın ve başarı motivasyonun. Yüksek hırs skoru, engellere rağmen pes etmediğini ve sürekli gelişim peşinde olduğunu gösterir."
+            },
+            risk: {
+                title: "Risk Alma",
+                desc: "Belirsizlik karşısında cesur kararlar alma eğilimin. Yüksek risk skoru, konfor alanından çıkmaktan korkmadığını ve fırsatları değerlendirdiğini gösterir."
+            },
+            integrity: {
+                title: "Dürüstlük",
+                desc: "Ahlaki değerlere bağlılığın ve tutarlılığın. Yüksek dürüstlük skoru, doğru olanı yapmak için bedel ödemeye hazır olduğunu gösterir."
+            },
+            loyalty: {
+                title: "Sadakat",
+                desc: "Sevdiklerine ve inandığın değerlere bağlılığın. Yüksek sadakat skoru, zor zamanlarda bile yanlarında durduğunu gösterir."
+            },
+            independence: {
+                title: "Bağımsızlık",
+                desc: "Kendi yolunu çizme ve özgün kalma isteğin. Yüksek bağımsızlık, başkalarının onayına ihtiyaç duymadan hareket edebildiğini gösterir."
+            },
+            sociability: {
+                title: "Sosyallik",
+                desc: "İnsanlarla vakit geçirmekten aldığın enerji. Yüksek sosyallik skoru, gruplar içinde rahat olduğunu ve ilişki kurmada başarılı olduğunu gösterir."
+            },
+            humor: {
+                title: "Mizah",
+                desc: "Hayatın komik yanlarını görme ve başkalarını güldürme yeteneğin. Yüksek mizah skoru, zor anları bile hafifletebileceğini gösterir."
+            },
+            creativity: {
+                title: "Yaratıcılık",
+                desc: "Yeni fikirler üretme ve farklı düşünme kapasiten. Yüksek yaratıcılık, kalıpların dışında çözümler bulabildiğini gösterir."
+            },
+            resilience: {
+                title: "Dayanıklılık",
+                desc: "Zorluklardan sonra toparlanma gücün. Yüksek dayanıklılık, hayatın seni yıkamayacağını ve her düşüşten daha güçlü kalktığını gösterir."
+            },
+            control: {
+                title: "Kontrol",
+                desc: "Durumları ve çevreni yönetme ihtiyacın. Yüksek kontrol skoru, planlı hareket ettiğini ve belirsizlikten rahatsız olduğunu gösterir."
+            },
+            sensitivity: {
+                title: "Hassasiyet",
+                desc: "Duygusal derinliğin ve çevresel uyaranlara tepkin. Yüksek hassasiyet, ince detayları fark ettiğini ve derin düşündüğünü gösterir."
+            }
+        };
 
         // Initialize trait scores with baseline
         function initializeTraits() {
@@ -1491,9 +1727,13 @@
 
         // Show result
         function showResult(character, similar) {
+            currentCharacter = character;
             document.getElementById('loading').classList.remove('active');
             document.getElementById('result').classList.add('active');
             document.body.style.overflow = 'auto';
+            
+            // Reset analysis
+            document.getElementById('analysisContent').classList.remove('active');
             
             // Set character emoji
             const resultImage = document.getElementById('resultCharacterImage');
@@ -1517,6 +1757,8 @@
                 const percentage = (value / 10) * 100;
                 const traitDiv = document.createElement('div');
                 traitDiv.className = 'trait-item';
+                traitDiv.setAttribute('data-trait', key);
+                traitDiv.onclick = () => showTraitPopup(key);
                 traitDiv.innerHTML = `
                     <div class="trait-label">
                         <span class="trait-name">${traitsInfo[key] || key}</span>
@@ -1582,6 +1824,112 @@
                     alert('Paylaşım metni: ' + text);
                 });
             }
+        }
+
+        // Show trait popup
+        function showTraitPopup(traitKey) {
+            const trait = traitDescriptions[traitKey];
+            if (!trait) return;
+            
+            document.getElementById('traitPopupTitle').textContent = trait.title;
+            document.getElementById('traitPopupDesc').textContent = trait.desc;
+            document.getElementById('traitPopup').classList.add('active');
+        }
+
+        // Close trait popup
+        function closeTraitPopup() {
+            document.getElementById('traitPopup').classList.remove('active');
+        }
+
+        // Show analysis
+        function showAnalysis() {
+            const analysisContent = document.getElementById('analysisContent');
+            const analysisText = document.getElementById('analysisText');
+            
+            if (analysisContent.classList.contains('active')) {
+                analysisContent.classList.remove('active');
+                return;
+            }
+            
+            if (!currentCharacter) return;
+            
+            // Get top 3 user traits
+            const topTraits = Object.entries(userTraitScores)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3);
+            
+            // Get matching traits with character
+            const matchingTraits = [];
+            topTraits.forEach(([key, value]) => {
+                const charValue = currentCharacter.traits[key] || 5;
+                if (Math.abs(value - charValue) <= 2) {
+                    matchingTraits.push({
+                        key,
+                        name: traitsInfo[key] || key,
+                        userValue: value,
+                        charValue: charValue
+                    });
+                }
+            });
+            
+            // Generate personalized analysis
+            let analysis = generateAnalysis(currentCharacter, topTraits, matchingTraits);
+            
+            analysisText.innerHTML = analysis;
+            analysisContent.classList.add('active');
+            
+            // Scroll to analysis
+            setTimeout(() => {
+                analysisContent.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        // Generate personalized analysis
+        function generateAnalysis(character, topTraits, matchingTraits) {
+            const charName = character.name;
+            const charWork = character.work;
+            const archetype = character.result_archetype_tr;
+            
+            let html = '';
+            
+            // Opening
+            html += `<p>Seninle <span class="analysis-highlight">${charName}</span> arasındaki benzerlik tesadüf değil. İşte neden:</p>`;
+            
+            // Top trait analysis
+            const trait1 = topTraits[0];
+            const trait1Name = traitsInfo[trait1[0]] || trait1[0];
+            const trait1Desc = traitDescriptions[trait1[0]];
+            
+            if (trait1Desc) {
+                html += `<p>🎯 <strong>En güçlü özelliğin ${trait1Name}</strong> — ${charName} da tam olarak bu özelliğiyle tanınır. ${charWork} yapımında karakterin bu yönünü sürekli görüyoruz.</p>`;
+            }
+            
+            // Matching traits
+            if (matchingTraits.length > 0) {
+                const matchNames = matchingTraits.map(t => t.name).join(', ');
+                html += `<p>🔗 <strong>Ortak noktalarınız:</strong> ${matchNames}. Bu özellikler hem sende hem ${charName}'de belirgin şekilde öne çıkıyor.</p>`;
+            }
+            
+            // Character-specific insight based on archetype
+            const archetypeInsights = {
+                'Stratejist': 'Hem sen hem karakter, durumları analiz edip en iyi hamleyi bulmakta ustasınız.',
+                'Asi': 'İkiniz de kurallara meydan okumaktan çekinmezsiniz. Kendi yolunuzu çizmek sizin için önemli.',
+                'Vizyoner': 'Büyük resmi görmek ve geleceği şekillendirmek ortak tutkularınız.',
+                'Koruyucu': 'Sevdikleriniz için savaşmak, ikinizin de içgüdüsel tepkisi.',
+                'Hayalperest': 'Gerçekliğin ötesini görmek ve hayal kurmak sizi birleştiriyor.',
+                'Kahraman': 'Doğru olanı yapmak için risk almaktan çekinmezsiniz.',
+                'Manipülatör': 'İnsanları ve durumları okuma yeteneğiniz dikkat çekici.',
+                'Sadık Savaşçı': 'Bağlılık ve fedakarlık, en güçlü yanlarınız.',
+                'default': 'Kişilik profiliniz bu karakterle örtüşüyor.'
+            };
+            
+            const insight = archetypeInsights[archetype] || archetypeInsights['default'];
+            html += `<p>💫 <strong>${archetype} olarak:</strong> ${insight}</p>`;
+            
+            // Personal reflection
+            html += `<p>🪞 <strong>Kendi hayatında düşün:</strong> Zor bir karar alman gerektiğinde ${charName} gibi mi hareket edersin? Büyük ihtimalle evet — çünkü aynı değerleri ve öncelikleri paylaşıyorsunuz.</p>`;
+            
+            return html;
         }
 
         // Load data on page load
