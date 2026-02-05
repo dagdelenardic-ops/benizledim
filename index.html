@@ -380,18 +380,18 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            padding: 15px 20px;
+            padding: 10px 20px;
         }
 
         /* Quiz Header */
         .quiz-header {
             text-align: center;
-            padding: 10px 0;
+            padding: 5px 0;
             flex-shrink: 0;
         }
 
         .quiz-header-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 800;
             color: #E31C25;
             letter-spacing: 1px;
@@ -407,11 +407,12 @@
         .progress-container {
             background: #1a1a1a;
             border-radius: 50px;
-            height: 14px;
-            margin-bottom: 8px;
+            height: 16px;
+            margin-bottom: 5px;
             overflow: hidden;
             border: 2px solid #333;
             flex-shrink: 0;
+            position: relative;
         }
 
         .progress-bar {
@@ -419,10 +420,22 @@
             background: linear-gradient(90deg, #E31C25 0%, #ff4757 50%, #E31C25 100%);
             background-size: 200% 100%;
             border-radius: 50px;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             width: 0%;
-            animation: progressShine 2s ease-in-out infinite;
-            box-shadow: 0 0 10px rgba(227, 28, 37, 0.5);
+            animation: progressShine 1.5s ease-in-out infinite, progressPulse 0.6s ease-out;
+            box-shadow: 0 0 15px rgba(227, 28, 37, 0.6), inset 0 1px 2px rgba(255,255,255,0.3);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: progressGlint 2s ease-in-out infinite;
         }
 
         @keyframes progressShine {
@@ -430,11 +443,22 @@
             50% { background-position: 100% 50%; }
         }
 
+        @keyframes progressPulse {
+            0% { box-shadow: 0 0 5px rgba(227, 28, 37, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(227, 28, 37, 0.8); }
+            100% { box-shadow: 0 0 15px rgba(227, 28, 37, 0.6); }
+        }
+
+        @keyframes progressGlint {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
         .progress-text {
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #FFFFFF;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 700;
             flex-shrink: 0;
         }
@@ -443,13 +467,14 @@
         .question-card {
             background: #111111;
             border-radius: 20px;
-            padding: 20px 20px;
+            padding: 18px 20px;
             border: 2px solid #E31C25;
             box-shadow: 0 0 30px rgba(227, 28, 37, 0.2);
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            min-height: 0;
         }
 
         /* Character Image in Question */
@@ -457,8 +482,8 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 12px;
-            padding: 10px 12px;
+            margin-bottom: 10px;
+            padding: 8px 12px;
             background: #1A1A1A;
             border-radius: 12px;
             border: 1px solid #333;
@@ -466,8 +491,8 @@
         }
 
         .character-image {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #E31C25;
@@ -476,7 +501,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 800;
             color: #FFFFFF;
         }
@@ -489,11 +514,11 @@
             font-size: 1rem;
             font-weight: 700;
             color: #FFFFFF;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .character-info-work {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #E31C25;
             font-weight: 600;
         }
@@ -503,10 +528,10 @@
         }
 
         .question-text {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 15px;
-            line-height: 1.4;
+            margin-bottom: 12px;
+            line-height: 1.35;
             color: #FFFFFF;
             flex-shrink: 0;
         }
@@ -517,6 +542,7 @@
             gap: 10px;
             flex: 1;
             justify-content: center;
+            min-height: 0;
         }
 
         .option-btn {
@@ -526,11 +552,12 @@
             background: #1A1A1A;
             border: 2px solid #333333;
             border-radius: 12px;
-            padding: 12px 15px;
+            padding: 14px 16px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: left;
             color: #FFFFFF;
+            flex-shrink: 0;
         }
 
         .option-btn:hover {
@@ -547,15 +574,15 @@
         }
 
         .option-letter {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             background: #E31C25;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 1rem;
             flex-shrink: 0;
             transition: all 0.3s ease;
             color: #FFFFFF;
@@ -572,7 +599,7 @@
         }
 
         .option-text {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
         }
 
@@ -1037,7 +1064,7 @@
             }
 
             .question-text {
-                font-size: 1.1rem;
+                font-size: 1.25rem;
             }
 
             .option-btn {
@@ -1045,7 +1072,7 @@
             }
 
             .option-text {
-                font-size: 0.9rem;
+                font-size: 1rem;
             }
 
             .question-character {
@@ -1062,6 +1089,7 @@
             .character-image {
                 width: 38px;
                 height: 38px;
+                font-size: 0.9rem;
             }
 
             .character-info-name {
@@ -1073,23 +1101,31 @@
             }
 
             .option-letter {
-                width: 30px;
-                height: 30px;
-                font-size: 0.85rem;
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
             }
 
             .progress-text {
-                font-size: 0.8rem;
-                margin-bottom: 6px;
+                font-size: 0.85rem;
+                margin-bottom: 5px;
             }
 
             .progress-container {
-                height: 12px;
-                margin-bottom: 6px;
+                height: 14px;
+                margin-bottom: 4px;
             }
 
             .quiz-header-title {
-                font-size: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .quiz-header {
+                padding: 4px 0;
+            }
+
+            .quiz-section .container {
+                padding: 8px 15px;
             }
 
             .quiz-section .container {
@@ -1136,7 +1172,7 @@
             }
 
             .quiz-section .container {
-                padding: 8px 12px;
+                padding: 6px 10px;
             }
 
             .question-card {
@@ -1145,8 +1181,9 @@
             }
 
             .question-text {
-                font-size: 1rem;
+                font-size: 1.15rem;
                 margin-bottom: 10px;
+                line-height: 1.3;
             }
 
             .options {
@@ -1154,12 +1191,12 @@
             }
 
             .option-btn {
-                padding: 10px 12px;
+                padding: 11px 12px;
                 border-radius: 10px;
             }
 
             .option-text {
-                font-size: 0.85rem;
+                font-size: 0.95rem;
             }
 
             .option-letter {
@@ -1623,7 +1660,14 @@
             const totalQuestions = questionsData.questions.length;
             const progress = ((currentQuestion) / totalQuestions) * 100;
             
-            document.getElementById('progressBar').style.width = progress + '%';
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            
+            // Trigger pulse animation on progress
+            progressBar.style.animation = 'none';
+            progressBar.offsetHeight; // Trigger reflow
+            progressBar.style.animation = 'progressShine 1.5s ease-in-out infinite, progressPulse 0.6s ease-out';
+            
             document.getElementById('progressText').textContent = `Soru ${currentQuestion + 1} / ${totalQuestions}`;
             document.getElementById('questionText').textContent = question.text_tr;
             
