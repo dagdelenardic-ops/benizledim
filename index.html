@@ -482,7 +482,7 @@
         /* Top Section - Character info */
         .question-top {
             flex-shrink: 0;
-            padding-bottom: 6px;
+            padding-bottom: 4px;
         }
 
         /* Character Image in Question */
@@ -540,7 +540,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 0;
+            padding: 10px 0;
         }
 
         .question-text {
@@ -556,7 +556,7 @@
         .question-bottom {
             flex-shrink: 0;
             padding-top: 0;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
             margin-top: auto;
         }
 
@@ -645,19 +645,7 @@
         }
 
         .result-character-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #E31C25;
-            border: 4px solid #FFFFFF;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #FFFFFF;
-            box-shadow: 0 0 30px rgba(227, 28, 37, 0.5);
+            display: none;
         }
 
         .result-badge {
@@ -671,6 +659,11 @@
             margin-bottom: 25px;
         }
 
+        @keyframes nameReveal {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         .result-character {
             font-size: 2.5rem;
             font-weight: 900;
@@ -679,6 +672,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
+        }
+
+        .result-character.show {
+            animation: nameReveal 0.7s ease-out forwards;
         }
 
         .result-work {
@@ -909,6 +908,12 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        @keyframes treasurePulse {
+            0% { transform: translateY(0) scale(1); box-shadow: 0 5px 20px rgba(227, 28, 37, 0.4), 0 0 10px rgba(255, 255, 255, 0.05); }
+            50% { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 28px rgba(227, 28, 37, 0.55), 0 0 18px rgba(255, 255, 255, 0.12); }
+            100% { transform: translateY(0) scale(1); box-shadow: 0 5px 20px rgba(227, 28, 37, 0.4), 0 0 10px rgba(255, 255, 255, 0.05); }
+        }
+
         .analysis-btn {
             background: linear-gradient(135deg, #E31C25, #ff4757);
             color: white;
@@ -922,12 +927,13 @@
             align-items: center;
             gap: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(227, 28, 37, 0.4);
+            box-shadow: 0 5px 20px rgba(227, 28, 37, 0.5), 0 0 14px rgba(255, 255, 255, 0.08);
+            animation: treasurePulse 2.2s ease-in-out infinite;
         }
 
         .analysis-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(227, 28, 37, 0.5);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(227, 28, 37, 0.6), 0 0 18px rgba(255, 255, 255, 0.12);
         }
 
         .analysis-content {
@@ -1079,18 +1085,18 @@
                 gap: 15px;
             }
 
-            .question-card {
-                padding: 0;
+            .question-top {
+                padding-bottom: 2px;
             }
 
-            .question-text {
-                font-size: 1.25rem;
+            .question-middle {
+                padding: 8px 0;
             }
 
-            .option-btn {
-                padding: 11px 12px;
+            .question-bottom {
+                padding-bottom: 6px;
+                margin-top: auto;
             }
-
             .option-text {
                 font-size: 0.95rem;
             }
@@ -1454,8 +1460,8 @@
 
                 <div class="analysis-section">
                     <button class="analysis-btn" onclick="showAnalysis()">
-                        <span>🔮</span>
-                        Analizin Devamı
+                        <span>💎</span>
+                        Karakterinin Sırlarını Aç
                     </button>
                     <div class="analysis-content" id="analysisContent">
                         <div class="analysis-title">✨ Neden Bu Karaktere Benziyorsun?</div>
@@ -1839,10 +1845,18 @@
             const resultImage = document.getElementById('resultCharacterImage');
             resultImage.textContent = getCharacterEmoji(character.name);
             
-            document.getElementById('resultCharacter').textContent = character.name;
+            const resultNameEl = document.getElementById('resultCharacter');
+            resultNameEl.classList.remove('show');
+            resultNameEl.textContent = '';
             document.getElementById('resultWork').textContent = character.work;
             document.getElementById('resultArchetype').textContent = character.result_archetype_tr;
             document.getElementById('resultDescription').textContent = character.result_blurb_tr;
+
+            // Reveal character name after a short suspense
+            setTimeout(() => {
+                resultNameEl.textContent = character.name;
+                resultNameEl.classList.add('show');
+            }, 2000);
             
             // Top traits
             const traitsContainer = document.getElementById('traitsContainer');
