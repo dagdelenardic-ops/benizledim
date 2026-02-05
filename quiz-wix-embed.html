@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Hangi Dizi/Film Karakterisin? | Benizledim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E31C25;
+            --primary-dark: #B71C1C;
+            --bg-dark: #000000;
+            --bg-card: #111111;
+            --text-primary: #FFFFFF;
+            --text-secondary: #E0E0E0;
+            --text-muted: #999999;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* AGGRESSIVE Wix iframe fit */
+        html, body { 
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+        html {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            min-height: 100dvh;
+        }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            min-height: 100dvh;
+            /* Wix iframe fix - overflow scroll */
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* iOS Safari & Mobile fixes */
+        @supports (-webkit-touch-callout: none) {
+            html, body {
+                min-height: -webkit-fill-available !important;
+            }
+        }
+        
+        /* Dynamic viewport height for mobile browsers */
+        @supports (height: 100dvh) {
+            html, body {
+                min-height: 100dvh !important;
+            }
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Header */
+        header { padding: 20px 0; }
+        .logo { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; }
+        .logo-ben { font-size: 0.85rem; font-weight: 400; color: #FFFFFF; letter-spacing: 3px; }
+        .logo-izledim { font-size: 1.3rem; font-weight: 900; color: #E31C25; letter-spacing: 1px; }
+        .logo-subtitle { font-size: 1.1rem; font-weight: 700; color: #FFFFFF; margin-top: 6px; }
+
+        /* Hero */
+        .hero { padding: 60px 0 40px; text-align: center; }
+        .hero-compact { 
+            padding: 30px 0 20px; 
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(227, 28, 37, 0.2); border: 1px solid rgba(227, 28, 37, 0.3);
+            padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;
+            color: #E31C25; margin-bottom: 20px;
+        }
+        .hero h1 { font-size: clamp(1.8rem, 6vw, 3rem); font-weight: 900; line-height: 1.2; margin-bottom: 15px; color: #FFFFFF; }
+        .hero h1 span { background: #B71C1C; color: #FFFFFF; padding: 5px 20px; border-radius: 8px; display: inline-block; }
+        .hero-subtitle { font-size: 1.15rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 35px; }
+        .hero-subtitle-short { font-size: 1rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto 20px; }
+        
+        .character-preview {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .character-preview span {
+            width: 45px;
+            height: 45px;
+            background: var(--bg-card);
+            border: 2px solid rgba(227, 28, 37, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+        
+        .test-features-mini {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .start-btn {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: #B71C1C; color: #FFFFFF; font-size: 1.2rem; font-weight: 700;
+            padding: 18px 45px; border: none; border-radius: 60px; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 0 30px rgba(183, 28, 28, 0.5);
+        }
+        .start-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(183, 28, 28, 0.7); background: #D32F2F; }
+        .start-btn svg { width: 24px; height: 24px; transition: transform 0.3s ease; }
+        .start-btn:hover svg { transform: translateX(5px); }
+
+        .stats { display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: 800; color: #E31C25; }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; }
+
+        /* Characters Grid */
+        .characters-section { padding: 60px 0; }
+        .section-title { text-align: center; font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; }
+        .section-title span { color: #E31C25; }
+        .characters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 800px; margin: 0 auto; }
+        .character-card {
+            background: var(--bg-card); border-radius: 16px; padding: 20px 15px; text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease;
+        }
+        .character-card:hover { transform: translateY(-5px); border-color: rgba(227, 28, 37, 0.3); }
+        .character-emoji { font-size: 2.5rem; margin-bottom: 10px; }
+        .character-name { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .character-work { font-size: 0.75rem; color: var(--text-muted); }
+
+        /* Features */
+        .features-section { padding: 60px 0; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .feature-card {
+            background: linear-gradient(135deg, rgba(17, 17, 17, 0.9) 0%, rgba(26, 26, 26, 0.9) 100%);
+            border-radius: 20px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .feature-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 1.5rem; background: rgba(227, 28, 37, 0.2); }
+        .feature-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+        .feature-desc { font-size: 0.95rem; color: var(--text-secondary); }
+
+        /* Quiz Section */
+        .quiz-section { padding: 40px 0 60px; display: none; }
+        .quiz-section.active { display: block; }
+        .progress-container { background: #222222; border-radius: 50px; height: 10px; margin-bottom: 30px; overflow: hidden; border: 1px solid #333; }
+        .progress-bar { height: 100%; background: #E31C25; border-radius: 50px; transition: width 0.4s ease; width: 0%; }
+        .progress-text { text-align: center; font-size: 1rem; color: #FFFFFF; margin-bottom: 30px; font-weight: 600; }
+
+        .question-card { background: #111111; border-radius: 24px; padding: 40px 30px; border: 2px solid #E31C25; box-shadow: 0 0 30px rgba(227, 28, 37, 0.2); }
+        .question-character { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; padding: 15px 20px; background: #1A1A1A; border-radius: 16px; border: 1px solid #333; }
+        .character-image { width: 70px; height: 70px; border-radius: 50%; border: 3px solid #E31C25; flex-shrink: 0; background: #E31C25; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; color: #FFFFFF; }
+        .character-info { text-align: left; }
+        .character-info-name { font-size: 1.2rem; font-weight: 700; color: #FFFFFF; margin-bottom: 4px; }
+        .character-info-work { font-size: 0.9rem; color: #E31C25; font-weight: 600; }
+        .question-number { display: inline-block; background: #E31C25; color: #FFFFFF; font-size: 0.9rem; font-weight: 700; padding: 8px 20px; border-radius: 50px; margin-bottom: 20px; }
+        .question-text { font-size: 1.5rem; font-weight: 700; margin-bottom: 30px; line-height: 1.5; color: #FFFFFF; }
+        
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { display: flex; align-items: center; gap: 15px; background: #1A1A1A; border: 2px solid #333333; border-radius: 16px; padding: 18px 20px; cursor: pointer; transition: all 0.3s ease; text-align: left; color: #FFFFFF; }
+        .option-btn:hover { background: #222222; border-color: #E31C25; transform: translateX(5px); box-shadow: 0 0 15px rgba(227, 28, 37, 0.3); }
+        .option-btn.selected { background: #E31C25; border-color: #E31C25; color: #FFFFFF; }
+        .option-letter { width: 40px; height: 40px; background: #E31C25; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; color: #FFFFFF; }
+        .option-btn:hover .option-letter, .option-btn.selected .option-letter { background: #FFFFFF; color: #E31C25; }
+        .option-text { font-size: 1rem; font-weight: 600; }
+
+        /* Result Section */
+        .result-section { padding: 60px 0; display: none; text-align: center; }
+        .result-section.active { display: block; }
+        .result-card { background: #111111; border-radius: 30px; padding: 50px 40px; border: 2px solid #E31C25; box-shadow: 0 0 40px rgba(227, 28, 37, 0.3); max-width: 600px; margin: 0 auto; }
+        .result-character-image { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; background: #E31C25; border: 4px solid #FFFFFF; font-size: 2.5rem; font-weight: 800; color: #FFFFFF; box-shadow: 0 0 30px rgba(227, 28, 37, 0.5); }
+        .result-badge { display: inline-block; background: #E31C25; color: white; font-size: 0.85rem; font-weight: 700; padding: 8px 20px; border-radius: 50px; margin-bottom: 25px; }
+        .result-character { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; color: #E31C25; }
+        .result-work { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 25px; }
+        .result-archetype { display: inline-block; background: rgba(227, 28, 37, 0.2); color: #E31C25; font-size: 0.9rem; font-weight: 700; padding: 8px 20px; border-radius: 50px; margin-bottom: 25px; }
+        .result-description { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 30px; }
+
+        .traits-section { margin-top: 30px; text-align: left; }
+        .traits-title { font-size: 1rem; color: var(--text-muted); margin-bottom: 20px; text-align: center; }
+        .trait-item { margin-bottom: 15px; }
+        .trait-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
+        .trait-name { font-weight: 600; }
+        .trait-value { color: var(--text-muted); }
+        .trait-bar { height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 50px; overflow: hidden; }
+        .trait-fill { height: 100%; background: #E31C25; border-radius: 50px; transition: width 0.8s ease; }
+
+        .similar-section { margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .similar-title { font-size: 1rem; color: var(--text-muted); margin-bottom: 20px; }
+        .similar-characters { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .similar-char { background: rgba(255, 255, 255, 0.05); padding: 12px 20px; border-radius: 12px; text-align: center; }
+        .similar-char-name { font-weight: 700; font-size: 0.95rem; }
+        .similar-char-work { font-size: 0.8rem; color: var(--text-muted); }
+
+        .action-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+        .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.1); color: white; font-size: 1rem; font-weight: 600; padding: 14px 28px; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
+        .btn-share { background: #E31C25; }
+        .btn-share:hover { transform: scale(1.05); }
+
+        /* Loading */
+        .loading { display: none; text-align: center; padding: 60px 0; }
+        .loading.active { display: block; }
+        .spinner { width: 60px; height: 60px; border: 4px solid rgba(255, 255, 255, 0.1); border-top-color: #E31C25; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { font-size: 1.1rem; color: var(--text-secondary); }
+
+        /* Footer */
+        footer { padding: 40px 0; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); margin-top: 60px; }
+        .footer-text { font-size: 0.9rem; color: var(--text-muted); }
+        .footer-text a { color: #E31C25; text-decoration: none; }
+
+        .hidden { display: none !important; }
+
+        /* Floating Characters */
+        .floating-characters { position: fixed; top: 0; height: 100%; width: 80px; z-index: 50; pointer-events: none; }
+        .floating-characters.left { left: 10px; }
+        .floating-characters.right { right: 10px; }
+        .floating-char { 
+            position: absolute; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            animation: floatChar 4s ease-in-out infinite;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        .floating-char:hover { opacity: 1; transform: scale(1.1); }
+        .floating-emoji { 
+            width: 55px; 
+            height: 55px; 
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); 
+            border: 2px solid #E31C25; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(227, 28, 37, 0.3);
+        }
+        .floating-name { 
+            font-size: 0.65rem; 
+            font-weight: 700; 
+            color: #fff; 
+            text-align: center; 
+            margin-top: 5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            max-width: 70px;
+        }
+        @keyframes floatChar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        /* Hide floating chars on mobile */
+        @media (max-width: 1100px) {
+            .floating-characters { display: none; }
+        }
+
+        /* Test Features */
+        .test-features { display: flex; justify-content: center; gap: 20px; margin: 25px 0; flex-wrap: wrap; }
+        .test-feature { background: rgba(227, 28, 37, 0.15); border: 1px solid rgba(227, 28, 37, 0.3); padding: 8px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; color: #fff; }
+        
+        /* Fullscreen Mode - hidden by default, quiz auto-fullscreen on mobile */
+        .fullscreen-btn { display: none !important; }
+        
+        /* AGGRESSIVE Fullscreen mode for Wix iframe */
+        body.is-fullscreen { 
+            position: fixed !important; 
+            top: 0 !important; 
+            left: 0 !important; 
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important; 
+            height: 100vh !important;
+            height: 100dvh !important;
+            overflow-y: auto !important;
+            z-index: 999999 !important;
+        }
+        body.is-fullscreen .quiz-section {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            overflow-y: auto !important;
+            background: var(--bg-dark) !important;
+            z-index: 999999 !important;
+            padding-top: 20px !important;
+            padding-bottom: 100px !important;
+        }
+        body.is-fullscreen .result-section {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            overflow-y: auto !important;
+            background: var(--bg-dark) !important;
+            z-index: 999999 !important;
+            padding-top: 20px !important;
+            padding-bottom: 100px !important;
+        }
+        body.is-fullscreen .loading {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: var(--bg-dark) !important;
+            z-index: 999999 !important;
+        }
+        body.is-fullscreen .loading.active {
+            display: flex !important;
+        }
+        body.is-fullscreen #landing {
+            display: none !important;
+        }
+        
+        /* iOS Safari standalone mode */
+        @media (display-mode: standalone) { body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); } }
+        
+        /* Pulse Animation */
+        .btn-pulse { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 60px; background: rgba(183, 28, 28, 0.5); animation: btnPulse 2s infinite; z-index: -1; }
+        @keyframes btnPulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 0; } }
+        .start-btn { position: relative; overflow: visible; }
+        .start-btn.large { font-size: 1.4rem; padding: 22px 55px; }
+        
+        .hero-note { font-size: 0.85rem; color: var(--text-muted); margin-top: 15px; }
+        
+        /* Results Preview */
+        .results-preview { padding: 60px 0; background: linear-gradient(180deg, rgba(227, 28, 37, 0.05) 0%, transparent 100%); }
+        .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px; }
+        .preview-card { background: var(--bg-card); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
+        .preview-card:hover { transform: translateY(-5px); border-color: rgba(227, 28, 37, 0.3); box-shadow: 0 10px 30px rgba(227, 28, 37, 0.2); }
+        .preview-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .preview-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: #E31C25; }
+        .preview-card p { font-size: 0.9rem; color: var(--text-secondary); }
+        
+        .section-subtitle { text-align: center; color: var(--text-muted); font-size: 1.1rem; margin-top: -20px; margin-bottom: 30px; }
+        .more-chars { text-align: center; color: #E31C25; font-weight: 700; font-size: 1.1rem; margin-top: 25px; }
+        
+        /* Testimonials */
+        .testimonials-section { padding: 60px 0; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .testimonial-card { background: var(--bg-card); border-radius: 20px; padding: 25px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .testimonial-stars { font-size: 1.2rem; margin-bottom: 15px; }
+        .testimonial-card p { font-size: 1rem; color: var(--text-secondary); font-style: italic; line-height: 1.6; margin-bottom: 15px; }
+        .testimonial-author { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
+        
+        /* Final CTA */
+        .final-cta { padding: 80px 0; text-align: center; background: linear-gradient(180deg, transparent 0%, rgba(227, 28, 37, 0.1) 100%); }
+        .final-cta h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
+        .final-cta p { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 30px; }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero { padding: 20px 0 15px; }
+            .hero-compact { padding: 10px 0 10px; min-height: auto; }
+            .hero-badge { margin-bottom: 10px; }
+            .hero h1 { font-size: 1.4rem; margin-bottom: 8px; }
+            .hero-subtitle-short { font-size: 0.85rem; margin-bottom: 10px; }
+            .character-preview { margin-bottom: 15px; gap: 5px; }
+            .character-preview span { width: 32px; height: 32px; font-size: 1rem; }
+            .start-btn { font-size: 1rem; padding: 14px 30px; }
+            .start-btn.large { font-size: 1.1rem; padding: 16px 35px; }
+            .test-features-mini { font-size: 0.7rem; gap: 5px; margin-top: 12px; }
+            .stats { gap: 25px; }
+            .stat-number { font-size: 1.6rem; }
+            .characters-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .character-card { padding: 15px 10px; }
+            .character-emoji { font-size: 2rem; }
+            .character-name { font-size: 0.8rem; }
+            .question-card { padding: 25px 20px; }
+            .question-text { font-size: 1.2rem; }
+            .question-character { flex-direction: column; text-align: center; gap: 12px; }
+            .character-info { text-align: center; }
+            .result-card { padding: 35px 25px; }
+            .result-character { font-size: 2rem; }
+            .action-buttons { flex-direction: column; }
+            .similar-characters { flex-direction: column; gap: 10px; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 0 12px; }
+            .hero-compact { padding: 8px 0 8px; }
+            .hero-badge { font-size: 0.65rem; padding: 4px 10px; margin-bottom: 8px; }
+            .hero h1 { font-size: 1.25rem; margin-bottom: 6px; }
+            .hero h1 span { padding: 3px 12px; }
+            .hero-subtitle-short { font-size: 0.8rem; margin-bottom: 8px; }
+            .character-preview { margin-bottom: 12px; gap: 4px; }
+            .character-preview span { width: 28px; height: 28px; font-size: 0.9rem; border-width: 1px; }
+            .start-btn.large { font-size: 1rem; padding: 14px 28px; }
+            .test-features-mini { font-size: 0.65rem; gap: 4px; margin-top: 10px; }
+            .characters-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        /* Extra small phones */
+        @media (max-width: 380px) {
+            .hero-badge { font-size: 0.6rem; padding: 3px 8px; }
+            .hero h1 { font-size: 1.1rem; }
+            .hero h1 span { padding: 2px 10px; font-size: 1rem; }
+            .hero-subtitle-short { font-size: 0.75rem; }
+            .character-preview span { width: 26px; height: 26px; font-size: 0.85rem; }
+            .start-btn.large { font-size: 0.95rem; padding: 12px 24px; }
+            .test-features-mini { font-size: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <main id="landing">
+        <section class="hero hero-compact">
+            <div class="container">
+                <div class="hero-badge">🔥 100.000+ Kişi Testi Yaptı!</div>
+                <h1>Sen Hangi Dizi/Film<br><span>Karakterisin?</span></h1>
+                <p class="hero-subtitle-short">60 efsane karakter arasından <strong>sana en çok benzeyen</strong> karakteri bul!</p>
+                
+                <div class="character-preview">
+                    <span>🧪</span><span>👑</span><span>🐉</span><span>🎭</span><span>🔍</span><span>💔</span><span>🎯</span><span>🦾</span>
+                </div>
+                
+                <button class="start-btn large" onclick="startQuiz()">
+                    <span class="btn-pulse"></span>
+                    🚀 Teste Başla!
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+                
+                <div class="test-features-mini">
+                    <span>✨ 25 Soru</span>
+                    <span>•</span>
+                    <span>⏱️ 3 dk</span>
+                    <span>•</span>
+                    <span>🎯 %95 Doğruluk</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section class="quiz-section" id="quiz">
+        <div class="container">
+            <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="progress-text" id="progressText">Soru 1 / 25</div>
+            <div class="question-card">
+                <div class="question-character" id="questionCharacter">
+                    <div class="character-image" id="characterImage"></div>
+                    <div class="character-info">
+                        <div class="character-info-name" id="characterInfoName"></div>
+                        <div class="character-info-work" id="characterInfoWork"></div>
+                    </div>
+                </div>
+                <div class="question-number" id="questionNumber">Soru 1</div>
+                <h2 class="question-text" id="questionText"></h2>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="loading" id="loading">
+        <div class="container"><div class="spinner"></div><p class="loading-text">Sonucun hesaplanıyor...</p></div>
+    </div>
+
+    <section class="result-section" id="result">
+        <div class="container">
+            <div class="result-card">
+                <div class="result-badge">🎉 Sonucun Hazır!</div>
+                <div class="result-character-image" id="resultCharacterImage"></div>
+                <h2 class="result-character" id="resultCharacter"></h2>
+                <p class="result-work" id="resultWork"></p>
+                <div class="result-archetype" id="resultArchetype"></div>
+                <p class="result-description" id="resultDescription"></p>
+                <div class="traits-section" id="traitsSection"><h4 class="traits-title">Öne Çıkan Kişilik Özeliklerin</h4><div id="traitsContainer"></div></div>
+                <div class="similar-section"><h4 class="similar-title">Yakın Eşleşmeler</h4><div class="similar-characters" id="similarCharacters"></div></div>
+                <div class="action-buttons">
+                    <button class="btn-secondary btn-share" onclick="shareResult()">📤 Paylaş</button>
+                    <button class="btn-secondary" onclick="restartQuiz()">🔄 Tekrar Dene</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer><div class="container"><p class="footer-text">© 2026 <a href="https://benizledim.com">Ben İzledim</a> - Tüm hakları saklıdır.</p></div></footer>
+
+    <!-- Fullscreen Button for Mobile -->
+    <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fullscreenBtn">
+        📱 Tam Ekran
+    </button>
+
+<script>
+// ========== EMBEDDED DATA ==========
+const questionsData = {"meta":{"id":"which-character-quiz-v1-tr","title":"Hangi Dizi/Film Karakterisin? (25 Soru)","version":"1.2","language":"tr"},"traits":[{"key":"leadership","label_tr":"Liderlik"},{"key":"logic","label_tr":"Mantık/Analiz"},{"key":"empathy","label_tr":"Empati"},{"key":"ambition","label_tr":"Hırs/Hedef"},{"key":"risk","label_tr":"Risk Alma"},{"key":"integrity","label_tr":"İlkesellik/Dürüstlük"},{"key":"loyalty","label_tr":"Sadakat"},{"key":"independence","label_tr":"Bağımsızlık"},{"key":"sociability","label_tr":"Sosyallik"},{"key":"humor","label_tr":"Mizah"},{"key":"creativity","label_tr":"Yaratıcılık"},{"key":"resilience","label_tr":"Dayanıklılık"},{"key":"control","label_tr":"Kontrol/Plan"},{"key":"sensitivity","label_tr":"Duygusal Hassasiyet"}],"questions":[{"id":"q01","text_tr":"Beklenmedik bir kriz çıktığında ilk refleksin ne olur?","options":[{"id":"a","text_tr":"Hemen plan yapar, öncelikleri sıralarım.","effects":{"control":2,"logic":2,"resilience":1,"sociability":-1,"sensitivity":-1}},{"id":"b","text_tr":"İnsanları sakinleştirir, moral veririm.","effects":{"empathy":2,"leadership":1,"sociability":1,"control":-1}},{"id":"c","text_tr":"Hızlı hareket eder, deneme-yanılma ile çözüm bulurum.","effects":{"risk":2,"resilience":1,"creativity":1,"control":-1}},{"id":"d","text_tr":"Önce içime çekilir, tek başıma düşünürüm.","effects":{"independence":2,"logic":1,"sociability":-2,"control":1}}]},{"id":"q02","text_tr":"Bir tartışmada seni en çok ne sinirlendirir?","options":[{"id":"a","text_tr":"Tutarsızlık ve mantıksızlık.","effects":{"logic":2,"control":1,"sensitivity":-1}},{"id":"b","text_tr":"Empati eksikliği ve kaba üslup.","effects":{"empathy":2,"integrity":1,"sensitivity":1}},{"id":"c","text_tr":"Haksızlık ve çifte standart.","effects":{"integrity":2,"leadership":1,"risk":1}},{"id":"d","text_tr":"Kısıtlanmak ve özgürlüğümün tehdit edilmesi.","effects":{"independence":2,"risk":1,"control":-1}}]},{"id":"q03","text_tr":"Bir hedef koyduğunda çoğunlukla nasıl ilerlersin?","options":[{"id":"a","text_tr":"Disiplinle, adım adım; planım nettir.","effects":{"control":2,"ambition":1,"resilience":1}},{"id":"b","text_tr":"İlham gelince hızlanırım; akışa göre şekillenir.","effects":{"creativity":2,"risk":1,"control":-1}},{"id":"c","text_tr":"İnsanlarla konuşur, ortaklık/ekip kurarım.","effects":{"leadership":1,"sociability":2,"empathy":1}},{"id":"d","text_tr":"Hedefi içten içe taşırım; dışarıdan yavaş görünürüm ama derin çalışırım.","effects":{"independence":1,"logic":1,"resilience":1,"sociability":-1}}]},{"id":"q04","text_tr":"Bir arkadaşın senden yardım istediğinde en çok ne yaparsın?","options":[{"id":"a","text_tr":"Duygusal olarak yanında olur, dinlerim.","effects":{"empathy":2,"loyalty":1,"sensitivity":1}},{"id":"b","text_tr":"Somut çözüm önerileri üretirim.","effects":{"logic":2,"control":1}},{"id":"c","text_tr":"Harekete geçer, işleri üstlenirim.","effects":{"leadership":1,"resilience":1,"integrity":1}},{"id":"d","text_tr":"Sınır koyarım; önce kendi dengesimi korurum.","effects":{"independence":2,"control":1,"empathy":-1}}]},{"id":"q05","text_tr":"Bir grup içinde doğal rolün hangisi?","options":[{"id":"a","text_tr":"Organize eden, yöneten.","effects":{"leadership":2,"control":1}},{"id":"b","text_tr":"Arabulucu; insanları anlaşmaya yaklaştıran.","effects":{"empathy":2,"sociability":1,"integrity":1}},{"id":"c","text_tr":"Yaratıcı fikir atan, eğlence katan.","effects":{"creativity":2,"humor":2,"sociability":1}},{"id":"d","text_tr":"Arka planda analiz eden, doğru zamanı kollayan.","effects":{"logic":2,"control":1,"sociability":-1}}]},{"id":"q06","text_tr":"İnsanların seni yanlış anlamasına en sık sebep olan şey?","options":[{"id":"a","text_tr":"Duygularımı az göstermem.","effects":{"control":1,"logic":1,"sociability":-1,"sensitivity":-1}},{"id":"b","text_tr":"Çok direkt konuşmam.","effects":{"integrity":1,"leadership":1,"sensitivity":-1}},{"id":"c","text_tr":"Mizahla her şeyi hafifletmem.","effects":{"humor":2,"sensitivity":1,"control":-1}},{"id":"d","text_tr":"Bir anda uzaklaşıp yalnız kalma ihtiyacım.","effects":{"independence":2,"sociability":-2}}]},{"id":"q07","text_tr":"Risk alman gereken bir anda neye bakarsın?","options":[{"id":"a","text_tr":"Veri ve olasılıklara; hesap yaparım.","effects":{"logic":2,"control":1,"risk":1}},{"id":"b","text_tr":"İçgüdüme; doğru hissettiriyorsa giderim.","effects":{"sensitivity":1,"risk":2,"creativity":1}},{"id":"c","text_tr":"İnsanlara etkisine; kim zarar görür, kim korunur.","effects":{"empathy":2,"integrity":1}},{"id":"d","text_tr":"Özgürlüğüme katkısına; beni büyütüyor mu?","effects":{"independence":2,"ambition":1,"risk":1}}]},{"id":"q08","text_tr":"Bir başarı elde ettiğinde ilk düşündüğün şey?","options":[{"id":"a","text_tr":"Bir sonraki daha büyük hedef.","effects":{"ambition":2,"leadership":1}},{"id":"b","text_tr":"Bunu ekip/arkadaşlarla paylaşmak.","effects":{"sociability":2,"loyalty":1}},{"id":"c","text_tr":"Bu süreçte ne öğrendim?","effects":{"logic":1,"integrity":1,"control":1}},{"id":"d","text_tr":"Huzur; sonunda nefes almak.","effects":{"sensitivity":1,"resilience":1,"control":-1}}]},{"id":"q09","text_tr":"Birinin sana ihanet ettiğini öğrenirsen ne yaparsın?","options":[{"id":"a","text_tr":"Sessizleşirim; uzaklaşır, plan kurarım.","effects":{"control":2,"logic":1,"sociability":-1,"sensitivity":-1}},{"id":"b","text_tr":"Yüzleşirim; net konuşur, hesap sorarım.","effects":{"integrity":2,"leadership":1,"risk":1}},{"id":"c","text_tr":"Anlamaya çalışırım; neden yaptı?","effects":{"empathy":2,"sensitivity":1}},{"id":"d","text_tr":"Bağımı tamamen koparırım; bir daha güvenmem.","effects":{"independence":2,"control":1,"loyalty":-1}}]},{"id":"q10","text_tr":"Seni en çok motive eden şey hangisi?","options":[{"id":"a","text_tr":"Kontrol ve ustalık hissi.","effects":{"control":2,"logic":1,"ambition":1}},{"id":"b","text_tr":"Anlam; değerli bir amaca hizmet etmek.","effects":{"integrity":2,"empathy":1}},{"id":"c","text_tr":"Özgürlük; kendi yolumu çizmek.","effects":{"independence":2,"risk":1}},{"id":"d","text_tr":"Takdir ve etki; insanların peşimden gelmesi.","effects":{"leadership":2,"sociability":1,"ambition":1}}]},{"id":"q11","text_tr":"Bir konuda haksız olduğun ortaya çıkınca nasıl davranırsın?","options":[{"id":"a","text_tr":"Hemen kabul eder, düzeltirim.","effects":{"integrity":2,"logic":1}},{"id":"b","text_tr":"Önce savunurum; sonra sakinleşince düşünürüm.","effects":{"control":1,"sensitivity":1,"integrity":-1}},{"id":"c","text_tr":"Şaka yaparım; ortamı yumuşatırım.","effects":{"humor":2,"sociability":1,"control":-1}},{"id":"d","text_tr":"Konuyu kapatır, yalnız kalıp değerlendiririm.","effects":{"independence":2,"logic":1,"sociability":-1}}]},{"id":"q12","text_tr":"Kalabalık bir ortamdan çıktıktan sonra genelde…","options":[{"id":"a","text_tr":"Enerjim artar; daha da sosyalleşirim.","effects":{"sociability":2,"humor":1}},{"id":"b","text_tr":"Yorulurum; yalnız kalıp toparlanırım.","effects":{"independence":2,"sociability":-2}},{"id":"c","text_tr":"Kısa bir mola yeter; sonra devam ederim.","effects":{"resilience":1,"control":1}},{"id":"d","text_tr":"Aşırı düşünürüm; kim ne dedi, ne hissettim?","effects":{"sensitivity":2,"empathy":1}}]},{"id":"q13","text_tr":"Bir işi sana göre 'iyi' yapan şey nedir?","options":[{"id":"a","text_tr":"Sonuç: işe yarıyor mu?","effects":{"logic":2,"control":1}},{"id":"b","text_tr":"Etik: doğru mu?","effects":{"integrity":2,"empathy":1}},{"id":"c","text_tr":"Yaratıcılık: özgün mü?","effects":{"creativity":2,"risk":1}},{"id":"d","text_tr":"Bağ: birlikte mi yaptık?","effects":{"loyalty":2,"sociability":1}}]},{"id":"q14","text_tr":"Birine bağlanmak senin için ne demek?","options":[{"id":"a","text_tr":"Sadakat; sözüm söz.","effects":{"loyalty":2,"integrity":1}},{"id":"b","text_tr":"Güven; güven yoksa yakınlaşmam.","effects":{"control":1,"sensitivity":1,"loyalty":1}},{"id":"c","text_tr":"Özgürlük içinde ortaklık; boğulmak istemem.","effects":{"independence":2,"sociability":1}},{"id":"d","text_tr":"Yoğun his; sevince tam severim.","effects":{"sensitivity":2,"empathy":1}}]},{"id":"q15","text_tr":"Bir proje başarısız olursa ilk ne yaparsın?","options":[{"id":"a","text_tr":"Neyi yanlış yaptık? Analiz ederim.","effects":{"logic":2,"control":1}},{"id":"b","text_tr":"Kendimi suçlarım; duygusal çökerim.","effects":{"sensitivity":2,"resilience":-1}},{"id":"c","text_tr":"Hemen yeni deneme; kaybettiğim zamanı telafi.","effects":{"resilience":2,"ambition":1,"risk":1}},{"id":"d","text_tr":"Ekibi toplar; dersi çıkarıp yeniden organize ederim.","effects":{"leadership":2,"control":1,"integrity":1}}]},{"id":"q16","text_tr":"Bir otorite figürüyle (patron/öğretmen) anlaşamadığında…","options":[{"id":"a","text_tr":"Kurala uyarım ama içten içe mesafe koyarım.","effects":{"control":1,"integrity":1,"sociability":-1}},{"id":"b","text_tr":"Direkt konuşur, sınır çizerim.","effects":{"integrity":1,"independence":1,"leadership":1}},{"id":"c","text_tr":"Kendi yolumu bulurum; sistemi 'hack'lerim.","effects":{"creativity":2,"risk":1,"control":-1}},{"id":"d","text_tr":"Uyum sağlarım; çatışma yerine ilişkiyi korurum.","effects":{"empathy":1,"loyalty":1,"sociability":1}}]},{"id":"q17","text_tr":"Seni 'çekici' yapan özellik hangisi diye düşünüyorsun?","options":[{"id":"a","text_tr":"Zekâm ve hızlı çözüm üretmem.","effects":{"logic":2,"creativity":1}},{"id":"b","text_tr":"Güvenilirliğim; sözümde durmam.","effects":{"integrity":2,"loyalty":1}},{"id":"c","text_tr":"Enerjim ve mizahım.","effects":{"humor":2,"sociability":1}},{"id":"d","text_tr":"Gizemim; herkese hemen açılmam.","effects":{"independence":1,"control":1,"sociability":-1}}]},{"id":"q18","text_tr":"Bir haksızlık gördüğünde ne kadar ileri gidersin?","options":[{"id":"a","text_tr":"Gerekirse yalnız kalsam da mücadele ederim.","effects":{"integrity":2,"resilience":1,"independence":1}},{"id":"b","text_tr":"Sistemi içeriden değiştirmenin yolunu ararım.","effects":{"logic":1,"control":2,"leadership":1}},{"id":"c","text_tr":"Çatışmayı büyütmem; sakin çözüm ararım.","effects":{"empathy":2,"sociability":1,"risk":-1}},{"id":"d","text_tr":"Bazen boşveririm; enerjimi kendime saklarım.","effects":{"independence":1,"control":1,"empathy":-1}}]},{"id":"q19","text_tr":"İnsanların seni en çok hangi cümleyle tanımlamasını istersin?","options":[{"id":"a","text_tr":"'Güvenilir ve sağlam'","effects":{"loyalty":2,"integrity":1,"resilience":1}},{"id":"b","text_tr":"'Çok zeki ve üretken'","effects":{"logic":2,"creativity":1,"ambition":1}},{"id":"c","text_tr":"'Cesur ve bağımsız'","effects":{"risk":2,"independence":2}},{"id":"d","text_tr":"'Kalbi güzel ve anlayışlı'","effects":{"empathy":2,"sensitivity":1}}]},{"id":"q20","text_tr":"Bir seçim yaparken çoğunlukla ne ağır basar?","options":[{"id":"a","text_tr":"Prensiplerim.","effects":{"integrity":2,"control":1}},{"id":"b","text_tr":"Duygularım.","effects":{"sensitivity":2,"empathy":1}},{"id":"c","text_tr":"Mantık ve fayda.","effects":{"logic":2,"control":1}},{"id":"d","text_tr":"Özgürlük ve deneyim.","effects":{"independence":2,"risk":1,"creativity":1}}]},{"id":"q21","text_tr":"Birinin sana saygı duymasını nasıl sağlarsın?","options":[{"id":"a","text_tr":"Yetkinlikle; işi en iyi ben yaparım.","effects":{"control":1,"logic":1,"ambition":1}},{"id":"b","text_tr":"Adaletle; kimseye haksızlık etmem.","effects":{"integrity":2,"empathy":1}},{"id":"c","text_tr":"Kararlılıkla; çizgim nettir.","effects":{"leadership":1,"resilience":1,"control":1}},{"id":"d","text_tr":"Sıcakkanlılıkla; insanlar bende rahat eder.","effects":{"sociability":2,"humor":1,"empathy":1}}]},{"id":"q22","text_tr":"'İdeal gün' senin için daha çok hangisi?","options":[{"id":"a","text_tr":"Yalnız, üretken ve sessiz.","effects":{"independence":2,"control":1,"creativity":1,"sociability":-1}},{"id":"b","text_tr":"Arkadaşlarla dolu, enerjik.","effects":{"sociability":2,"humor":1}},{"id":"c","text_tr":"Zorlu ama anlamlı bir mücadele/iş.","effects":{"resilience":2,"integrity":1,"ambition":1}},{"id":"d","text_tr":"Yeni şeyler denediğim, sürprizli.","effects":{"risk":2,"creativity":1,"control":-1}}]},{"id":"q23","text_tr":"Stresli olduğunda ne yaparsın?","options":[{"id":"a","text_tr":"Kontrol ederim; plan yapıp rahatlarım.","effects":{"control":2,"logic":1}},{"id":"b","text_tr":"Konuşurum; dertleşince rahatlarım.","effects":{"sociability":2,"empathy":1}},{"id":"c","text_tr":"Mizaha vururum; gülünce geçer.","effects":{"humor":2,"resilience":1}},{"id":"d","text_tr":"İçime kapanırım; duygum derinleşir.","effects":{"sensitivity":2,"independence":1,"sociability":-1}}]},{"id":"q24","text_tr":"Birinin kalbini kırdığını fark edince…","options":[{"id":"a","text_tr":"Hemen özür diler, telafi ederim.","effects":{"empathy":2,"integrity":1}},{"id":"b","text_tr":"Haklıysam geri adım atmam.","effects":{"integrity":1,"control":1,"empathy":-1}},{"id":"c","text_tr":"Zorlanırım; suçluluk hissi günler sürer.","effects":{"sensitivity":2,"loyalty":1}},{"id":"d","text_tr":"Durumu rasyonelleştirir; niyeti anlatırım.","effects":{"logic":2,"control":1,"sensitivity":-1}}]},{"id":"q25","text_tr":"En zor sınavın hangisi?","options":[{"id":"a","text_tr":"Kontrolü bırakmak.","effects":{"control":2,"sensitivity":-1}},{"id":"b","text_tr":"Hayır demek ve sınır koymak.","effects":{"empathy":1,"loyalty":1,"independence":-1}},{"id":"c","text_tr":"Sabretmek; hemen sonuç almak isterim.","effects":{"ambition":2,"risk":1}},{"id":"d","text_tr":"Güvenmek; kimseyi kolay içeri almam.","effects":{"independence":1,"control":1,"loyalty":-1}}]}]};
+
+const charactersData = {"characters":[
+{"id":"series_breakingbad_walter","name":"Walter White","work":"Breaking Bad","result_archetype_tr":"Soğukkanlı Stratejist","result_blurb_tr":"Karmaşada bile aklını kaybetmemek senin gücün. Plan kurar, kontrolü ele alır ve sonuç almak için duygunu geri çekersin. Bazen 'doğru' ile 'işe yarar' arasındaki çizgi bulanıklaşabilir.","traits":{"leadership":7,"logic":9,"empathy":3,"ambition":9,"risk":7,"integrity":3,"loyalty":6,"independence":7,"sociability":3,"humor":3,"creativity":6,"resilience":8,"control":10,"sensitivity":4}},
+{"id":"series_got_daenerys","name":"Daenerys Targaryen","work":"Game of Thrones","result_archetype_tr":"İdealist Lider","result_blurb_tr":"Sen, 'daha iyi bir düzen' fikrine gerçekten inanıyorsun. İnsanları peşinden sürükleyebilecek kararlılığın var. En büyük sınavın, amaç uğruna sertleşip sertleşmediğin.","traits":{"leadership":10,"logic":6,"empathy":6,"ambition":9,"risk":7,"integrity":6,"loyalty":7,"independence":8,"sociability":7,"humor":3,"creativity":5,"resilience":9,"control":7,"sensitivity":6}},
+{"id":"series_muhtesemyuzyil_hurrem","name":"Hürrem Sultan","work":"Muhteşem Yüzyıl","result_archetype_tr":"Saray Zekâsı","result_blurb_tr":"Sen duygudan çok denge okursun: kim ne ister, neyi kaybeder, neyi kazanır. Hedefe yürürken planın nettir.","traits":{"leadership":8,"logic":8,"empathy":4,"ambition":10,"risk":7,"integrity":3,"loyalty":7,"independence":7,"sociability":7,"humor":3,"creativity":6,"resilience":9,"control":9,"sensitivity":6}},
+{"id":"series_askimemnu_bihter","name":"Bihter Ziyagil","work":"Aşk-ı Memnu","result_archetype_tr":"Yoğun Duygular","result_blurb_tr":"Senin dünyanda hisler 'yarım' olmaz; ya tamdır ya hiç. Sevdiğinde çok sahiplenirsin; en çok da gurur ile kalp arasında gidip gelirsin.","traits":{"leadership":4,"logic":4,"empathy":6,"ambition":6,"risk":6,"integrity":4,"loyalty":7,"independence":5,"sociability":6,"humor":3,"creativity":5,"resilience":4,"control":5,"sensitivity":10}},
+{"id":"series_ezel_ezel","name":"Ezel Bayraktar","work":"Ezel","result_archetype_tr":"Sessiz Planlayıcı","result_blurb_tr":"Sen başkasının hamlesini beklemezsin; oyunu kurarsın. Güven kolay verilmez. İçten içe adalet ararsın ama yöntemin 'hesap' olabilir.","traits":{"leadership":7,"logic":8,"empathy":4,"ambition":7,"risk":7,"integrity":5,"loyalty":6,"independence":8,"sociability":3,"humor":3,"creativity":6,"resilience":8,"control":9,"sensitivity":6}},
+{"id":"series_behzatc_behzat","name":"Behzat Ç.","work":"Behzat Ç.","result_archetype_tr":"Karanlık Vicdan","result_blurb_tr":"Sen 'doğru'yu kitabına göre değil, vicdanına göre ararsın. Sertliğin aslında yorgun bir korumadır. İnsanlar mizahını yanlış anlar.","traits":{"leadership":7,"logic":6,"empathy":5,"ambition":4,"risk":7,"integrity":8,"loyalty":7,"independence":8,"sociability":3,"humor":5,"creativity":4,"resilience":8,"control":6,"sensitivity":6}},
+{"id":"series_sahsiyet_agah","name":"Agah Beyoğlu","work":"Şahsiyet","result_archetype_tr":"Sessiz Hesap","result_blurb_tr":"Senin hikâyende 'unutmak' bir seçenek değil. Zamanla daha da netleşen bir adalet hissin var. Duygusal görünmezsin ama taşıdığın yük ağırdır.","traits":{"leadership":5,"logic":7,"empathy":5,"ambition":5,"risk":6,"integrity":8,"loyalty":6,"independence":7,"sociability":2,"humor":2,"creativity":4,"resilience":8,"control":7,"sensitivity":7}},
+{"id":"series_birbaskadir_meryem","name":"Meryem","work":"Bir Başkadır","result_archetype_tr":"Sessiz Dayanıklılık","result_blurb_tr":"Senin gücün gürültü yapmadan ayakta kalmak. Başkalarını anlaman çok kolay, kendini anlatman zor. İyilik sende 'saflık' değil; dirençli bir seçim.","traits":{"leadership":4,"logic":5,"empathy":9,"ambition":4,"risk":4,"integrity":8,"loyalty":8,"independence":5,"sociability":5,"humor":3,"creativity":4,"resilience":8,"control":5,"sensitivity":9}},
+{"id":"series_leylailemecnun_mecnun","name":"Mecnun","work":"Leyla ile Mecnun","result_archetype_tr":"Hayal Gücü Kalkanı","result_blurb_tr":"Sen acıyı bile hikâyeye çevirenlerdensin. Mizahın bir 'kaçış' değil, hayatta kalma biçimi. Kalbin çok açık; bu yüzden hem çok seversin hem çok yaralanırsın.","traits":{"leadership":3,"logic":4,"empathy":8,"ambition":3,"risk":5,"integrity":7,"loyalty":8,"independence":6,"sociability":6,"humor":9,"creativity":9,"resilience":5,"control":2,"sensitivity":10}},
+{"id":"series_bettercallsaul_kim","name":"Kim Wexler","work":"Better Call Saul","result_archetype_tr":"Disiplinli Gerçekçi","result_blurb_tr":"Sen işini ciddiye alırsın; 'düzgün yapmak' senin saygınlığın. Risk alırsın ama rastgele değil—hesaplı. Duygudan kaçmazsın; sadece yönetirsin.","traits":{"leadership":7,"logic":8,"empathy":6,"ambition":7,"risk":6,"integrity":7,"loyalty":7,"independence":7,"sociability":4,"humor":3,"creativity":5,"resilience":8,"control":9,"sensitivity":6}},
+{"id":"series_sherlock_sherlock","name":"Sherlock Holmes","work":"Sherlock","result_archetype_tr":"Keskin Zihin","result_blurb_tr":"Sen önce 'veri' görürsün, sonra insan. Sorunu anında çözersin ama duygular dünyası bazen sabrını zorlar.","traits":{"leadership":5,"logic":10,"empathy":2,"ambition":6,"risk":6,"integrity":6,"loyalty":5,"independence":9,"sociability":1,"humor":4,"creativity":7,"resilience":7,"control":8,"sensitivity":4}},
+{"id":"series_house_house","name":"Gregory House","work":"House M.D.","result_archetype_tr":"Sivri Deha","result_blurb_tr":"Senin zekân hızlı, dilin daha hızlı. Kurallar seni değil, sen kuralları test ediyorsun. Mizahın çoğu zaman bir mesafe.","traits":{"leadership":6,"logic":9,"empathy":3,"ambition":6,"risk":6,"integrity":6,"loyalty":4,"independence":9,"sociability":2,"humor":8,"creativity":7,"resilience":7,"control":6,"sensitivity":5}},
+{"id":"series_strangerthings_eleven","name":"Eleven","work":"Stranger Things","result_archetype_tr":"Korumacı Yalnız","result_blurb_tr":"Sen bağ kurunca 'tam' bağ kurarsın. Dışarıdan sessiz görünürsün ama içeride büyük bir güç var. Tehlikede sevdiklerini düşünürsün.","traits":{"leadership":5,"logic":4,"empathy":7,"ambition":4,"risk":7,"integrity":7,"loyalty":9,"independence":7,"sociability":3,"humor":2,"creativity":5,"resilience":8,"control":4,"sensitivity":9}},
+{"id":"series_lacasa_professor","name":"The Professor","work":"La Casa de Papel","result_archetype_tr":"Usta Planlayıcı","result_blurb_tr":"Sen kaosu sevmiyorsun; onu yönetmek istiyorsun. Her adımı önce zihninde oynatıp sonra sahaya sürersin. Duygular geldiğinde bile planın 'yedek planı' vardır.","traits":{"leadership":7,"logic":9,"empathy":5,"ambition":8,"risk":6,"integrity":5,"loyalty":7,"independence":7,"sociability":3,"humor":2,"creativity":7,"resilience":7,"control":10,"sensitivity":6}},
+{"id":"series_queensgambit_beth","name":"Beth Harmon","work":"The Queen's Gambit","result_archetype_tr":"Yalnız Usta","result_blurb_tr":"Sen rekabeti ciddiye alıyorsun; kendini aşmak senin oyunun. Yalnızken daha iyi düşünürsün, kalabalık seni yorabilir.","traits":{"leadership":5,"logic":10,"empathy":4,"ambition":9,"risk":6,"integrity":7,"loyalty":5,"independence":9,"sociability":2,"humor":2,"creativity":6,"resilience":6,"control":8,"sensitivity":7}},
+{"id":"series_mrrobot_elliot","name":"Elliot Alderson","work":"Mr. Robot","result_archetype_tr":"Derin Yalnız","result_blurb_tr":"Senin kafanda dünya 'katman katman'. İnsanlara yaklaşmak zor, çünkü her şeyi fazla görüyorsun. Doğru bir amaç bulunca, sessizce çok büyük işler çıkarırsın.","traits":{"leadership":4,"logic":9,"empathy":5,"ambition":6,"risk":6,"integrity":7,"loyalty":6,"independence":9,"sociability":1,"humor":2,"creativity":7,"resilience":5,"control":7,"sensitivity":9}},
+{"id":"series_peaky_tommy","name":"Tommy Shelby","work":"Peaky Blinders","result_archetype_tr":"Soğukkanlı Lider","result_blurb_tr":"Sen kriz anında donmazsın; netleşirsin. İnsanlar kararlılığını 'sertlik' sanabilir. İçeride çok şey taşısan da dışarıda stratejiyle yürürsün.","traits":{"leadership":9,"logic":8,"empathy":4,"ambition":9,"risk":7,"integrity":5,"loyalty":7,"independence":8,"sociability":4,"humor":2,"creativity":5,"resilience":9,"control":9,"sensitivity":6}},
+{"id":"series_fleabag_fleabag","name":"Fleabag","work":"Fleabag","result_archetype_tr":"Mizahla Hayatta Kalan","result_blurb_tr":"Senin zekânın sesi komik çıkar—ama bu bir maske. İçeride çok hassas bir radarın var; bu yüzden hem hızlı bağ kurar hem hızlı yorulursun.","traits":{"leadership":4,"logic":6,"empathy":6,"ambition":5,"risk":6,"integrity":7,"loyalty":6,"independence":8,"sociability":7,"humor":10,"creativity":7,"resilience":5,"control":3,"sensitivity":9}},
+{"id":"film_ironman_tony","name":"Tony Stark","work":"Iron Man","result_archetype_tr":"Karizmatik Üretici","result_blurb_tr":"Hem zekâ hem hız sende. Krizde bile espri yaparsın; ama ciddiyet gerektiğinde omzu sen koyarsın. İnsanlar 'rahatlığı' yanlış anlayabilir; sen aslında çok hesap yapıyorsun.","traits":{"leadership":8,"logic":9,"empathy":5,"ambition":8,"risk":7,"integrity":6,"loyalty":7,"independence":9,"sociability":8,"humor":9,"creativity":10,"resilience":7,"control":6,"sensitivity":5}},
+{"id":"film_darkknight_batman","name":"Bruce Wayne (Batman)","work":"The Dark Knight Trilogy","result_archetype_tr":"Sessiz Muhafız","result_blurb_tr":"Sen sorumluluğu 'hisseden' taraftasın: yapılması gerekiyorsa yaparsın. Adalet senin için bir fikir değil, bir görev.","traits":{"leadership":7,"logic":7,"empathy":4,"ambition":6,"risk":7,"integrity":9,"loyalty":7,"independence":9,"sociability":2,"humor":2,"creativity":4,"resilience":10,"control":8,"sensitivity":4}},
+{"id":"film_pirates_jack","name":"Jack Sparrow","work":"Pirates of the Caribbean","result_archetype_tr":"Özgür Ruh","result_blurb_tr":"Senin refleksin 'kaçış' değil; doğaçlama. Kurallar seni yavaşlatır, sen hız seversin. Zor durumlarda bile mizahla nefes alırsın.","traits":{"leadership":6,"logic":6,"empathy":5,"ambition":5,"risk":9,"integrity":4,"loyalty":5,"independence":10,"sociability":7,"humor":9,"creativity":8,"resilience":7,"control":2,"sensitivity":4}},
+{"id":"film_forrestgump_forrest","name":"Forrest Gump","work":"Forrest Gump","result_archetype_tr":"Saf Güç","result_blurb_tr":"Senin gücün karmaşık olmaman: kalbin net. Sadakat senin imzan; sevdiklerin için yorulmadan yürürsün. İnsanlar seni hafife alabilir ama en dayanıklı sensin.","traits":{"leadership":4,"logic":4,"empathy":8,"ambition":3,"risk":5,"integrity":9,"loyalty":10,"independence":6,"sociability":6,"humor":5,"creativity":3,"resilience":9,"control":4,"sensitivity":7}},
+{"id":"film_harrypotter_hermione","name":"Hermione Granger","work":"Harry Potter","result_archetype_tr":"Prensipli Zihin","result_blurb_tr":"Sen 'hazırlıklı' insanlardansın: bilgi senin zırhın. İlken varsa kolay kolay geri adım atmazsın. Sevdiklerini korurken de soğukkanlı kalabilirsin.","traits":{"leadership":7,"logic":9,"empathy":7,"ambition":7,"risk":5,"integrity":9,"loyalty":9,"independence":6,"sociability":6,"humor":4,"creativity":6,"resilience":7,"control":8,"sensitivity":6}},
+{"id":"film_starwars_leia","name":"Leia Organa","work":"Star Wars","result_archetype_tr":"Sorumluluk Lideri","result_blurb_tr":"Senin için 'bahane' yok: durum neyse ona göre hareket edersin. İnsanlar senden güç alır çünkü paniklemezsin.","traits":{"leadership":9,"logic":7,"empathy":6,"ambition":7,"risk":7,"integrity":9,"loyalty":8,"independence":8,"sociability":6,"humor":4,"creativity":4,"resilience":9,"control":7,"sensitivity":5}},
+{"id":"film_godfather_michael","name":"Michael Corleone","work":"The Godfather","result_archetype_tr":"Buz Gibi Kontrol","result_blurb_tr":"Senin zekân 'sakin' çalışır: duygun yükselse bile yüzün belli etmez. Gücü sevmesen de gerektiğinde taşırsın.","traits":{"leadership":9,"logic":8,"empathy":3,"ambition":9,"risk":6,"integrity":3,"loyalty":8,"independence":7,"sociability":3,"humor":1,"creativity":4,"resilience":9,"control":10,"sensitivity":4}},
+{"id":"film_shawshank_andy","name":"Andy Dufresne","work":"The Shawshank Redemption","result_archetype_tr":"Sabırlı Kurtarıcı","result_blurb_tr":"Senin avantajın 'zamanı' kullanabilmek. Panik yerine sabır, öfke yerine plan koyarsın. Umudu romantik değil, pratik bir şeye çevirirsin.","traits":{"leadership":6,"logic":8,"empathy":6,"ambition":6,"risk":5,"integrity":8,"loyalty":7,"independence":7,"sociability":4,"humor":2,"creativity":6,"resilience":10,"control":8,"sensitivity":5}},
+{"id":"film_matrix_neo","name":"Neo","work":"The Matrix","result_archetype_tr":"Anlam Arayıcısı","result_blurb_tr":"Senin hayatında 'neden?' sorusu çok önemli. Bir şey doğru gelmiyorsa peşini bırakmazsın. İnandığın şeye karar verdiğinde cesaretin bir anda yükselir.","traits":{"leadership":7,"logic":6,"empathy":6,"ambition":5,"risk":8,"integrity":8,"loyalty":7,"independence":9,"sociability":3,"humor":2,"creativity":6,"resilience":8,"control":5,"sensitivity":7}},
+{"id":"film_alien_ripley","name":"Ellen Ripley","work":"Alien","result_archetype_tr":"Kriz Yönetici","result_blurb_tr":"Sen baskı altında parlıyorsun: 'ne yapılmalı?' sorusuna odaklanırsın. Duygu göstermezsin ama sevdiklerini korursun.","traits":{"leadership":8,"logic":7,"empathy":5,"ambition":5,"risk":7,"integrity":8,"loyalty":6,"independence":9,"sociability":3,"humor":2,"creativity":4,"resilience":10,"control":7,"sensitivity":5}},
+{"id":"film_silence_clarice","name":"Clarice Starling","work":"The Silence of the Lambs","result_archetype_tr":"Cesur Analist","result_blurb_tr":"Sen hem görürsün hem hissedersin. Zor soruların içine girer, kaçmazsın. Empatin seni yumuşatmaz; daha doğru karar almana yardım eder.","traits":{"leadership":7,"logic":8,"empathy":7,"ambition":7,"risk":7,"integrity":8,"loyalty":6,"independence":8,"sociability":4,"humor":2,"creativity":4,"resilience":9,"control":8,"sensitivity":6}},
+{"id":"film_lotr_aragorn","name":"Aragorn","work":"The Lord of the Rings","result_archetype_tr":"Alçakgönüllü Lider","result_blurb_tr":"Sen liderliği 'poz' olarak değil, sorumluluk olarak görüyorsun. Güç eline geçse de kendini kaybetmezsin. İnsanlar sana güvenir çünkü prensiplerin net.","traits":{"leadership":9,"logic":6,"empathy":7,"ambition":5,"risk":7,"integrity":10,"loyalty":9,"independence":8,"sociability":5,"humor":3,"creativity":4,"resilience":9,"control":6,"sensitivity":6}},
+{"id":"film_gladiator_maximus","name":"Maximus","work":"Gladiator","result_archetype_tr":"Onurlu Savaşçı","result_blurb_tr":"Sen 'doğru bildiğini' pazarlık yapmadan savunursun. Zor şartlarda bile çizgin bozulmaz. Sadakat ve onur senin çekirdeğin.","traits":{"leadership":8,"logic":6,"empathy":5,"ambition":6,"risk":8,"integrity":10,"loyalty":9,"independence":8,"sociability":4,"humor":2,"creativity":3,"resilience":10,"control":6,"sensitivity":6}},
+{"id":"film_lalaland_mia","name":"Mia Dolan","work":"La La Land","result_archetype_tr":"Yaratıcı Hayalperest","result_blurb_tr":"Senin dünyanda hedef 'sadece iş' değil, anlam. Hayal kurarsın ama çalışmayı da bilirsin. Kalbinin kırılması seni durdurmaz; sadece olgunlaştırır.","traits":{"leadership":4,"logic":5,"empathy":7,"ambition":7,"risk":5,"integrity":7,"loyalty":6,"independence":6,"sociability":6,"humor":5,"creativity":9,"resilience":6,"control":5,"sensitivity":8}},
+{"id":"film_amelie_amelie","name":"Amélie Poulain","work":"Amélie","result_archetype_tr":"İnce Ruh","result_blurb_tr":"Sen büyük laflardan çok küçük hareketlerle etki ediyorsun. İnsanların duygusunu hemen okursun. Kalabalığı seversin ama kendi dünyan daha güvenli gelir.","traits":{"leadership":3,"logic":5,"empathy":9,"ambition":3,"risk":4,"integrity":8,"loyalty":6,"independence":6,"sociability":4,"humor":6,"creativity":9,"resilience":6,"control":4,"sensitivity":9}},
+{"id":"film_blackswan_nina","name":"Nina Sayers","work":"Black Swan","result_archetype_tr":"Mükemmeliyetçi","result_blurb_tr":"Senin standartların herkesin üstünde—özellikle kendin için. Detayları görür, hata istemezsin. Gücün disiplin; riskin kendini fazla zorlamak.","traits":{"leadership":3,"logic":6,"empathy":5,"ambition":9,"risk":6,"integrity":6,"loyalty":5,"independence":5,"sociability":2,"humor":1,"creativity":8,"resilience":4,"control":10,"sensitivity":10}},
+{"id":"film_eternalsunshine_clementine","name":"Clementine Kruczynski","work":"Eternal Sunshine of the Spotless Mind","result_archetype_tr":"Spontane Kalp","result_blurb_tr":"Sen hayatı 'his' üzerinden yaşarsın. Bir şey içten gelmiyorsa sürdürmezsin. Gücün cesaret ve renk; zorluğun dalgalanmayı yönetmek.","traits":{"leadership":4,"logic":4,"empathy":6,"ambition":4,"risk":7,"integrity":6,"loyalty":5,"independence":8,"sociability":7,"humor":6,"creativity":8,"resilience":5,"control":2,"sensitivity":9}},
+{"id":"film_martian_watney","name":"Mark Watney","work":"The Martian","result_archetype_tr":"Problem Çözücü","result_blurb_tr":"Senin olayın 'şartlar ne olursa olsun çözüm'. Baskıda bile moralini mizahla tutarsın. Zekân pratik; elindekiyle iş çıkarırsın.","traits":{"leadership":7,"logic":8,"empathy":6,"ambition":6,"risk":7,"integrity":8,"loyalty":7,"independence":8,"sociability":5,"humor":7,"creativity":7,"resilience":9,"control":6,"sensitivity":5}},
+{"id":"film_madmax_furiosa","name":"Imperator Furiosa","work":"Mad Max: Fury Road","result_archetype_tr":"Çelik İrade","result_blurb_tr":"Geri vites yok: tehlike seni küçültmez, netleştirir. Başkaları için risk alabilen 'sert iyilik' taşıyorsun.","traits":{"leadership":9,"logic":7,"empathy":5,"ambition":6,"risk":8,"integrity":7,"loyalty":7,"independence":9,"sociability":3,"humor":2,"creativity":4,"resilience":10,"control":7,"sensitivity":5}},
+{"id":"film_terminator_sarah","name":"Sarah Connor","work":"Terminator 2","result_archetype_tr":"Dönüşmüş Koruyucu","result_blurb_tr":"Sen tehlike gördüğünde 'beklemezsin'. Hazırlanır, güçlenirsin. Sevdiklerin için sertleşebilen ama özünde koruyan birisin.","traits":{"leadership":8,"logic":6,"empathy":5,"ambition":7,"risk":8,"integrity":7,"loyalty":8,"independence":8,"sociability":3,"humor":2,"creativity":4,"resilience":10,"control":7,"sensitivity":6}},
+{"id":"film_erinbrockovich_erin","name":"Erin Brockovich","work":"Erin Brockovich","result_archetype_tr":"Hakkını Arayan","result_blurb_tr":"Sen 'haksızlık' gördüğünde geri çekilmiyorsun. Konuşur, ikna eder, mücadele edersin. Gücün: yılmamak.","traits":{"leadership":8,"logic":6,"empathy":7,"ambition":8,"risk":7,"integrity":9,"loyalty":7,"independence":8,"sociability":7,"humor":5,"creativity":6,"resilience":8,"control":6,"sensitivity":7}},
+{"id":"film_devilwearsprada_miranda","name":"Miranda Priestly","work":"The Devil Wears Prada","result_archetype_tr":"Yüksek Standartlı Yönetici","result_blurb_tr":"Sen 'ortalama' ile barışık değilsin. Kalite ve kontrol senin için güven demek. İnsanlar seni sert bulabilir; sen ise 'işin gereği' dersin.","traits":{"leadership":9,"logic":7,"empathy":3,"ambition":9,"risk":4,"integrity":4,"loyalty":4,"independence":7,"sociability":6,"humor":2,"creativity":6,"resilience":8,"control":10,"sensitivity":4}},
+{"id":"film_hungergames_katniss","name":"Katniss Everdeen","work":"The Hunger Games","result_archetype_tr":"İnatçı Hayatta Kalan","result_blurb_tr":"Sen zor şartlarda bile kendi ayaklarının üzerinde durursun. Sevdiklerini korumak için risk alırsın. Kahraman olmak istemezsin; mecbur kalınca olursun.","traits":{"leadership":8,"logic":6,"empathy":6,"ambition":5,"risk":8,"integrity":8,"loyalty":8,"independence":9,"sociability":3,"humor":2,"creativity":4,"resilience":9,"control":6,"sensitivity":7}},
+{"id":"film_mulan_mulan","name":"Mulan","work":"Mulan","result_archetype_tr":"Cesur Sorumluluk","result_blurb_tr":"Senin cesaretin gösterişsiz: 'gerekli' olduğu için yaparsın. Sadakat ve prensip seni ayakta tutar. Krizde de toparlanmayı bilirsin.","traits":{"leadership":8,"logic":6,"empathy":7,"ambition":6,"risk":7,"integrity":9,"loyalty":9,"independence":8,"sociability":4,"humor":3,"creativity":5,"resilience":9,"control":6,"sensitivity":6}},
+{"id":"film_insideout_joy","name":"Joy","work":"Inside Out","result_archetype_tr":"Moral Motoru","result_blurb_tr":"Sen ortamı ayağa kaldıran kişisin. İnsanları motive eder, duyguları yönetmeye çalışırsın. Bazen her şeyi 'iyi' yapmak seni yorabilir.","traits":{"leadership":6,"logic":5,"empathy":8,"ambition":5,"risk":4,"integrity":8,"loyalty":7,"independence":5,"sociability":8,"humor":8,"creativity":7,"resilience":7,"control":4,"sensitivity":6}},
+{"id":"film_indianajones_indiana","name":"Indiana Jones","work":"Indiana Jones","result_archetype_tr":"Maceracı Çözümcü","result_blurb_tr":"Senin olayın hareket: durup beklemek sana göre değil. Tehlike seni korkutmaz; merakın daha güçlü.","traits":{"leadership":7,"logic":6,"empathy":5,"ambition":6,"risk":8,"integrity":7,"loyalty":6,"independence":9,"sociability":6,"humor":6,"creativity":6,"resilience":8,"control":4,"sensitivity":4}},
+{"id":"film_missionimpossible_ethan","name":"Ethan Hunt","work":"Mission: Impossible","result_archetype_tr":"Görev Odaklı","result_blurb_tr":"Sen stres altında bile işi bitiren taraftasın. Sadakat senin için söz değil eylem. Risk alırsın ama boşuna değil—sonuç için.","traits":{"leadership":8,"logic":6,"empathy":5,"ambition":6,"risk":9,"integrity":8,"loyalty":8,"independence":8,"sociability":5,"humor":3,"creativity":5,"resilience":9,"control":6,"sensitivity":4}},
+{"id":"film_legallyblonde_elle","name":"Elle Woods","work":"Legally Blonde","result_archetype_tr":"Parlayan Azim","result_blurb_tr":"Sen hafife alınsan bile yürümeye devam edersin. Sosyal enerjin yüksek ama boş değil—hedef koyunca çalışırsın. 'Ben yaparım' özgüveni sende doğal.","traits":{"leadership":6,"logic":6,"empathy":8,"ambition":8,"risk":5,"integrity":8,"loyalty":7,"independence":7,"sociability":9,"humor":7,"creativity":7,"resilience":7,"control":5,"sensitivity":7}},
+{"id":"film_prideprejudice_elizabeth","name":"Elizabeth Bennet","work":"Pride and Prejudice","result_archetype_tr":"Zarif Bağımsızlık","result_blurb_tr":"Sen kendi fikrini kolay kolay satmazsın. Zekân ve mizahın birlikte çalışır; insanları okursun. İlişkilerde 'eşitlik' senin kırmızı çizgin.","traits":{"leadership":5,"logic":7,"empathy":7,"ambition":5,"risk":4,"integrity":8,"loyalty":7,"independence":8,"sociability":6,"humor":6,"creativity":5,"resilience":7,"control":5,"sensitivity":7}},
+{"id":"film_lesmis_valjean","name":"Jean Valjean","work":"Les Misérables","result_archetype_tr":"Vicdanlı Fedakâr","result_blurb_tr":"Senin için 'iyi olmak' kolay değil, ama vazgeçmediğin bir seçim. Zorluğu taşıyabilirsin; bu yüzden insanlar sana yaslanır.","traits":{"leadership":7,"logic":6,"empathy":8,"ambition":6,"risk":6,"integrity":10,"loyalty":9,"independence":7,"sociability":4,"humor":2,"creativity":4,"resilience":9,"control":6,"sensitivity":8}},
+{"id":"film_leon_mathilda","name":"Mathilda","work":"Léon: The Professional","result_archetype_tr":"Kırılgan Cesaret","result_blurb_tr":"Sen kırılganlığını kimseye göstermezsin ama içten içe çok şey hissedersin. Zorlanınca geri çekilmek yerine atılabilirsin. Güvenince de kolay bırakmazsın.","traits":{"leadership":4,"logic":5,"empathy":6,"ambition":6,"risk":7,"integrity":6,"loyalty":7,"independence":7,"sociability":3,"humor":3,"creativity":6,"resilience":7,"control":4,"sensitivity":9}},
+{"id":"film_schindler_oskar","name":"Oskar Schindler","work":"Schindler's List","result_archetype_tr":"Karizmatik Vicdan","result_blurb_tr":"Sen insanları ikna etmeyi bilirsin; sosyal zekân güçlü. Zor bir an geldiğinde vicdanın devreye girer ve konforunu terk edebilirsin.","traits":{"leadership":8,"logic":7,"empathy":6,"ambition":7,"risk":6,"integrity":7,"loyalty":7,"independence":7,"sociability":8,"humor":5,"creativity":6,"resilience":8,"control":6,"sensitivity":6}},
+{"id":"film_mononoke_san","name":"San","work":"Princess Mononoke","result_archetype_tr":"Yabanın Sadakati","result_blurb_tr":"Senin özgürlüğün pazarlık konusu değil. İnandığın şeyi korurken sertleşebilirsin. Yakın hissettiğin az kişiye ise çok sadıksın.","traits":{"leadership":6,"logic":5,"empathy":6,"ambition":5,"risk":8,"integrity":7,"loyalty":7,"independence":10,"sociability":2,"humor":1,"creativity":5,"resilience":9,"control":4,"sensitivity":7}},
+{"id":"film_spiderman_peter","name":"Peter Parker (Spider-Man)","work":"Spider-Man","result_archetype_tr":"Vicdanlı Kahraman","result_blurb_tr":"Sen haksızlık görünce harekete geçersin. Kendi yükünü kimseye yıkmak istemezsin, o yüzden bazen yalnız taşırsın. Mizahın da bir dayanıklılık biçimi.","traits":{"leadership":7,"logic":6,"empathy":8,"ambition":6,"risk":7,"integrity":9,"loyalty":8,"independence":7,"sociability":7,"humor":7,"creativity":6,"resilience":8,"control":4,"sensitivity":7}},
+{"id":"film_wonderwoman_diana","name":"Diana Prince (Wonder Woman)","work":"Wonder Woman","result_archetype_tr":"Merhametli Güç","result_blurb_tr":"Sen güçlü olmayı 'ezmek' değil 'korumak' olarak görüyorsun. İlken net, vicdanın canlı. İnsanlar sana güvenir çünkü sıcak kalabiliyorsun.","traits":{"leadership":9,"logic":6,"empathy":7,"ambition":6,"risk":7,"integrity":10,"loyalty":8,"independence":8,"sociability":6,"humor":3,"creativity":4,"resilience":9,"control":6,"sensitivity":6}},
+{"id":"film_killbill_bride","name":"Beatrix Kiddo (The Bride)","work":"Kill Bill","result_archetype_tr":"Bitirici","result_blurb_tr":"Sen hedef koyduğunda yarım bırakmazsın. Duygun yükselse bile enerjini eyleme çevirirsin. İnsanlar geri adım atmadığını bilir.","traits":{"leadership":6,"logic":6,"empathy":4,"ambition":7,"risk":9,"integrity":6,"loyalty":6,"independence":9,"sociability":2,"humor":1,"creativity":4,"resilience":10,"control":7,"sensitivity":5}},
+{"id":"film_tr_eskiya_baran","name":"Baran","work":"Eşkıya","result_archetype_tr":"Onurlu Yalnız","result_blurb_tr":"Senin çizgin onur: söz ağızdan çıktı mı geri dönmez. Hayat seni sertleştirmiş olabilir ama özün temiz. Güvendiğine çok sadıksın.","traits":{"leadership":6,"logic":5,"empathy":6,"ambition":5,"risk":7,"integrity":9,"loyalty":9,"independence":7,"sociability":3,"humor":2,"creativity":4,"resilience":9,"control":5,"sensitivity":7}},
+{"id":"film_tr_mustang_lale","name":"Lale","work":"Mustang","result_archetype_tr":"Özgürlük Ateşi","result_blurb_tr":"Senin için hayat 'izin'le yaşanmaz. Baskı gördüğünde küçülmez, büyürsün. Risk alırsın çünkü özgürlük konfordan daha kıymetli.","traits":{"leadership":6,"logic":5,"empathy":6,"ambition":6,"risk":8,"integrity":7,"loyalty":8,"independence":10,"sociability":6,"humor":4,"creativity":6,"resilience":8,"control":3,"sensitivity":7}},
+{"id":"film_tr_babamoglum_sadik","name":"Sadık","work":"Babam ve Oğlum","result_archetype_tr":"Vicdanlı İdealist","result_blurb_tr":"Sen 'doğru'yu sadece savunmazsın, yaşarsın. Sevdiklerin için kendinden vazgeçmeye yatkınsın. En büyük sınavın, kendini de korumayı öğrenmek.","traits":{"leadership":6,"logic":6,"empathy":8,"ambition":6,"risk":6,"integrity":9,"loyalty":9,"independence":7,"sociability":5,"humor":3,"creativity":5,"resilience":6,"control":6,"sensitivity":9}},
+{"id":"film_tr_gora_arif","name":"Arif","work":"G.O.R.A.","result_archetype_tr":"Doğaçlama Ustası","result_blurb_tr":"Senin zekân 'hayatta kalma zekâsı'. Kriz anında panik yerine şaka çıkar; ama o şakanın arkasında pratik çözüm vardır. İnsanlar yanında rahatlar.","traits":{"leadership":6,"logic":6,"empathy":5,"ambition":5,"risk":7,"integrity":6,"loyalty":6,"independence":8,"sociability":7,"humor":10,"creativity":7,"resilience":7,"control":3,"sensitivity":4}},
+{"id":"film_tr_kisuykusu_aydin","name":"Aydın","work":"Kış Uykusu","result_archetype_tr":"Düşünen Mesafe","result_blurb_tr":"Sen olaylara dışarıdan bakmayı seversin; bu sana güç verir. Ama duygusal yakınlık geldiğinde zorlanabilirsin. En iyi halin: kendinle dürüst olduğunda.","traits":{"leadership":5,"logic":8,"empathy":4,"ambition":5,"risk":3,"integrity":6,"loyalty":5,"independence":7,"sociability":2,"humor":2,"creativity":5,"resilience":6,"control":8,"sensitivity":7}},
+{"id":"film_tr_ahlat_sinan","name":"Sinan","work":"Ahlat Ağacı","result_archetype_tr":"Yalnız Arayıcı","result_blurb_tr":"Senin kafanda 'haklılık' kadar 'anlam' da önemli. Eleştiri seni çabuk yaralayabilir, bu yüzden sertleşebilirsin. Ama içten içe çok canlı bir hayal gücün var.","traits":{"leadership":3,"logic":6,"empathy":6,"ambition":6,"risk":4,"integrity":7,"loyalty":5,"independence":8,"sociability":2,"humor":2,"creativity":7,"resilience":5,"control":6,"sensitivity":9}}
+]};
+
+// Character emojis
+const characterEmojis = {'Walter White':'🧪','Daenerys Targaryen':'🐉','Hürrem Sultan':'👑','Bihter Ziyagil':'💔','Ezel Bayraktar':'🎭','Behzat Ç.':'🔫','Agah Beyoğlu':'⚖️','Meryem':'🕊️','Mecnun':'🌙','Kim Wexler':'⚖️','Sherlock Holmes':'🔍','Gregory House':'💊','Eleven':'🔮','The Professor':'🎯','Beth Harmon':'♟️','Elliot Alderson':'💻','Tommy Shelby':'🎩','Fleabag':'🍷','Tony Stark':'🦾','Bruce Wayne (Batman)':'🦇','Jack Sparrow':'🏴‍☠️','Forrest Gump':'🏃','Hermione Granger':'📚','Leia Organa':'⭐','Michael Corleone':'🤵','Andy Dufresne':'🔨','Neo':'💊','Ellen Ripley':'🚀','Clarice Starling':'🔦','Aragorn':'👑','Maximus':'⚔️','Mia Dolan':'🎭','Amélie Poulain':'🎨','Nina Sayers':'🩰','Clementine Kruczynski':'🌈','Mark Watney':'🌱','Imperator Furiosa':'🔥','Sarah Connor':'💪','Erin Brockovich':'📋','Miranda Priestly':'👠','Katniss Everdeen':'🏹','Mulan':'⚔️','Joy':'☀️','Indiana Jones':'🎒','Ethan Hunt':'🕵️','Elle Woods':'💖','Elizabeth Bennet':'📖','Jean Valjean':'🕯️','Mathilda':'🌱','Oskar Schindler':'📝','San':'🐺','Peter Parker (Spider-Man)':'🕷️','Diana Prince (Wonder Woman)':'⭐','Beatrix Kiddo (The Bride)':'⚔️','Baran':'🐺','Lale':'🌸','Sadık':'❤️','Arif':'🚀','Aydın':'📚','Sinan':'🌳','default':'🎬'};
+
+let currentQuestion = 0;
+let userTraitScores = {};
+let traitsInfo = {};
+
+// Build traits info
+questionsData.traits.forEach(t => { traitsInfo[t.key] = t.label_tr; });
+
+function initializeTraits() {
+    userTraitScores = {leadership:5,logic:5,empathy:5,ambition:5,risk:5,integrity:5,loyalty:5,independence:5,sociability:5,humor:5,creativity:5,resilience:5,control:5,sensitivity:5};
+}
+
+function getCharacterEmoji(name) { return characterEmojis[name] || characterEmojis['default']; }
+
+function startQuiz() {
+    initializeTraits();
+    currentQuestion = 0;
+    document.getElementById('landing').classList.add('hidden');
+    document.getElementById('quiz').classList.add('active');
+    
+    // Mobile: Auto fullscreen mode
+    if (window.innerWidth <= 768) {
+        document.body.classList.add('is-fullscreen');
+        // Hide fullscreen button since we're already fullscreen
+        const fsBtn = document.querySelector('.fullscreen-btn');
+        if (fsBtn) fsBtn.style.display = 'none';
+    }
+    
+    displayQuestion();
+    window.scrollTo(0, 0);
+}
+
+function displayQuestion() {
+    const question = questionsData.questions[currentQuestion];
+    const totalQuestions = questionsData.questions.length;
+    const progress = ((currentQuestion) / totalQuestions) * 100;
+    
+    document.getElementById('progressBar').style.width = progress + '%';
+    document.getElementById('progressText').textContent = `Soru ${currentQuestion + 1} / ${totalQuestions}`;
+    document.getElementById('questionNumber').textContent = `Soru ${currentQuestion + 1}`;
+    document.getElementById('questionText').textContent = question.text_tr;
+    
+    const characters = charactersData.characters;
+    const randomChar = characters[currentQuestion % characters.length];
+    
+    document.getElementById('characterInfoName').textContent = randomChar.name;
+    document.getElementById('characterInfoWork').textContent = randomChar.work;
+    document.getElementById('characterImage').textContent = getCharacterEmoji(randomChar.name);
+    
+    const optionsContainer = document.getElementById('optionsContainer');
+    optionsContainer.innerHTML = '';
+    
+    const letters = ['A', 'B', 'C', 'D'];
+    question.options.forEach((option, index) => {
+        const optionBtn = document.createElement('button');
+        optionBtn.className = 'option-btn';
+        optionBtn.innerHTML = `<span class="option-letter">${letters[index]}</span><span class="option-text">${option.text_tr}</span>`;
+        optionBtn.onclick = () => selectOption(option, optionBtn);
+        optionsContainer.appendChild(optionBtn);
+    });
+}
+
+function selectOption(option, buttonElement) {
+    document.querySelectorAll('.option-btn').forEach(btn => { btn.classList.remove('selected'); btn.style.pointerEvents = 'none'; });
+    buttonElement.classList.add('selected');
+    
+    if (option.effects) {
+        for (const [trait, value] of Object.entries(option.effects)) {
+            userTraitScores[trait] = Math.max(0, Math.min(10, userTraitScores[trait] + value));
+        }
+    }
+    
+    const totalQuestions = questionsData.questions.length;
+    console.log('Question answered:', currentQuestion + 1, '/', totalQuestions);
+    
+    setTimeout(() => {
+        currentQuestion++;
+        console.log('Moving to question:', currentQuestion + 1);
+        if (currentQuestion < totalQuestions) { 
+            displayQuestion(); 
+            window.scrollTo(0, 0);
+        }
+        else { 
+            console.log('Quiz complete, showing loading...');
+            showLoading(); 
+        }
+    }, 400);
+}
+
+function showLoading() {
+    document.getElementById('quiz').classList.remove('active');
+    document.getElementById('loading').classList.add('active');
+    setTimeout(() => { calculateResult(); }, 2000);
+}
+
+function manhattanDistance(userScores, characterTraits) {
+    let distance = 0;
+    for (const key of Object.keys(userScores)) {
+        const userVal = userScores[key] || 5;
+        const charVal = characterTraits[key] || 5;
+        distance += Math.abs(userVal - charVal);
+    }
+    return distance;
+}
+
+function calculateResult() {
+    // Skorları normalize et (0-10 arasına yay)
+    const values = Object.values(userTraitScores);
+    const minVal = Math.min(...values);
+    const maxVal = Math.max(...values);
+    const range = maxVal - minVal || 1;
+    
+    for (const key of Object.keys(userTraitScores)) {
+        userTraitScores[key] = ((userTraitScores[key] - minVal) / range) * 10;
+    }
+    
+    const characters = charactersData.characters;
+    const scored = characters.map(char => ({...char, distance: manhattanDistance(userTraitScores, char.traits)}));
+    scored.sort((a, b) => {
+        if (a.distance !== b.distance) return a.distance - b.distance;
+        const tieA = (a.traits.resilience || 0) + (a.traits.logic || 0) + (a.traits.integrity || 0);
+        const tieB = (b.traits.resilience || 0) + (b.traits.logic || 0) + (b.traits.integrity || 0);
+        return tieB - tieA;
+    });
+    showResult(scored[0], scored.slice(1, 3));
+}
+
+function showResult(character, similar) {
+    document.getElementById('loading').classList.remove('active');
+    document.getElementById('result').classList.add('active');
+    
+    document.getElementById('resultCharacterImage').textContent = getCharacterEmoji(character.name);
+    document.getElementById('resultCharacter').textContent = character.name;
+    document.getElementById('resultWork').textContent = character.work;
+    document.getElementById('resultArchetype').textContent = character.result_archetype_tr;
+    document.getElementById('resultDescription').textContent = character.result_blurb_tr;
+    
+    const traitsContainer = document.getElementById('traitsContainer');
+    traitsContainer.innerHTML = '';
+    
+    // En yüksek 3 ve en düşük 2 trait'i göster (daha dengeli)
+    const allTraits = Object.entries(userTraitScores).sort((a, b) => b[1] - a[1]);
+    const topTraits = allTraits.slice(0, 3);
+    const bottomTraits = allTraits.slice(-2).reverse();
+    const sortedTraits = [...topTraits, ...bottomTraits];
+    sortedTraits.forEach(([key, value]) => {
+        const percentage = (value / 10) * 100;
+        const traitDiv = document.createElement('div');
+        traitDiv.className = 'trait-item';
+        traitDiv.innerHTML = `<div class="trait-label"><span class="trait-name">${traitsInfo[key] || key}</span><span class="trait-value">${value.toFixed(1)}/10</span></div><div class="trait-bar"><div class="trait-fill" style="width: 0%"></div></div>`;
+        traitsContainer.appendChild(traitDiv);
+        setTimeout(() => { traitDiv.querySelector('.trait-fill').style.width = percentage + '%'; }, 100);
+    });
+    
+    const similarContainer = document.getElementById('similarCharacters');
+    similarContainer.innerHTML = '';
+    similar.forEach(char => {
+        const div = document.createElement('div');
+        div.className = 'similar-char';
+        div.innerHTML = `<div class="similar-char-name">${char.name}</div><div class="similar-char-work">${char.work}</div>`;
+        similarContainer.appendChild(div);
+    });
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+    document.getElementById('result').classList.remove('active');
+    document.getElementById('landing').classList.remove('hidden');
+    currentQuestion = 0;
+    initializeTraits();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function shareResult() {
+    const character = document.getElementById('resultCharacter').textContent;
+    const work = document.getElementById('resultWork').textContent;
+    const text = `Ben "${work}" yapımından ${character} karakterine benziyorum! 🎬\n\nSen hangi karaktersin?\n`;
+    if (navigator.share) {
+        navigator.share({ title: 'Hangi Dizi/Film Karakterisin?', text: text, url: window.location.href }).catch(console.error);
+    } else {
+        navigator.clipboard.writeText(text + window.location.href).then(() => { alert('Paylaşım metni kopyalandı!'); }).catch(() => { alert('Paylaşım metni: ' + text); });
+    }
+}
+
+// Fullscreen toggle for mobile
+function toggleFullscreen() {
+    const btn = document.getElementById('fullscreenBtn');
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+        btn.innerHTML = '📱 Tam Ekran';
+    } else {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        }
+        btn.innerHTML = '✕ Küçült';
+    }
+}
+
+// ========== WIX IFRAME INTEGRATION ==========
+
+// Send height to Wix parent for auto-resize
+function sendHeightToWix() {
+    const height = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.scrollHeight,
+        document.documentElement.offsetHeight,
+        window.innerHeight
+    );
+    
+    if (window.parent !== window) {
+        window.parent.postMessage({
+            type: 'quiz-height',
+            height: height,
+            fullscreen: true
+        }, '*');
+    }
+}
+
+// Force resize to fill container
+function resizeToFit() {
+    const vh = window.innerHeight;
+    document.documentElement.style.setProperty('--real-vh', vh + 'px');
+    document.body.style.minHeight = vh + 'px';
+    sendHeightToWix();
+}
+
+// Listen for messages from Wix parent
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'wix-resize') {
+        resizeToFit();
+    }
+});
+
+// Initial setup
+window.addEventListener('resize', resizeToFit);
+window.addEventListener('load', function() {
+    resizeToFit();
+    // Send ready message to Wix
+    if (window.parent !== window) {
+        window.parent.postMessage({ type: 'quiz-ready' }, '*');
+    }
+});
+window.addEventListener('orientationchange', function() {
+    setTimeout(resizeToFit, 100);
+});
+
+// Run immediately
+resizeToFit();
+
+// Also update on DOM changes (for quiz sections showing/hiding)
+const observer = new MutationObserver(function() {
+    setTimeout(sendHeightToWix, 100);
+});
+observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangi Dizi/Film Karakterisin? | Kişilik Testi | Benizledim</title>
+    <meta name="description" content="25 soruluk bu eğlenceli kişilik testinde 60 popüler dizi ve film karakteri arasından sana en çok benzeyen karakteri keşfet!">
+    <meta name="keywords" content="kişilik testi, dizi karakteri, film karakteri, hangi karakter, quiz, test">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Hangi Dizi/Film Karakterisin?">
+    <meta property="og:description" content="25 soruluk bu eğlenceli testte sana en çok benzeyen karakteri keşfet!">
+    <meta property="og:type" content="website">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #E31C25;
+            --primary-dark: #B71C1C;
+            --primary-light: #E31C25;
+            --secondary: #1A1A1A;
+            --secondary-dark: #000000;
+            --accent: #E31C25;
+            --accent-light: #E31C25;
+            --bg-dark: #000000;
+            --bg-card: #111111;
+            --bg-light: #000000;
+            --text-primary: #FFFFFF;
+            --text-secondary: #E0E0E0;
+            --text-muted: #999999;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --gradient-primary: linear-gradient(135deg, #E31C25 0%, #E31C25 100%);
+            --gradient-accent: linear-gradient(135deg, #E31C25 0%, #E31C25 100%);
+            --gradient-warm: linear-gradient(135deg, #E31C25 0%, #E31C25 100%);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            --shadow-glow: 0 0 40px rgba(227, 28, 37, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(108, 92, 231, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(0, 206, 201, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(255, 118, 117, 0.08) 0%, transparent 40%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(5deg); }
+            66% { transform: translate(-20px, 20px) rotate(-5deg); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+        }
+
+        .logo-ben {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #FFFFFF;
+            letter-spacing: 3px;
+        }
+
+        .logo-izledim {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #E31C25;
+            letter-spacing: 1px;
+        }
+
+        .logo-subtitle {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(108, 92, 231, 0.2);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 25px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .hero-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+        }
+
+        .hero h1 span {
+            background: #B71C1C;
+            color: #FFFFFF;
+            padding: 5px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            -webkit-text-fill-color: #FFFFFF;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 35px;
+        }
+
+        /* Start Button */
+        .start-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #B71C1C;
+            color: #FFFFFF;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 18px 45px;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(183, 28, 28, 0.5);
+            text-decoration: none;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(183, 28, 28, 0.7);
+            background: #D32F2F;
+        }
+
+        .start-btn svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .start-btn:hover svg {
+            transform: translateX(5px);
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Characters Preview */
+        .characters-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+        }
+
+        .section-title span {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .character-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(227, 28, 37, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .character-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .character-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .character-work {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Features */
+        .features-section {
+            padding: 60px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.8) 0%, rgba(26, 26, 46, 0.8) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(227, 28, 37, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .feature-icon.purple { background: rgba(227, 28, 37, 0.2); }
+        .feature-icon.teal { background: rgba(227, 28, 37, 0.15); }
+        .feature-icon.orange { background: rgba(227, 28, 37, 0.25); }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            padding: 40px 0 60px;
+            display: none;
+        }
+
+        .quiz-section.active {
+            display: block;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #222222;
+            border-radius: 50px;
+            height: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #E31C25;
+            border-radius: 50px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 1rem;
+            color: #FFFFFF;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: #111111;
+            border-radius: 24px;
+            padding: 40px 30px;
+            border: 2px solid #E31C25;
+            box-shadow: 0 0 30px rgba(227, 28, 37, 0.2);
+        }
+
+        /* Character Image in Question */
+        .question-character {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            background: #1A1A1A;
+            border-radius: 16px;
+            border: 1px solid #333;
+        }
+
+        .character-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #E31C25;
+            flex-shrink: 0;
+            background: #E31C25;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+
+        .character-info {
+            text-align: left;
+        }
+
+        .character-info-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+
+        .character-info-work {
+            font-size: 0.9rem;
+            color: #E31C25;
+            font-weight: 600;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #E31C25;
+            color: #FFFFFF;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            color: #FFFFFF;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #1A1A1A;
+            border: 2px solid #333333;
+            border-radius: 16px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            color: #FFFFFF;
+        }
+
+        .option-btn:hover {
+            background: #222222;
+            border-color: #E31C25;
+            transform: translateX(5px);
+            box-shadow: 0 0 15px rgba(227, 28, 37, 0.3);
+        }
+
+        .option-btn.selected {
+            background: #E31C25;
+            border-color: #E31C25;
+            color: #FFFFFF;
+        }
+
+        .option-letter {
+            width: 40px;
+            height: 40px;
+            background: #E31C25;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            color: #FFFFFF;
+        }
+
+        .option-btn:hover .option-letter {
+            background: #FFFFFF;
+            color: #E31C25;
+        }
+        
+        .option-btn.selected .option-letter {
+            background: #FFFFFF;
+            color: #E31C25;
+        }
+
+        .option-text {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Result Section */
+        .result-section {
+            padding: 60px 0;
+            display: none;
+            text-align: center;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .result-card {
+            background: #111111;
+            border-radius: 30px;
+            padding: 50px 40px;
+            border: 2px solid #E31C25;
+            box-shadow: 0 0 40px rgba(227, 28, 37, 0.3);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .result-character-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #E31C25;
+            border: 4px solid #FFFFFF;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            box-shadow: 0 0 30px rgba(227, 28, 37, 0.5);
+        }
+
+        .result-badge {
+            display: inline-block;
+            background: var(--gradient-warm);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+        }
+
+        .result-character {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-work {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .result-archetype {
+            display: inline-block;
+            background: rgba(227, 28, 37, 0.2);
+            color: var(--primary-light);
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+        }
+
+        .result-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        /* Similar Characters */
+        .similar-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .similar-title {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .similar-characters {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .similar-char {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .similar-char-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .similar-char-work {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-share {
+            background: var(--gradient-warm);
+        }
+
+        .btn-share:hover {
+            transform: scale(1.05);
+        }
+
+        /* Trait Bars */
+        .traits-section {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .traits-title {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .trait-item {
+            margin-bottom: 15px;
+        }
+
+        .trait-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+
+        .trait-name {
+            font-weight: 600;
+        }
+
+        .trait-value {
+            color: var(--text-muted);
+        }
+
+        .trait-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .trait-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 50px;
+            transition: width 0.8s ease;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 60px;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer-text a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Hide class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 40px 0 30px;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .start-btn {
+                font-size: 1.1rem;
+                padding: 16px 35px;
+            }
+
+            .stats {
+                gap: 25px;
+            }
+
+            .stat-number {
+                font-size: 1.6rem;
+            }
+
+            .characters-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .character-card {
+                padding: 15px 10px;
+            }
+
+            .character-emoji {
+                font-size: 2rem;
+            }
+
+            .character-name {
+                font-size: 0.8rem;
+            }
+
+            .features-grid {
+                gap: 15px;
+            }
+
+            .question-card {
+                padding: 25px 20px;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .option-btn {
+                padding: 14px 15px;
+            }
+
+            .option-text {
+                font-size: 0.95rem;
+            }
+
+            .question-character {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .character-info {
+                text-align: center;
+            }
+
+            .character-image {
+                width: 70px;
+                height: 70px;
+            }
+
+            .result-card {
+                padding: 35px 25px;
+            }
+
+            .result-character {
+                font-size: 2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .similar-characters {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .characters-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats {
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <span class="logo-ben">BEN</span>
+                <span class="logo-izledim">İZLEDİM</span>
+                <span class="logo-subtitle">Hangi Karaktersin?</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Landing Section -->
+    <main id="landing">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                    Yeni Kişilik Testi
+                </div>
+                <h1>Hangi Dizi/Film<br><span>Karakterisin?</span></h1>
+                <p class="hero-subtitle">
+                    25 soruluk bu eğlenceli testte, kişiliğine en uygun 60 popüler dizi ve film karakteri arasından sana en çok benzeyeni keşfet!
+                </p>
+                <button class="start-btn" onclick="startQuiz()">
+                    Teste Başla
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">25</div>
+                        <div class="stat-label">Soru</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">60</div>
+                        <div class="stat-label">Karakter</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">14</div>
+                        <div class="stat-label">Kişilik Özelliği</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Characters Preview -->
+        <section class="characters-section">
+            <div class="container">
+                <h2 class="section-title">Hangi <span>Karaktere</span> Benziyorsun?</h2>
+                <div class="characters-grid">
+                    <div class="character-card">
+                        <div class="character-emoji">🧪</div>
+                        <div class="character-name">Walter White</div>
+                        <div class="character-work">Breaking Bad</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-emoji">🐉</div>
+                        <div class="character-name">Daenerys</div>
+                        <div class="character-work">Game of Thrones</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-emoji">👑</div>
+                        <div class="character-name">Hürrem Sultan</div>
+                        <div class="character-work">Muhteşem Yüzyıl</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-emoji">🔍</div>
+                        <div class="character-name">Sherlock</div>
+                        <div class="character-work">Sherlock</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-emoji">🎭</div>
+                        <div class="character-name">Ezel</div>
+                        <div class="character-work">Ezel</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-emoji">💔</div>
+                        <div class="character-name">Bihter</div>
+                        <div class="character-work">Aşk-ı Memnu</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-emoji">🎯</div>
+                        <div class="character-name">The Professor</div>
+                        <div class="character-work">La Casa de Papel</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-emoji">♟️</div>
+                        <div class="character-name">Beth Harmon</div>
+                        <div class="character-work">Queen's Gambit</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features-section">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon purple">🧠</div>
+                        <h3 class="feature-title">14 Kişilik Özelliği</h3>
+                        <p class="feature-desc">Liderlik, mantık, empati, hırs, risk alma ve daha fazlası analiz ediliyor.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon teal">🎬</div>
+                        <h3 class="feature-title">Türk ve Dünya Yapımları</h3>
+                        <p class="feature-desc">Breaking Bad'den Muhteşem Yüzyıl'a, Ezel'den Stranger Things'e geniş karakter havuzu.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon orange">📊</div>
+                        <h3 class="feature-title">Bilimsel Eşleştirme</h3>
+                        <p class="feature-desc">Trait tabanlı skorlama ile en uygun karakteri bul, yakın eşleşmeleri gör.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Quiz Section -->
+    <section class="quiz-section" id="quiz">
+        <div class="container">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">Soru 1 / 25</div>
+            
+            <div class="question-card">
+                <div class="question-character" id="questionCharacter">
+                    <div class="character-image" id="characterImage"></div>
+                    <div class="character-info">
+                        <div class="character-info-name" id="characterInfoName"></div>
+                        <div class="character-info-work" id="characterInfoWork"></div>
+                    </div>
+                </div>
+                <div class="question-number" id="questionNumber">Soru 1</div>
+                <h2 class="question-text" id="questionText"></h2>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+        <div class="container">
+            <div class="spinner"></div>
+            <p class="loading-text">Sonucun hesaplanıyor...</p>
+        </div>
+    </div>
+
+    <!-- Result Section -->
+    <section class="result-section" id="result">
+        <div class="container">
+            <div class="result-card">
+                <div class="result-badge">🎉 Sonucun Hazır!</div>
+                <div class="result-character-image" id="resultCharacterImage"></div>
+                <h2 class="result-character" id="resultCharacter"></h2>
+                <p class="result-work" id="resultWork"></p>
+                <div class="result-archetype" id="resultArchetype"></div>
+                <p class="result-description" id="resultDescription"></p>
+                
+                <div class="traits-section" id="traitsSection">
+                    <h4 class="traits-title">Öne Çıkan Kişilik Özeliklerin</h4>
+                    <div id="traitsContainer"></div>
+                </div>
+
+                <div class="similar-section">
+                    <h4 class="similar-title">Yakın Eşleşmeler</h4>
+                    <div class="similar-characters" id="similarCharacters"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-secondary btn-share" onclick="shareResult()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                            <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
+                        </svg>
+                        Paylaş
+                    </button>
+                    <button class="btn-secondary" onclick="restartQuiz()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 4v6h6M23 20v-6h-6"/>
+                            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                        </svg>
+                        Tekrar Dene
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="footer-text">
+                © 2026 <a href="https://benizledim.com">Ben İzledim</a> - Tüm hakları saklıdır.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz Data
+        let questionsData = null;
+        let charactersData = null;
+        let currentQuestion = 0;
+        let userTraitScores = {};
+        let traitsInfo = {};
+
+        // Initialize trait scores with baseline
+        function initializeTraits() {
+            userTraitScores = {
+                leadership: 5,
+                logic: 5,
+                empathy: 5,
+                ambition: 5,
+                risk: 5,
+                integrity: 5,
+                loyalty: 5,
+                independence: 5,
+                sociability: 5,
+                humor: 5,
+                creativity: 5,
+                resilience: 5,
+                control: 5,
+                sensitivity: 5
+            };
+        }
+
+        // Load JSON data
+        async function loadData() {
+            try {
+                const [questionsResponse, charactersResponse] = await Promise.all([
+                    fetch('quiz_questions.json'),
+                    fetch('quiz_characters.json')
+                ]);
+                
+                questionsData = await questionsResponse.json();
+                charactersData = await charactersResponse.json();
+                
+                // Build traits info
+                questionsData.traits.forEach(t => {
+                    traitsInfo[t.key] = t.label_tr;
+                });
+                
+                console.log('Data loaded successfully!');
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Start Quiz
+        function startQuiz() {
+            if (!questionsData || !charactersData) {
+                alert('Veriler yüklenemedi, lütfen sayfayı yenileyin.');
+                return;
+            }
+            
+            initializeTraits();
+            currentQuestion = 0;
+            
+            document.getElementById('landing').classList.add('hidden');
+            document.getElementById('quiz').classList.add('active');
+            
+            displayQuestion();
+        }
+
+        // Character emojis based on their personality/work
+        const characterEmojis = {
+            // Turkish Series
+            'Walter White': '🧪',
+            'Daenerys Targaryen': '🐉',
+            'Hürrem Sultan': '👑',
+            'Bihter Ziyagil': '💔',
+            'Ezel Bayraktar': '🎭',
+            'Behzat Ç.': '🔫',
+            'Agah Beyoğlu': '⚖️',
+            'Meryem': '🕊️',
+            'Mecnun': '🌙',
+            'Polat Alemdar': '🐺',
+            // International Series
+            'Kim Wexler': '⚖️',
+            'Sherlock Holmes': '🔍',
+            'Gregory House': '💊',
+            'Eleven': '🔮',
+            'The Professor': '🎯',
+            'Beth Harmon': '♟️',
+            'Elliot Alderson': '💻',
+            'Tommy Shelby': '🎩',
+            'Fleabag': '🍷',
+            'Tony Soprano': '🎲',
+            'Dexter Morgan': '🔪',
+            'Hannibal Lecter': '🍽️',
+            'Ragnar Lothbrok': '⚔️',
+            'Michael Scofield': '🗝️',
+            'Jon Snow': '❄️',
+            'Tyrion Lannister': '🍺',
+            'Arya Stark': '🗡️',
+            'Cersei Lannister': '🦁',
+            // Films
+            'Tony Stark': '🦾',
+            'Bruce Wayne (Batman)': '🦇',
+            'Jack Sparrow': '🏴‍☠️',
+            'Forrest Gump': '🏃',
+            'Andy Dufresne': '🔨',
+            'Tyler Durden': '🧼',
+            'Neo': '💊',
+            'Vito Corleone': '🎭',
+            'Michael Corleone': '🤵',
+            'Gandalf': '🧙',
+            'Aragorn': '👑',
+            'Hermione Granger': '📚',
+            'Harry Potter': '⚡',
+            'The Joker': '🃏',
+            'Thanos': '💎',
+            'Loki': '🐍',
+            'Black Widow': '🕷️',
+            'Wonder Woman': '⭐',
+            'Katniss Everdeen': '🏹',
+            'Elsa': '❄️',
+            'Moana': '🌊',
+            'Shrek': '🧅',
+            'Chandler Bing': '😂',
+            'Michael Scott': '📋',
+            'Barney Stinson': '🤵',
+            'Sheldon Cooper': '🧪',
+            'Wednesday Addams': '🖤',
+            'Geralt': '⚔️',
+            // Default
+            'default': '🎬'
+        };
+
+        // Get emoji for character
+        function getCharacterEmoji(name) {
+            return characterEmojis[name] || characterEmojis['default'];
+        }
+
+        // Get character initials
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        }
+
+        // Display current question
+        function displayQuestion() {
+            const question = questionsData.questions[currentQuestion];
+            const totalQuestions = questionsData.questions.length;
+            const progress = ((currentQuestion) / totalQuestions) * 100;
+            
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Soru ${currentQuestion + 1} / ${totalQuestions}`;
+            document.getElementById('questionNumber').textContent = `Soru ${currentQuestion + 1}`;
+            document.getElementById('questionText').textContent = question.text_tr;
+            
+            // Show random character for this question
+            const characters = charactersData.characters;
+            const randomChar = characters[currentQuestion % characters.length];
+            
+            document.getElementById('characterInfoName').textContent = randomChar.name;
+            document.getElementById('characterInfoWork').textContent = randomChar.work;
+            
+            // Set character emoji
+            const characterImage = document.getElementById('characterImage');
+            characterImage.textContent = getCharacterEmoji(randomChar.name);
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            const letters = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, index) => {
+                const optionBtn = document.createElement('button');
+                optionBtn.className = 'option-btn';
+                optionBtn.innerHTML = `
+                    <span class="option-letter">${letters[index]}</span>
+                    <span class="option-text">${option.text_tr}</span>
+                `;
+                optionBtn.onclick = () => selectOption(option, optionBtn);
+                optionsContainer.appendChild(optionBtn);
+            });
+        }
+
+        // Handle option selection
+        function selectOption(option, buttonElement) {
+            // Visual feedback
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                btn.style.pointerEvents = 'none';
+            });
+            buttonElement.classList.add('selected');
+            
+            // Apply effects to trait scores
+            if (option.effects) {
+                for (const [trait, value] of Object.entries(option.effects)) {
+                    userTraitScores[trait] = Math.max(0, Math.min(10, userTraitScores[trait] + value));
+                }
+            }
+            
+            // Next question or show result
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questionsData.questions.length) {
+                    displayQuestion();
+                } else {
+                    showLoading();
+                }
+            }, 400);
+        }
+
+        // Show loading
+        function showLoading() {
+            document.getElementById('quiz').classList.remove('active');
+            document.getElementById('loading').classList.add('active');
+            
+            setTimeout(() => {
+                calculateResult();
+            }, 2000);
+        }
+
+        // Calculate Manhattan distance
+        function manhattanDistance(userScores, characterTraits) {
+            let distance = 0;
+            for (const key of Object.keys(userScores)) {
+                const userVal = userScores[key] || 5;
+                const charVal = characterTraits[key] || 5;
+                distance += Math.abs(userVal - charVal);
+            }
+            return distance;
+        }
+
+        // Calculate result
+        function calculateResult() {
+            const characters = charactersData.characters;
+            const scored = characters.map(char => ({
+                ...char,
+                distance: manhattanDistance(userTraitScores, char.traits)
+            }));
+            
+            // Sort by distance (lowest = best match)
+            scored.sort((a, b) => {
+                if (a.distance !== b.distance) return a.distance - b.distance;
+                // Tie breakers: resilience, logic, integrity
+                const tieA = (a.traits.resilience || 0) + (a.traits.logic || 0) + (a.traits.integrity || 0);
+                const tieB = (b.traits.resilience || 0) + (b.traits.logic || 0) + (b.traits.integrity || 0);
+                return tieB - tieA;
+            });
+            
+            const bestMatch = scored[0];
+            const similarMatches = scored.slice(1, 3);
+            
+            showResult(bestMatch, similarMatches);
+        }
+
+        // Show result
+        function showResult(character, similar) {
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('result').classList.add('active');
+            
+            // Set character emoji
+            const resultImage = document.getElementById('resultCharacterImage');
+            resultImage.textContent = getCharacterEmoji(character.name);
+            
+            document.getElementById('resultCharacter').textContent = character.name;
+            document.getElementById('resultWork').textContent = character.work;
+            document.getElementById('resultArchetype').textContent = character.result_archetype_tr;
+            document.getElementById('resultDescription').textContent = character.result_blurb_tr;
+            
+            // Top traits
+            const traitsContainer = document.getElementById('traitsContainer');
+            traitsContainer.innerHTML = '';
+            
+            // Get top 5 user traits
+            const sortedTraits = Object.entries(userTraitScores)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            sortedTraits.forEach(([key, value]) => {
+                const percentage = (value / 10) * 100;
+                const traitDiv = document.createElement('div');
+                traitDiv.className = 'trait-item';
+                traitDiv.innerHTML = `
+                    <div class="trait-label">
+                        <span class="trait-name">${traitsInfo[key] || key}</span>
+                        <span class="trait-value">${value.toFixed(1)}/10</span>
+                    </div>
+                    <div class="trait-bar">
+                        <div class="trait-fill" style="width: 0%"></div>
+                    </div>
+                `;
+                traitsContainer.appendChild(traitDiv);
+                
+                // Animate bar
+                setTimeout(() => {
+                    traitDiv.querySelector('.trait-fill').style.width = percentage + '%';
+                }, 100);
+            });
+            
+            // Similar characters
+            const similarContainer = document.getElementById('similarCharacters');
+            similarContainer.innerHTML = '';
+            
+            similar.forEach(char => {
+                const div = document.createElement('div');
+                div.className = 'similar-char';
+                div.innerHTML = `
+                    <div class="similar-char-name">${char.name}</div>
+                    <div class="similar-char-work">${char.work}</div>
+                `;
+                similarContainer.appendChild(div);
+            });
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            document.getElementById('result').classList.remove('active');
+            document.getElementById('landing').classList.remove('hidden');
+            currentQuestion = 0;
+            initializeTraits();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Share result
+        function shareResult() {
+            const character = document.getElementById('resultCharacter').textContent;
+            const work = document.getElementById('resultWork').textContent;
+            const text = `Ben "${work}" dizisinden ${character} karakterine benziyorum! 🎬\n\nSen hangi karaktersin? Hemen teste gir:\n`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Hangi Dizi/Film Karakterisin?',
+                    text: text,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(text + window.location.href).then(() => {
+                    alert('Paylaşım metni kopyalandı!');
+                }).catch(() => {
+                    alert('Paylaşım metni: ' + text);
+                });
+            }
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1101 @@
+{
+  "meta": {
+    "id": "which-character-quiz-v1-tr",
+    "title": "Hangi Dizi/Film Karakterisin? (25 Soru)",
+    "version": "1.2",
+    "language": "tr",
+    "generated_at_utc": "2026-02-05T08:02:24Z",
+    "baseline_trait_score": 5,
+    "trait_min": 0,
+    "trait_max": 10,
+    "scoring_note_tr": "Kullanıcı her soruda 1 seçenek seçer. Seçeneklerin effects alanı trait skorlarına eklenir. Sonra karakter traits vektörüne en yakın sonuç bulunur (örn. Manhattan veya Euclidean)."
+  },
+  "traits": [
+    {
+      "key": "leadership",
+      "label_tr": "Liderlik"
+    },
+    {
+      "key": "logic",
+      "label_tr": "Mantık/Analiz"
+    },
+    {
+      "key": "empathy",
+      "label_tr": "Empati"
+    },
+    {
+      "key": "ambition",
+      "label_tr": "Hırs/Hedef"
+    },
+    {
+      "key": "risk",
+      "label_tr": "Risk Alma"
+    },
+    {
+      "key": "integrity",
+      "label_tr": "İlkesellik/Dürüstlük"
+    },
+    {
+      "key": "loyalty",
+      "label_tr": "Sadakat"
+    },
+    {
+      "key": "independence",
+      "label_tr": "Bağımsızlık"
+    },
+    {
+      "key": "sociability",
+      "label_tr": "Sosyallik"
+    },
+    {
+      "key": "humor",
+      "label_tr": "Mizah"
+    },
+    {
+      "key": "creativity",
+      "label_tr": "Yaratıcılık"
+    },
+    {
+      "key": "resilience",
+      "label_tr": "Dayanıklılık"
+    },
+    {
+      "key": "control",
+      "label_tr": "Kontrol/Plan"
+    },
+    {
+      "key": "sensitivity",
+      "label_tr": "Duygusal Hassasiyet"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q01",
+      "text_tr": "Beklenmedik bir kriz çıktığında ilk refleksin ne olur?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Hemen plan yapar, öncelikleri sıralarım.",
+          "effects": {
+            "control": 2,
+            "logic": 2,
+            "resilience": 1,
+            "sociability": -1,
+            "sensitivity": -1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "İnsanları sakinleştirir, moral veririm.",
+          "effects": {
+            "empathy": 2,
+            "leadership": 1,
+            "sociability": 1,
+            "control": -1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Hızlı hareket eder, deneme-yanılma ile çözüm bulurum.",
+          "effects": {
+            "risk": 2,
+            "resilience": 1,
+            "creativity": 1,
+            "control": -1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Önce içime çekilir, tek başıma düşünürüm.",
+          "effects": {
+            "independence": 2,
+            "logic": 1,
+            "sociability": -2,
+            "control": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "text_tr": "Bir tartışmada seni en çok ne sinirlendirir?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Tutarsızlık ve mantıksızlık.",
+          "effects": {
+            "logic": 2,
+            "control": 1,
+            "sensitivity": -1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Empati eksikliği ve kaba üslup.",
+          "effects": {
+            "empathy": 2,
+            "integrity": 1,
+            "sensitivity": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Haksızlık ve çifte standart.",
+          "effects": {
+            "integrity": 2,
+            "leadership": 1,
+            "risk": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Kısıtlanmak ve özgürlüğümün tehdit edilmesi.",
+          "effects": {
+            "independence": 2,
+            "risk": 1,
+            "control": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "text_tr": "Bir hedef koyduğunda çoğunlukla nasıl ilerlersin?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Disiplinle, adım adım; planım nettir.",
+          "effects": {
+            "control": 2,
+            "ambition": 1,
+            "resilience": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "İlham gelince hızlanırım; akışa göre şekillenir.",
+          "effects": {
+            "creativity": 2,
+            "risk": 1,
+            "control": -1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "İnsanlarla konuşur, ortaklık/ekip kurarım.",
+          "effects": {
+            "leadership": 1,
+            "sociability": 2,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Hedefi içten içe taşırım; dışarıdan yavaş görünürüm ama derin çalışırım.",
+          "effects": {
+            "independence": 1,
+            "logic": 1,
+            "resilience": 1,
+            "sociability": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "text_tr": "Bir arkadaşın senden yardım istediğinde en çok ne yaparsın?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Duygusal olarak yanında olur, dinlerim.",
+          "effects": {
+            "empathy": 2,
+            "loyalty": 1,
+            "sensitivity": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Somut çözüm önerileri üretirim.",
+          "effects": {
+            "logic": 2,
+            "control": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Harekete geçer, işleri üstlenirim.",
+          "effects": {
+            "leadership": 1,
+            "resilience": 1,
+            "integrity": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Sınır koyarım; önce kendi dengesimi korurum.",
+          "effects": {
+            "independence": 2,
+            "control": 1,
+            "empathy": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "text_tr": "Bir grup içinde doğal rolün hangisi?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Organize eden, yöneten.",
+          "effects": {
+            "leadership": 2,
+            "control": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Arabulucu; insanları anlaşmaya yaklaştıran.",
+          "effects": {
+            "empathy": 2,
+            "sociability": 1,
+            "integrity": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Yaratıcı fikir atan, eğlence katan.",
+          "effects": {
+            "creativity": 2,
+            "humor": 2,
+            "sociability": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Arka planda analiz eden, doğru zamanı kollayan.",
+          "effects": {
+            "logic": 2,
+            "control": 1,
+            "sociability": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "text_tr": "İnsanların seni yanlış anlamasına en sık sebep olan şey?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Duygularımı az göstermem.",
+          "effects": {
+            "control": 1,
+            "logic": 1,
+            "sociability": -1,
+            "sensitivity": -1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Çok direkt konuşmam.",
+          "effects": {
+            "integrity": 1,
+            "leadership": 1,
+            "sensitivity": -1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Mizahla her şeyi hafifletmem.",
+          "effects": {
+            "humor": 2,
+            "sensitivity": 1,
+            "control": -1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Bir anda uzaklaşıp yalnız kalma ihtiyacım.",
+          "effects": {
+            "independence": 2,
+            "sociability": -2
+          }
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "text_tr": "Risk alman gereken bir anda neye bakarsın?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Veri ve olasılıklara; hesap yaparım.",
+          "effects": {
+            "logic": 2,
+            "control": 1,
+            "risk": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "İçgüdüme; doğru hissettiriyorsa giderim.",
+          "effects": {
+            "sensitivity": 1,
+            "risk": 2,
+            "creativity": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "İnsanlara etkisine; kim zarar görür, kim korunur.",
+          "effects": {
+            "empathy": 2,
+            "integrity": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Özgürlüğüme katkısına; beni büyütüyor mu?",
+          "effects": {
+            "independence": 2,
+            "ambition": 1,
+            "risk": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "text_tr": "Bir başarı elde ettiğinde ilk düşündüğün şey?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Bir sonraki daha büyük hedef.",
+          "effects": {
+            "ambition": 2,
+            "leadership": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Bunu ekip/arkadaşlarla paylaşmak.",
+          "effects": {
+            "sociability": 2,
+            "loyalty": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Bu süreçte ne öğrendim?",
+          "effects": {
+            "logic": 1,
+            "integrity": 1,
+            "control": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Huzur; sonunda nefes almak.",
+          "effects": {
+            "sensitivity": 1,
+            "resilience": 1,
+            "control": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "text_tr": "Birinin sana ihanet ettiğini öğrenirsen ne yaparsın?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Sessizleşirim; uzaklaşır, plan kurarım.",
+          "effects": {
+            "control": 2,
+            "logic": 1,
+            "sociability": -1,
+            "sensitivity": -1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Yüzleşirim; net konuşur, hesap sorarım.",
+          "effects": {
+            "integrity": 2,
+            "leadership": 1,
+            "risk": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Anlamaya çalışırım; neden yaptı?",
+          "effects": {
+            "empathy": 2,
+            "sensitivity": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Bağımı tamamen koparırım; bir daha güvenmem.",
+          "effects": {
+            "independence": 2,
+            "control": 1,
+            "loyalty": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text_tr": "Seni en çok motive eden şey hangisi?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Kontrol ve ustalık hissi.",
+          "effects": {
+            "control": 2,
+            "logic": 1,
+            "ambition": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Anlam; değerli bir amaca hizmet etmek.",
+          "effects": {
+            "integrity": 2,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Özgürlük; kendi yolumu çizmek.",
+          "effects": {
+            "independence": 2,
+            "risk": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Takdir ve etki; insanların peşimden gelmesi.",
+          "effects": {
+            "leadership": 2,
+            "sociability": 1,
+            "ambition": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text_tr": "Bir konuda haksız olduğun ortaya çıkınca nasıl davranırsın?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Hemen kabul eder, düzeltirim.",
+          "effects": {
+            "integrity": 2,
+            "logic": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Önce savunurum; sonra sakinleşince düşünürüm.",
+          "effects": {
+            "control": 1,
+            "sensitivity": 1,
+            "integrity": -1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Şaka yaparım; ortamı yumuşatırım.",
+          "effects": {
+            "humor": 2,
+            "sociability": 1,
+            "control": -1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Konuyu kapatır, yalnız kalıp değerlendiririm.",
+          "effects": {
+            "independence": 2,
+            "logic": 1,
+            "sociability": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text_tr": "Kalabalık bir ortamdan çıktıktan sonra genelde…",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Enerjim artar; daha da sosyalleşirim.",
+          "effects": {
+            "sociability": 2,
+            "humor": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Yorulurum; yalnız kalıp toparlanırım.",
+          "effects": {
+            "independence": 2,
+            "sociability": -2
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Kısa bir mola yeter; sonra devam ederim.",
+          "effects": {
+            "resilience": 1,
+            "control": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Aşırı düşünürüm; kim ne dedi, ne hissettim?",
+          "effects": {
+            "sensitivity": 2,
+            "empathy": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "text_tr": "Bir işi sana göre ‘iyi’ yapan şey nedir?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Sonuç: işe yarıyor mu?",
+          "effects": {
+            "logic": 2,
+            "control": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Etik: doğru mu?",
+          "effects": {
+            "integrity": 2,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Yaratıcılık: özgün mü?",
+          "effects": {
+            "creativity": 2,
+            "risk": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Bağ: birlikte mi yaptık?",
+          "effects": {
+            "loyalty": 2,
+            "sociability": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "text_tr": "Birine bağlanmak senin için ne demek?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Sadakat; sözüm söz.",
+          "effects": {
+            "loyalty": 2,
+            "integrity": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Güven; güven yoksa yakınlaşmam.",
+          "effects": {
+            "control": 1,
+            "sensitivity": 1,
+            "loyalty": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Özgürlük içinde ortaklık; boğulmak istemem.",
+          "effects": {
+            "independence": 2,
+            "sociability": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Yoğun his; sevince tam severim.",
+          "effects": {
+            "sensitivity": 2,
+            "empathy": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "text_tr": "Bir proje başarısız olursa ilk ne yaparsın?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Neyi yanlış yaptık? Analiz ederim.",
+          "effects": {
+            "logic": 2,
+            "control": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Kendimi suçlarım; duygusal çökerim.",
+          "effects": {
+            "sensitivity": 2,
+            "resilience": -1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Hemen yeni deneme; kaybettiğim zamanı telafi.",
+          "effects": {
+            "resilience": 2,
+            "ambition": 1,
+            "risk": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Ekibi toplar; dersi çıkarıp yeniden organize ederim.",
+          "effects": {
+            "leadership": 2,
+            "control": 1,
+            "integrity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "text_tr": "Bir otorite figürüyle (patron/öğretmen) anlaşamadığında…",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Kurala uyarım ama içten içe mesafe koyarım.",
+          "effects": {
+            "control": 1,
+            "integrity": 1,
+            "sociability": -1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Direkt konuşur, sınır çizerim.",
+          "effects": {
+            "integrity": 1,
+            "independence": 1,
+            "leadership": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Kendi yolumu bulurum; sistemi ‘hack’lerim.",
+          "effects": {
+            "creativity": 2,
+            "risk": 1,
+            "control": -1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Uyum sağlarım; çatışma yerine ilişkiyi korurum.",
+          "effects": {
+            "empathy": 1,
+            "loyalty": 1,
+            "sociability": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "text_tr": "Seni ‘çekici’ yapan özellik hangisi diye düşünüyorsun?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Zekâm ve hızlı çözüm üretmem.",
+          "effects": {
+            "logic": 2,
+            "creativity": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Güvenilirliğim; sözümde durmam.",
+          "effects": {
+            "integrity": 2,
+            "loyalty": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Enerjim ve mizahım.",
+          "effects": {
+            "humor": 2,
+            "sociability": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Gizemim; herkese hemen açılmam.",
+          "effects": {
+            "independence": 1,
+            "control": 1,
+            "sociability": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "text_tr": "Bir haksızlık gördüğünde ne kadar ileri gidersin?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Gerekirse yalnız kalsam da mücadele ederim.",
+          "effects": {
+            "integrity": 2,
+            "resilience": 1,
+            "independence": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Sistemi içeriden değiştirmenin yolunu ararım.",
+          "effects": {
+            "logic": 1,
+            "control": 2,
+            "leadership": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Çatışmayı büyütmem; sakin çözüm ararım.",
+          "effects": {
+            "empathy": 2,
+            "sociability": 1,
+            "risk": -1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Bazen boşveririm; enerjimi kendime saklarım.",
+          "effects": {
+            "independence": 1,
+            "control": 1,
+            "empathy": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "text_tr": "İnsanların seni en çok hangi cümleyle tanımlamasını istersin?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "‘Güvenilir ve sağlam’",
+          "effects": {
+            "loyalty": 2,
+            "integrity": 1,
+            "resilience": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "‘Çok zeki ve üretken’",
+          "effects": {
+            "logic": 2,
+            "creativity": 1,
+            "ambition": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "‘Cesur ve bağımsız’",
+          "effects": {
+            "risk": 2,
+            "independence": 2
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "‘Kalbi güzel ve anlayışlı’",
+          "effects": {
+            "empathy": 2,
+            "sensitivity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "text_tr": "Bir seçim yaparken çoğunlukla ne ağır basar?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Prensiplerim.",
+          "effects": {
+            "integrity": 2,
+            "control": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Duygularım.",
+          "effects": {
+            "sensitivity": 2,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Mantık ve fayda.",
+          "effects": {
+            "logic": 2,
+            "control": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Özgürlük ve deneyim.",
+          "effects": {
+            "independence": 2,
+            "risk": 1,
+            "creativity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "text_tr": "Birinin sana saygı duymasını nasıl sağlarsın?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Yetkinlikle; işi en iyi ben yaparım.",
+          "effects": {
+            "control": 1,
+            "logic": 1,
+            "ambition": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Adaletle; kimseye haksızlık etmem.",
+          "effects": {
+            "integrity": 2,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Kararlılıkla; çizgim nettir.",
+          "effects": {
+            "leadership": 1,
+            "resilience": 1,
+            "control": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Sıcakkanlılıkla; insanlar bende rahat eder.",
+          "effects": {
+            "sociability": 2,
+            "humor": 1,
+            "empathy": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "text_tr": "‘İdeal gün’ senin için daha çok hangisi?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Yalnız, üretken ve sessiz.",
+          "effects": {
+            "independence": 2,
+            "control": 1,
+            "creativity": 1,
+            "sociability": -1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Arkadaşlarla dolu, enerjik.",
+          "effects": {
+            "sociability": 2,
+            "humor": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Zorlu ama anlamlı bir mücadele/iş.",
+          "effects": {
+            "resilience": 2,
+            "integrity": 1,
+            "ambition": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Yeni şeyler denediğim, sürprizli.",
+          "effects": {
+            "risk": 2,
+            "creativity": 1,
+            "control": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "text_tr": "Stresli olduğunda ne yaparsın?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Kontrol ederim; plan yapıp rahatlarım.",
+          "effects": {
+            "control": 2,
+            "logic": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Konuşurum; dertleşince rahatlarım.",
+          "effects": {
+            "sociability": 2,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Mizaha vururum; gülünce geçer.",
+          "effects": {
+            "humor": 2,
+            "resilience": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "İçime kapanırım; duygum derinleşir.",
+          "effects": {
+            "sensitivity": 2,
+            "independence": 1,
+            "sociability": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "text_tr": "Birinin kalbini kırdığını fark edince…",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Hemen özür diler, telafi ederim.",
+          "effects": {
+            "empathy": 2,
+            "integrity": 1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Haklıysam geri adım atmam.",
+          "effects": {
+            "integrity": 1,
+            "control": 1,
+            "empathy": -1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Zorlanırım; suçluluk hissi günler sürer.",
+          "effects": {
+            "sensitivity": 2,
+            "loyalty": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Durumu rasyonelleştirir; niyeti anlatırım.",
+          "effects": {
+            "logic": 2,
+            "control": 1,
+            "sensitivity": -1
+          }
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "text_tr": "En zor sınavın hangisi?",
+      "options": [
+        {
+          "id": "a",
+          "text_tr": "Kontrolü bırakmak.",
+          "effects": {
+            "control": 2,
+            "sensitivity": -1
+          }
+        },
+        {
+          "id": "b",
+          "text_tr": "Hayır demek ve sınır koymak.",
+          "effects": {
+            "empathy": 1,
+            "loyalty": 1,
+            "independence": -1
+          }
+        },
+        {
+          "id": "c",
+          "text_tr": "Sabretmek; hemen sonuç almak isterim.",
+          "effects": {
+            "ambition": 2,
+            "risk": 1
+          }
+        },
+        {
+          "id": "d",
+          "text_tr": "Güvenmek; kimseyi kolay içeri almam.",
+          "effects": {
+            "independence": 1,
+            "control": 1,
+            "loyalty": -1
+          }
+        }
+      ]
+    }
+  ],
+  "recommendation": {
+    "distance_metric": "manhattan",
+    "tie_breakers": [
+      "resilience",
+      "logic",
+      "integrity"
+    ],
+    "top_n_suggestions": 3
+  }
+}
