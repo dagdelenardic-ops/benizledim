@@ -357,69 +357,117 @@
 
         /* Quiz Section */
         .quiz-section {
-            padding: 20px 0;
+            padding: 0;
             display: none;
             min-height: 100vh;
             max-height: 100vh;
             overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000000;
+            z-index: 1000;
         }
 
         .quiz-section.active {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+        }
+
+        .quiz-section .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 15px 20px;
+        }
+
+        /* Quiz Header */
+        .quiz-header {
+            text-align: center;
+            padding: 10px 0;
+            flex-shrink: 0;
+        }
+
+        .quiz-header-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #E31C25;
+            letter-spacing: 1px;
+        }
+
+        .quiz-header-subtitle {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 2px;
         }
 
         /* Progress Bar */
         .progress-container {
-            background: #222222;
+            background: #1a1a1a;
             border-radius: 50px;
-            height: 8px;
-            margin-bottom: 15px;
+            height: 14px;
+            margin-bottom: 8px;
             overflow: hidden;
-            border: 1px solid #333;
+            border: 2px solid #333;
+            flex-shrink: 0;
         }
 
         .progress-bar {
             height: 100%;
-            background: #E31C25;
+            background: linear-gradient(90deg, #E31C25 0%, #ff4757 50%, #E31C25 100%);
+            background-size: 200% 100%;
             border-radius: 50px;
-            transition: width 0.4s ease;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             width: 0%;
+            animation: progressShine 2s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(227, 28, 37, 0.5);
+        }
+
+        @keyframes progressShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .progress-text {
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #FFFFFF;
-            margin-bottom: 15px;
-            font-weight: 600;
+            margin-bottom: 10px;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
         /* Question Card */
         .question-card {
             background: #111111;
             border-radius: 20px;
-            padding: 25px 25px;
+            padding: 20px 20px;
             border: 2px solid #E31C25;
             box-shadow: 0 0 30px rgba(227, 28, 37, 0.2);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         /* Character Image in Question */
         .question-character {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            padding: 12px 15px;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 10px 12px;
             background: #1A1A1A;
             border-radius: 12px;
             border: 1px solid #333;
+            flex-shrink: 0;
         }
 
         .character-image {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #E31C25;
@@ -428,7 +476,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: #FFFFFF;
         }
@@ -438,41 +486,37 @@
         }
 
         .character-info-name {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #FFFFFF;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .character-info-work {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #E31C25;
             font-weight: 600;
         }
 
         .question-number {
-            display: inline-block;
-            background: #E31C25;
-            color: #FFFFFF;
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 6px 16px;
-            border-radius: 50px;
-            margin-bottom: 12px;
+            display: none;
         }
 
         .question-text {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 18px;
+            margin-bottom: 15px;
             line-height: 1.4;
             color: #FFFFFF;
+            flex-shrink: 0;
         }
 
         .options {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
         }
 
         .option-btn {
@@ -835,26 +879,26 @@
             }
 
             .question-card {
-                padding: 18px 15px;
+                padding: 15px 15px;
             }
 
             .question-text {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
 
             .option-btn {
-                padding: 10px 12px;
+                padding: 12px 14px;
             }
 
             .option-text {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
             }
 
             .question-character {
                 flex-direction: row;
                 text-align: left;
                 gap: 10px;
-                padding: 10px 12px;
+                padding: 8px 10px;
             }
 
             .character-info {
@@ -862,33 +906,40 @@
             }
 
             .character-image {
-                width: 40px;
-                height: 40px;
+                width: 38px;
+                height: 38px;
             }
 
             .character-info-name {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
             }
 
             .character-info-work {
-                font-size: 0.75rem;
-            }
-
-            .question-number {
                 font-size: 0.7rem;
-                padding: 4px 12px;
-                margin-bottom: 8px;
             }
 
             .option-letter {
-                width: 28px;
-                height: 28px;
-                font-size: 0.8rem;
+                width: 30px;
+                height: 30px;
+                font-size: 0.85rem;
             }
 
             .progress-text {
                 font-size: 0.8rem;
-                margin-bottom: 10px;
+                margin-bottom: 6px;
+            }
+
+            .progress-container {
+                height: 12px;
+                margin-bottom: 6px;
+            }
+
+            .quiz-header-title {
+                font-size: 1rem;
+            }
+
+            .quiz-section .container {
+                padding: 10px 15px;
             }
 
             .result-card {
@@ -930,42 +981,50 @@
                 font-size: 1.4rem;
             }
 
-            .quiz-section {
-                padding: 10px 0;
+            .quiz-section .container {
+                padding: 8px 12px;
             }
 
             .question-card {
-                padding: 15px 12px;
+                padding: 12px 12px;
                 border-radius: 16px;
             }
 
             .question-text {
-                font-size: 0.95rem;
-                margin-bottom: 12px;
+                font-size: 1rem;
+                margin-bottom: 10px;
             }
 
             .options {
-                gap: 6px;
+                gap: 8px;
             }
 
             .option-btn {
-                padding: 8px 10px;
+                padding: 10px 12px;
                 border-radius: 10px;
             }
 
             .option-text {
-                font-size: 0.8rem;
+                font-size: 0.85rem;
             }
 
             .option-letter {
-                width: 26px;
-                height: 26px;
-                font-size: 0.75rem;
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
             }
 
             .progress-container {
-                height: 6px;
-                margin-bottom: 8px;
+                height: 10px;
+                margin-bottom: 5px;
+            }
+
+            .quiz-header {
+                padding: 6px 0;
+            }
+
+            .quiz-header-title {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -1099,6 +1158,9 @@
     <!-- Quiz Section -->
     <section class="quiz-section" id="quiz">
         <div class="container">
+            <div class="quiz-header">
+                <div class="quiz-header-title">BENİZLEDİM QUIZ</div>
+            </div>
             <div class="progress-container">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
@@ -1112,7 +1174,6 @@
                         <div class="character-info-work" id="characterInfoWork"></div>
                     </div>
                 </div>
-                <div class="question-number" id="questionNumber">Soru 1</div>
                 <h2 class="question-text" id="questionText"></h2>
                 <div class="options" id="optionsContainer"></div>
             </div>
@@ -1328,7 +1389,6 @@
             
             document.getElementById('progressBar').style.width = progress + '%';
             document.getElementById('progressText').textContent = `Soru ${currentQuestion + 1} / ${totalQuestions}`;
-            document.getElementById('questionNumber').textContent = `Soru ${currentQuestion + 1}`;
             document.getElementById('questionText').textContent = question.text_tr;
             
             // Show random character for this question
