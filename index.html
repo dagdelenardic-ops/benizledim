@@ -380,18 +380,19 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            padding: 10px 20px;
+            padding: 12px 20px;
+            max-width: 600px;
         }
 
         /* Quiz Header */
         .quiz-header {
             text-align: center;
-            padding: 5px 0;
+            padding: 8px 0;
             flex-shrink: 0;
         }
 
         .quiz-header-title {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: #E31C25;
             letter-spacing: 1px;
@@ -463,18 +464,20 @@
             flex-shrink: 0;
         }
 
-        /* Question Card */
+        /* Question Card - No border, fixed layout */
         .question-card {
-            background: #111111;
-            border-radius: 20px;
-            padding: 18px 20px;
-            border: 2px solid #E31C25;
-            box-shadow: 0 0 30px rgba(227, 28, 37, 0.2);
+            background: transparent;
+            padding: 0;
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            min-height: 0;
+        }
+
+        /* Top Section - Character info */
+        .question-top {
+            flex-shrink: 0;
+            padding-bottom: 15px;
         }
 
         /* Character Image in Question */
@@ -482,17 +485,15 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            background: #1A1A1A;
-            border-radius: 12px;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border-radius: 14px;
             border: 1px solid #333;
-            flex-shrink: 0;
         }
 
         .character-image {
-            width: 42px;
-            height: 42px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #E31C25;
@@ -501,7 +502,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: #FFFFFF;
         }
@@ -511,14 +512,14 @@
         }
 
         .character-info-name {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: #FFFFFF;
-            margin-bottom: 1px;
+            margin-bottom: 2px;
         }
 
         .character-info-work {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #E31C25;
             font-weight: 600;
         }
@@ -527,37 +528,48 @@
             display: none;
         }
 
+        /* Middle Section - Question text, centered */
+        .question-middle {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
         .question-text {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 12px;
-            line-height: 1.35;
+            line-height: 1.4;
             color: #FFFFFF;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Bottom Section - Options, fixed at bottom */
+        .question-bottom {
             flex-shrink: 0;
+            padding-top: 10px;
         }
 
         .options {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            flex: 1;
-            justify-content: center;
-            min-height: 0;
+            gap: 12px;
         }
 
         .option-btn {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: #1A1A1A;
+            gap: 14px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
             border: 2px solid #333333;
-            border-radius: 12px;
-            padding: 14px 16px;
+            border-radius: 14px;
+            padding: 16px 18px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: left;
             color: #FFFFFF;
-            flex-shrink: 0;
         }
 
         .option-btn:hover {
@@ -1060,15 +1072,15 @@
             }
 
             .question-card {
-                padding: 15px 15px;
+                padding: 0;
             }
 
             .question-text {
-                font-size: 1.25rem;
+                font-size: 1.3rem;
             }
 
             .option-btn {
-                padding: 12px 14px;
+                padding: 14px 14px;
             }
 
             .option-text {
@@ -1076,56 +1088,55 @@
             }
 
             .question-character {
-                flex-direction: row;
-                text-align: left;
                 gap: 10px;
-                padding: 8px 10px;
-            }
-
-            .character-info {
-                text-align: left;
+                padding: 10px 12px;
             }
 
             .character-image {
-                width: 38px;
-                height: 38px;
-                font-size: 0.9rem;
+                width: 42px;
+                height: 42px;
+                font-size: 1rem;
             }
 
             .character-info-name {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
 
             .character-info-work {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
             }
 
             .option-letter {
-                width: 32px;
-                height: 32px;
-                font-size: 0.9rem;
+                width: 34px;
+                height: 34px;
+                font-size: 0.95rem;
             }
 
             .progress-text {
-                font-size: 0.85rem;
-                margin-bottom: 5px;
+                font-size: 0.9rem;
+                margin-bottom: 6px;
             }
 
             .progress-container {
                 height: 14px;
-                margin-bottom: 4px;
+                margin-bottom: 5px;
             }
 
             .quiz-header-title {
-                font-size: 0.9rem;
+                font-size: 1rem;
             }
 
             .quiz-header {
-                padding: 4px 0;
+                padding: 6px 0;
             }
 
             .quiz-section .container {
-                padding: 8px 15px;
+                padding: 10px 18px;
+            }
+
+            .options {
+                gap: 10px;
+            }
             }
 
             .quiz-section .container {
@@ -1172,27 +1183,25 @@
             }
 
             .quiz-section .container {
-                padding: 6px 10px;
+                padding: 8px 12px;
             }
 
             .question-card {
-                padding: 12px 12px;
-                border-radius: 16px;
+                padding: 0;
             }
 
             .question-text {
-                font-size: 1.15rem;
-                margin-bottom: 10px;
-                line-height: 1.3;
+                font-size: 1.2rem;
+                line-height: 1.35;
             }
 
             .options {
-                gap: 8px;
+                gap: 10px;
             }
 
             .option-btn {
-                padding: 11px 12px;
-                border-radius: 10px;
+                padding: 13px 14px;
+                border-radius: 12px;
             }
 
             .option-text {
@@ -1200,13 +1209,13 @@
             }
 
             .option-letter {
-                width: 28px;
-                height: 28px;
-                font-size: 0.8rem;
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
             }
 
             .progress-container {
-                height: 10px;
+                height: 12px;
                 margin-bottom: 5px;
             }
 
@@ -1358,15 +1367,21 @@
             <div class="progress-text" id="progressText">Soru 1 / 25</div>
             
             <div class="question-card">
-                <div class="question-character" id="questionCharacter">
-                    <div class="character-image" id="characterImage"></div>
-                    <div class="character-info">
-                        <div class="character-info-name" id="characterInfoName"></div>
-                        <div class="character-info-work" id="characterInfoWork"></div>
+                <div class="question-top">
+                    <div class="question-character" id="questionCharacter">
+                        <div class="character-image" id="characterImage"></div>
+                        <div class="character-info">
+                            <div class="character-info-name" id="characterInfoName"></div>
+                            <div class="character-info-work" id="characterInfoWork"></div>
+                        </div>
                     </div>
                 </div>
-                <h2 class="question-text" id="questionText"></h2>
-                <div class="options" id="optionsContainer"></div>
+                <div class="question-middle">
+                    <h2 class="question-text" id="questionText"></h2>
+                </div>
+                <div class="question-bottom">
+                    <div class="options" id="optionsContainer"></div>
+                </div>
             </div>
         </div>
     </section>
