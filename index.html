@@ -974,7 +974,7 @@
     <div class="bg-animation"></div>
 
     <!-- Header -->
-    <header>
+    <header id="siteHeader">
         <div class="container">
             <div class="logo">
                 <span class="logo-ben">BEN</span>
@@ -1237,6 +1237,7 @@
             initializeTraits();
             currentQuestion = 0;
             
+            document.getElementById('siteHeader').classList.add('hidden');
             document.getElementById('landing').classList.add('hidden');
             document.getElementById('quiz').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1494,6 +1495,7 @@
         // Restart quiz
         function restartQuiz() {
             document.getElementById('result').classList.remove('active');
+            document.getElementById('siteHeader').classList.remove('hidden');
             document.getElementById('landing').classList.remove('hidden');
             currentQuestion = 0;
             initializeTraits();
