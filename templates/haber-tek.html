@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1080px;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      position: relative;
+      background: #1a1a1a;
+    }
+
+    .poster-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('{{posterUrl}}');
+      background-size: cover;
+      background-position: center top;
+    }
+
+    /* Daha genis ve guclu gradient - yazi asla kesilmesin */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        0deg,
+        rgba(0,0,0,0.92) 0%,
+        rgba(0,0,0,0.82) 30%,
+        rgba(0,0,0,0.45) 55%,
+        rgba(0,0,0,0.15) 75%,
+        rgba(0,0,0,0.3) 100%
+      );
+    }
+
+    .badge {
+      position: absolute;
+      top: 36px;
+      left: 36px;
+      background: #C62828;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      padding: 10px 22px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      z-index: 2;
+    }
+
+    .logo {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      z-index: 3;
+      text-align: right;
+    }
+    .logo-ben {
+      font-size: 28px;
+      font-weight: 900;
+      color: #C62828;
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+    .logo-izledim {
+      font-size: 28px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+
+    /* Icerik alani - ustunde daha fazla alan, kelime kesme kontrolleri */
+    .content {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      right: 200px;
+      z-index: 2;
+      /* Ust sinir: badge ile cakismasin */
+      max-height: 680px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .title {
+      font-size: 52px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.12;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.7);
+      /* Kelime kesme kontrolu */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      /* Maksimum 5 satir, sonra ... ile kes */
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .subtitle {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 26px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.85);
+      margin-top: 14px;
+      line-height: 1.35;
+      font-style: italic;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 18px;
+      flex-shrink: 0;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #FFC107;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    .rating svg { width: 20px; height: 20px; fill: #FFC107; }
+
+    .year-badge {
+      background: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.9);
+      padding: 5px 14px;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="poster-bg"></div>
+  <div class="overlay"></div>
+
+  <div class="badge">{{badgeText}}</div>
+
+  <div class="content">
+    <div class="title">{{title}}</div>
+    {{#if subtitle}}<div class="subtitle">{{subtitle}}</div>{{/if}}
+    <div class="meta">
+      {{#if rating}}<div class="rating"><svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L17.3 6.7l-3.65 3.56.86 5.03L10 13.01l-4.51 2.37.86-5.03L2.7 6.79l4.91-.85L10 1z"/></svg> {{rating}}</div>{{/if}}
+      {{#if year}}<span class="year-badge">{{year}}</span>{{/if}}
+    </div>
+  </div>
+
+  <div class="logo">
+    <div class="logo-ben">BEN</div>
+    <div class="logo-izledim">İZLEDİM</div>
+  </div>
+</body>
+</html>

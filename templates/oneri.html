@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1080px;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      position: relative;
+      background: #1a1a1a;
+    }
+    .bg-image {
+      position: absolute;
+      inset: 0;
+      background-image: url('{{posterUrl}}');
+      background-size: cover;
+      background-position: center top;
+    }
+
+    /* Daha genis ve guclu gradient */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        0deg,
+        rgba(0,0,0,0.95) 0%,
+        rgba(0,0,0,0.85) 30%,
+        rgba(0,0,0,0.5) 55%,
+        rgba(0,0,0,0.15) 75%,
+        rgba(0,0,0,0.25) 100%
+      );
+    }
+
+    .badge {
+      position: absolute;
+      top: 36px;
+      left: 36px;
+      background: #FFC107;
+      color: #1a1a1a;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      z-index: 2;
+    }
+
+    .content {
+      position: absolute;
+      bottom: 50px;
+      left: 50px;
+      right: 200px;
+      z-index: 2;
+      max-height: 680px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .rating-large {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .star-icon { width: 36px; height: 36px; fill: #FFC107; }
+    .rating-number { font-size: 48px; font-weight: 900; color: #FFC107; }
+    .rating-max { font-size: 24px; font-weight: 400; color: rgba(255,255,255,0.5); margin-left: -4px; }
+
+    .title {
+      font-size: 54px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 12px;
+      text-shadow: 0 3px 16px rgba(0,0,0,0.6);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .subtitle {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 26px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.45;
+      max-width: 750px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .year-tag {
+      display: inline-block;
+      margin-top: 16px;
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.85);
+      font-size: 18px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      position: absolute;
+      bottom: 50px;
+      right: 50px;
+      z-index: 3;
+      text-align: right;
+    }
+    .logo-ben { font-size: 24px; font-weight: 900; color: #C62828; letter-spacing: 2px; line-height: 1; }
+    .logo-izledim { font-size: 24px; font-weight: 900; color: #FFFFFF; letter-spacing: 3px; line-height: 1; }
+  </style>
+</head>
+<body>
+  <div class="bg-image"></div>
+  <div class="overlay"></div>
+  <div class="badge">ÖNERİ</div>
+  <div class="content">
+    {{#if rating}}
+    <div class="rating-large">
+      <svg class="star-icon" viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L17.3 6.7l-3.65 3.56.86 5.03L10 13.01l-4.51 2.37.86-5.03L2.7 6.79l4.91-.85L10 1z"/></svg>
+      <span class="rating-number">{{rating}}</span>
+      <span class="rating-max">/10</span>
+    </div>
+    {{/if}}
+    <div class="title">{{title}}</div>
+    {{#if subtitle}}<div class="subtitle">{{subtitle}}</div>{{/if}}
+    {{#if year}}<span class="year-tag">{{year}}</span>{{/if}}
+  </div>
+  <div class="logo">
+    <div class="logo-ben">BEN</div>
+    <div class="logo-izledim">İZLEDİM</div>
+  </div>
+</body>
+</html>

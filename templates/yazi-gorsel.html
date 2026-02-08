@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+      position: relative;
+      background: #1a1a1a;
+    }
+    /* Film karesi - tam kaplama */
+    .scene-image {
+      position: absolute;
+      inset: 0;
+      background-image: url('{{posterUrl}}');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene-image"></div>
+</body>
+</html>

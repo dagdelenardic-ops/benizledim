@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1080px;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      position: relative;
+      background: #0a0a0a;
+    }
+
+    /* Film karesi arka plan */
+    .scene-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('{{posterUrl}}');
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Sinematik siyah bantlar (letterbox) */
+    .letterbox-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: #000;
+      z-index: 2;
+    }
+    .letterbox-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: #000;
+      z-index: 2;
+    }
+
+    /* Karartma overlay - replik okunabilirliği için */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        0deg,
+        rgba(0,0,0,0.85) 0%,
+        rgba(0,0,0,0.5) 35%,
+        rgba(0,0,0,0.2) 50%,
+        rgba(0,0,0,0.5) 65%,
+        rgba(0,0,0,0.85) 100%
+      );
+      z-index: 1;
+    }
+
+    /* Replik metni - ortada */
+    .quote-container {
+      position: absolute;
+      top: 50%;
+      left: 80px;
+      right: 80px;
+      transform: translateY(-50%);
+      z-index: 3;
+      text-align: center;
+    }
+
+    .quote-mark-open {
+      font-size: 80px;
+      font-weight: 900;
+      color: rgba(198,40,40,0.8);
+      line-height: 0.5;
+      margin-bottom: 20px;
+    }
+
+    .quote-text {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.4;
+      font-style: italic;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      display: -webkit-box;
+      -webkit-line-clamp: 6;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .quote-mark-close {
+      font-size: 80px;
+      font-weight: 900;
+      color: rgba(198,40,40,0.8);
+      line-height: 0.5;
+      margin-top: 20px;
+    }
+
+    /* Film adı + karakter - alt kısım */
+    .info-bar {
+      position: absolute;
+      bottom: 140px;
+      left: 80px;
+      right: 80px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .movie-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .movie-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    .character-name {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      font-style: italic;
+    }
+
+    .year-badge {
+      background: rgba(198,40,40,0.9);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    /* Logo - üst sağ */
+    .logo {
+      position: absolute;
+      top: 135px;
+      right: 40px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .logo-ben { font-size: 16px; font-weight: 900; color: #C62828; letter-spacing: 1px; }
+    .logo-izledim { font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.6); letter-spacing: 2px; }
+
+    /* Replik badge - üst sol */
+    .badge {
+      position: absolute;
+      top: 135px;
+      left: 40px;
+      background: rgba(198,40,40,0.9);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene-bg"></div>
+  <div class="overlay"></div>
+  <div class="letterbox-top"></div>
+  <div class="letterbox-bottom"></div>
+
+  <div class="badge">REPLİK</div>
+
+  <div class="logo">
+    <span class="logo-ben">BEN</span>
+    <span class="logo-izledim">İZLEDİM</span>
+  </div>
+
+  <div class="quote-container">
+    <div class="quote-mark-open">&ldquo;</div>
+    <div class="quote-text">{{bodyText}}</div>
+    <div class="quote-mark-close">&rdquo;</div>
+  </div>
+
+  <div class="info-bar">
+    <div class="movie-info">
+      <div class="movie-title">{{title}}</div>
+      {{#if subtitle}}<div class="character-name">— {{subtitle}}</div>{{/if}}
+    </div>
+    {{#if year}}<div class="year-badge">{{year}}</div>{{/if}}
+  </div>
+</body>
+</html>

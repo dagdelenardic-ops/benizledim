@@ -1,0 +1,118 @@
+import type { FeedSource } from "@/types/feed";
+
+export const DEFAULT_FEEDS: FeedSource[] = [
+  // --- Türkçe Kaynaklar ---
+  {
+    id: "beyazperde-haberler",
+    name: "Beyazperde - Haberler",
+    url: "https://www.beyazperde.com/rss/haberler.xml",
+    category: "tr",
+    enabled: true,
+  },
+  {
+    id: "beyazperde-filmler",
+    name: "Beyazperde - Filmler",
+    url: "https://www.beyazperde.com/rss/filmler.xml",
+    category: "tr",
+    enabled: true,
+  },
+  {
+    id: "beyazperde-diziler",
+    name: "Beyazperde - Diziler",
+    url: "https://www.beyazperde.com/rss/diziler.xml",
+    category: "tr",
+    enabled: false,
+  },
+  {
+    id: "filmloverss",
+    name: "Filmloverss",
+    url: "https://www.filmloverss.com/feed/",
+    category: "tr",
+    enabled: true,
+  },
+  // --- Yabancı Kaynaklar ---
+  {
+    id: "variety",
+    name: "Variety",
+    url: "https://variety.com/feed/",
+    category: "en",
+    enabled: true,
+  },
+  {
+    id: "hollywoodreporter",
+    name: "The Hollywood Reporter",
+    url: "https://www.hollywoodreporter.com/feed/",
+    category: "en",
+    enabled: true,
+  },
+  {
+    id: "deadline",
+    name: "Deadline",
+    url: "https://deadline.com/feed/",
+    category: "en",
+    enabled: true,
+  },
+  {
+    id: "screenrant",
+    name: "Screen Rant",
+    url: "https://screenrant.com/feed/",
+    category: "en",
+    enabled: true,
+  },
+  {
+    id: "collider",
+    name: "Collider",
+    url: "https://collider.com/feed/",
+    category: "en",
+    enabled: true,
+  },
+  {
+    id: "indiewire",
+    name: "IndieWire",
+    url: "https://www.indiewire.com/feed/",
+    category: "en",
+    enabled: true,
+  },
+  {
+    id: "ign-movies",
+    name: "IGN - Movies",
+    url: "https://feeds.feedburner.com/ign/movies-articles",
+    category: "en",
+    enabled: false,
+  },
+  {
+    id: "empire",
+    name: "Empire Magazine",
+    url: "https://www.empireonline.com/movies/feed/",
+    category: "en",
+    enabled: false,
+  },
+  {
+    id: "cinemablend",
+    name: "CinemaBlend",
+    url: "https://www.cinemablend.com/rss/topic/news",
+    category: "en",
+    enabled: false,
+  },
+  {
+    id: "slashfilm",
+    name: "/Film",
+    url: "https://www.slashfilm.com/feed/",
+    category: "en",
+    enabled: false,
+  },
+  {
+    id: "theplaylist",
+    name: "The Playlist",
+    url: "https://theplaylist.net/feed/",
+    category: "en",
+    enabled: false,
+  },
+  {
+    id: "rottentomatoes",
+    name: "Rotten Tomatoes",
+    url: "https://editorial.rottentomatoes.com/feed/",
+    category: "en",
+    enabled: false,
+  },
+];

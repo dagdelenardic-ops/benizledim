@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1080px;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      position: relative;
+      background: #1a1a1a;
+    }
+    .poster-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('{{posterUrl}}');
+      background-size: cover;
+      background-position: center top;
+    }
+
+    /* Daha genis ve guclu gradient */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        0deg,
+        rgba(0,0,0,0.93) 0%,
+        rgba(0,0,0,0.82) 30%,
+        rgba(0,0,0,0.45) 55%,
+        rgba(0,0,0,0.15) 75%,
+        rgba(0,0,0,0.3) 100%
+      );
+    }
+
+    .badge {
+      position: absolute;
+      top: 36px;
+      left: 36px;
+      background: #C62828;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      z-index: 2;
+    }
+
+    .poster-frame {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      width: 400px;
+      height: 590px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      border: 3px solid rgba(255,255,255,0.1);
+      z-index: 1;
+    }
+    .poster-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+    .content {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      right: 200px;
+      z-index: 2;
+      max-height: 350px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .title {
+      font-size: 48px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.12;
+      text-shadow: 0 3px 16px rgba(0,0,0,0.6);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .subtitle {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 24px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 10px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .release-info {
+      display: inline-block;
+      margin-top: 14px;
+      background: rgba(198,40,40,0.9);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      z-index: 3;
+      text-align: right;
+    }
+    .logo-ben { font-size: 24px; font-weight: 900; color: #C62828; letter-spacing: 2px; line-height: 1; }
+    .logo-izledim { font-size: 24px; font-weight: 900; color: #FFFFFF; letter-spacing: 3px; line-height: 1; }
+  </style>
+</head>
+<body>
+  <div class="poster-bg"></div>
+  <div class="overlay"></div>
+  <div class="badge">YENİ İÇERİK</div>
+  <div class="poster-frame"><img src="{{posterUrl}}" alt="" /></div>
+  <div class="content">
+    <div class="title">{{title}}</div>
+    {{#if subtitle}}<div class="subtitle">{{subtitle}}</div>{{/if}}
+    {{#if releaseInfo}}<div class="release-info">{{releaseInfo}}</div>{{/if}}
+  </div>
+  <div class="logo">
+    <div class="logo-ben">BEN</div>
+    <div class="logo-izledim">İZLEDİM</div>
+  </div>
+</body>
+</html>

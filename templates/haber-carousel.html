@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1080px;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      position: relative;
+      background: #1a1a1a;
+    }
+    .poster-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('{{posterUrl}}');
+      background-size: cover;
+      background-position: center;
+      filter: blur(30px) brightness(0.2) saturate(1.3);
+      transform: scale(1.1);
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
+    }
+
+    /* Slayt numarasi */
+    .slide-number {
+      position: absolute;
+      top: 36px;
+      right: 36px;
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      background: rgba(0,0,0,0.4);
+      padding: 6px 14px;
+      border-radius: 4px;
+      z-index: 2;
+    }
+
+    /* Orta alan - poster + metin */
+    .center-area {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 50px;
+      align-items: center;
+      width: 920px;
+    }
+    .poster-frame {
+      width: 350px;
+      height: 520px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+      flex-shrink: 0;
+    }
+    .poster-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+    .text-area {
+      flex: 1;
+      max-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.12;
+      margin-bottom: 16px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .subtitle {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 19px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Logo sol alt */
+    .logo {
+      position: absolute;
+      bottom: 36px;
+      left: 40px;
+      z-index: 2;
+    }
+    .logo-ben { font-size: 18px; font-weight: 900; color: #C62828; letter-spacing: 1px; line-height: 1; display: inline; }
+    .logo-izledim { font-size: 18px; font-weight: 900; color: rgba(255,255,255,0.5); letter-spacing: 2px; line-height: 1; display: inline; }
+  </style>
+</head>
+<body>
+  <div class="poster-bg"></div>
+  <div class="overlay"></div>
+  <div class="slide-number">{{slideNumber}} / {{totalSlides}}</div>
+  <div class="center-area">
+    <div class="poster-frame"><img src="{{posterUrl}}" alt="" /></div>
+    <div class="text-area">
+      <div class="title">{{title}}</div>
+      {{#if subtitle}}<div class="subtitle">{{subtitle}}</div>{{/if}}
+    </div>
+  </div>
+  <div class="logo">
+    <span class="logo-ben">BEN </span><span class="logo-izledim">İZLEDİM</span>
+  </div>
+</body>
+</html>

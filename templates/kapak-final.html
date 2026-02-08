@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1080px;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      position: relative;
+      background: #1a1a1a;
+    }
+
+    /* Sinema salonu arka plan */
+    .cinema-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(26,26,26,0.3) 0%,
+        rgba(26,26,26,0.1) 30%,
+        rgba(26,26,26,0.5) 70%,
+        rgba(26,26,26,0.9) 100%
+      );
+    }
+    .cinema-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse at top center,
+        rgba(255,255,255,0.15) 0%,
+        rgba(0,0,0,0) 60%
+      );
+    }
+
+    /* Yarı saydam beyaz kutu - ortada */
+    .center-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      padding: 60px 80px;
+      text-align: center;
+    }
+
+    .logo-ben {
+      font-size: 56px;
+      font-weight: 900;
+      color: #C62828;
+      letter-spacing: 4px;
+      line-height: 1.1;
+    }
+    .logo-izledim {
+      font-size: 56px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: 6px;
+      line-height: 1.1;
+    }
+
+    /* Alt kısım - website */
+    .website-section {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    .website-label {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 18px;
+      font-style: italic;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+    }
+    .website-url {
+      font-size: 22px;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="cinema-bg"></div>
+  <div class="center-box">
+    <div class="logo-ben">BEN</div>
+    <div class="logo-izledim">İZLEDİM</div>
+  </div>
+  <div class="website-section">
+    <div class="website-label">daha fazlası için;</div>
+    <div class="website-url">www.benizledim.com</div>
+  </div>
+</body>
+</html>

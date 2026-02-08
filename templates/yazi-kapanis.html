@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1080px;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+      position: relative;
+      background: #8B7D6B;
+    }
+
+    /* Uzun metin kapanis */
+    .text-content {
+      position: absolute;
+      top: 60px;
+      left: 80px;
+      right: 80px;
+      bottom: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .body-text {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: #FFFFFF;
+      line-height: 1.7;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .body-text strong, .body-text b {
+      font-weight: 700;
+    }
+    .body-text em, .body-text i {
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    /* Alt kisim - yazar adi badge */
+    .author-section {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .author-badge {
+      background: #5D4037;
+      color: #FFFFFF;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      padding: 14px 36px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="text-content">
+    {{#if bodyText}}<div class="body-text">{{{bodyText}}}</div>{{/if}}
+  </div>
+  {{#if authorName}}
+  <div class="author-section">
+    <div class="author-badge">YAZI : {{authorName}}</div>
+  </div>
+  {{/if}}
+</body>
+</html>
