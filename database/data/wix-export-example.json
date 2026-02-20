@@ -1,0 +1,28 @@
+{
+    "exported_from": "benizledim.com (Wix)",
+    "exported_at": "2025-01-01T00:00:00Z",
+    "posts": [
+        {
+            "title": "Örnek Yazı Başlığı",
+            "excerpt": "Yazının kısa özeti",
+            "content": "<p>Yazının tam HTML içeriği. <strong>Bold</strong> ve <em>italic</em> destekler.</p><p>İkinci paragraf burada.</p>",
+            "cover_image": "https://static.wixstatic.com/media/example.jpg",
+            "author_email": "gurur@benizledim.com",
+            "categories": ["Sinema", "Film"],
+            "tags": ["Dram", "Gerilim"],
+            "published_at": "2024-06-15T10:00:00Z",
+            "view_count": 150
+        },
+        {
+            "title": "İkinci Örnek Yazı",
+            "excerpt": "Bu yazının da bir özeti var",
+            "content": "<p>Bu da <strong>başka bir</strong> yazı içeriği.</p><p>Wix'ten export edilen format bu şekilde.</p>",
+            "cover_image": "https://static.wixstatic.com/media/another-example.jpg",
+            "author_email": "iris@benizledim.com",
+            "categories": ["Dizi"],
+            "tags": ["Netflix", "Komedi"],
+            "published_at": "2024-05-20T14:30:00Z",
+            "view_count": 89
+        }
+    ]
+}
