@@ -55,8 +55,23 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isEditor(): bool
+    {
+        return $this->role === 'editor';
+    }
+
     public function isAuthor(): bool
     {
-        return in_array($this->role, ['admin', 'author']);
+        return in_array($this->role, ['admin', 'editor', 'author'], true);
+    }
+
+    public function canAccessCms(): bool
+    {
+        return in_array($this->role, ['admin', 'editor', 'author'], true);
+    }
+
+    public function canManageAllPosts(): bool
+    {
+        return in_array($this->role, ['admin', 'editor'], true);
     }
 }

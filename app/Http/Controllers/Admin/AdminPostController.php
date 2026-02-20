@@ -3,36 +3,63 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class AdminPostController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        $query = Post::with(['user', 'categories'])
+        $user = $request->user();
+
+        $query = Post::with(['user', 'categories', 'deletionRequestedBy'])
             ->latest();
 
-        if ($request->has('status') && in_array($request->status, ['draft', 'published'])) {
-            $query->where('status', $request->status);
+        if (!$user->canManageAllPosts()) {
+            $query->where('user_id', $user->id);
         }
 
-        if ($request->has('search')) {
-            $query->where('title', 'like', "%{$request->search}%");
+        $status = $request->string('status')->toString();
+
+        if ($status === 'pending_deletion') {
+            $query->whereNotNull('deletion_requested_at');
+        } elseif (in_array($status, ['draft', 'published'], true)) {
+            $query->where('status', $status)
+                ->whereNull('deletion_requested_at');
         }
 
-        $posts = $query->paginate(15);
+        if ($request->filled('search')) {
+            $search = $request->string('search')->toString();
+            $query->where(function ($builder) use ($search) {
+                $builder->where('title', 'like', "%{$search}%")
+                    ->orWhere('excerpt', 'like', "%{$search}%");
+            });
+        }
+
+        $posts = $query->paginate(15)->withQueryString();
+
+        $posts->getCollection()->transform(function (Post $post) {
+            $post->setAttribute('is_deletion_pending', $post->isDeletionPending());
+
+            return $post;
+        });
 
         return Inertia::render('Admin/Posts/Index', [
             'posts' => $posts,
             'filters' => $request->only(['status', 'search']),
+            'permissions' => [
+                'canApproveDeletion' => $user->isAdmin(),
+                'canManageAllPosts' => $user->canManageAllPosts(),
+            ],
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         $categories = Category::all();
         $tags = Tag::all();
@@ -57,7 +84,6 @@ class AdminPostController extends Controller
             'tags.*' => 'exists:tags,id',
         ]);
 
-        // Okuma süresi hesapla (her 200 kelime = 1 dakika)
         $wordCount = str_word_count(strip_tags($validated['content']));
         $readingTime = max(1, ceil($wordCount / 200));
 
@@ -69,9 +95,12 @@ class AdminPostController extends Controller
             'reading_time_minutes' => $readingTime,
             'status' => $validated['status'],
             'published_at' => $validated['status'] === 'published' ? now() : null,
+            'deletion_requested_at' => null,
+            'deletion_requested_by' => null,
+            'deletion_approved_at' => null,
+            'deletion_approved_by' => null,
         ];
 
-        // Cover image upload
         if ($request->hasFile('cover_image')) {
             $path = $request->file('cover_image')->store('posts', 'public');
             $postData['cover_image'] = '/storage/' . $path;
@@ -80,16 +109,16 @@ class AdminPostController extends Controller
         $post = Post::create($postData);
 
         $post->categories()->sync($validated['categories']);
-        if (!empty($validated['tags'])) {
-            $post->tags()->sync($validated['tags']);
-        }
+        $post->tags()->sync($validated['tags'] ?? []);
 
         return redirect()->route('admin.posts.index')
             ->with('success', 'Yazı başarıyla oluşturuldu!');
     }
 
-    public function edit(Post $post)
+    public function edit(Post $post): Response
     {
+        $this->authorizePostAccess($post, request()->user());
+
         $post->load(['categories', 'tags']);
         $categories = Category::all();
         $tags = Tag::all();
@@ -103,6 +132,9 @@ class AdminPostController extends Controller
 
     public function update(Request $request, Post $post)
     {
+        $user = $request->user();
+        $this->authorizePostAccess($post, $user);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'excerpt' => 'nullable|string|max:500',
@@ -126,7 +158,6 @@ class AdminPostController extends Controller
             'status' => $validated['status'],
         ];
 
-        // Yeni publish oluyorsa published_at set et
         if ($validated['status'] === 'published' && !$post->published_at) {
             $updateData['published_at'] = now();
         }
@@ -134,6 +165,14 @@ class AdminPostController extends Controller
         if ($request->hasFile('cover_image')) {
             $path = $request->file('cover_image')->store('posts', 'public');
             $updateData['cover_image'] = '/storage/' . $path;
+        }
+
+        // Admin bir yazıyı güncellediyse, isterse silme talebini kaldırabilsin.
+        if ($post->isDeletionPending() && $user->isAdmin()) {
+            $updateData['deletion_requested_at'] = null;
+            $updateData['deletion_requested_by'] = null;
+            $updateData['deletion_approved_at'] = null;
+            $updateData['deletion_approved_by'] = null;
         }
 
         $post->update($updateData);
@@ -147,13 +186,83 @@ class AdminPostController extends Controller
 
     public function destroy(Post $post)
     {
+        $user = request()->user();
+        $this->authorizePostAccess($post, $user);
+
+        if ($user->isAdmin()) {
+            $this->hardDeletePost($post);
+
+            return redirect()->route('admin.posts.index')
+                ->with('success', 'Yazı kalıcı olarak silindi.');
+        }
+
+        if ($post->isDeletionPending()) {
+            return back()->with('error', 'Bu yazı zaten admin onayı bekliyor.');
+        }
+
+        $post->update([
+            'deletion_requested_at' => now(),
+            'deletion_requested_by' => $user->id,
+            'deletion_approved_at' => null,
+            'deletion_approved_by' => null,
+        ]);
+
+        return back()->with('success', 'Yazı yayından kaldırıldı ve admin silme onayına gönderildi.');
+    }
+
+    public function approveDeletion(Post $post)
+    {
+        $user = request()->user();
+        $this->assertAdmin($user);
+
+        if (!$post->isDeletionPending()) {
+            return back()->with('error', 'Bu yazı için bekleyen bir silme talebi yok.');
+        }
+
+        $post->update([
+            'deletion_approved_at' => now(),
+            'deletion_approved_by' => $user->id,
+        ]);
+
+        $this->hardDeletePost($post);
+
+        return back()->with('success', 'Silme talebi onaylandı ve yazı kalıcı olarak silindi.');
+    }
+
+    public function rejectDeletion(Post $post)
+    {
+        $this->assertAdmin(request()->user());
+
+        if (!$post->isDeletionPending()) {
+            return back()->with('error', 'Bu yazı için bekleyen bir silme talebi yok.');
+        }
+
+        $post->update([
+            'deletion_requested_at' => null,
+            'deletion_requested_by' => null,
+            'deletion_approved_at' => null,
+            'deletion_approved_by' => null,
+        ]);
+
+        return back()->with('success', 'Silme talebi reddedildi. Yazı tekrar canlıda görünecek.');
+    }
+
+    private function authorizePostAccess(Post $post, ?User $user): void
+    {
+        abort_unless($user && $post->canBeEditedBy($user), 403, 'Bu yazıyı düzenleme yetkiniz yok.');
+    }
+
+    private function assertAdmin(?User $user): void
+    {
+        abort_unless($user && $user->isAdmin(), 403, 'Bu işlem sadece admin için açıktır.');
+    }
+
+    private function hardDeletePost(Post $post): void
+    {
         $post->comments()->delete();
         $post->likes()->delete();
         $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();
-
-        return redirect()->route('admin.posts.index')
-            ->with('success', 'Yazı silindi.');
     }
 }

@@ -10,6 +10,8 @@ const page = usePage();
 const authUser = page.props.auth?.user;
 const flashSuccess = computed(() => page.props.flash?.success);
 const flashError = computed(() => page.props.flash?.error);
+const isAdmin = computed(() => authUser?.role === 'admin');
+const isManager = computed(() => ['admin', 'editor'].includes(authUser?.role || ''));
 
 const showMobileSidebar = ref(false);
 const showUserMenu = ref(false);
@@ -18,12 +20,28 @@ const logout = () => {
     router.post('/logout');
 };
 
-const menuItems = [
-    { name: 'Dashboard', href: '/admin', icon: '📊' },
-    { name: 'Yazılar', href: '/admin/posts', icon: '📝' },
-    { name: 'Kategoriler', href: '/admin/categories', icon: '📁' },
-    { name: 'Kullanıcılar', href: '/admin/users', icon: '👥' },
-];
+const menuItems = computed(() => {
+    const items = [
+        { name: 'Dashboard', href: '/admin', icon: '📊' },
+        { name: 'Yazılar', href: '/admin/posts', icon: '📝' },
+        { name: 'Kategoriler', href: '/admin/categories', icon: '📁' },
+        { name: 'Etiketler', href: '/admin/tags', icon: '🏷️' },
+        { name: 'Podcast', href: '/admin/podcasts', icon: '🎙️' },
+        { name: 'Festival', href: '/admin/festival-events', icon: '🎬' },
+        { name: 'Sayfalar', href: '/admin/pages', icon: '📄' },
+        { name: 'Yorumlar', href: '/admin/comments', icon: '💬' },
+    ];
+
+    if (isManager.value) {
+        items.push({ name: 'Newsletter', href: '/admin/newsletters', icon: '📧' });
+    }
+
+    if (isAdmin.value) {
+        items.push({ name: 'Kullanıcılar', href: '/admin/users', icon: '👥' });
+    }
+
+    return items;
+});
 
 // Toast notifications
 const toasts = ref([]);

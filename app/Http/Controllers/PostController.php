@@ -42,6 +42,10 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
+        if (!$post->published_at || $post->status !== 'published' || $post->deletion_requested_at) {
+            abort(404);
+        }
+
         // View count artır
         $post->increment('view_count');
 

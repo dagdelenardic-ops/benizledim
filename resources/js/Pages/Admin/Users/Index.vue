@@ -1,5 +1,5 @@
 <script setup>
-import { router } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import { useDate } from '@/Composables/useDate';
 
@@ -18,9 +18,28 @@ const updateRole = (user, newRole) => {
     });
 };
 
+const setPassword = (user) => {
+    const password = prompt(`${user.email} için yeni şifre girin (en az 10 karakter, büyük/küçük harf, rakam ve sembol):`);
+    if (!password) return;
+
+    const passwordConfirmation = prompt('Şifreyi tekrar girin:');
+    if (password !== passwordConfirmation) {
+        alert('Şifre tekrarı eşleşmiyor.');
+        return;
+    }
+
+    router.put(`/admin/users/${user.id}/password`, {
+        password,
+        password_confirmation: passwordConfirmation,
+    }, {
+        preserveScroll: true,
+    });
+};
+
 const getRoleBadge = (role) => {
     const colors = {
         admin: 'bg-red-100 text-red-700',
+        editor: 'bg-purple-100 text-purple-700',
         author: 'bg-blue-100 text-blue-700',
         reader: 'bg-gray-100 text-gray-700',
     };
@@ -30,6 +49,7 @@ const getRoleBadge = (role) => {
 const getRoleLabel = (role) => {
     const labels = {
         admin: 'Admin',
+        editor: 'Editör',
         author: 'Yazar',
         reader: 'Okuyucu',
     };
@@ -55,6 +75,7 @@ const getRoleLabel = (role) => {
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Yazılar</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Yorumlar</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kayıt Tarihi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
@@ -88,6 +109,7 @@ const getRoleLabel = (role) => {
                                         :disabled="user.id === $page.props.auth.user?.id"
                                     >
                                         <option value="admin">Admin</option>
+                                        <option value="editor">Editör</option>
                                         <option value="author">Yazar</option>
                                         <option value="reader">Okuyucu</option>
                                     </select>
@@ -95,9 +117,17 @@ const getRoleLabel = (role) => {
                                 <td class="px-6 py-4 text-gray-600">{{ user.posts_count }}</td>
                                 <td class="px-6 py-4 text-gray-600">{{ user.comments_count }}</td>
                                 <td class="px-6 py-4 text-gray-600 text-sm">{{ formatDate(user.created_at) }}</td>
+                                <td class="px-6 py-4">
+                                    <button
+                                        @click="setPassword(user)"
+                                        class="text-blue-600 hover:text-blue-700 text-sm"
+                                    >
+                                        Şifre Ata
+                                    </button>
+                                </td>
                             </tr>
                             <tr v-if="users.data.length === 0">
-                                <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                <td colspan="7" class="px-6 py-8 text-center text-gray-500">
                                     Kullanıcı bulunamadı.
                                 </td>
                             </tr>

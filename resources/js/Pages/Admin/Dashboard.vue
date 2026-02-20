@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AdminLayout from '../../Components/Admin/AdminLayout.vue';
 import { useDate } from '@/Composables/useDate';
@@ -20,25 +21,40 @@ const props = defineProps({
 
 const { timeAgo } = useDate();
 
-const statCards = [
-    { key: 'total_posts', label: 'Toplam Yazı', icon: '📝', color: 'bg-blue-500' },
-    { key: 'published_posts', label: 'Yayında', icon: '✅', color: 'bg-green-500' },
-    { key: 'draft_posts', label: 'Taslak', icon: '📄', color: 'bg-yellow-500' },
-    { key: 'total_views', label: 'Toplam Görüntülenme', icon: '👁️', color: 'bg-purple-500' },
-    { key: 'total_users', label: 'Toplam Kullanıcı', icon: '👥', color: 'bg-indigo-500' },
-    { key: 'total_comments', label: 'Toplam Yorum', icon: '💬', color: 'bg-pink-500' },
-    { key: 'newsletter_subscribers', label: 'Newsletter Abonesi', icon: '📧', color: 'bg-red-500' },
-];
+const statCards = computed(() => {
+    const cards = [
+        { key: 'total_posts', label: 'Toplam Yazı', icon: '📝', color: 'bg-blue-500' },
+        { key: 'published_posts', label: 'Yayında', icon: '✅', color: 'bg-green-500' },
+        { key: 'draft_posts', label: 'Taslak', icon: '📄', color: 'bg-yellow-500' },
+        { key: 'pending_deletion_posts', label: 'Silme Onayı', icon: '🧹', color: 'bg-orange-500' },
+        { key: 'total_views', label: 'Toplam Görüntülenme', icon: '👁️', color: 'bg-purple-500' },
+        { key: 'total_users', label: 'Toplam Kullanıcı', icon: '👥', color: 'bg-indigo-500' },
+        { key: 'total_comments', label: 'Toplam Yorum', icon: '💬', color: 'bg-pink-500' },
+        { key: 'newsletter_subscribers', label: 'Newsletter Abonesi', icon: '📧', color: 'bg-red-500' },
+    ];
+
+    return cards.filter((card) => stats[card.key] !== null && stats[card.key] !== undefined);
+});
 
 const getStatusBadge = (status) => {
+    if (status === 'pending_deletion') {
+        return 'bg-red-100 text-red-700';
+    }
+
     return status === 'published'
         ? 'bg-green-100 text-green-700'
         : 'bg-yellow-100 text-yellow-700';
 };
 
 const getStatusLabel = (status) => {
+    if (status === 'pending_deletion') {
+        return 'Silme Onayı';
+    }
+
     return status === 'published' ? 'Yayında' : 'Taslak';
 };
+
+const resolveStatus = (post) => (post.deletion_requested_at ? 'pending_deletion' : post.status);
 </script>
 
 <template>
@@ -92,9 +108,9 @@ const getStatusLabel = (status) => {
                                     </p>
                                 </div>
                                 <span
-                                    :class="['px-2 py-1 rounded-full text-xs font-medium', getStatusBadge(post.status)]"
+                                    :class="['px-2 py-1 rounded-full text-xs font-medium', getStatusBadge(resolveStatus(post))]"
                                 >
-                                    {{ getStatusLabel(post.status) }}
+                                    {{ getStatusLabel(resolveStatus(post)) }}
                                 </span>
                             </div>
                         </div>

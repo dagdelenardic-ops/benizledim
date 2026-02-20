@@ -9,7 +9,7 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->user() || !$request->user()->isAdmin()) {
+        if (!$request->user() || !$request->user()->canAccessCms()) {
             abort(403, 'Bu sayfaya erişim yetkiniz yok.');
         }
 

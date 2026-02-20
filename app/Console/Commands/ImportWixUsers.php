@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 
 class ImportWixUsers extends Command
 {
@@ -66,7 +65,8 @@ class ImportWixUsers extends Command
                 User::create([
                     'name' => $name,
                     'email' => $email,
-                    'password' => Hash::make('password123'), // Varsayılan şifre
+                    // Şifreyi admin panelinden güvenli şekilde tanımlamak için boş bırak.
+                    'password' => null,
                     'role' => 'author',
                     'bio' => $wixUser['bio'] ?? null,
                     'avatar' => $wixUser['avatar'] ?? null,

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import { useDate } from '@/Composables/useDate';
 
@@ -13,9 +13,17 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    permissions: {
+        type: Object,
+        default: () => ({
+            canApproveDeletion: false,
+            canManageAllPosts: false,
+        }),
+    },
 });
 
 const { timeAgo } = useDate();
+const page = usePage();
 
 const search = ref(props.filters.search || '');
 const status = ref(props.filters.status || '');
@@ -36,19 +44,49 @@ watch([search, status], () => {
 });
 
 const getStatusBadge = (status) => {
+    if (status === 'pending_deletion') {
+        return 'bg-red-100 text-red-700';
+    }
+
     return status === 'published'
         ? 'bg-green-100 text-green-700'
         : 'bg-yellow-100 text-yellow-700';
 };
 
 const getStatusLabel = (status) => {
+    if (status === 'pending_deletion') {
+        return 'Silme Onayı';
+    }
+
     return status === 'published' ? 'Yayında' : 'Taslak';
 };
 
 const deletePost = (post) => {
-    if (!confirm(`"${post.title}" yazısını silmek istediğinize emin misiniz?`)) return;
+    const role = page.props.auth?.user?.role;
+    const isAdmin = role === 'admin';
+
+    const confirmText = isAdmin
+        ? `"${post.title}" yazısını kalıcı olarak silmek istediğinize emin misiniz?`
+        : `"${post.title}" yazısını yayından kaldırıp admin onayına göndermek istiyor musunuz?`;
+
+    if (!confirm(confirmText)) return;
+
     router.delete(`/admin/posts/${post.id}`);
 };
+
+const approveDeletion = (post) => {
+    if (!confirm(`"${post.title}" için silme talebini onaylayıp kalıcı silmek istiyor musunuz?`)) return;
+
+    router.post(`/admin/posts/${post.id}/approve-deletion`);
+};
+
+const rejectDeletion = (post) => {
+    if (!confirm(`"${post.title}" için silme talebini reddedip tekrar yayına almak istiyor musunuz?`)) return;
+
+    router.post(`/admin/posts/${post.id}/reject-deletion`);
+};
+
+const resolveStatus = (post) => (post.is_deletion_pending ? 'pending_deletion' : post.status);
 </script>
 
 <template>
@@ -83,6 +121,7 @@ const deletePost = (post) => {
                     <option value="">Tümü</option>
                     <option value="published">Yayında</option>
                     <option value="draft">Taslak</option>
+                    <option value="pending_deletion">Silme Onayı</option>
                 </select>
             </div>
 
@@ -112,8 +151,8 @@ const deletePost = (post) => {
                                 </td>
                                 <td class="px-6 py-4 text-gray-600">{{ post.user?.name }}</td>
                                 <td class="px-6 py-4">
-                                    <span :class="['px-2 py-1 rounded-full text-xs font-medium', getStatusBadge(post.status)]">
-                                        {{ getStatusLabel(post.status) }}
+                                    <span :class="['px-2 py-1 rounded-full text-xs font-medium', getStatusBadge(resolveStatus(post))]">
+                                        {{ getStatusLabel(resolveStatus(post)) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-gray-600 text-sm">{{ timeAgo(post.created_at) }}</td>
@@ -126,11 +165,26 @@ const deletePost = (post) => {
                                         >
                                             Düzenle
                                         </Link>
+                                        <template v-if="post.is_deletion_pending && permissions.canApproveDeletion">
+                                            <button
+                                                @click="approveDeletion(post)"
+                                                class="text-red-700 hover:text-red-800 text-sm"
+                                            >
+                                                Kalıcı Sil
+                                            </button>
+                                            <button
+                                                @click="rejectDeletion(post)"
+                                                class="text-emerald-600 hover:text-emerald-700 text-sm"
+                                            >
+                                                Yayına Al
+                                            </button>
+                                        </template>
                                         <button
+                                            v-else
                                             @click="deletePost(post)"
                                             class="text-red-600 hover:text-red-700 text-sm"
                                         >
-                                            Sil
+                                            {{ page.props.auth?.user?.role === 'admin' ? 'Sil' : 'Silme Talebi' }}
                                         </button>
                                     </div>
                                 </td>

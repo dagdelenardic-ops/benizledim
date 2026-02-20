@@ -17,6 +17,7 @@ const props = defineProps({
 const getRoleLabel = (role) => {
     const labels = {
         admin: 'Admin',
+        editor: 'Editör',
         author: 'Yazar',
         reader: 'Okuyucu',
     };
@@ -26,6 +27,7 @@ const getRoleLabel = (role) => {
 const getRoleColor = (role) => {
     const colors = {
         admin: 'bg-red-100 text-red-700',
+        editor: 'bg-purple-100 text-purple-700',
         author: 'bg-blue-100 text-blue-700',
         reader: 'bg-gray-100 text-gray-700',
     };

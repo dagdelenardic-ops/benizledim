@@ -19,6 +19,9 @@ const props = defineProps({
 const page = usePage();
 const authUser = page.props.auth?.user;
 const newsletterMessage = computed(() => page.props.flash?.newsletter_message);
+const canAccessCms = computed(() => {
+    return ['admin', 'editor', 'author'].includes(authUser?.role || '');
+});
 
 const showLoginModal = ref(false);
 const showUserMenu = ref(false);
@@ -178,7 +181,7 @@ export default {
                                                 Profilim
                                             </Link>
                                             <Link
-                                                v-if="authUser?.role === 'admin'"
+                                                v-if="canAccessCms"
                                                 href="/admin"
                                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
@@ -278,6 +281,14 @@ export default {
                                     Giriş Yap
                                 </button>
                                 <template v-else>
+                                    <Link
+                                        v-if="canAccessCms"
+                                        href="/admin"
+                                        class="block px-4 py-2 hover:bg-white/10 rounded-lg transition-colors"
+                                        @click="showMobileMenu = false"
+                                    >
+                                        Admin Panel
+                                    </Link>
                                     <Link
                                         :href="`/profile/${authUser.id}`"
                                         class="block px-4 py-2 hover:bg-white/10 rounded-lg transition-colors"
