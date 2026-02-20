@@ -26,7 +26,7 @@ jobs:
           node-version: '20'
 
       - name: 🔧 Install PHP Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader --ignore-platform-reqs
 
       - name: 🔨 Install Frontend Dependencies & Build
         run: |
