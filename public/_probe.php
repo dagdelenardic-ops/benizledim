@@ -34,4 +34,16 @@ try {
     ];
 }
 
+if (isset($_GET['logs']) && $_GET['logs'] === '1') {
+    $logFile = $basePath . '/storage/logs/laravel.log';
+    if (is_file($logFile) && is_readable($logFile)) {
+        $lines = @file($logFile, FILE_IGNORE_NEW_LINES);
+        if (is_array($lines)) {
+            $result['log_tail'] = array_slice($lines, -40);
+        }
+    } else {
+        $result['log_tail'] = ['log file not readable'];
+    }
+}
+
 echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
