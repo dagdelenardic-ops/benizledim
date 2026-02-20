@@ -139,4 +139,40 @@ class RoleAuthorizationTest extends TestCase
 
         $response->assertStatus(403);
     }
+
+    /**
+     * Test author cannot manage categories.
+     */
+    public function test_author_cannot_manage_categories(): void
+    {
+        $author = User::factory()->create(['role' => 'author']);
+
+        $response = $this->actingAs($author)->get(route('admin.categories.index'));
+
+        $response->assertStatus(403);
+    }
+
+    /**
+     * Test editor can manage categories.
+     */
+    public function test_editor_can_manage_categories(): void
+    {
+        $editor = User::factory()->create(['role' => 'editor']);
+
+        $response = $this->actingAs($editor)->get(route('admin.categories.index'));
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Test editor cannot manage users.
+     */
+    public function test_editor_cannot_manage_users(): void
+    {
+        $editor = User::factory()->create(['role' => 'editor']);
+
+        $response = $this->actingAs($editor)->get(route('admin.users.index'));
+
+        $response->assertStatus(403);
+    }
 }

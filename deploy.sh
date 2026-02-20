@@ -22,6 +22,16 @@ echo ""
 echo "🗄️  Migration çalıştırılıyor..."
 php artisan migrate --force
 
+# 3.1 Primary admin hesabını garanti et
+if [ -n "${PRIMARY_ADMIN_PASSWORD:-}" ]; then
+  echo ""
+  echo "👤 Primary admin hesabı hazırlanıyor..."
+  php artisan benizledim:ensure-admin --no-interaction
+else
+  echo ""
+  echo "⚠️  PRIMARY_ADMIN_PASSWORD boş. Admin hesabı otomatik oluşturulmadı."
+fi
+
 # 4. Storage link
 echo ""
 echo "📁 Storage link oluşturuluyor..."

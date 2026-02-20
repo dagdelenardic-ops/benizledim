@@ -78,59 +78,64 @@ Route::get('/sayfa/{page:slug}', [PageController::class, 'show'])->name('pages.s
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    // Yazılar
+    // Yazılar (admin, editör, yazar)
     Route::get('/posts', [AdminPostController::class, 'index'])->name('posts.index');
     Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [AdminPostController::class, 'store'])->name('posts.store');
     Route::get('/posts/{post}/edit', [AdminPostController::class, 'edit'])->name('posts.edit');
     Route::put('/posts/{post}', [AdminPostController::class, 'update'])->name('posts.update');
     Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
-    Route::post('/posts/{post}/approve-deletion', [AdminPostController::class, 'approveDeletion'])->name('posts.approveDeletion');
-    Route::post('/posts/{post}/reject-deletion', [AdminPostController::class, 'rejectDeletion'])->name('posts.rejectDeletion');
 
-    // Kategoriler
-    Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
-    Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
-    Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
-    Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::middleware('role:admin,editor')->group(function () {
+        // Kategoriler
+        Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+        Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+        Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 
-    // Etiketler
-    Route::get('/tags', [AdminTagController::class, 'index'])->name('tags.index');
-    Route::post('/tags', [AdminTagController::class, 'store'])->name('tags.store');
-    Route::put('/tags/{tag}', [AdminTagController::class, 'update'])->name('tags.update');
-    Route::delete('/tags/{tag}', [AdminTagController::class, 'destroy'])->name('tags.destroy');
+        // Etiketler
+        Route::get('/tags', [AdminTagController::class, 'index'])->name('tags.index');
+        Route::post('/tags', [AdminTagController::class, 'store'])->name('tags.store');
+        Route::put('/tags/{tag}', [AdminTagController::class, 'update'])->name('tags.update');
+        Route::delete('/tags/{tag}', [AdminTagController::class, 'destroy'])->name('tags.destroy');
 
-    // Podcast
-    Route::get('/podcasts', [AdminPodcastController::class, 'index'])->name('podcasts.index');
-    Route::post('/podcasts', [AdminPodcastController::class, 'store'])->name('podcasts.store');
-    Route::put('/podcasts/{podcast}', [AdminPodcastController::class, 'update'])->name('podcasts.update');
-    Route::delete('/podcasts/{podcast}', [AdminPodcastController::class, 'destroy'])->name('podcasts.destroy');
+        // Podcast
+        Route::get('/podcasts', [AdminPodcastController::class, 'index'])->name('podcasts.index');
+        Route::post('/podcasts', [AdminPodcastController::class, 'store'])->name('podcasts.store');
+        Route::put('/podcasts/{podcast}', [AdminPodcastController::class, 'update'])->name('podcasts.update');
+        Route::delete('/podcasts/{podcast}', [AdminPodcastController::class, 'destroy'])->name('podcasts.destroy');
 
-    // Festival
-    Route::get('/festival-events', [AdminFestivalEventController::class, 'index'])->name('festival.index');
-    Route::post('/festival-events', [AdminFestivalEventController::class, 'store'])->name('festival.store');
-    Route::put('/festival-events/{festivalEvent}', [AdminFestivalEventController::class, 'update'])->name('festival.update');
-    Route::delete('/festival-events/{festivalEvent}', [AdminFestivalEventController::class, 'destroy'])->name('festival.destroy');
+        // Festival
+        Route::get('/festival-events', [AdminFestivalEventController::class, 'index'])->name('festival.index');
+        Route::post('/festival-events', [AdminFestivalEventController::class, 'store'])->name('festival.store');
+        Route::put('/festival-events/{festivalEvent}', [AdminFestivalEventController::class, 'update'])->name('festival.update');
+        Route::delete('/festival-events/{festivalEvent}', [AdminFestivalEventController::class, 'destroy'])->name('festival.destroy');
 
-    // Sayfalar
-    Route::get('/pages', [AdminPageController::class, 'index'])->name('pages.index');
-    Route::post('/pages', [AdminPageController::class, 'store'])->name('pages.store');
-    Route::put('/pages/{page}', [AdminPageController::class, 'update'])->name('pages.update');
-    Route::delete('/pages/{page}', [AdminPageController::class, 'destroy'])->name('pages.destroy');
+        // Sayfalar
+        Route::get('/pages', [AdminPageController::class, 'index'])->name('pages.index');
+        Route::post('/pages', [AdminPageController::class, 'store'])->name('pages.store');
+        Route::put('/pages/{page}', [AdminPageController::class, 'update'])->name('pages.update');
+        Route::delete('/pages/{page}', [AdminPageController::class, 'destroy'])->name('pages.destroy');
 
-    // Yorumlar
-    Route::get('/comments', [AdminCommentController::class, 'index'])->name('comments.index');
-    Route::delete('/comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comments.destroy');
+        // Yorumlar
+        Route::get('/comments', [AdminCommentController::class, 'index'])->name('comments.index');
+        Route::delete('/comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comments.destroy');
 
-    // Newsletter
-    Route::get('/newsletters', [AdminNewsletterController::class, 'index'])->name('newsletters.index');
-    Route::post('/newsletters/{newsletter}/toggle', [AdminNewsletterController::class, 'toggle'])->name('newsletters.toggle');
-    Route::delete('/newsletters/{newsletter}', [AdminNewsletterController::class, 'destroy'])->name('newsletters.destroy');
+        // Newsletter
+        Route::get('/newsletters', [AdminNewsletterController::class, 'index'])->name('newsletters.index');
+        Route::post('/newsletters/{newsletter}/toggle', [AdminNewsletterController::class, 'toggle'])->name('newsletters.toggle');
+        Route::delete('/newsletters/{newsletter}', [AdminNewsletterController::class, 'destroy'])->name('newsletters.destroy');
+    });
 
-    // Kullanıcılar
-    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
-    Route::put('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.updateRole');
-    Route::put('/users/{user}/password', [AdminUserController::class, 'updatePassword'])->name('users.updatePassword');
+    Route::middleware('role:admin')->group(function () {
+        Route::post('/posts/{post}/approve-deletion', [AdminPostController::class, 'approveDeletion'])->name('posts.approveDeletion');
+        Route::post('/posts/{post}/reject-deletion', [AdminPostController::class, 'rejectDeletion'])->name('posts.rejectDeletion');
+
+        // Kullanıcılar
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::put('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.updateRole');
+        Route::put('/users/{user}/password', [AdminUserController::class, 'updatePassword'])->name('users.updatePassword');
+    });
 });
 
 // Wix Redirect'leri (eski URL yapısından yeni yapıya)
