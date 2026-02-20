@@ -1,0 +1,12 @@
+Options -MultiViews -Indexes
+RewriteEngine On
+
+# Prefer PHP 8.2 on cPanel (ea-php first, alt-php fallback if available).
+<IfModule mime_module>
+    AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+    AddHandler application/x-httpd-alt-php82 .php .php8 .phtml
+</IfModule>
+
+# Serve the Laravel app from the public/ directory.
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]
