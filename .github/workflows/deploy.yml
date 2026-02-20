@@ -13,26 +13,6 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      - name: 📦 Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, iconv, json, libxml, mbstring, openssl, pcre, pdo, phar, posix, readline, reflection, session, simplexml, sodium, sqlite3, standard, tokenizer, xml, xmlreader, xmlwriter, zlib
-          coverage: none
-
-      - name: 🛠️ Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: 🔧 Install PHP Dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader --ignore-platform-reqs
-
-      - name: 🔨 Install Frontend Dependencies & Build
-        run: |
-          npm ci
-          npm run build
-
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -50,3 +30,5 @@ jobs:
             .qwen-instructions.md
             scripts/**
             database/data/**
+            node_modules/**
+            vendor/**
