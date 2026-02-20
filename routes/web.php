@@ -21,6 +21,8 @@ use App\Http\Controllers\Admin\AdminFestivalEventController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminNewsletterController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\SitemapController;
 
 // Sitemap
@@ -73,6 +75,12 @@ Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile
 
 // Statik Sayfalar
 Route::get('/sayfa/{page:slug}', [PageController::class, 'show'])->name('pages.show');
+
+// Authentication & OAuth
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 // Admin Panel
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {

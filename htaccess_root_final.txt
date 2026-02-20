@@ -1,0 +1,11 @@
+Options -MultiViews -Indexes
+RewriteEngine On
+
+# Set PHP version
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+</IfModule>
+
+# Rewrite everything to public/ subdirectory (transparent - no redirect)
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]

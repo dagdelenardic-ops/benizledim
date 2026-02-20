@@ -37,6 +37,13 @@ class AuthController extends Controller
             RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            if ($user->isAdmin() || $user->isEditor() || $user->isAuthor()) {
+               return redirect()->intended('/admin');
+            }
+
             return redirect()->intended('/');
         }
 
