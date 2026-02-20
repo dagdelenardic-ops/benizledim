@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
-            $table->enum('role', ['admin', 'author', 'reader'])->default('reader');
+            $table->enum('role', ['admin', 'editor', 'author', 'reader'])->default('reader');
             $table->text('bio')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -12,6 +12,7 @@ const flashSuccess = computed(() => page.props.flash?.success);
 const flashError = computed(() => page.props.flash?.error);
 const isAdmin = computed(() => authUser?.role === 'admin');
 const isManager = computed(() => ['admin', 'editor'].includes(authUser?.role || ''));
+const isAuthor = computed(() => authUser?.role === 'author');
 
 const showMobileSidebar = ref(false);
 const showUserMenu = ref(false);
@@ -20,27 +21,43 @@ const logout = () => {
     router.post('/logout');
 };
 
+// Check if menu item is active
+const isMenuActive = (href) => {
+    const currentUrl = page.url;
+    
+    // Dashboard special case
+    if (href === '/admin') {
+        return currentUrl === '/admin' || currentUrl === '/admin/';
+    }
+    
+    // For other routes, check if current URL starts with the menu href
+    return currentUrl.startsWith(href);
+};
+
 const menuItems = computed(() => {
     const items = [
-        { name: 'Dashboard', href: '/admin', icon: '📊' },
-        { name: 'Yazılar', href: '/admin/posts', icon: '📝' },
-        { name: 'Kategoriler', href: '/admin/categories', icon: '📁' },
-        { name: 'Etiketler', href: '/admin/tags', icon: '🏷️' },
-        { name: 'Podcast', href: '/admin/podcasts', icon: '🎙️' },
-        { name: 'Festival', href: '/admin/festival-events', icon: '🎬' },
-        { name: 'Sayfalar', href: '/admin/pages', icon: '📄' },
-        { name: 'Yorumlar', href: '/admin/comments', icon: '💬' },
+        { name: 'Dashboard', href: '/admin', icon: '📊', roles: ['admin', 'editor', 'author'] },
+        { name: 'Yazılar', href: '/admin/posts', icon: '📝', roles: ['admin', 'editor', 'author'] },
+        { name: 'Kategoriler', href: '/admin/categories', icon: '📁', roles: ['admin', 'editor'] },
+        { name: 'Etiketler', href: '/admin/tags', icon: '🏷️', roles: ['admin', 'editor'] },
+        { name: 'Podcast', href: '/admin/podcasts', icon: '🎙️', roles: ['admin', 'editor'] },
+        { name: 'Festival', href: '/admin/festival-events', icon: '🎬', roles: ['admin', 'editor'] },
+        { name: 'Sayfalar', href: '/admin/pages', icon: '📄', roles: ['admin', 'editor'] },
+        { name: 'Yorumlar', href: '/admin/comments', icon: '💬', roles: ['admin', 'editor'] },
     ];
 
+    // Newsletter - only admin and editor
     if (isManager.value) {
-        items.push({ name: 'Newsletter', href: '/admin/newsletters', icon: '📧' });
+        items.push({ name: 'Newsletter', href: '/admin/newsletters', icon: '📧', roles: ['admin', 'editor'] });
     }
 
+    // Users - only admin
     if (isAdmin.value) {
-        items.push({ name: 'Kullanıcılar', href: '/admin/users', icon: '👥' });
+        items.push({ name: 'Kullanıcılar', href: '/admin/users', icon: '👥', roles: ['admin'] });
     }
 
-    return items;
+    // Filter items based on user role
+    return items.filter(item => item.roles.includes(authUser?.role || ''));
 });
 
 // Toast notifications
@@ -89,6 +106,23 @@ watch(flashError, (message) => {
                 </Link>
             </div>
 
+            <!-- User Role Badge -->
+            <div class="px-4 py-3 border-b border-gray-800">
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-400 text-sm">Rol:</span>
+                    <span 
+                        :class="[
+                            'px-2 py-0.5 rounded text-xs font-medium',
+                            isAdmin ? 'bg-purple-100 text-purple-700' : 
+                            isManager ? 'bg-blue-100 text-blue-700' : 
+                            'bg-green-100 text-green-700'
+                        ]"
+                    >
+                        {{ isAdmin ? 'Admin' : isManager ? 'Editor' : 'Yazar' }}
+                    </span>
+                </div>
+            </div>
+
             <!-- Navigation -->
             <nav class="p-4 space-y-1">
                 <Link
@@ -97,11 +131,9 @@ watch(flashError, (message) => {
                     :href="item.href"
                     :class="[
                         'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-                        $page.url.startsWith(item.href) && item.href !== '/admin'
+                        isMenuActive(item.href)
                             ? 'bg-red-600/10 text-red-500 border-l-4 border-red-500'
-                            : $page.url === '/admin' && item.href === '/admin'
-                                ? 'bg-red-600/10 text-red-500 border-l-4 border-red-500'
-                                : 'hover:bg-gray-800 text-gray-300'
+                            : 'hover:bg-gray-800 text-gray-300'
                     ]"
                     @click="showMobileSidebar = false"
                 >
@@ -180,6 +212,10 @@ watch(flashError, (message) => {
                             class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200"
                             v-click-outside="() => showUserMenu = false"
                         >
+                            <div class="px-4 py-2 border-b border-gray-100">
+                                <div class="text-sm font-medium text-gray-900">{{ authUser?.name }}</div>
+                                <div class="text-xs text-gray-500">{{ authUser?.email }}</div>
+                            </div>
                             <Link
                                 :href="`/profile/${authUser?.id}`"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

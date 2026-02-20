@@ -95,16 +95,17 @@ const deletePodcast = (podcast) => {
         <div class="space-y-6">
             <h1 class="text-2xl font-bold text-gray-900">Podcast Yönetimi</h1>
 
+            <!-- New Podcast Form -->
             <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                 <h2 class="text-lg font-medium text-gray-900">Yeni Podcast</h2>
 
                 <form @submit.prevent="submitNew" class="grid md:grid-cols-2 gap-4">
                     <div class="md:col-span-2">
-                        <label class="block text-sm text-gray-700 mb-1">Başlık</label>
+                        <label class="block text-sm text-gray-700 mb-1">Başlık <span class="text-red-500">*</span></label>
                         <input
                             v-model="newForm.title"
                             type="text"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
                             :class="{ 'border-red-500': newForm.errors.title }"
                         />
                         <p v-if="newForm.errors.title" class="mt-1 text-sm text-red-600">{{ newForm.errors.title }}</p>
@@ -115,8 +116,10 @@ const deletePodcast = (podcast) => {
                         <textarea
                             v-model="newForm.description"
                             rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            :class="{ 'border-red-500': newForm.errors.description }"
                         ></textarea>
+                        <p v-if="newForm.errors.description" class="mt-1 text-sm text-red-600">{{ newForm.errors.description }}</p>
                     </div>
 
                     <div>
@@ -124,7 +127,7 @@ const deletePodcast = (podcast) => {
                         <input
                             v-model="newForm.spotify_embed_url"
                             type="url"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
                             :class="{ 'border-red-500': newForm.errors.spotify_embed_url }"
                         />
                         <p v-if="newForm.errors.spotify_embed_url" class="mt-1 text-sm text-red-600">{{ newForm.errors.spotify_embed_url }}</p>
@@ -136,7 +139,7 @@ const deletePodcast = (podcast) => {
                             v-model="newForm.duration"
                             type="number"
                             min="1"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
                             :class="{ 'border-red-500': newForm.errors.duration }"
                         />
                         <p v-if="newForm.errors.duration" class="mt-1 text-sm text-red-600">{{ newForm.errors.duration }}</p>
@@ -147,65 +150,74 @@ const deletePodcast = (podcast) => {
                         <input
                             v-model="newForm.published_at"
                             type="datetime-local"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            :class="{ 'border-red-500': newForm.errors.published_at }"
                         />
+                        <p v-if="newForm.errors.published_at" class="mt-1 text-sm text-red-600">{{ newForm.errors.published_at }}</p>
                     </div>
 
                     <div>
                         <label class="block text-sm text-gray-700 mb-1">Kapak Görseli</label>
                         <input type="file" accept="image/*" @change="onNewCoverChange" class="w-full text-sm" />
                         <p v-if="selectedCoverName" class="mt-1 text-xs text-gray-500">{{ selectedCoverName }}</p>
+                        <p v-if="newForm.errors.cover_image" class="mt-1 text-sm text-red-600">{{ newForm.errors.cover_image }}</p>
                     </div>
 
                     <div class="md:col-span-2">
                         <button
                             type="submit"
                             :disabled="newForm.processing"
-                            class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                            class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
                         >
-                            Kaydet
+                            <span v-if="newForm.processing">Kaydediliyor...</span>
+                            <span v-else>Kaydet</span>
                         </button>
                     </div>
                 </form>
             </div>
 
+            <!-- Podcasts List -->
             <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Başlık</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Süre</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Yayın</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        <tr v-for="podcast in podcasts.data" :key="podcast.id" class="hover:bg-gray-50 align-top">
-                            <td class="px-6 py-4">
-                                <div class="font-medium text-gray-900">{{ podcast.title }}</div>
-                                <div class="text-xs text-gray-500 mt-1 line-clamp-2">{{ podcast.description }}</div>
-                            </td>
-                            <td class="px-6 py-4 text-gray-600">{{ podcast.duration || '-' }}</td>
-                            <td class="px-6 py-4 text-gray-600 text-sm">{{ podcast.published_at ? podcast.published_at.slice(0, 10) : '-' }}</td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-2">
-                                    <button @click="startEdit(podcast)" class="text-blue-600 hover:text-blue-700 text-sm">Düzenle</button>
-                                    <button @click="deletePodcast(podcast)" class="text-red-600 hover:text-red-700 text-sm">Sil</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr v-if="podcasts.data.length === 0">
-                            <td colspan="4" class="px-6 py-8 text-center text-gray-500">Podcast bulunamadı.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[600px]">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Başlık</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Süre</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Yayın</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr v-for="podcast in podcasts.data" :key="podcast.id" class="hover:bg-gray-50 align-top">
+                                <td class="px-6 py-4">
+                                    <div class="font-medium text-gray-900">{{ podcast.title }}</div>
+                                    <div class="text-xs text-gray-500 mt-1 line-clamp-2">{{ podcast.description }}</div>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">{{ podcast.duration || '-' }}</td>
+                                <td class="px-6 py-4 text-gray-600 text-sm">{{ podcast.published_at ? podcast.published_at.slice(0, 10) : '-' }}</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-2">
+                                        <button @click="startEdit(podcast)" class="text-blue-600 hover:text-blue-700 text-sm">Düzenle</button>
+                                        <button @click="deletePodcast(podcast)" class="text-red-600 hover:text-red-700 text-sm">Sil</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr v-if="!podcasts.data || podcasts.data.length === 0">
+                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">Henüz podcast kaydı bulunmuyor.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                <div v-if="podcasts.links" class="px-6 py-4 border-t border-gray-200 flex justify-center">
+                <!-- Pagination -->
+                <div v-if="podcasts.links && podcasts.links.length > 3" class="px-6 py-4 border-t border-gray-200 flex justify-center">
                     <div class="flex items-center gap-2">
                         <Link
                             v-for="(link, index) in podcasts.links"
                             :key="index"
-                            :href="link.url || '#'"
+                            :href="link.url || '#'
+                            "
                             :class="[
                                 'px-3 py-1 rounded text-sm',
                                 link.active
@@ -220,50 +232,84 @@ const deletePodcast = (podcast) => {
                 </div>
             </div>
 
+            <!-- Edit Form -->
             <div v-if="editingPodcastId" class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                 <h2 class="text-lg font-medium text-gray-900">Podcast Düzenle</h2>
 
                 <form @submit.prevent="submitEdit(podcasts.data.find((item) => item.id === editingPodcastId))" class="grid md:grid-cols-2 gap-4">
                     <div class="md:col-span-2">
-                        <label class="block text-sm text-gray-700 mb-1">Başlık</label>
-                        <input v-model="editForm.title" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                        <label class="block text-sm text-gray-700 mb-1">Başlık <span class="text-red-500">*</span></label>
+                        <input
+                            v-model="editForm.title"
+                            type="text"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            :class="{ 'border-red-500': editForm.errors.title }"
+                        />
+                        <p v-if="editForm.errors.title" class="mt-1 text-sm text-red-600">{{ editForm.errors.title }}</p>
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="block text-sm text-gray-700 mb-1">Açıklama</label>
-                        <textarea v-model="editForm.description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
+                        <textarea
+                            v-model="editForm.description"
+                            rows="3"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            :class="{ 'border-red-500': editForm.errors.description }"
+                        ></textarea>
+                        <p v-if="editForm.errors.description" class="mt-1 text-sm text-red-600">{{ editForm.errors.description }}</p>
                     </div>
 
                     <div>
                         <label class="block text-sm text-gray-700 mb-1">Spotify Embed URL</label>
-                        <input v-model="editForm.spotify_embed_url" type="url" class="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                        <input
+                            v-model="editForm.spotify_embed_url"
+                            type="url"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            :class="{ 'border-red-500': editForm.errors.spotify_embed_url }"
+                        />
+                        <p v-if="editForm.errors.spotify_embed_url" class="mt-1 text-sm text-red-600">{{ editForm.errors.spotify_embed_url }}</p>
                     </div>
 
                     <div>
                         <label class="block text-sm text-gray-700 mb-1">Süre</label>
-                        <input v-model="editForm.duration" type="number" min="1" class="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                        <input
+                            v-model="editForm.duration"
+                            type="number"
+                            min="1"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            :class="{ 'border-red-500': editForm.errors.duration }"
+                        />
+                        <p v-if="editForm.errors.duration" class="mt-1 text-sm text-red-600">{{ editForm.errors.duration }}</p>
                     </div>
 
                     <div>
                         <label class="block text-sm text-gray-700 mb-1">Yayın Tarihi</label>
-                        <input v-model="editForm.published_at" type="datetime-local" class="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                        <input
+                            v-model="editForm.published_at"
+                            type="datetime-local"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            :class="{ 'border-red-500': editForm.errors.published_at }"
+                        />
+                        <p v-if="editForm.errors.published_at" class="mt-1 text-sm text-red-600">{{ editForm.errors.published_at }}</p>
                     </div>
 
                     <div>
                         <label class="block text-sm text-gray-700 mb-1">Yeni Kapak</label>
                         <input type="file" accept="image/*" @change="onEditCoverChange" class="w-full text-sm" />
                         <p v-if="editCoverName" class="mt-1 text-xs text-gray-500">{{ editCoverName }}</p>
+                        <p v-if="editForm.errors.cover_image" class="mt-1 text-sm text-red-600">{{ editForm.errors.cover_image }}</p>
                     </div>
 
                     <div class="md:col-span-2 flex gap-2">
                         <button
                             type="submit"
                             :disabled="editForm.processing"
-                            class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                            class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
                         >
-                            Güncelle
+                            <span v-if="editForm.processing">Güncelleniyor...</span>
+                            <span v-else>Güncelle</span>
                         </button>
-                        <button type="button" @click="cancelEdit" class="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                        <button type="button" @click="cancelEdit" class="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                             İptal
                         </button>
                     </div>
