@@ -36,10 +36,14 @@ try {
 
 if (isset($_GET['logs']) && $_GET['logs'] === '1') {
     $logFile = $basePath . '/storage/logs/laravel.log';
+    $lineCount = 40;
+    if (isset($_GET['lines']) && ctype_digit((string) $_GET['lines'])) {
+        $lineCount = max(10, min(300, (int) $_GET['lines']));
+    }
     if (is_file($logFile) && is_readable($logFile)) {
         $lines = @file($logFile, FILE_IGNORE_NEW_LINES);
         if (is_array($lines)) {
-            $result['log_tail'] = array_slice($lines, -40);
+            $result['log_tail'] = array_slice($lines, -$lineCount);
         }
     } else {
         $result['log_tail'] = ['log file not readable'];
