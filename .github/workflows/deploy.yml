@@ -4,14 +4,40 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
+
+      - name: 🔐 Validate required secrets
+        run: |
+          missing=0
+          for key in FTP_SERVER FTP_USERNAME FTP_PASSWORD; do
+            if [ -z "${!key}" ]; then
+              echo "::error::Missing required secret: ${key}"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
       - name: 🐘 Setup PHP
         uses: shivammathur/setup-php@v2
@@ -21,7 +47,7 @@ jobs:
           coverage: none
 
       - name: 📦 Install PHP dependencies
-        run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --ignore-platform-reqs
+        run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-ansi --ignore-platform-reqs
 
       - name: 🟢 Setup Node
         uses: actions/setup-node@v4
@@ -30,7 +56,7 @@ jobs:
           cache: npm
 
       - name: 📦 Install Node dependencies
-        run: npm ci
+        run: npm ci --no-audit --no-fund
 
       - name: 🏗️ Build frontend assets
         run: npm run build
@@ -42,14 +68,73 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: public_html/
+          state-name: .ftp-deploy-sync-state.json
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
+            **/tests/**
+            **/.env
+            **/.env.*
             .env.example
+            .env.production
+            .env.cpanel
             .codex-instructions.md
             .kimi-instructions.md
             .qwen-instructions.md
-            scripts/**
+            CLAUDE.md
+            .claude/**
+            .DS_Store
+            debug_*.txt
+            check_*.php
+            read_*.php
+            reset_*.php
+            run_*.php
+            test_*.php
+            unzip*.php
+            setup*.php
+            seed_and_import.php
+            public/_probe.php
+            public/_probe.txt
             database/data/**
             node_modules/**
+            *.zip
+
+      - name: 🔧 Post-deploy optimize (optional SSH)
+        if: ${{ secrets.SSH_HOST != '' && secrets.SSH_USERNAME != '' && secrets.SSH_PRIVATE_KEY != '' }}
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            APP_PATH="${{ secrets.SSH_APP_PATH }}"
+            if [ -z "$APP_PATH" ]; then
+              APP_PATH="$HOME/public_html"
+            fi
+            cd "$APP_PATH"
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan event:cache
+            php artisan migrate --force
+
+      - name: 🩺 Health check (optional)
+        if: ${{ secrets.DEPLOY_HEALTHCHECK_URL != '' }}
+        run: |
+          for i in {1..15}; do
+            http_code="$(curl -sS -o /tmp/deploy-health.txt -w '%{http_code}' "$DEPLOY_HEALTHCHECK_URL" || true)"
+            if [ "$http_code" = "200" ]; then
+              echo "Health check passed."
+              exit 0
+            fi
+            echo "Health check attempt ${i}/15 failed with status ${http_code}."
+            sleep 10
+          done
+          echo "::error::Health check failed after deployment."
+          cat /tmp/deploy-health.txt || true
+          exit 1
+        env:
+          DEPLOY_HEALTHCHECK_URL: ${{ secrets.DEPLOY_HEALTHCHECK_URL }}
