@@ -1,11 +1,25 @@
 Options -MultiViews -Indexes
-RewriteEngine On
 
 # Set PHP version
 <IfModule mime_module>
   AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+  AddHandler application/x-httpd-alt-php82 .php .php8 .phtml
 </IfModule>
 
-# Rewrite everything to public/ subdirectory (transparent - no redirect)
-RewriteCond %{REQUEST_URI} !^/public/
-RewriteRule ^(.*)$ public/$1 [L]
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Force HTTPS (proxy aware)
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Skip rewrite when request already points to public or existing path.
+  RewriteCond %{REQUEST_URI} ^/public/ [OR]
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Rewrite everything to public/ subdirectory (transparent - no redirect)
+  RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

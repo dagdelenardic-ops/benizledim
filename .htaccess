@@ -1,5 +1,4 @@
 Options -MultiViews -Indexes
-RewriteEngine On
 
 # Prefer PHP 8.2 on cPanel (ea-php first, alt-php fallback if available).
 <IfModule mime_module>
@@ -7,6 +6,20 @@ RewriteEngine On
     AddHandler application/x-httpd-alt-php82 .php .php8 .phtml
 </IfModule>
 
-# Serve the Laravel app from the public/ directory.
-RewriteCond %{REQUEST_URI} !^/public/
-RewriteRule ^(.*)$ public/$1 [L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS (works with reverse proxies too).
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Skip rewrite when request already points to public or existing path.
+    RewriteCond %{REQUEST_URI} ^/public/ [OR]
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Serve Laravel from public/ without changing visible URL.
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
