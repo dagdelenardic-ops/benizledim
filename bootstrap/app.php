@@ -1,5 +1,19 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| Shared Hosting Route Cache Guard
+|--------------------------------------------------------------------------
+|
+| Some FTP-only deployments may leave stale `bootstrap/cache/routes-v*.php`
+| files behind. Pinning a deterministic cache path prevents booting from
+| orphaned cache files created by older releases.
+|
+*/
+$routeCachePath = __DIR__.'/cache/routes-shared.php';
+$_ENV['APP_ROUTES_CACHE'] = $_ENV['APP_ROUTES_CACHE'] ?? $routeCachePath;
+$_SERVER['APP_ROUTES_CACHE'] = $_SERVER['APP_ROUTES_CACHE'] ?? $routeCachePath;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
