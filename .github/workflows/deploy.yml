@@ -18,6 +18,12 @@ jobs:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_APP_PATH: ${{ secrets.SSH_APP_PATH }}
+      DEPLOY_HEALTHCHECK_URL: ${{ secrets.DEPLOY_HEALTHCHECK_URL }}
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
@@ -101,15 +107,15 @@ jobs:
             *.zip
 
       - name: 🔧 Post-deploy optimize (optional SSH)
-        if: ${{ secrets.SSH_HOST != '' && secrets.SSH_USERNAME != '' && secrets.SSH_PRIVATE_KEY != '' }}
+        if: ${{ env.SSH_HOST != '' && env.SSH_USERNAME != '' && env.SSH_PRIVATE_KEY != '' }}
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USERNAME }}
+          key: ${{ env.SSH_PRIVATE_KEY }}
           script_stop: true
           script: |
-            APP_PATH="${{ secrets.SSH_APP_PATH }}"
+            APP_PATH="$SSH_APP_PATH"
             if [ -z "$APP_PATH" ]; then
               APP_PATH="$HOME/public_html"
             fi
@@ -122,7 +128,7 @@ jobs:
             php artisan migrate --force
 
       - name: 🩺 Health check (optional)
-        if: ${{ secrets.DEPLOY_HEALTHCHECK_URL != '' }}
+        if: ${{ env.DEPLOY_HEALTHCHECK_URL != '' }}
         run: |
           for i in {1..15}; do
             http_code="$(curl -sS -o /tmp/deploy-health.txt -w '%{http_code}' "$DEPLOY_HEALTHCHECK_URL" || true)"
@@ -136,5 +142,3 @@ jobs:
           echo "::error::Health check failed after deployment."
           cat /tmp/deploy-health.txt || true
           exit 1
-        env:
-          DEPLOY_HEALTHCHECK_URL: ${{ secrets.DEPLOY_HEALTHCHECK_URL }}
