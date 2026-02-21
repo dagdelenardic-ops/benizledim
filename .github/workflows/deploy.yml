@@ -102,7 +102,7 @@ jobs:
             seed_and_import.php
             public/_probe.php
             public/_probe.txt
-            database/data/**
+            database/data/*.sqlite
             node_modules/**
             *.zip
 
@@ -126,6 +126,7 @@ jobs:
             php artisan view:cache
             php artisan event:cache
             php artisan migrate --force
+            php artisan app:fix-authors
 
       - name: 🩺 Health check (optional)
         if: ${{ env.DEPLOY_HEALTHCHECK_URL != '' }}
