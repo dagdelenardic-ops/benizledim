@@ -14,6 +14,18 @@ $routeCachePath = __DIR__.'/cache/routes-shared.php';
 $_ENV['APP_ROUTES_CACHE'] = $_ENV['APP_ROUTES_CACHE'] ?? $routeCachePath;
 $_SERVER['APP_ROUTES_CACHE'] = $_SERVER['APP_ROUTES_CACHE'] ?? $routeCachePath;
 
+$cachePathMap = [
+    'APP_CONFIG_CACHE' => __DIR__.'/cache/config-shared.php',
+    'APP_EVENTS_CACHE' => __DIR__.'/cache/events-shared.php',
+    'APP_PACKAGES_CACHE' => __DIR__.'/cache/packages-shared.php',
+    'APP_SERVICES_CACHE' => __DIR__.'/cache/services-shared.php',
+];
+
+foreach ($cachePathMap as $envKey => $path) {
+    $_ENV[$envKey] = $_ENV[$envKey] ?? $path;
+    $_SERVER[$envKey] = $_SERVER[$envKey] ?? $path;
+}
+
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
