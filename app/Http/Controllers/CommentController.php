@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Services\SentimentAnalyzer;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -13,15 +14,19 @@ class CommentController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Request $request, Post $post)
+    public function store(Request $request, Post $post, SentimentAnalyzer $sentimentAnalyzer)
     {
         $request->validate([
             'content' => 'required|string|max:1000',
         ]);
 
+        $sentiment = $sentimentAnalyzer->analyze($request->content);
+
         $comment = $post->comments()->create([
             'user_id' => $request->user()->id,
             'content' => $request->content,
+            'sentiment_score' => $sentiment['score'],
+            'sentiment_label' => $sentiment['label'],
         ]);
 
         return back();

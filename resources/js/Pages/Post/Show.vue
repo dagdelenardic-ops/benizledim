@@ -8,6 +8,10 @@ import CommentList from '../../Components/Comment/CommentList.vue';
 import WixComments from '../../Components/Comment/WixComments.vue';
 import LikeButton from '../../Components/UI/LikeButton.vue';
 import ShareButtons from '../../Components/Post/ShareButtons.vue';
+import EntrySection from '../../Components/Entry/EntrySection.vue';
+import TimeCapsuleBanner from '../../Components/Post/TimeCapsuleBanner.vue';
+import DialogueView from '../../Components/Post/DialogueView.vue';
+import VisualEssayView from '../../Components/Post/VisualEssayView.vue';
 import LoginModal from '../../Components/Auth/LoginModal.vue';
 import { useDate } from '@/Composables/useDate';
 
@@ -23,6 +27,10 @@ const props = defineProps({
     isLiked: {
         type: Boolean,
         default: false,
+    },
+    userEntryVotes: {
+        type: Object,
+        default: () => ({}),
     },
 });
 
@@ -139,15 +147,40 @@ const closeLoginModal = () => {
                         </div>
                     </div>
 
+                    <!-- Time Capsule Banner -->
+                    <TimeCapsuleBanner
+                        v-if="post.is_revisit || (post.revisits && post.revisits.length > 0)"
+                        :original-post="post.original_post"
+                        :revisits="post.revisits || []"
+                        :is-revisit="post.is_revisit"
+                        :current-published-at="post.published_at"
+                        class="mb-8"
+                    />
+
                     <!-- Excerpt -->
                     <div v-if="post.excerpt" class="text-xl text-gray-600 italic mb-8 leading-relaxed">
                         {{ post.excerpt }}
                     </div>
 
-                    <!-- Content -->
-                    <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:hover:text-red-700">
+                    <!-- Content: Standard Format -->
+                    <div v-if="!post.format || post.format === 'standard'" class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:hover:text-red-700">
                         <div v-html="post.content"></div>
                     </div>
+
+                    <!-- Content: Dialogue Format -->
+                    <DialogueView
+                        v-else-if="post.format === 'dialogue'"
+                        :exchanges="post.dialogue_exchanges || []"
+                        :primary-author="post.user"
+                        :secondary-author="post.secondary_author"
+                        :intro="post.content"
+                    />
+
+                    <!-- Content: Visual Essay Format -->
+                    <VisualEssayView
+                        v-else-if="post.format === 'visual_essay'"
+                        :blocks="post.visual_essay_blocks || []"
+                    />
 
                     <!-- Tags -->
                     <div v-if="post.tags?.length > 0" class="mt-10 pt-8 border-t border-gray-200">
@@ -177,6 +210,16 @@ const closeLoginModal = () => {
                         />
                     </div>
                 </div>
+            </div>
+
+            <!-- Entry Section -->
+            <div class="max-w-4xl mx-auto px-4 py-8">
+                <EntrySection
+                    :entries="post.entries || []"
+                    :post-slug="post.slug"
+                    :user-votes="userEntryVotes"
+                    @open-login="openLoginModal"
+                />
             </div>
 
             <!-- Comments Section -->

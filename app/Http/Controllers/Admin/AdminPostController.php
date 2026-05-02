@@ -17,7 +17,7 @@ class AdminPostController extends Controller
     {
         $user = $request->user();
 
-        $query = Post::with(['user', 'categories', 'deletionRequestedBy'])
+        $query = Post::with(['user', 'categories', 'deletionRequestedBy', 'pendingReviewBy', 'reviewedBy'])
             ->latest();
 
         if (!$user->canManageAllPosts()) {
@@ -28,9 +28,15 @@ class AdminPostController extends Controller
 
         if ($status === 'pending_deletion') {
             $query->whereNotNull('deletion_requested_at');
-        } elseif (in_array($status, ['draft', 'published'], true)) {
+        } elseif (in_array($status, ['draft', 'published', 'pending_review'], true)) {
             $query->where('status', $status)
                 ->whereNull('deletion_requested_at');
+        }
+
+        $ownerId = $request->integer('owner');
+
+        if ($ownerId > 0 && $user->canManageAllPosts()) {
+            $query->where('user_id', $ownerId);
         }
 
         if ($request->filled('search')) {
@@ -45,16 +51,22 @@ class AdminPostController extends Controller
 
         $posts->getCollection()->transform(function (Post $post) {
             $post->setAttribute('is_deletion_pending', $post->isDeletionPending());
+            $post->setAttribute('resolved_status', $post->resolveStatus());
 
             return $post;
         });
 
         return Inertia::render('Admin/Posts/Index', [
             'posts' => $posts,
-            'filters' => $request->only(['status', 'search']),
+            'filters' => $request->only(['status', 'search', 'owner']),
+            'owners' => $user->canManageAllPosts()
+                ? User::query()->orderBy('name')->get(['id', 'name', 'email', 'role'])
+                : [],
             'permissions' => [
                 'canApproveDeletion' => $user->isAdmin(),
                 'canManageAllPosts' => $user->canManageAllPosts(),
+                'canReviewPosts' => $user->canManageAllPosts(),
+                'canReassignPosts' => $user->isAdmin(),
             ],
         ]);
     }
@@ -67,6 +79,9 @@ class AdminPostController extends Controller
         return Inertia::render('Admin/Posts/Create', [
             'categories' => $categories,
             'tags' => $tags,
+            'publishMode' => [
+                'requiresReview' => !request()->user()?->canPublishWithoutReview(),
+            ],
         ]);
     }
 
@@ -86,6 +101,7 @@ class AdminPostController extends Controller
 
         $wordCount = str_word_count(strip_tags($validated['content']));
         $readingTime = max(1, ceil($wordCount / 200));
+        $targetStatus = $this->resolveTargetStatus($request->user(), $validated['status']);
 
         $postData = [
             'user_id' => auth()->id(),
@@ -93,8 +109,12 @@ class AdminPostController extends Controller
             'excerpt' => $validated['excerpt'],
             'content' => $validated['content'],
             'reading_time_minutes' => $readingTime,
-            'status' => $validated['status'],
-            'published_at' => $validated['status'] === 'published' ? now() : null,
+            'status' => $targetStatus,
+            'published_at' => $targetStatus === 'published' ? now() : null,
+            'pending_review_at' => $targetStatus === 'pending_review' ? now() : null,
+            'pending_review_by' => $targetStatus === 'pending_review' ? $request->user()->id : null,
+            'reviewed_at' => $targetStatus === 'published' ? now() : null,
+            'reviewed_by' => $targetStatus === 'published' ? $request->user()->id : null,
             'deletion_requested_at' => null,
             'deletion_requested_by' => null,
             'deletion_approved_at' => null,
@@ -111,15 +131,19 @@ class AdminPostController extends Controller
         $post->categories()->sync($validated['categories']);
         $post->tags()->sync($validated['tags'] ?? []);
 
+        $message = $targetStatus === 'pending_review'
+            ? 'Yazı incelemeye gönderildi.'
+            : 'Yazı başarıyla oluşturuldu!';
+
         return redirect()->route('admin.posts.index')
-            ->with('success', 'Yazı başarıyla oluşturuldu!');
+            ->with('success', $message);
     }
 
     public function edit(Post $post): Response
     {
         $this->authorizePostAccess($post, request()->user());
 
-        $post->load(['categories', 'tags']);
+        $post->load(['categories', 'tags', 'pendingReviewBy', 'reviewedBy']);
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -127,6 +151,12 @@ class AdminPostController extends Controller
             'post' => $post,
             'categories' => $categories,
             'tags' => $tags,
+            'owners' => request()->user()?->isAdmin()
+                ? User::query()->orderBy('name')->get(['id', 'name', 'email', 'role'])
+                : [],
+            'publishMode' => [
+                'requiresReview' => !request()->user()?->canPublishWithoutReview(),
+            ],
         ]);
     }
 
@@ -149,17 +179,26 @@ class AdminPostController extends Controller
 
         $wordCount = str_word_count(strip_tags($validated['content']));
         $readingTime = max(1, ceil($wordCount / 200));
+        $targetStatus = $this->resolveTargetStatus($user, $validated['status']);
 
         $updateData = [
             'title' => $validated['title'],
             'excerpt' => $validated['excerpt'],
             'content' => $validated['content'],
             'reading_time_minutes' => $readingTime,
-            'status' => $validated['status'],
+            'status' => $targetStatus,
+            'pending_review_at' => $targetStatus === 'pending_review' ? now() : null,
+            'pending_review_by' => $targetStatus === 'pending_review' ? $user->id : null,
+            'reviewed_at' => $targetStatus === 'published' ? now() : null,
+            'reviewed_by' => $targetStatus === 'published' ? $user->id : null,
         ];
 
-        if ($validated['status'] === 'published' && !$post->published_at) {
+        if ($targetStatus === 'published' && !$post->published_at) {
             $updateData['published_at'] = now();
+        }
+
+        if ($targetStatus !== 'published') {
+            $updateData['published_at'] = null;
         }
 
         if ($request->hasFile('cover_image')) {
@@ -180,8 +219,66 @@ class AdminPostController extends Controller
         $post->categories()->sync($validated['categories']);
         $post->tags()->sync($validated['tags'] ?? []);
 
+        $message = $targetStatus === 'pending_review'
+            ? 'Yazı güncellendi ve tekrar incelemeye gönderildi.'
+            : 'Yazı başarıyla güncellendi!';
+
         return redirect()->route('admin.posts.index')
-            ->with('success', 'Yazı başarıyla güncellendi!');
+            ->with('success', $message);
+    }
+
+    public function updateOwner(Request $request, Post $post)
+    {
+        $user = $request->user();
+        $this->assertAdmin($user);
+
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $post->update([
+            'user_id' => (int) $validated['user_id'],
+        ]);
+
+        return back()->with('success', 'Yazı sahibi güncellendi.');
+    }
+
+    public function approveReview(Post $post)
+    {
+        $user = request()->user();
+        abort_unless($user && $user->canManageAllPosts(), 403, 'Bu işlem için yetkiniz yok.');
+
+        abort_unless($post->isPendingReview(), 422, 'Bu yazı inceleme beklemiyor.');
+
+        $post->update([
+            'status' => 'published',
+            'published_at' => $post->published_at ?? now(),
+            'pending_review_at' => null,
+            'pending_review_by' => null,
+            'reviewed_at' => now(),
+            'reviewed_by' => $user->id,
+        ]);
+
+        return back()->with('success', 'Yazı yayına alındı.');
+    }
+
+    public function rejectReview(Post $post)
+    {
+        $user = request()->user();
+        abort_unless($user && $user->canManageAllPosts(), 403, 'Bu işlem için yetkiniz yok.');
+
+        abort_unless($post->isPendingReview(), 422, 'Bu yazı inceleme beklemiyor.');
+
+        $post->update([
+            'status' => 'draft',
+            'published_at' => null,
+            'pending_review_at' => null,
+            'pending_review_by' => null,
+            'reviewed_at' => now(),
+            'reviewed_by' => $user->id,
+        ]);
+
+        return back()->with('success', 'Yazı taslağa geri alındı.');
     }
 
     public function destroy(Post $post)
@@ -264,5 +361,14 @@ class AdminPostController extends Controller
         $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();
+    }
+
+    private function resolveTargetStatus(User $user, string $requestedStatus): string
+    {
+        if ($requestedStatus !== 'published') {
+            return 'draft';
+        }
+
+        return $user->canPublishWithoutReview() ? 'published' : 'pending_review';
     }
 }

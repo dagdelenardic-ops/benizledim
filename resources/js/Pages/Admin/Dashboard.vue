@@ -17,6 +17,10 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    authorBreakdown: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const { timeAgo } = useDate();
@@ -25,6 +29,7 @@ const statCards = computed(() => {
     const cards = [
         { key: 'total_posts', label: 'Toplam Yazı', icon: '📝', color: 'bg-blue-500' },
         { key: 'published_posts', label: 'Yayında', icon: '✅', color: 'bg-green-500' },
+        { key: 'pending_review_posts', label: 'İncelemede', icon: '🕵️', color: 'bg-amber-500' },
         { key: 'draft_posts', label: 'Taslak', icon: '📄', color: 'bg-yellow-500' },
         { key: 'pending_deletion_posts', label: 'Silme Onayı', icon: '🧹', color: 'bg-orange-500' },
         { key: 'total_views', label: 'Toplam Görüntülenme', icon: '👁️', color: 'bg-purple-500' },
@@ -142,7 +147,7 @@ const resolveStatus = (post) => (post.deletion_requested_at ? 'pending_deletion'
                                     v-else
                                     class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm"
                                 >
-                                    {{ comment.user?.name?.charAt(0)?.toUpperCase() }}
+                                    {{ comment.user?.name?.charAt(0)?.toUpperCase() || '?' }}
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-gray-900">{{ comment.user?.name }}</p>
@@ -159,6 +164,28 @@ const resolveStatus = (post) => (post.deletion_requested_at ? 'pending_deletion'
                         <div v-if="recentComments.length === 0" class="px-6 py-8 text-center text-gray-500">
                             Henüz yorum yok.
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="authorBreakdown.length" class="bg-white rounded-xl shadow-sm">
+                <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-gray-900">Yazı Sahipliği</h2>
+                    <Link href="/admin/posts" class="text-red-600 hover:text-red-700 text-sm">
+                        Sahiplikleri Yönet →
+                    </Link>
+                </div>
+                <div class="divide-y divide-gray-200">
+                    <div
+                        v-for="author in authorBreakdown"
+                        :key="author.id"
+                        class="px-6 py-4 flex items-center justify-between gap-4 hover:bg-gray-50"
+                    >
+                        <div class="min-w-0">
+                            <p class="font-medium text-gray-900 truncate">{{ author.name }}</p>
+                            <p class="text-sm text-gray-500 truncate">{{ author.email }} • {{ author.role }}</p>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">{{ author.posts_count }} yazı</span>
                     </div>
                 </div>
             </div>

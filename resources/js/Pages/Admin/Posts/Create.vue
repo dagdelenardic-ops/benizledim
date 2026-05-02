@@ -13,6 +13,10 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    publishMode: {
+        type: Object,
+        default: () => ({ requiresReview: false }),
+    },
 });
 
 const form = useForm({
@@ -26,6 +30,7 @@ const form = useForm({
 });
 
 const coverPreview = ref(null);
+const action = ref('draft');
 
 const handleCoverChange = (e) => {
     const file = e.target.files[0];
@@ -36,6 +41,7 @@ const handleCoverChange = (e) => {
 };
 
 const submit = (publish = false) => {
+    action.value = publish ? 'publish' : 'draft';
     if (publish) {
         form.status = 'published';
     }
@@ -191,7 +197,7 @@ const submit = (publish = false) => {
                         :disabled="form.processing"
                         class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                        <svg v-if="form.processing && form.status === 'draft'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <svg v-if="form.processing && action === 'draft'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -203,14 +209,14 @@ const submit = (publish = false) => {
                         :disabled="form.processing"
                         class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                        <svg v-if="form.processing && form.status === 'published'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <svg v-if="form.processing && action === 'publish'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                         <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>Yayınla</span>
+                        <span>{{ publishMode.requiresReview ? 'İncelemeye Gönder' : 'Yayınla' }}</span>
                     </button>
                 </div>
             </form>

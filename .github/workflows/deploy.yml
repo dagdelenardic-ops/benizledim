@@ -68,6 +68,55 @@ jobs:
       - name: 🏗️ Build frontend assets
         run: npm run build
 
+      - name: 🧹 Purge exposed debug endpoints
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set +e
+          files=(
+            _diag.php
+            _probe.php
+            _probe.txt
+            check_config.php
+            check_db.php
+            check_mb.php
+            check_sessions.php
+            chmod_storage.php
+            db_users.php
+            debug_laravel.php
+            extract.php
+            get_admin.php
+            list_users.php
+            mkdir_views.php
+            read_env.php
+            read_log.php
+            read_pct.php
+            reset_admin.php
+            reset_gurur.php
+            run_artisan.php
+            run_cli.php
+            save_hash.php
+            test_auth.php
+            test_hash.php
+            unzip.php
+            unzip_sys.php
+            update_pass.php
+          )
+
+          for file in "${files[@]}"; do
+            for dir in public_html public_html/public; do
+              echo "Attempting delete: ${dir}/${file}"
+              curl --silent --show-error --ftp-method nocwd \
+                --connect-timeout 6 \
+                --max-time 12 \
+                --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
+                --url "ftp://${FTP_SERVER}/${dir}/" \
+                --quote "DELE ${file}" >/dev/null || true
+            done
+          done
+
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -92,11 +141,63 @@ jobs:
             CLAUDE.md
             .claude/**
             .DS_Store
+            _diag.php
+            _probe.php
+            _probe.txt
+            read_env.php
+            check_config.php
+            check_db.php
+            check_mb.php
+            check_sessions.php
+            chmod_storage.php
+            db_users.php
+            debug_laravel.php
             debug_*.txt
+            extract.php
+            get_admin.php
+            list_users.php
+            mkdir_views.php
+            read_log.php
+            read_pct.php
+            reset_admin.php
+            reset_gurur.php
+            run_artisan.php
+            run_cli.php
+            save_hash.php
             setup*.php
             seed_and_import.php
+            test_auth.php
+            test_hash.php
+            unzip.php
+            unzip_sys.php
+            update_pass.php
             public/_probe.php
             public/_probe.txt
+            public/_diag.php
+            public/read_env.php
+            public/check_config.php
+            public/check_db.php
+            public/check_mb.php
+            public/check_sessions.php
+            public/chmod_storage.php
+            public/db_users.php
+            public/debug_laravel.php
+            public/extract.php
+            public/get_admin.php
+            public/list_users.php
+            public/mkdir_views.php
+            public/read_log.php
+            public/read_pct.php
+            public/reset_admin.php
+            public/reset_gurur.php
+            public/run_artisan.php
+            public/run_cli.php
+            public/save_hash.php
+            public/test_auth.php
+            public/test_hash.php
+            public/unzip.php
+            public/unzip_sys.php
+            public/update_pass.php
             database/data/*.sqlite
             node_modules/**
             *.zip
@@ -117,11 +218,10 @@ jobs:
             fi
             cd "$APP_PATH"
             php artisan optimize:clear
+            php artisan migrate --force
             php artisan config:cache
-            php artisan route:cache
             php artisan view:cache
             php artisan event:cache
-            php artisan migrate --force
 
       - name: 🩺 Health check (optional)
         if: ${{ env.DEPLOY_HEALTHCHECK_URL != '' }}

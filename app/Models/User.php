@@ -74,4 +74,19 @@ class User extends Authenticatable
     {
         return in_array($this->role, ['admin', 'editor'], true);
     }
+
+    public function canPublishWithoutReview(): bool
+    {
+        return in_array($this->role, ['admin', 'editor'], true);
+    }
+
+    public function isWixPlaceholder(): bool
+    {
+        return str_ends_with(strtolower((string) $this->email), '@benizledim.local');
+    }
+
+    public function hasGoogleConnection(): bool
+    {
+        return $this->provider === 'google' && filled($this->provider_id);
+    }
 }

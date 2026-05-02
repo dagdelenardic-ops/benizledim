@@ -36,30 +36,29 @@ const isActiveCategory = (slug) => {
 
 <template>
     <AppLayout :title="getPageTitle()">
-        <div class="bg-gray-50 min-h-screen">
-            <!-- Header -->
-            <div class="bg-white border-b border-gray-200">
-                <div class="max-w-7xl mx-auto px-4 py-8">
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+        <div class="min-h-screen bg-[var(--bi-paper)]">
+            <div class="border-b-2 border-[var(--bi-ink)]">
+                <div class="bi-wrap py-8">
+                    <span class="bi-kicker">Arşiv</span>
+                    <h1 class="bi-serif mt-3 text-5xl font-bold leading-none text-[var(--bi-ink)] md:text-7xl">
                         {{ getPageTitle() }}
                     </h1>
-                    <p class="text-gray-600">
+                    <p class="mt-4 max-w-2xl text-[var(--bi-muted)]">
                         Film, dizi ve belgesel dünyasından eleştiri ve tavsiyeler
                     </p>
                 </div>
             </div>
 
-            <!-- Categories Filter -->
-            <div class="bg-white border-b border-gray-200 sticky top-0 z-10">
-                <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="sticky top-0 z-10 border-b border-[var(--bi-ink)] bg-[var(--bi-paper)]/95 backdrop-blur">
+                <div class="bi-wrap py-4">
                     <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
                         <Link
                             href="/yazilar"
                             :class="[
-                                'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors',
+                                'bi-chip whitespace-nowrap',
                                 !filters.category && !filters.tag
-                                    ? 'bg-red-600 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    ? 'is-active'
+                                    : ''
                             ]"
                         >
                             Tümü
@@ -69,21 +68,20 @@ const isActiveCategory = (slug) => {
                             :key="category.id"
                             :href="`/yazilar?category=${category.slug}`"
                             :class="[
-                                'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors',
+                                'bi-chip whitespace-nowrap',
                                 isActiveCategory(category.slug)
-                                    ? 'bg-red-600 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    ? 'is-active'
+                                    : ''
                             ]"
                         >
                             {{ category.name }}
                         </Link>
                     </div>
 
-                    <!-- Active Filter Badge -->
                     <div v-if="filters.category || filters.tag" class="mt-4">
                         <Link
                             href="/yazilar"
-                            class="inline-flex items-center gap-2 px-3 py-1 bg-red-100 text-red-700 text-sm rounded-full hover:bg-red-200 transition-colors"
+                            class="inline-flex items-center gap-2 border border-red-700 px-3 py-2 text-sm font-bold text-red-700 transition-colors hover:bg-red-700 hover:text-white"
                         >
                             Filtreyi Temizle
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,20 +92,18 @@ const isActiveCategory = (slug) => {
                 </div>
             </div>
 
-            <!-- Posts Grid -->
-            <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="bi-wrap py-8">
                 <PostGrid :posts="posts.data" />
 
-                <!-- Empty State -->
-                <div v-if="posts.data.length === 0" class="text-center py-16">
-                    <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div v-if="posts.data.length === 0" class="bi-rule-box mt-6 text-center py-16">
+                    <svg class="w-16 h-16 mx-auto text-[var(--bi-rule-soft)] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Sonuç bulunamadı</h3>
-                    <p class="text-gray-500">Seçtiğiniz kriterlere uygun yazı bulunmuyor.</p>
+                    <h3 class="bi-serif text-3xl font-bold text-[var(--bi-ink)] mb-2">Sonuç bulunamadı</h3>
+                    <p class="text-[var(--bi-muted)]">Seçtiğiniz kriterlere uygun yazı bulunmuyor.</p>
                     <Link
                         href="/yazilar"
-                        class="inline-flex items-center gap-2 mt-4 text-red-600 font-medium hover:text-red-700"
+                        class="mt-4 inline-flex items-center gap-2 text-red-700 font-bold hover:text-red-900"
                     >
                         Tüm yazıları gör
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,7 +112,6 @@ const isActiveCategory = (slug) => {
                     </Link>
                 </div>
 
-                <!-- Pagination -->
                 <div v-if="posts.links && posts.data.length > 0" class="mt-12 flex justify-center">
                     <div class="flex items-center gap-2">
                         <Link
@@ -125,12 +120,12 @@ const isActiveCategory = (slug) => {
                             :href="link.url || '#'
                             "
                             :class="[
-                                'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                                'border px-4 py-2 text-sm font-bold transition-colors',
                                 link.active
-                                    ? 'bg-red-600 text-white'
+                                    ? 'border-red-700 bg-red-700 text-white'
                                     : link.url
-                                        ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                        ? 'border-[var(--bi-ink)] bg-[var(--bi-paper)] text-[var(--bi-ink)] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)]'
+                                        : 'border-[var(--bi-rule-soft)] text-[var(--bi-muted)] cursor-not-allowed'
                             ]"
                             v-html="link.label"
                         />

@@ -9,6 +9,12 @@ Options -MultiViews -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Canonical host: benizledim.com
+    RewriteCond %{HTTP_HOST} ^www\.benizledim\.com$ [NC,OR]
+    RewriteCond %{HTTP_HOST} ^benizledim\.store$ [NC,OR]
+    RewriteCond %{HTTP_HOST} ^www\.benizledim\.store$ [NC]
+    RewriteRule ^ https://benizledim.com%{REQUEST_URI} [L,R=301]
+
     # Force HTTPS (works with reverse proxies too).
     RewriteCond %{HTTPS} !=on
     RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]

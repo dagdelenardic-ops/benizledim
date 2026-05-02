@@ -1,0 +1,58 @@
+name: Remote Artisan
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Artisan command to run on the server'
+        required: true
+        default: 'about'
+      app_path:
+        description: 'Remote Laravel path (optional)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  artisan:
+    name: Run remote artisan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+      SSH_APP_PATH: ${{ inputs.app_path || secrets.SSH_APP_PATH }}
+      ARTISAN_COMMAND: ${{ inputs.command }}
+    steps:
+      - name: Validate SSH secrets
+        run: |
+          missing=0
+          for key in SSH_HOST SSH_USERNAME SSH_PRIVATE_KEY; do
+            if [ -z "${!key}" ]; then
+              echo "::error::Missing required secret: ${key}"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Run artisan command over SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USERNAME }}
+          key: ${{ env.SSH_PRIVATE_KEY }}
+          passphrase: ${{ env.SSH_PASSPHRASE }}
+          script_stop: true
+          script: |
+            APP_PATH="$SSH_APP_PATH"
+            if [ -z "$APP_PATH" ]; then
+              APP_PATH="$HOME/public_html"
+            fi
+            cd "$APP_PATH"
+            php artisan ${ARTISAN_COMMAND}

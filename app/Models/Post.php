@@ -24,19 +24,34 @@ class Post extends \Illuminate\Database\Eloquent\Model
         'reading_time_minutes',
         'status',
         'published_at',
+        'pending_review_at',
+        'pending_review_by',
         'deletion_requested_at',
         'deletion_requested_by',
         'deletion_approved_at',
         'deletion_approved_by',
+        'reviewed_at',
+        'reviewed_by',
         'view_count',
+        'format',
+        'secondary_user_id',
+        'parent_post_id',
+        'is_revisit',
+        'mood_tags',
+        'duration_category',
+        'intensity_level',
     ];
 
     protected function casts(): array
     {
         return [
             'published_at' => 'datetime',
+            'pending_review_at' => 'datetime',
             'deletion_requested_at' => 'datetime',
             'deletion_approved_at' => 'datetime',
+            'reviewed_at' => 'datetime',
+            'is_revisit' => 'boolean',
+            'mood_tags' => 'array',
         ];
     }
 
@@ -82,9 +97,52 @@ class Post extends \Illuminate\Database\Eloquent\Model
         return $this->belongsTo(User::class, 'deletion_approved_by');
     }
 
+    public function pendingReviewBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'pending_review_by');
+    }
+
+    public function reviewedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function entries(): HasMany
+    {
+        return $this->hasMany(Entry::class);
+    }
+
+    // Time Capsule (Feature 2)
+    public function originalPost(): BelongsTo
+    {
+        return $this->belongsTo(Post::class, 'parent_post_id');
+    }
+
+    public function revisits(): HasMany
+    {
+        return $this->hasMany(Post::class, 'parent_post_id');
+    }
+
+    // Dialogue Format (Feature 3)
+    public function secondaryAuthor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'secondary_user_id');
+    }
+
+    public function dialogueExchanges(): HasMany
+    {
+        return $this->hasMany(DialogueExchange::class)->orderBy('sort_order');
+    }
+
+    // Visual Essay (Feature 4)
+    public function visualEssayBlocks(): HasMany
+    {
+        return $this->hasMany(VisualEssayBlock::class)->orderBy('sort_order');
     }
 
     public function scopePublished($query)
@@ -98,6 +156,16 @@ class Post extends \Illuminate\Database\Eloquent\Model
     public function isDeletionPending(): bool
     {
         return $this->deletion_requested_at !== null;
+    }
+
+    public function isPendingReview(): bool
+    {
+        return $this->status === 'pending_review';
+    }
+
+    public function resolveStatus(): string
+    {
+        return $this->isDeletionPending() ? 'pending_deletion' : $this->status;
     }
 
     public function canBeEditedBy(User $user): bool

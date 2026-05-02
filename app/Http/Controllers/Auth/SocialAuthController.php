@@ -119,7 +119,11 @@ class SocialAuthController extends Controller
 
     public function handleFacebookCallback(): RedirectResponse
     {
-        $socialUser = Socialite::driver('facebook')->user();
+        try {
+            $socialUser = Socialite::driver('facebook')->user();
+        } catch (\Exception $e) {
+            return redirect('/')->with('error', 'Facebook girişi başarısız.');
+        }
 
         $user = User::where('provider', 'facebook')
             ->where('provider_id', $socialUser->id)

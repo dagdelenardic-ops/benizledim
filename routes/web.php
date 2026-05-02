@@ -21,6 +21,10 @@ use App\Http\Controllers\Admin\AdminFestivalEventController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminNewsletterController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\EntryController;
+use App\Http\Controllers\CinemaController;
+use App\Http\Controllers\CinemaReviewController;
+use App\Http\Controllers\AiRecommendationController;
 use App\Http\Controllers\SitemapController;
 
 Route::get('/up', function () {
@@ -66,6 +70,21 @@ Route::delete('/yorum/{comment}', [CommentController::class, 'destroy'])->name('
 // Beğeni (toggle)
 Route::post('/yazi/{post}/begen', [LikeController::class, 'toggle'])->name('likes.toggle');
 
+// Entry (sosyal tartışma)
+Route::post('/yazi/{post}/entry', [EntryController::class, 'store'])->name('entries.store');
+Route::post('/entry/{entry}/vote', [EntryController::class, 'vote'])->name('entries.vote')->middleware('auth');
+Route::delete('/entry/{entry}', [EntryController::class, 'destroy'])->name('entries.destroy')->middleware('auth');
+
+// Sinemalar
+Route::get('/sinemalar', [CinemaController::class, 'index'])->name('cinemas.index');
+Route::get('/sinema/{cinema}', [CinemaController::class, 'show'])->name('cinemas.show');
+Route::post('/sinema/{cinema}/yorum', [CinemaReviewController::class, 'store'])->name('cinema-reviews.store');
+Route::delete('/sinema-yorum/{cinemaReview}', [CinemaReviewController::class, 'destroy'])->name('cinema-reviews.destroy');
+
+// Ne Izlesem (AI Recommendation)
+Route::get('/ne-izlesem', [AiRecommendationController::class, 'index'])->name('recommend.index');
+Route::post('/ne-izlesem/chat', [AiRecommendationController::class, 'chat'])->name('recommend.chat');
+
 // Podcast
 Route::get('/podcast', [PodcastController::class, 'index'])->name('podcast.index');
 
@@ -89,11 +108,14 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('/posts', [AdminPostController::class, 'index'])->name('posts.index');
     Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [AdminPostController::class, 'store'])->name('posts.store');
-    Route::get('/posts/{post}/edit', [AdminPostController::class, 'edit'])->name('posts.edit');
-    Route::put('/posts/{post}', [AdminPostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
+    Route::get('/posts/{post:id}/edit', [AdminPostController::class, 'edit'])->name('posts.edit');
+    Route::put('/posts/{post:id}', [AdminPostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{post:id}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
 
     Route::middleware('role:admin,editor')->group(function () {
+        Route::post('/posts/{post:id}/approve-review', [AdminPostController::class, 'approveReview'])->name('posts.approveReview');
+        Route::post('/posts/{post:id}/reject-review', [AdminPostController::class, 'rejectReview'])->name('posts.rejectReview');
+
         // Kategoriler
         Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
         Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
@@ -135,8 +157,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     });
 
     Route::middleware('role:admin')->group(function () {
-        Route::post('/posts/{post}/approve-deletion', [AdminPostController::class, 'approveDeletion'])->name('posts.approveDeletion');
-        Route::post('/posts/{post}/reject-deletion', [AdminPostController::class, 'rejectDeletion'])->name('posts.rejectDeletion');
+        Route::put('/posts/{post:id}/owner', [AdminPostController::class, 'updateOwner'])->name('posts.updateOwner');
+        Route::post('/posts/{post:id}/approve-deletion', [AdminPostController::class, 'approveDeletion'])->name('posts.approveDeletion');
+        Route::post('/posts/{post:id}/reject-deletion', [AdminPostController::class, 'rejectDeletion'])->name('posts.rejectDeletion');
 
         // Kullanıcılar
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');

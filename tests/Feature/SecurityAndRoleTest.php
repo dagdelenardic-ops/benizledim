@@ -5,14 +5,14 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\RateLimiter;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SecurityAndRoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function login_attempts_are_rate_limited()
     {
         $this->withExceptionHandling();
@@ -33,7 +33,7 @@ class SecurityAndRoleTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function only_admins_editors_and_authors_can_access_admin_panel()
     {
         // 1. Reader
@@ -56,7 +56,7 @@ class SecurityAndRoleTest extends TestCase
         $this->assertFalse(in_array($response->status(), [403]));
     }
 
-    /** @test */
+    #[Test]
     public function editors_can_request_deletion_but_not_delete_directly()
     {
         $editor = User::factory()->create(['role' => 'editor']);

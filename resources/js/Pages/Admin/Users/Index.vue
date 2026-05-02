@@ -1,4 +1,5 @@
 <script setup>
+import { ref, reactive } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import { useDate } from '@/Composables/useDate';
@@ -19,20 +20,38 @@ const updateRole = (user, newRole) => {
 };
 
 const setPassword = (user) => {
-    const password = prompt(`${user.email} için yeni şifre girin (en az 10 karakter, büyük/küçük harf, rakam ve sembol):`);
-    if (!password) return;
+    passwordUser.value = user;
+    passwordForm.email = user.email;
+    passwordForm.password = '';
+    passwordForm.password_confirmation = '';
+    showPasswordModal.value = true;
+};
 
-    const passwordConfirmation = prompt('Şifreyi tekrar girin:');
-    if (password !== passwordConfirmation) {
+const showPasswordModal = ref(false);
+const passwordUser = ref(null);
+const passwordForm = reactive({
+    email: '',
+    password: '',
+    password_confirmation: '',
+});
+
+const submitPassword = () => {
+    if (!passwordUser.value) return;
+    if (passwordForm.password !== passwordForm.password_confirmation) {
         alert('Şifre tekrarı eşleşmiyor.');
         return;
     }
-
-    router.put(`/admin/users/${user.id}/password`, {
-        password,
-        password_confirmation: passwordConfirmation,
+    router.put(`/admin/users/${passwordUser.value.id}/password`, {
+        password: passwordForm.password,
+        password_confirmation: passwordForm.password_confirmation,
     }, {
         preserveScroll: true,
+        onSuccess: () => {
+            showPasswordModal.value = false;
+            passwordUser.value = null;
+            passwordForm.password = '';
+            passwordForm.password_confirmation = '';
+        },
     });
 };
 
@@ -55,6 +74,18 @@ const getRoleLabel = (role) => {
     };
     return labels[role] || role;
 };
+
+const getProviderLabel = (user) => {
+    if (user.has_google_connection) {
+        return 'Google bağlı';
+    }
+
+    if (user.is_wix_placeholder) {
+        return 'Wix placeholder';
+    }
+
+    return user.provider || 'E-posta';
+};
 </script>
 
 <template>
@@ -72,6 +103,7 @@ const getRoleLabel = (role) => {
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kullanıcı</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">E-posta</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rol</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bağlantı</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Yazılar</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Yorumlar</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kayıt Tarihi</th>
@@ -92,7 +124,7 @@ const getRoleLabel = (role) => {
                                             v-else
                                             class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold"
                                         >
-                                            {{ user.name.charAt(0).toUpperCase() }}
+                                            {{ user.name?.charAt(0)?.toUpperCase() || '?' }}
                                         </div>
                                         <Link :href="`/profile/${user.id}`" class="font-medium text-gray-900 hover:text-red-600">
                                             {{ user.name }}
@@ -114,20 +146,29 @@ const getRoleLabel = (role) => {
                                         <option value="reader">Okuyucu</option>
                                     </select>
                                 </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ getProviderLabel(user) }}</td>
                                 <td class="px-6 py-4 text-gray-600">{{ user.posts_count }}</td>
                                 <td class="px-6 py-4 text-gray-600">{{ user.comments_count }}</td>
                                 <td class="px-6 py-4 text-gray-600 text-sm">{{ formatDate(user.created_at) }}</td>
                                 <td class="px-6 py-4">
-                                    <button
-                                        @click="setPassword(user)"
-                                        class="text-blue-600 hover:text-blue-700 text-sm"
-                                    >
-                                        Şifre Ata
-                                    </button>
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <Link
+                                            :href="`/admin/posts?owner=${user.id}`"
+                                            class="text-gray-700 hover:text-red-600"
+                                        >
+                                            Yazıları Gör
+                                        </Link>
+                                        <button
+                                            @click="setPassword(user)"
+                                            class="text-blue-600 hover:text-blue-700"
+                                        >
+                                            Şifre Ata
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <tr v-if="users.data.length === 0">
-                                <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                <td colspan="8" class="px-6 py-8 text-center text-gray-500">
                                     Kullanıcı bulunamadı.
                                 </td>
                             </tr>
@@ -141,8 +182,7 @@ const getRoleLabel = (role) => {
                         <Link
                             v-for="(link, index) in users.links"
                             :key="index"
-                            :href="link.url || '#'
-                            "
+                            :href="link.url || '#'"
                             :class="[
                                 'px-3 py-1 rounded text-sm',
                                 link.active
@@ -157,5 +197,53 @@ const getRoleLabel = (role) => {
                 </div>
             </div>
         </div>
+
+        <!-- Password Modal -->
+        <Teleport to="body">
+            <div v-if="showPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showPasswordModal = false">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Şifre Ata: {{ passwordForm.email }}</h3>
+                    <form @submit.prevent="submitPassword" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Yeni Şifre</label>
+                            <input
+                                v-model="passwordForm.password"
+                                type="password"
+                                required
+                                minlength="10"
+                                placeholder="En az 10 karakter"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Şifre Tekrarı</label>
+                            <input
+                                v-model="passwordForm.password_confirmation"
+                                type="password"
+                                required
+                                minlength="10"
+                                placeholder="Şifreyi tekrar girin"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                            />
+                        </div>
+                        <div class="flex gap-2 justify-end">
+                            <button
+                                type="button"
+                                @click="showPasswordModal = false"
+                                class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                            >
+                                İptal
+                            </button>
+                            <button
+                                type="submit"
+                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                            >
+                                Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </Teleport>
     </AdminLayout>
 </template>

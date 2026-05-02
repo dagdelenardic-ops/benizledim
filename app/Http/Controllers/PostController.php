@@ -49,7 +49,15 @@ class PostController extends Controller
         // View count artır
         $post->increment('view_count');
 
-        $post->load(['user', 'categories', 'tags', 'comments.user', 'likes']);
+        $post->load([
+            'user', 'categories', 'tags', 'comments.user', 'likes',
+            'entries.user', 'entries.votes',
+            'originalPost:id,title,slug,published_at',
+            'revisits' => fn ($q) => $q->published()->select('id', 'title', 'slug', 'published_at', 'parent_post_id'),
+            'secondaryAuthor:id,name,avatar',
+            'dialogueExchanges.user:id,name,avatar',
+            'visualEssayBlocks',
+        ]);
 
         // Mevcut kullanıcı beğenmiş mi?
         $isLiked = auth()->check()
@@ -67,10 +75,19 @@ class PostController extends Controller
             ->latest('published_at')
             ->get();
 
+        $userEntryVotes = [];
+        if (auth()->check()) {
+            $userEntryVotes = \App\Models\EntryVote::whereIn('entry_id', $post->entries->pluck('id'))
+                ->where('user_id', auth()->id())
+                ->pluck('vote', 'entry_id')
+                ->toArray();
+        }
+
         return Inertia::render('Post/Show', [
             'post' => $post,
             'relatedPosts' => $relatedPosts,
             'isLiked' => $isLiked,
+            'userEntryVotes' => $userEntryVotes,
         ]);
     }
 }

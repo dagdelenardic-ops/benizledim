@@ -146,8 +146,7 @@ const deletePage = (page) => {
                         <Link
                             v-for="(link, index) in pages.links"
                             :key="index"
-                            :href="link.url || '#'
-                            "
+                            :href="link.url || '#'"
                             :class="[
                                 'px-3 py-1 rounded text-sm',
                                 link.active

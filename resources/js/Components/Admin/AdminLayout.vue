@@ -113,9 +113,9 @@ watch(flashError, (message) => {
                     <span 
                         :class="[
                             'px-2 py-0.5 rounded text-xs font-medium',
-                            isAdmin ? 'bg-purple-100 text-purple-700' : 
-                            isManager ? 'bg-blue-100 text-blue-700' : 
-                            'bg-green-100 text-green-700'
+                            isAdmin ? 'bg-purple-800/60 text-purple-200' : 
+                            isManager ? 'bg-blue-800/60 text-blue-200' : 
+                            'bg-green-800/60 text-green-200'
                         ]"
                     >
                         {{ isAdmin ? 'Admin' : isManager ? 'Editor' : 'Yazar' }}
@@ -193,7 +193,7 @@ watch(flashError, (message) => {
                             v-else
                             class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-sm"
                         >
-                            {{ authUser?.name?.charAt(0)?.toUpperCase() }}
+                            {{ authUser?.name?.charAt(0)?.toUpperCase() || '?' }}
                         </div>
                         <span class="hidden sm:block font-medium text-gray-700">{{ authUser?.name }}</span>
                     </button>

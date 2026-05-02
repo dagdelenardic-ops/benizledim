@@ -15,8 +15,16 @@ class AdminUserController extends Controller
         abort_unless(auth()->user()?->isAdmin(), 403, 'Kullanıcı yönetimi sadece admin için açıktır.');
 
         $users = User::withCount(['posts', 'comments'])
+            ->withExists(['posts as has_posts'])
             ->latest()
             ->paginate(20);
+
+        $users->getCollection()->transform(function (User $user) {
+            $user->setAttribute('is_wix_placeholder', $user->isWixPlaceholder());
+            $user->setAttribute('has_google_connection', $user->hasGoogleConnection());
+
+            return $user;
+        });
 
         return Inertia::render('Admin/Users/Index', [
             'users' => $users,

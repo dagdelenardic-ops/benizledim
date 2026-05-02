@@ -17,6 +17,14 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    publishMode: {
+        type: Object,
+        default: () => ({ requiresReview: false }),
+    },
+    owners: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const page = usePage();
@@ -29,12 +37,14 @@ const form = useForm({
     content: props.post.content,
     cover_image: null,
     status: props.post.status,
+    user_id: props.post.user_id,
     categories: props.post.categories?.map(c => c.id) || [],
     tags: props.post.tags?.map(t => t.id) || [],
     _method: 'PUT',
 });
 
 const coverPreview = ref(props.post.cover_image);
+const action = ref('draft');
 
 const handleCoverChange = (e) => {
     const file = e.target.files[0];
@@ -45,6 +55,7 @@ const handleCoverChange = (e) => {
 };
 
 const submit = (publish = false) => {
+    action.value = publish ? 'publish' : 'draft';
     if (publish) {
         form.status = 'published';
     }
@@ -98,6 +109,21 @@ const requestDelete = () => {
                 </div>
             </div>
 
+            <div v-if="post.status === 'pending_review'" class="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h3 class="text-sm font-medium text-amber-800">İnceleme Bekleniyor</h3>
+                        <p class="text-sm text-amber-700 mt-1">
+                            Bu yazı editör onayında.
+                            <span v-if="post.pending_review_by?.name">Gönderen: {{ post.pending_review_by.name }}.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Status Badge -->
             <div class="mb-6 flex items-center gap-3">
                 <span class="text-sm text-gray-500">Durum:</span>
@@ -106,13 +132,29 @@ const requestDelete = () => {
                         'px-3 py-1 rounded-full text-sm font-medium',
                         post.is_deletion_pending 
                             ? 'bg-red-100 text-red-700' 
+                            : post.status === 'pending_review'
+                                ? 'bg-amber-100 text-amber-700'
                             : post.status === 'published' 
                                 ? 'bg-green-100 text-green-700' 
                                 : 'bg-yellow-100 text-yellow-700'
                     ]"
                 >
-                    {{ post.is_deletion_pending ? 'Silme Onayı Bekliyor' : post.status === 'published' ? 'Yayında' : 'Taslak' }}
+                    {{ post.is_deletion_pending ? 'Silme Onayı Bekliyor' : post.status === 'pending_review' ? 'İncelemede' : post.status === 'published' ? 'Yayında' : 'Taslak' }}
                 </span>
+            </div>
+
+            <div v-if="isAdmin" class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Yazı Sahibi</label>
+                <select
+                    v-model="form.user_id"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                    disabled
+                >
+                    <option v-for="owner in owners" :key="owner.id" :value="owner.id">
+                        {{ owner.name }}
+                    </option>
+                </select>
+                <p class="mt-1 text-xs text-gray-500">Sahip değişikliği liste ekranından yapılır.</p>
             </div>
 
             <form @submit.prevent="submit(false)" class="space-y-6">
@@ -245,7 +287,7 @@ const requestDelete = () => {
                             :disabled="form.processing || post.is_deletion_pending"
                             class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                         >
-                            <svg v-if="form.processing && form.status !== 'published'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                            <svg v-if="form.processing && action === 'draft'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
@@ -257,14 +299,14 @@ const requestDelete = () => {
                             :disabled="form.processing || post.is_deletion_pending"
                             class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                         >
-                            <svg v-if="form.processing && form.status === 'published'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                            <svg v-if="form.processing && action === 'publish'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                             <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
-                            <span>{{ post.status === 'published' ? 'Güncelle' : 'Yayınla' }}</span>
+                            <span>{{ publishMode.requiresReview ? 'İncelemeye Gönder' : post.status === 'published' ? 'Güncelle' : 'Yayınla' }}</span>
                         </button>
                     </div>
                     

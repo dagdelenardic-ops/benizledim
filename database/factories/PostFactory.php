@@ -22,10 +22,14 @@ class PostFactory extends Factory
             'reading_time_minutes' => fake()->numberBetween(1, 10),
             'status' => fake()->randomElement(['draft', 'published']),
             'published_at' => null,
+            'pending_review_at' => null,
+            'pending_review_by' => null,
             'deletion_requested_at' => null,
             'deletion_requested_by' => null,
             'deletion_approved_at' => null,
             'deletion_approved_by' => null,
+            'reviewed_at' => null,
+            'reviewed_by' => null,
             'view_count' => 0,
         ];
     }

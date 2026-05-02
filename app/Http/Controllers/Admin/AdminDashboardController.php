@@ -24,6 +24,7 @@ class AdminDashboardController extends Controller
         $stats = [
             'total_posts' => (clone $postQuery)->count(),
             'published_posts' => (clone $postQuery)->published()->count(),
+            'pending_review_posts' => (clone $postQuery)->where('status', 'pending_review')->count(),
             'draft_posts' => (clone $postQuery)->where('status', 'draft')->whereNull('deletion_requested_at')->count(),
             'pending_deletion_posts' => (clone $postQuery)->whereNotNull('deletion_requested_at')->count(),
             'total_users' => $user->isAdmin() ? User::count() : null,
@@ -39,6 +40,15 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
+        $authorBreakdown = $user->canManageAllPosts()
+            ? User::query()
+                ->has('posts')
+                ->withCount('posts')
+                ->orderByDesc('posts_count')
+                ->limit(8)
+                ->get(['id', 'name', 'email', 'role'])
+            : collect();
+
         $recentComments = Comment::with(['user', 'post'])
             ->when(
                 !$user->canManageAllPosts(),
@@ -52,6 +62,7 @@ class AdminDashboardController extends Controller
             'stats' => $stats,
             'recentPosts' => $recentPosts,
             'recentComments' => $recentComments,
+            'authorBreakdown' => $authorBreakdown,
         ]);
     }
 }

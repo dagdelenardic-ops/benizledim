@@ -74,8 +74,7 @@ const deleteComment = (comment) => {
                                 <td class="px-6 py-4 text-gray-700">{{ comment.user?.name || '-' }}</td>
                                 <td class="px-6 py-4">
                                     <Link
-                                        :href="comment.post?.slug ? `/yazi/${comment.post.slug}` : '#'
-                                        "
+                                        :href="comment.post?.slug ? `/yazi/${comment.post.slug}` : '#'"
                                         class="text-blue-600 hover:text-blue-700 text-sm"
                                     >
                                         {{ comment.post?.title || '-' }}
@@ -106,8 +105,7 @@ const deleteComment = (comment) => {
                         <Link
                             v-for="(link, index) in comments.links"
                             :key="index"
-                            :href="link.url || '#'
-                            "
+                            :href="link.url || '#'"
                             :class="[
                                 'px-3 py-1 rounded text-sm',
                                 link.active

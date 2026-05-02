@@ -30,15 +30,15 @@ const toggleSearch = () => {
 
 <template>
     <!-- Desktop Search -->
-    <form @submit.prevent="handleSubmit" class="hidden md:block relative">
+    <form @submit.prevent="handleSubmit" class="relative hidden md:block">
         <input
             v-model="searchQuery"
             type="text"
             :placeholder="placeholder"
-            class="w-64 pl-10 pr-4 py-2 rounded-full bg-white/10 text-white placeholder-white/70 border border-white/20 focus:outline-none focus:bg-white/20 focus:border-white/40 transition-all"
+            class="w-72 border border-[var(--bi-ink)] bg-transparent py-2.5 pl-10 pr-4 text-sm text-[var(--bi-ink)] placeholder-[var(--bi-muted)] transition-all focus:border-red-700 focus:outline-none"
         />
         <svg
-            class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70"
+            class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-red-700"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -51,7 +51,7 @@ const toggleSearch = () => {
     <div class="md:hidden">
         <button
             @click="toggleSearch"
-            class="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
+            class="border border-[var(--bi-ink)] p-2 text-[var(--bi-ink)] transition-colors hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)]"
         >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -69,17 +69,17 @@ const toggleSearch = () => {
         >
             <div
                 v-if="isOpen"
-                class="fixed inset-0 bg-black/50 z-50"
+                class="fixed inset-0 z-50 bg-black/50"
                 @click="isOpen = false"
             >
-                <div class="bg-red-600 p-4" @click.stop>
+                <div class="border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper)] p-4" @click.stop>
                     <form @submit.prevent="handleSubmit" class="relative">
                         <input
                             id="mobile-search-input"
                             v-model="searchQuery"
                             type="text"
                             placeholder="Yazı ara..."
-                            class="w-full pl-10 pr-12 py-3 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none"
+                            class="w-full border border-[var(--bi-ink)] bg-white py-3 pl-10 pr-12 text-gray-900 placeholder-gray-500 focus:outline-none"
                         />
                         <svg
                             class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"

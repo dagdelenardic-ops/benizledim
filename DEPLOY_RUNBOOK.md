@@ -6,9 +6,61 @@ Set these in repository secrets:
 - `FTP_SERVER` (required)
 - `FTP_USERNAME` (required)
 - `FTP_PASSWORD` (required)
-- `DEPLOY_HEALTHCHECK_URL` (optional, e.g. `https://benizledim.store/up`)
+- `DEPLOY_HEALTHCHECK_URL` (optional, e.g. `https://benizledim.com/up`)
 - `SSH_HOST` / `SSH_USERNAME` / `SSH_PRIVATE_KEY` (optional, enables post-deploy optimize+migrate)
+- `SSH_PASSPHRASE` (optional, required if your SSH private key is encrypted)
 - `SSH_APP_PATH` (optional, default: `$HOME/public_html`)
+
+## SSH Setup (Recommended)
+For agent-friendly operations, prefer SSH over manual cPanel edits.
+
+1. In cPanel, open `SSH Access` and authorize your public key.
+2. Download the matching private key from cPanel.
+3. Save these GitHub secrets:
+   - `SSH_HOST`
+   - `SSH_USERNAME`
+   - `SSH_PRIVATE_KEY`
+   - `SSH_PASSPHRASE` if the key has a passphrase
+   - `SSH_APP_PATH=/home/<cpanel_user>/public_html`
+
+With these set, the deploy workflow can run post-deploy Laravel commands and the `Remote Artisan` workflow can run one-off commands such as:
+
+```bash
+wix:apply-author-report output/spreadsheet/wix-author-resolution.csv --dry-run
+```
+
+Post-deploy command order is:
+
+```bash
+php artisan optimize:clear
+php artisan migrate --force
+php artisan config:cache
+php artisan view:cache
+php artisan event:cache
+```
+
+Do not run `route:cache` until closure routes are removed.
+
+## Production Domain Baseline
+Use these production values when the canonical host is `https://benizledim.com`:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://benizledim.com
+FRONTEND_URL=https://benizledim.com
+GOOGLE_REDIRECT_URI=https://benizledim.com/auth/google/callback
+CANONICAL_REDIRECT_HOSTS=www.benizledim.com,benizledim.store,www.benizledim.store
+SESSION_DOMAIN=null
+SESSION_SECURE_COOKIE=true
+```
+
+Expected host behavior:
+
+- `https://benizledim.com/*` serves the app
+- `https://www.benizledim.com/*` returns `301` to `https://benizledim.com/*`
+- `https://benizledim.store/*` returns `301` to `https://benizledim.com/*`
+- `https://www.benizledim.store/*` returns `301` to `https://benizledim.com/*`
 
 ## cPanel Cron (Required)
 Add one cron for Laravel scheduler:

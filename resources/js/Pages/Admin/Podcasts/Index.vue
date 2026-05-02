@@ -216,8 +216,7 @@ const deletePodcast = (podcast) => {
                         <Link
                             v-for="(link, index) in podcasts.links"
                             :key="index"
-                            :href="link.url || '#'
-                            "
+                            :href="link.url || '#'"
                             :class="[
                                 'px-3 py-1 rounded text-sm',
                                 link.active

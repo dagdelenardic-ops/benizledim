@@ -20,6 +20,10 @@ const props = defineProps({
             canManageAllPosts: false,
         }),
     },
+    owners: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const { timeAgo } = useDate();
@@ -27,15 +31,17 @@ const page = usePage();
 
 const search = ref(props.filters.search || '');
 const status = ref(props.filters.status || '');
+const owner = ref(props.filters.owner || '');
 
 // Debounced search
 let searchTimeout;
-watch([search, status], () => {
+watch([search, status, owner], () => {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
         router.get('/admin/posts', {
             search: search.value,
             status: status.value,
+            owner: owner.value,
         }, {
             preserveState: true,
             replace: true,
@@ -43,22 +49,30 @@ watch([search, status], () => {
     }, 300);
 });
 
-const getStatusBadge = (status) => {
-    if (status === 'pending_deletion') {
-        return 'bg-red-100 text-red-700';
-    }
-
-    return status === 'published'
-        ? 'bg-green-100 text-green-700'
-        : 'bg-yellow-100 text-yellow-700';
-};
-
 const getStatusLabel = (status) => {
     if (status === 'pending_deletion') {
         return 'Silme Onayı';
     }
 
+    if (status === 'pending_review') {
+        return 'İncelemede';
+    }
+
     return status === 'published' ? 'Yayında' : 'Taslak';
+};
+
+const getStatusBadge = (status) => {
+    if (status === 'pending_deletion') {
+        return 'bg-red-100 text-red-700';
+    }
+
+    if (status === 'pending_review') {
+        return 'bg-amber-100 text-amber-700';
+    }
+
+    return status === 'published'
+        ? 'bg-green-100 text-green-700'
+        : 'bg-yellow-100 text-yellow-700';
 };
 
 const deletePost = (post) => {
@@ -86,7 +100,27 @@ const rejectDeletion = (post) => {
     router.post(`/admin/posts/${post.id}/reject-deletion`);
 };
 
-const resolveStatus = (post) => (post.is_deletion_pending ? 'pending_deletion' : post.status);
+const approveReview = (post) => {
+    if (!confirm(`"${post.title}" yazısını yayına almak istiyor musunuz?`)) return;
+
+    router.post(`/admin/posts/${post.id}/approve-review`);
+};
+
+const rejectReview = (post) => {
+    if (!confirm(`"${post.title}" yazısını taslağa geri almak istiyor musunuz?`)) return;
+
+    router.post(`/admin/posts/${post.id}/reject-review`);
+};
+
+const updateOwner = (post, userId) => {
+    router.put(`/admin/posts/${post.id}/owner`, {
+        user_id: Number(userId),
+    }, {
+        preserveScroll: true,
+    });
+};
+
+const resolveStatus = (post) => post.resolved_status || (post.is_deletion_pending ? 'pending_deletion' : post.status);
 </script>
 
 <template>
@@ -120,8 +154,17 @@ const resolveStatus = (post) => (post.is_deletion_pending ? 'pending_deletion' :
                 >
                     <option value="">Tümü</option>
                     <option value="published">Yayında</option>
+                    <option value="pending_review">İncelemede</option>
                     <option value="draft">Taslak</option>
                     <option value="pending_deletion">Silme Onayı</option>
+                </select>
+                <select
+                    v-if="permissions.canManageAllPosts"
+                    v-model="owner"
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
+                >
+                    <option value="">Tüm Yazarlar</option>
+                    <option v-for="item in owners" :key="item.id" :value="item.id">{{ item.name }}</option>
                 </select>
             </div>
 
@@ -142,14 +185,39 @@ const resolveStatus = (post) => (post.is_deletion_pending ? 'pending_deletion' :
                         <tbody class="divide-y divide-gray-200">
                             <tr v-for="post in posts.data" :key="post.id" class="hover:bg-gray-50">
                                 <td class="px-6 py-4">
-                                    <Link
-                                        :href="`/admin/posts/${post.id}/edit`"
-                                        class="font-medium text-gray-900 hover:text-red-600"
-                                    >
-                                        {{ post.title }}
-                                    </Link>
+                                    <div class="space-y-1">
+                                        <Link
+                                            :href="`/admin/posts/${post.id}/edit`"
+                                            class="font-medium text-gray-900 hover:text-red-600"
+                                        >
+                                            {{ post.title }}
+                                        </Link>
+                                        <p v-if="post.reviewed_by?.name" class="text-xs text-gray-500">
+                                            Son inceleyen: {{ post.reviewed_by.name }}
+                                        </p>
+                                        <p v-if="resolveStatus(post) === 'pending_review' && post.pending_review_by?.name" class="text-xs text-gray-500">
+                                            İncelemeye gönderen: {{ post.pending_review_by.name }}
+                                        </p>
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4 text-gray-600">{{ post.user?.name }}</td>
+                                <td class="px-6 py-4">
+                                    <template v-if="permissions.canReassignPosts">
+                                        <select
+                                            :value="post.user?.id"
+                                            @change="updateOwner(post, $event.target.value)"
+                                            class="min-w-48 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-red-500"
+                                        >
+                                            <option v-for="item in owners" :key="item.id" :value="item.id">
+                                                {{ item.name }}
+                                            </option>
+                                        </select>
+                                        <p class="text-xs text-gray-500 mt-1 truncate">{{ post.user?.email }}</p>
+                                    </template>
+                                    <template v-else>
+                                        <p class="text-gray-700">{{ post.user?.name }}</p>
+                                        <p class="text-xs text-gray-500 truncate">{{ post.user?.email }}</p>
+                                    </template>
+                                </td>
                                 <td class="px-6 py-4">
                                     <span :class="['px-2 py-1 rounded-full text-xs font-medium', getStatusBadge(resolveStatus(post))]">
                                         {{ getStatusLabel(resolveStatus(post)) }}
@@ -165,6 +233,20 @@ const resolveStatus = (post) => (post.is_deletion_pending ? 'pending_deletion' :
                                         >
                                             Düzenle
                                         </Link>
+                                        <template v-if="resolveStatus(post) === 'pending_review' && permissions.canReviewPosts">
+                                            <button
+                                                @click="approveReview(post)"
+                                                class="text-emerald-600 hover:text-emerald-700 text-sm"
+                                            >
+                                                Yayına Al
+                                            </button>
+                                            <button
+                                                @click="rejectReview(post)"
+                                                class="text-amber-600 hover:text-amber-700 text-sm"
+                                            >
+                                                Taslağa Al
+                                            </button>
+                                        </template>
                                         <template v-if="post.is_deletion_pending && permissions.canApproveDeletion">
                                             <button
                                                 @click="approveDeletion(post)"
@@ -204,8 +286,7 @@ const resolveStatus = (post) => (post.is_deletion_pending ? 'pending_deletion' :
                         <Link
                             v-for="(link, index) in posts.links"
                             :key="index"
-                            :href="link.url || '#'
-                            "
+                            :href="link.url || '#'"
                             :class="[
                                 'px-3 py-1 rounded text-sm',
                                 link.active

@@ -13,6 +13,17 @@ const page = usePage();
 const authUser = page.props.auth?.user;
 const { timeAgo } = useDate();
 
+const sentimentConfig = {
+    pozitif: { icon: '+', color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200', text: 'Pozitif' },
+    negatif: { icon: '-', color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200', text: 'Negatif' },
+    notr:    { icon: '~', color: 'text-gray-500', bg: 'bg-gray-50', border: 'border-gray-200', text: 'N\u00F6tr' },
+};
+
+const getSentiment = (comment) => {
+    if (!comment.sentiment_label) return null;
+    return sentimentConfig[comment.sentiment_label] || sentimentConfig.notr;
+};
+
 const canDelete = (comment) => {
     if (!authUser) return false;
     return authUser.id === comment.user_id || authUser.role === 'admin';
@@ -68,6 +79,17 @@ const deleteComment = (comment) => {
                             </span>
                         </div>
                         <p class="text-gray-700 whitespace-pre-wrap">{{ comment.content }}</p>
+
+                        <!-- Sentiment Indicator -->
+                        <div
+                            v-if="getSentiment(comment)"
+                            class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border"
+                            :class="[getSentiment(comment).bg, getSentiment(comment).color, getSentiment(comment).border]"
+                            :title="'Duygu analizi: ' + getSentiment(comment).text + ' (' + comment.sentiment_score?.toFixed(2) + ')'"
+                        >
+                            <span class="font-bold text-sm leading-none">{{ getSentiment(comment).icon }}</span>
+                            <span>{{ getSentiment(comment).text }}</span>
+                        </div>
                     </div>
                     
                     <!-- Actions -->

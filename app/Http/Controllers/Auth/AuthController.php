@@ -37,7 +37,9 @@ class AuthController extends Controller
             RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
-            return redirect()->intended('/');
+            $target = $request->user()?->canAccessCms() ? '/admin' : '/';
+
+            return redirect()->intended($target);
         }
 
         RateLimiter::hit($throttleKey, 300);

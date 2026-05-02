@@ -186,8 +186,7 @@ const deleteEvent = (event) => {
                         <Link
                             v-for="(link, index) in events.links"
                             :key="index"
-                            :href="link.url || '#'
-                            "
+                            :href="link.url || '#'"
                             :class="[
                                 'px-3 py-1 rounded text-sm',
                                 link.active
