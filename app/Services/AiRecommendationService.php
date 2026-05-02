@@ -85,6 +85,11 @@ class AiRecommendationService
         }
     }
 
+    private function endpoint(): string
+    {
+        return 'https://generativelanguage.googleapis.com/v1beta/models/'.$this->model.':generateContent?key='.$this->apiKey;
+    }
+
     private function buildSystemPrompt(array $posts): string
     {
         $postList = collect($posts)->map(function ($p) {
@@ -129,7 +134,10 @@ PROMPT;
         return $conversation->messages()
             ->orderBy('created_at')
             ->get()
-            ->map(fn ($m) => ['role' => $m->role, 'content' => $m->content])
+            ->map(fn ($m) => [
+                'role' => $m->role === 'assistant' ? 'model' : $m->role,
+                'parts' => [['text' => $m->content]],
+            ])
             ->toArray();
     }
 
