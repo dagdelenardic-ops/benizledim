@@ -56,7 +56,7 @@ chmod_storage.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
-.claude/worktrees/
+.claude/
 .playwright-mcp/
 /output/
 /cpanel-login.png
