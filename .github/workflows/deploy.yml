@@ -22,6 +22,7 @@ jobs:
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
       SSH_APP_PATH: ${{ secrets.SSH_APP_PATH }}
       DEPLOY_HEALTHCHECK_URL: ${{ secrets.DEPLOY_HEALTHCHECK_URL }}
     steps:
@@ -113,6 +114,7 @@ jobs:
           host: ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USERNAME }}
           key: ${{ env.SSH_PRIVATE_KEY }}
+          passphrase: ${{ env.SSH_PASSPHRASE }}
           script_stop: true
           script: |
             APP_PATH="$SSH_APP_PATH"
@@ -126,7 +128,6 @@ jobs:
             php artisan view:cache
             php artisan event:cache
             php artisan migrate --force
-            php artisan app:fix-authors
 
       - name: 🩺 Health check (optional)
         if: ${{ env.DEPLOY_HEALTHCHECK_URL != '' }}
