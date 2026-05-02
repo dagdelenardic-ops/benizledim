@@ -108,6 +108,8 @@ jobs:
           for file in "${files[@]}"; do
             echo "Attempting delete: ${file}"
             curl --silent --show-error --ftp-method nocwd \
+              --connect-timeout 8 \
+              --max-time 15 \
               --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
               --url "ftp://${FTP_SERVER}/public_html/" \
               --quote "DELE ${file}" >/dev/null || true
