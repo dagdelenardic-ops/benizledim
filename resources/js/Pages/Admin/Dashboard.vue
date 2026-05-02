@@ -1,7 +1,8 @@
 <script setup>
 import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../Components/Admin/AdminLayout.vue';
+import Icon from '../../Components/Admin/AdminIcon.vue';
 import { useDate } from '@/Composables/useDate';
 
 const props = defineProps({
@@ -24,38 +25,47 @@ const props = defineProps({
 });
 
 const { timeAgo } = useDate();
+const page = usePage();
+const authUser = computed(() => page.props.auth?.user || {});
+const canManageAll = computed(() => ['admin', 'editor'].includes(authUser.value.role || ''));
+const heading = computed(() => (canManageAll.value ? 'Yönetim Özeti' : 'Yazı Masam'));
+const intro = computed(() => (
+    canManageAll.value
+        ? 'Onay bekleyen içerikleri, son hareketleri ve yazar dağılımını tek ekranda takip edin.'
+        : 'Taslaklarını, incelemeye giden yazılarını ve yayındaki içeriklerini hızlıca gör.'
+));
 
 const statCards = computed(() => {
-    const cards = [
-        { key: 'total_posts', label: 'Toplam Yazı', icon: '📝', color: 'bg-blue-500' },
-        { key: 'published_posts', label: 'Yayında', icon: '✅', color: 'bg-green-500' },
-        { key: 'pending_review_posts', label: 'İncelemede', icon: '🕵️', color: 'bg-amber-500' },
-        { key: 'draft_posts', label: 'Taslak', icon: '📄', color: 'bg-yellow-500' },
-        { key: 'pending_deletion_posts', label: 'Silme Onayı', icon: '🧹', color: 'bg-orange-500' },
-        { key: 'total_views', label: 'Toplam Görüntülenme', icon: '👁️', color: 'bg-purple-500' },
-        { key: 'total_users', label: 'Toplam Kullanıcı', icon: '👥', color: 'bg-indigo-500' },
-        { key: 'total_comments', label: 'Toplam Yorum', icon: '💬', color: 'bg-pink-500' },
-        { key: 'newsletter_subscribers', label: 'Newsletter Abonesi', icon: '📧', color: 'bg-red-500' },
+    const managerCards = [
+        { key: 'pending_review_posts', label: 'İncelemede', icon: 'posts', tone: 'red' },
+        { key: 'pending_deletion_posts', label: 'Silme Talebi', icon: 'alert', tone: 'black' },
+        { key: 'published_posts', label: 'Yayında', icon: 'check', tone: 'green' },
+        { key: 'total_posts', label: 'Toplam Yazı', icon: 'dashboard', tone: 'neutral' },
+        { key: 'total_comments', label: 'Yorum', icon: 'comments', tone: 'neutral' },
+        { key: 'total_users', label: 'Kullanıcı', icon: 'users', tone: 'neutral' },
     ];
 
-    return cards.filter((card) => stats[card.key] !== null && stats[card.key] !== undefined);
+    const authorCards = [
+        { key: 'draft_posts', label: 'Taslaklarım', icon: 'page', tone: 'neutral' },
+        { key: 'pending_review_posts', label: 'İncelemede', icon: 'posts', tone: 'red' },
+        { key: 'published_posts', label: 'Yayında', icon: 'check', tone: 'green' },
+        { key: 'total_comments', label: 'Yorum', icon: 'comments', tone: 'neutral' },
+    ];
+
+    return (canManageAll.value ? managerCards : authorCards)
+        .filter((card) => props.stats[card.key] !== null && props.stats[card.key] !== undefined);
 });
 
 const getStatusBadge = (status) => {
-    if (status === 'pending_deletion') {
-        return 'bg-red-100 text-red-700';
-    }
-
-    return status === 'published'
-        ? 'bg-green-100 text-green-700'
-        : 'bg-yellow-100 text-yellow-700';
+    if (status === 'pending_deletion') return 'border-red-700 bg-red-50 text-red-800';
+    if (status === 'pending_review') return 'border-amber-700 bg-amber-50 text-amber-800';
+    if (status === 'published') return 'border-emerald-700 bg-emerald-50 text-emerald-800';
+    return 'border-[var(--bi-ink)] bg-white text-[var(--bi-ink)]';
 };
 
 const getStatusLabel = (status) => {
-    if (status === 'pending_deletion') {
-        return 'Silme Onayı';
-    }
-
+    if (status === 'pending_deletion') return 'Silme Talebi';
+    if (status === 'pending_review') return 'İncelemede';
     return status === 'published' ? 'Yayında' : 'Taslak';
 };
 
@@ -63,132 +73,134 @@ const resolveStatus = (post) => (post.deletion_requested_at ? 'pending_deletion'
 </script>
 
 <template>
-    <AdminLayout title="Dashboard">
+    <AdminLayout title="Genel Bakış">
         <div class="space-y-8">
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <section class="border-2 border-[var(--bi-ink)] bg-[var(--bi-paper)] p-5 md:p-6">
+                <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <span class="bi-kicker">{{ canManageAll ? 'Panel' : 'Yazar' }}</span>
+                        <h2 class="mt-3 text-3xl font-black leading-tight text-[var(--bi-ink)] md:text-4xl">{{ heading }}</h2>
+                        <p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--bi-muted)] md:text-base">{{ intro }}</p>
+                    </div>
+                    <Link
+                        href="/admin/posts/create"
+                        class="inline-flex items-center justify-center gap-2 bg-red-700 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-800"
+                    >
+                        <Icon name="posts" />
+                        Yeni Yazı
+                    </Link>
+                </div>
+            </section>
+
+            <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <div
                     v-for="card in statCards"
                     :key="card.key"
-                    class="bg-white rounded-xl shadow-sm p-6"
+                    class="border-2 border-[var(--bi-ink)] bg-white p-5 shadow-[5px_5px_0_var(--bi-ink)]"
                 >
-                    <div class="flex items-center gap-4">
-                        <div :class="[card.color, 'w-12 h-12 rounded-lg flex items-center justify-center text-2xl']">
-                            {{ card.icon }}
-                        </div>
+                    <div class="flex items-start justify-between gap-4">
                         <div>
-                            <p class="text-sm text-gray-500">{{ card.label }}</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ stats[card.key]?.toLocaleString() }}</p>
+                            <p class="bi-mono text-[0.68rem] font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)]">{{ card.label }}</p>
+                            <p class="mt-3 text-3xl font-black text-[var(--bi-ink)]">{{ stats[card.key]?.toLocaleString() }}</p>
+                        </div>
+                        <div
+                            :class="[
+                                'grid h-10 w-10 place-items-center border-2',
+                                card.tone === 'red'
+                                    ? 'border-red-700 bg-red-700 text-white'
+                                    : card.tone === 'green'
+                                        ? 'border-emerald-700 bg-emerald-700 text-white'
+                                        : 'border-[var(--bi-ink)] bg-[var(--bi-paper)] text-[var(--bi-ink)]',
+                            ]"
+                        >
+                            <Icon :name="card.icon" />
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Recent Content -->
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Recent Posts -->
-                <div class="bg-white rounded-xl shadow-sm">
-                    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                        <h2 class="text-lg font-bold text-gray-900">Son Yazılar</h2>
-                        <Link href="/admin/posts" class="text-red-600 hover:text-red-700 text-sm">
-                            Tümünü Gör →
+            <section class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+                <div class="border-2 border-[var(--bi-ink)] bg-white">
+                    <div class="flex items-center justify-between border-b-2 border-[var(--bi-ink)] px-5 py-4">
+                        <h2 class="text-lg font-black text-[var(--bi-ink)]">Son Yazılar</h2>
+                        <Link href="/admin/posts" class="bi-mono text-xs font-bold uppercase tracking-[0.08em] text-red-700 hover:text-red-900">
+                            Tümünü Gör
                         </Link>
                     </div>
-                    <div class="divide-y divide-gray-200">
+                    <div class="divide-y divide-[var(--bi-rule-soft)]">
                         <div
                             v-for="post in recentPosts"
                             :key="post.id"
-                            class="px-6 py-4 hover:bg-gray-50"
+                            class="grid gap-3 px-5 py-4 md:grid-cols-[1fr_auto] md:items-center"
                         >
-                            <div class="flex items-start justify-between gap-4">
-                                <div class="flex-1 min-w-0">
-                                    <Link
-                                        :href="`/admin/posts/${post.id}/edit`"
-                                        class="font-medium text-gray-900 hover:text-red-600 truncate block"
-                                    >
-                                        {{ post.title }}
-                                    </Link>
-                                    <p class="text-sm text-gray-500 mt-1">
-                                        {{ post.user?.name }} • {{ timeAgo(post.created_at) }}
-                                    </p>
-                                </div>
-                                <span
-                                    :class="['px-2 py-1 rounded-full text-xs font-medium', getStatusBadge(resolveStatus(post))]"
+                            <div class="min-w-0">
+                                <Link
+                                    :href="`/admin/posts/${post.id}/edit`"
+                                    class="block truncate text-base font-black text-[var(--bi-ink)] hover:text-red-700"
                                 >
-                                    {{ getStatusLabel(resolveStatus(post)) }}
-                                </span>
+                                    {{ post.title }}
+                                </Link>
+                                <p class="mt-1 text-sm text-[var(--bi-muted)]">
+                                    {{ post.user?.name }} · {{ timeAgo(post.created_at) }}
+                                </p>
                             </div>
+                            <span :class="['w-fit border px-2 py-1 text-xs font-bold', getStatusBadge(resolveStatus(post))]">
+                                {{ getStatusLabel(resolveStatus(post)) }}
+                            </span>
                         </div>
-                        <div v-if="recentPosts.length === 0" class="px-6 py-8 text-center text-gray-500">
+                        <div v-if="recentPosts.length === 0" class="px-5 py-10 text-center text-sm text-[var(--bi-muted)]">
                             Henüz yazı yok.
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Comments -->
-                <div class="bg-white rounded-xl shadow-sm">
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-lg font-bold text-gray-900">Son Yorumlar</h2>
+                <div class="border-2 border-[var(--bi-ink)] bg-white">
+                    <div class="border-b-2 border-[var(--bi-ink)] px-5 py-4">
+                        <h2 class="text-lg font-black text-[var(--bi-ink)]">Son Yorumlar</h2>
                     </div>
-                    <div class="divide-y divide-gray-200">
+                    <div class="divide-y divide-[var(--bi-rule-soft)]">
                         <div
                             v-for="comment in recentComments"
                             :key="comment.id"
-                            class="px-6 py-4 hover:bg-gray-50"
+                            class="px-5 py-4"
                         >
-                            <div class="flex items-start gap-3">
-                                <img
-                                    v-if="comment.user?.avatar"
-                                    :src="comment.user.avatar"
-                                    :alt="comment.user.name"
-                                    class="w-8 h-8 rounded-full object-cover"
-                                />
-                                <div
-                                    v-else
-                                    class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm"
-                                >
-                                    {{ comment.user?.name?.charAt(0)?.toUpperCase() || '?' }}
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900">{{ comment.user?.name }}</p>
-                                    <p class="text-sm text-gray-600 line-clamp-2">{{ comment.content }}</p>
-                                    <Link
-                                        :href="`/yazi/${comment.post?.slug}`"
-                                        class="text-xs text-red-600 hover:text-red-700 mt-1 block"
-                                    >
-                                        {{ comment.post?.title }}
-                                    </Link>
-                                </div>
-                            </div>
+                            <p class="text-sm font-bold text-[var(--bi-ink)]">{{ comment.user?.name }}</p>
+                            <p class="mt-1 line-clamp-2 text-sm leading-6 text-[var(--bi-muted)]">{{ comment.content }}</p>
+                            <Link
+                                :href="`/yazi/${comment.post?.slug}`"
+                                class="mt-2 block truncate text-xs font-bold text-red-700 hover:text-red-900"
+                            >
+                                {{ comment.post?.title }}
+                            </Link>
                         </div>
-                        <div v-if="recentComments.length === 0" class="px-6 py-8 text-center text-gray-500">
+                        <div v-if="recentComments.length === 0" class="px-5 py-10 text-center text-sm text-[var(--bi-muted)]">
                             Henüz yorum yok.
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div v-if="authorBreakdown.length" class="bg-white rounded-xl shadow-sm">
-                <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                    <h2 class="text-lg font-bold text-gray-900">Yazı Sahipliği</h2>
-                    <Link href="/admin/posts" class="text-red-600 hover:text-red-700 text-sm">
-                        Sahiplikleri Yönet →
+            <section v-if="authorBreakdown.length" class="border-2 border-[var(--bi-ink)] bg-white">
+                <div class="flex items-center justify-between border-b-2 border-[var(--bi-ink)] px-5 py-4">
+                    <h2 class="text-lg font-black text-[var(--bi-ink)]">Yazı Sahipliği</h2>
+                    <Link href="/admin/posts" class="bi-mono text-xs font-bold uppercase tracking-[0.08em] text-red-700 hover:text-red-900">
+                        Yönet
                     </Link>
                 </div>
-                <div class="divide-y divide-gray-200">
+                <div class="divide-y divide-[var(--bi-rule-soft)]">
                     <div
                         v-for="author in authorBreakdown"
                         :key="author.id"
-                        class="px-6 py-4 flex items-center justify-between gap-4 hover:bg-gray-50"
+                        class="grid gap-2 px-5 py-4 sm:grid-cols-[1fr_auto] sm:items-center"
                     >
                         <div class="min-w-0">
-                            <p class="font-medium text-gray-900 truncate">{{ author.name }}</p>
-                            <p class="text-sm text-gray-500 truncate">{{ author.email }} • {{ author.role }}</p>
+                            <p class="truncate font-bold text-[var(--bi-ink)]">{{ author.name }}</p>
+                            <p class="truncate text-sm text-[var(--bi-muted)]">{{ author.email }} · {{ author.role }}</p>
                         </div>
-                        <span class="text-sm font-semibold text-gray-900">{{ author.posts_count }} yazı</span>
+                        <span class="text-sm font-black text-[var(--bi-ink)]">{{ author.posts_count }} yazı</span>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </AdminLayout>
 </template>

@@ -15,8 +15,8 @@ class AiRecommendationService
 
     public function __construct()
     {
-        $this->apiKey = config('services.anthropic.api_key', '');
-        $this->model = config('services.anthropic.model', 'claude-sonnet-4-5-20250514');
+        $this->apiKey = config('services.gemini.api_key', '');
+        $this->model = config('services.gemini.text_model', 'gemini-3-pro-preview');
     }
 
     public function chat(AiConversation $conversation, string $userMessage): array
@@ -31,24 +31,31 @@ class AiRecommendationService
         $conversationHistory = $this->buildConversationHistory($conversation);
 
         try {
-            $response = Http::withHeaders([
-                'x-api-key' => $this->apiKey,
-                'anthropic-version' => '2023-06-01',
-                'content-type' => 'application/json',
-            ])->timeout(30)->post('https://api.anthropic.com/v1/messages', [
-                'model' => $this->model,
-                'max_tokens' => 1024,
-                'system' => $this->buildSystemPrompt($postContext),
-                'messages' => $conversationHistory,
+            if (blank($this->apiKey)) {
+                Log::error('Gemini API key is not configured');
+                return $this->createErrorResponse($conversation);
+            }
+
+            $response = Http::timeout(30)->post($this->endpoint(), [
+                'systemInstruction' => [
+                    'parts' => [
+                        ['text' => $this->buildSystemPrompt($postContext)],
+                    ],
+                ],
+                'contents' => $conversationHistory,
+                'generationConfig' => [
+                    'maxOutputTokens' => 1024,
+                    'temperature' => 0.7,
+                ],
             ]);
 
             if (!$response->successful()) {
-                Log::error('Anthropic API error', ['status' => $response->status(), 'body' => $response->body()]);
+                Log::error('Gemini API error', ['status' => $response->status(), 'body' => $response->body()]);
                 return $this->createErrorResponse($conversation);
             }
 
             $data = $response->json();
-            $assistantContent = $data['content'][0]['text'] ?? 'Bir hata olustu, lutfen tekrar deneyin.';
+            $assistantContent = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'Bir hata olustu, lutfen tekrar deneyin.';
 
             $recommendedIds = $this->extractPostIds($assistantContent, $postContext);
 

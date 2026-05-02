@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import RichTextEditor from '../../../Components/Admin/RichTextEditor.vue';
+import Icon from '../../../Components/Admin/AdminIcon.vue';
 
 const props = defineProps({
     post: {
@@ -80,20 +81,25 @@ const requestDelete = () => {
 
 <template>
     <AdminLayout :title="`Yazı Düzenle`">
-        <div class="max-w-4xl mx-auto">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="text-2xl font-bold text-gray-900">Yazı Düzenle</h1>
-                <Link href="/admin/posts" class="text-gray-600 hover:text-gray-900 flex items-center gap-1">
+        <div class="mx-auto max-w-5xl space-y-6">
+            <section class="border-2 border-[var(--bi-ink)] bg-[var(--bi-paper)] p-5">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="min-w-0">
+                        <span class="bi-kicker">Üretim</span>
+                        <h1 class="mt-3 truncate text-3xl font-black text-[var(--bi-ink)]">Yazı Düzenle</h1>
+                        <p class="mt-2 truncate text-sm text-[var(--bi-muted)]">{{ post.title }}</p>
+                    </div>
+                    <Link href="/admin/posts" class="flex items-center gap-1 border border-[var(--bi-ink)] bg-white px-3 py-2 text-sm font-bold text-[var(--bi-ink)] hover:bg-[var(--bi-paper)]">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                     Geri
-                </Link>
-            </div>
+                    </Link>
+                </div>
+            </section>
 
             <!-- Pending Deletion Warning -->
-            <div v-if="post.is_deletion_pending" class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div v-if="post.is_deletion_pending" class="border-2 border-red-700 bg-red-50 p-4">
                 <div class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -109,7 +115,7 @@ const requestDelete = () => {
                 </div>
             </div>
 
-            <div v-if="post.status === 'pending_review'" class="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div v-if="post.status === 'pending_review'" class="border-2 border-amber-700 bg-amber-50 p-4">
                 <div class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -125,11 +131,11 @@ const requestDelete = () => {
             </div>
 
             <!-- Status Badge -->
-            <div class="mb-6 flex items-center gap-3">
+            <div class="flex items-center gap-3 border-2 border-[var(--bi-ink)] bg-white p-4">
                 <span class="text-sm text-gray-500">Durum:</span>
                 <span 
                     :class="[
-                        'px-3 py-1 rounded-full text-sm font-medium',
+                        'border px-3 py-1 text-sm font-bold',
                         post.is_deletion_pending 
                             ? 'bg-red-100 text-red-700' 
                             : post.status === 'pending_review'
@@ -143,11 +149,11 @@ const requestDelete = () => {
                 </span>
             </div>
 
-            <div v-if="isAdmin" class="mb-6">
+            <div v-if="isAdmin" class="border-2 border-[var(--bi-ink)] bg-white p-5">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Yazı Sahibi</label>
                 <select
                     v-model="form.user_id"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                    class="w-full border border-[var(--bi-ink)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-700/20"
                     disabled
                 >
                     <option v-for="owner in owners" :key="owner.id" :value="owner.id">
@@ -157,7 +163,7 @@ const requestDelete = () => {
                 <p class="mt-1 text-xs text-gray-500">Sahip değişikliği liste ekranından yapılır.</p>
             </div>
 
-            <form @submit.prevent="submit(false)" class="space-y-6">
+            <form @submit.prevent="submit(false)" class="space-y-6 border-2 border-[var(--bi-ink)] bg-white p-5 md:p-6">
                 <!-- Title -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -167,7 +173,7 @@ const requestDelete = () => {
                     <input
                         v-model="form.title"
                         type="text"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                        class="w-full border border-[var(--bi-ink)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-700/20"
                         :class="{ 'border-red-500': form.errors.title }"
                         placeholder="Yazı başlığı..."
                     />
@@ -184,7 +190,7 @@ const requestDelete = () => {
                         v-model="form.excerpt"
                         rows="3"
                         maxlength="500"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 resize-none"
+                        class="w-full resize-none border border-[var(--bi-ink)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-700/20"
                         :class="{ 'border-red-500': form.errors.excerpt }"
                         placeholder="Yazının kısa özeti..."
                     ></textarea>
@@ -214,11 +220,11 @@ const requestDelete = () => {
                         type="file"
                         accept="image/*"
                         @change="handleCoverChange"
-                        class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
+                        class="block w-full text-sm text-gray-600 file:mr-4 file:border file:border-red-700 file:bg-red-50 file:px-4 file:py-2 file:font-bold file:text-red-700 hover:file:bg-red-100"
                         :class="{ 'border-red-500': form.errors.cover_image }"
                     />
                     <p v-if="form.errors.cover_image" class="mt-1 text-sm text-red-600">{{ form.errors.cover_image }}</p>
-                    <img v-if="coverPreview" :src="coverPreview" class="mt-4 max-h-48 rounded-lg shadow-sm" />
+                    <img v-if="coverPreview" :src="coverPreview" class="mt-4 max-h-48 border-2 border-[var(--bi-ink)]" />
                 </div>
 
                 <!-- Categories -->
@@ -233,8 +239,8 @@ const requestDelete = () => {
                             :key="category.id"
                             class="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
                             :class="{ 
-                                'border-red-500 bg-red-50': form.categories.includes(category.id),
-                                'border-gray-300': !form.categories.includes(category.id),
+                                'border-red-700 bg-red-50': form.categories.includes(category.id),
+                                'border-[var(--bi-ink)]': !form.categories.includes(category.id),
                                 'border-red-500 ring-1 ring-red-500': form.errors.categories 
                             }"
                         >
@@ -263,8 +269,8 @@ const requestDelete = () => {
                             :key="tag.id"
                             class="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
                             :class="{ 
-                                'border-red-500 bg-red-50': form.tags.includes(tag.id),
-                                'border-gray-300': !form.tags.includes(tag.id)
+                                'border-red-700 bg-red-50': form.tags.includes(tag.id),
+                                'border-[var(--bi-ink)]': !form.tags.includes(tag.id)
                             }"
                         >
                             <input
@@ -280,12 +286,12 @@ const requestDelete = () => {
                 </div>
 
                 <!-- Actions -->
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-4 border-t">
+                <div class="flex flex-col items-stretch justify-between gap-4 border-t-2 border-[var(--bi-ink)] pt-5 sm:flex-row sm:items-center">
                     <div class="flex flex-col sm:flex-row gap-4">
                         <button
                             type="submit"
                             :disabled="form.processing || post.is_deletion_pending"
-                            class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                            class="flex items-center justify-center gap-2 border border-[var(--bi-ink)] bg-white px-6 py-3 font-bold text-[var(--bi-ink)] transition-colors hover:bg-[var(--bi-paper)] disabled:opacity-50"
                         >
                             <svg v-if="form.processing && action === 'draft'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -297,15 +303,13 @@ const requestDelete = () => {
                             type="button"
                             @click="submit(true)"
                             :disabled="form.processing || post.is_deletion_pending"
-                            class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                            class="flex items-center justify-center gap-2 bg-red-700 px-6 py-3 font-bold text-white transition-colors hover:bg-red-800 disabled:opacity-50"
                         >
                             <svg v-if="form.processing && action === 'publish'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
+                            <Icon v-else name="check" />
                             <span>{{ publishMode.requiresReview ? 'İncelemeye Gönder' : post.status === 'published' ? 'Güncelle' : 'Yayınla' }}</span>
                         </button>
                     </div>
@@ -315,7 +319,7 @@ const requestDelete = () => {
                         type="button"
                         @click="requestDelete"
                         :disabled="form.processing || post.is_deletion_pending"
-                        class="px-6 py-3 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                        class="flex items-center justify-center gap-2 border border-red-700 bg-red-50 px-6 py-3 font-bold text-red-800 transition-colors hover:bg-red-100 disabled:opacity-50"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

@@ -19,7 +19,10 @@ const emit = defineEmits(['update:modelValue']);
 const editor = useEditor({
     content: props.modelValue,
     extensions: [
-        StarterKit,
+        StarterKit.configure({
+            link: false,
+            underline: false,
+        }),
         Image,
         Link.configure({ openOnClick: false }),
         Placeholder.configure({ placeholder: 'Yazınızı buraya yazın...' }),
@@ -68,14 +71,14 @@ const isActive = (type, options = {}) => {
 </script>
 
 <template>
-    <div class="border border-gray-300 rounded-lg overflow-hidden">
+    <div class="overflow-hidden border-2 border-[var(--bi-ink)] bg-white">
         <!-- Toolbar -->
-        <div class="bg-gray-50 border-b border-gray-200 p-2 flex flex-wrap items-center gap-1">
+        <div class="flex flex-wrap items-center gap-1 border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper)] p-2">
             <button
                 type="button"
                 @click="toggleBold"
-                :class="{ 'bg-gray-200': isActive('bold') }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 font-bold text-sm transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('bold') }"
+                class="border border-transparent px-3 py-1.5 text-sm font-bold transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Bold"
             >
                 B
@@ -83,8 +86,8 @@ const isActive = (type, options = {}) => {
             <button
                 type="button"
                 @click="toggleItalic"
-                :class="{ 'bg-gray-200': isActive('italic') }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 italic text-sm transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('italic') }"
+                class="border border-transparent px-3 py-1.5 text-sm font-bold transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Italic"
             >
                 I
@@ -92,18 +95,18 @@ const isActive = (type, options = {}) => {
             <button
                 type="button"
                 @click="toggleUnderline"
-                :class="{ 'bg-gray-200': isActive('underline') }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 underline text-sm transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('underline') }"
+                class="border border-transparent px-3 py-1.5 text-sm font-bold underline transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Underline"
             >
                 U
             </button>
-            <div class="w-px h-6 bg-gray-300 mx-1"></div>
+            <div class="mx-1 h-6 w-px bg-[var(--bi-rule-soft)]"></div>
             <button
                 type="button"
                 @click="toggleHeading2"
-                :class="{ 'bg-gray-200': isActive('heading', { level: 2 }) }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm font-bold transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('heading', { level: 2 }) }"
+                class="border border-transparent px-3 py-1.5 text-sm font-bold transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Başlık 2"
             >
                 H2
@@ -111,18 +114,18 @@ const isActive = (type, options = {}) => {
             <button
                 type="button"
                 @click="toggleHeading3"
-                :class="{ 'bg-gray-200': isActive('heading', { level: 3 }) }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm font-bold transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('heading', { level: 3 }) }"
+                class="border border-transparent px-3 py-1.5 text-sm font-bold transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Başlık 3"
             >
                 H3
             </button>
-            <div class="w-px h-6 bg-gray-300 mx-1"></div>
+            <div class="mx-1 h-6 w-px bg-[var(--bi-rule-soft)]"></div>
             <button
                 type="button"
                 @click="toggleBulletList"
-                :class="{ 'bg-gray-200': isActive('bulletList') }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('bulletList') }"
+                class="border border-transparent px-3 py-1.5 text-sm transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Liste"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,8 +135,8 @@ const isActive = (type, options = {}) => {
             <button
                 type="button"
                 @click="toggleOrderedList"
-                :class="{ 'bg-gray-200': isActive('orderedList') }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('orderedList') }"
+                class="border border-transparent px-3 py-1.5 text-sm transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Numaralı Liste"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,20 +146,20 @@ const isActive = (type, options = {}) => {
             <button
                 type="button"
                 @click="toggleBlockquote"
-                :class="{ 'bg-gray-200': isActive('blockquote') }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('blockquote') }"
+                class="border border-transparent px-3 py-1.5 text-sm transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Alıntı"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                 </svg>
             </button>
-            <div class="w-px h-6 bg-gray-300 mx-1"></div>
+            <div class="mx-1 h-6 w-px bg-[var(--bi-rule-soft)]"></div>
             <button
                 type="button"
                 @click="addLink"
-                :class="{ 'bg-gray-200': isActive('link') }"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm transition-colors"
+                :class="{ 'bg-white border-[var(--bi-ink)]': isActive('link') }"
+                class="border border-transparent px-3 py-1.5 text-sm transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Link"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,18 +169,18 @@ const isActive = (type, options = {}) => {
             <button
                 type="button"
                 @click="addImage"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm transition-colors"
+                class="border border-transparent px-3 py-1.5 text-sm transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Görsel"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
             </button>
-            <div class="w-px h-6 bg-gray-300 mx-1"></div>
+            <div class="mx-1 h-6 w-px bg-[var(--bi-rule-soft)]"></div>
             <button
                 type="button"
                 @click="undo"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm transition-colors"
+                class="border border-transparent px-3 py-1.5 text-sm transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="Geri Al"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,7 +190,7 @@ const isActive = (type, options = {}) => {
             <button
                 type="button"
                 @click="redo"
-                class="px-3 py-1.5 rounded hover:bg-gray-200 text-sm transition-colors"
+                class="border border-transparent px-3 py-1.5 text-sm transition-colors hover:border-[var(--bi-ink)] hover:bg-white"
                 title="İleri Al"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
