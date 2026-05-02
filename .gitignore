@@ -57,3 +57,12 @@ chmod_storage.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+.claude/worktrees/
+.playwright-mcp/
+/output/
+/cpanel-login.png
+/remote-config-shared.php
+/CLAUDE_HANDOFF.md
+/.codex-instructions.md
+/.kimi-instructions.md
+/.qwen-instructions.md
