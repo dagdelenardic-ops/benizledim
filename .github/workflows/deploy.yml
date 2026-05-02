@@ -68,6 +68,51 @@ jobs:
       - name: 🏗️ Build frontend assets
         run: npm run build
 
+      - name: 🧹 Remove legacy debug endpoints (best effort)
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set +e
+          files=(
+            check_config.php
+            check_db.php
+            check_mb.php
+            check_sessions.php
+            chmod_storage.php
+            db_users.php
+            debug_laravel.php
+            extract.php
+            get_admin.php
+            list_users.php
+            mkdir_views.php
+            nuke_cache.php
+            read_env.php
+            read_log.php
+            read_pct.php
+            reset_admin.php
+            reset_gurur.php
+            run_artisan.php
+            run_author_report.php
+            run_cli.php
+            run_composer.php
+            save_hash.php
+            test_auth.php
+            test_hash.php
+            unzip.php
+            unzip_sys.php
+            update_pass.php
+          )
+
+          for file in "${files[@]}"; do
+            echo "Attempting delete: ${file}"
+            curl --silent --show-error --ftp-method nocwd \
+              --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
+              --url "ftp://${FTP_SERVER}/public_html/" \
+              --quote "DELE ${file}" >/dev/null || true
+          done
+
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -93,12 +138,6 @@ jobs:
             .claude/**
             .DS_Store
             debug_*.txt
-            check_*.php
-            read_*.php
-            reset_*.php
-            run_*.php
-            test_*.php
-            unzip*.php
             setup*.php
             seed_and_import.php
             public/_probe.php
