@@ -176,9 +176,10 @@ jobs:
           \.zip$
           EXCEOF
 
-          lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftp://${FTP_SERVER}" << 'LFTPEOF'
+          lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftps://${FTP_SERVER}" << 'LFTPEOF'
           set ftp:passive-mode true
-          set ftp:ssl-allow true
+          set ftp:ssl-force true
+          set ssl:verify-certificate false
           set net:timeout 60
           set net:max-retries 5
           set net:reconnect-interval-base 10
