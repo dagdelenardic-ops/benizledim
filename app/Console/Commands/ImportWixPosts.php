@@ -45,9 +45,16 @@ class ImportWixPosts extends Command
                 continue;
             }
 
-            // Yazar bul veya admin kullan
-            $user = User::where('email', $wixPost['author_email'] ?? '')->first()
-                ?? User::where('role', 'admin')->first();
+            // Yazar bul — eşleşme yoksa atla (admin fallback yok)
+            $user = User::where('email', $wixPost['author_email'] ?? '')->first();
+            if (!$user) {
+                $email = $wixPost['author_email'] ?? '(none)';
+                $title = $wixPost['title'] ?? '(no title)';
+                $this->warn("Skipping post '{$title}' — author '{$email}' not found. Run wix:apply-author-report after import to align authors.");
+                $skipped++;
+                $bar->advance();
+                continue;
+            }
 
             // Okuma süresi hesapla
             $wordCount = str_word_count(strip_tags($wixPost['content'] ?? ''));

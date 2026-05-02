@@ -8,6 +8,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+/**
+ * @deprecated Reads corrupted wix-posts.json. Use wix:apply-author-report instead.
+ */
 class FixAuthorMapping extends Command
 {
     /**
@@ -38,6 +41,9 @@ class FixAuthorMapping extends Command
      */
     public function handle()
     {
+        $this->error('Deprecated. This command applied corrupted database/data/wix-posts.json data (Wix admin export bug) and incorrectly assigned ~95% of posts to the admin user. Use `php artisan wix:apply-author-report output/spreadsheet/wix-author-resolution.csv` instead.');
+        return self::FAILURE;
+
         $jsonPath = database_path('data/wix-posts.json');
 
         if (!file_exists($jsonPath)) {
