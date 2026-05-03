@@ -163,7 +163,7 @@ const subscribe = () => {
                     <div v-if="newsletterMessage" class="mb-4 border border-green-200 bg-green-100 px-4 py-3 text-green-700">
                         {{ newsletterMessage }}
                     </div>
-                    <form @submit.prevent="subscribe" class="flex flex-col gap-3 sm:flex-row">
+                    <form @submit.prevent="subscribe" class="flex flex-col gap-3 sm:flex-row" novalidate>
                         <input
                             v-model="form.email"
                             type="email"

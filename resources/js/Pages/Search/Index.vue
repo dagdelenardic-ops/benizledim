@@ -71,7 +71,7 @@ const resultCount = () => {
             <!-- Results -->
             <div class="max-w-7xl mx-auto px-4 py-8">
                 <!-- Results Header -->
-                <div v-if="query" class="mb-6">
+                <div v-if="query && query.length >= 2" class="mb-6">
                     <h2 class="text-xl font-semibold text-gray-900">
                         "{{ query }}" için arama sonuçları
                         <span v-if="resultCount() > 0" class="text-gray-500 font-normal">
@@ -94,7 +94,7 @@ const resultCount = () => {
                     <p class="text-gray-500 max-w-md mx-auto mb-6">
                         "{{ query }}" aramanızla eşleşen yazı bulunamadı. Farklı bir kelime deneyin veya yazımı kontrol edin.
                     </p>
-                    <Link
+                    <a
                         href="/yazilar"
                         class="inline-flex items-center gap-2 text-red-600 font-medium hover:text-red-700"
                     >
@@ -102,7 +102,17 @@ const resultCount = () => {
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
-                    </Link>
+                    </a>
+                </div>
+
+                <!-- Empty State (Query < 2) -->
+                <div v-else-if="query && query.length < 2" class="text-center py-16">
+                    <svg class="w-20 h-20 mx-auto text-yellow-400 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p class="text-gray-500 text-lg">
+                        Arama yapmak için en az 2 karakter girmelisiniz
+                    </p>
                 </div>
 
                 <!-- Empty State (No Query) -->

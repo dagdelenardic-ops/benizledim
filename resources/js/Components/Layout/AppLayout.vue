@@ -275,7 +275,7 @@ export default {
                         </div>
                     </div>
                     
-                    <form @submit.prevent="subscribe" class="flex gap-2">
+                    <form @submit.prevent="subscribe" class="flex gap-2" novalidate>
                         <input
                             v-model="form.email"
                             type="email"
