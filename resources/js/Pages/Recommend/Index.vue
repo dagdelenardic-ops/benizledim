@@ -1,5 +1,5 @@
 <script setup>
-import { ref, nextTick, onMounted } from 'vue';
+import { ref, nextTick, onMounted, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 import axios from 'axios';
@@ -23,6 +23,16 @@ const scrollToBottom = async () => {
     }
 };
 
+const renderMarkdown = (text) => {
+    if (!text) return '';
+    return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/\[ID:\d+\]\s*/g, '')
+        .replace(/^- (.+)$/gm, '<span class="block pl-4 border-l-2 border-[var(--bi-red)] my-1">$1</span>')
+        .replace(/\n/g, '<br>');
+};
+
 const sendMessage = async () => {
     const text = input.value.trim();
     if (!text || isLoading.value) return;
@@ -41,7 +51,6 @@ const sendMessage = async () => {
 
     try {
         const response = await axios.post('/ne-izlesem/chat', { message: text });
-
         messages.value.push(response.data.message);
         recommendedPosts.value = response.data.recommended_posts || [];
     } catch (err) {
@@ -57,10 +66,12 @@ const sendMessage = async () => {
 };
 
 const quickPrompts = [
-    'Bugün kısa ve hafif bir şey izlemek istiyorum',
-    'Düşündürücü bir belgesel önerir misin?',
-    'Gerilimli bir dizi arıyorum',
-    'Ailecek izlenecek bir film?',
+    { icon: '🎭', text: 'Düşündürücü bir film öner' },
+    { icon: '🔥', text: 'Gerilimli bir dizi arıyorum' },
+    { icon: '👨‍👩‍👧', text: 'Ailecek izlenecek bir film?' },
+    { icon: '⏱️', text: 'Kısa ve hafif bir şey izlemek istiyorum' },
+    { icon: '🎬', text: 'Son dönemin en iyi filmleri?' },
+    { icon: '📺', text: 'Netflix\'te ne izlesem?' },
 ];
 
 const sendQuickPrompt = (prompt) => {
@@ -73,116 +84,484 @@ onMounted(scrollToBottom);
 
 <template>
     <AppLayout title="Ne İzlesem?" description="Ruh haline göre film ve dizi önerisi">
-        <div class="min-h-screen bg-gray-50 flex flex-col">
-            <!-- Header -->
-            <div class="bg-white border-b border-gray-200">
-                <div class="max-w-3xl mx-auto px-4 py-6">
-                    <h1 class="text-2xl font-bold text-gray-900">Ne İzlesem?</h1>
-                    <p class="text-gray-500 text-sm mt-1">Ruh haline ve zamanına göre kişiselleştirilmiş öneriler</p>
+        <div class="ne-izlesem">
+            <!-- Hero Header -->
+            <header class="ne-izlesem__header">
+                <div class="ne-izlesem__header-inner">
+                    <div class="ne-izlesem__kicker">SİNEMA REHBERİ</div>
+                    <h1 class="ne-izlesem__title">Ne İzlesem?</h1>
+                    <p class="ne-izlesem__subtitle">
+                        Ruh haline, zamanına ve tercihlerine göre sana özel film &amp; dizi önerileri.
+                        <span class="ne-izlesem__badge">Gemini AI</span>
+                    </p>
                 </div>
-            </div>
+            </header>
 
-            <!-- Chat Area -->
-            <div class="flex-1 max-w-3xl mx-auto w-full px-4 py-6 flex flex-col">
-                <div ref="chatContainer" class="flex-1 overflow-y-auto space-y-4 mb-4" style="max-height: calc(100vh - 320px)">
-                    <!-- Empty State -->
-                    <div v-if="messages.length === 0" class="text-center py-12">
-                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                            </svg>
-                        </div>
-                        <h2 class="text-lg font-semibold text-gray-800 mb-2">Merhaba! Ne izlemek istersin?</h2>
-                        <p class="text-sm text-gray-500 mb-6">Ruh halini, zamanını veya tercihlerini yaz, sana özel öneriler sunayım.</p>
-
-                        <!-- Quick Prompts -->
-                        <div class="flex flex-wrap justify-center gap-2">
-                            <button
-                                v-for="prompt in quickPrompts"
-                                :key="prompt"
-                                @click="sendQuickPrompt(prompt)"
-                                class="px-4 py-2 bg-white border border-gray-200 text-sm text-gray-700 rounded-full hover:bg-gray-50 hover:border-gray-300 transition-colors"
-                            >
-                                {{ prompt }}
-                            </button>
-                        </div>
-                    </div>
-
+            <!-- Chat Container -->
+            <div class="ne-izlesem__body">
+                <div class="ne-izlesem__chat-wrapper">
                     <!-- Messages -->
-                    <div
-                        v-for="msg in messages"
-                        :key="msg.id"
-                        class="flex"
-                        :class="msg.role === 'user' ? 'justify-end' : 'justify-start'"
-                    >
+                    <div ref="chatContainer" class="ne-izlesem__messages">
+                        <!-- Empty State -->
+                        <div v-if="messages.length === 0" class="ne-izlesem__empty">
+                            <div class="ne-izlesem__empty-icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="4" y="8" width="40" height="32" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <rect x="8" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                    <rect x="20" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                    <rect x="32" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                    <rect x="8" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                    <rect x="20" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                    <rect x="32" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                    <rect x="8" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
+                                    <rect x="20" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
+                                    <rect x="32" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
+                                </svg>
+                            </div>
+                            <h2 class="ne-izlesem__empty-title">Merhaba, sinema sever!</h2>
+                            <p class="ne-izlesem__empty-desc">
+                                Ruh halini ya da ne tarz bir şey izlemek istediğini yaz, sana en uygun filmleri ve dizileri önereyim.
+                            </p>
+
+                            <!-- Quick Prompts -->
+                            <div class="ne-izlesem__prompts">
+                                <button
+                                    v-for="prompt in quickPrompts"
+                                    :key="prompt.text"
+                                    @click="sendQuickPrompt(prompt.text)"
+                                    class="ne-izlesem__prompt-btn"
+                                >
+                                    <span class="ne-izlesem__prompt-icon">{{ prompt.icon }}</span>
+                                    {{ prompt.text }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Message Bubbles -->
                         <div
-                            class="max-w-[80%] rounded-2xl px-4 py-3 text-sm"
-                            :class="msg.role === 'user'
-                                ? 'bg-red-600 text-white rounded-br-sm'
-                                : 'bg-white border border-gray-200 text-gray-800 rounded-bl-sm'"
+                            v-for="msg in messages"
+                            :key="msg.id"
+                            class="ne-izlesem__msg"
+                            :class="msg.role === 'user' ? 'ne-izlesem__msg--user' : 'ne-izlesem__msg--ai'"
                         >
-                            <p class="whitespace-pre-line">{{ msg.content }}</p>
+                            <div v-if="msg.role !== 'user'" class="ne-izlesem__msg-avatar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M15.91 11.72a.5.5 0 010 .56l-1.2 2.08a.5.5 0 01-.43.25H12.6a.5.5 0 01-.44-.25l-1.2-2.08a.5.5 0 010-.56l1.2-2.08a.5.5 0 01.44-.25h1.68a.5.5 0 01.43.25l1.2 2.08z"/>
+                                    <circle cx="12" cy="12" r="10"/>
+                                </svg>
+                            </div>
+                            <div class="ne-izlesem__msg-bubble">
+                                <div v-if="msg.role === 'user'" class="ne-izlesem__msg-text">{{ msg.content }}</div>
+                                <div v-else class="ne-izlesem__msg-text" v-html="renderMarkdown(msg.content)"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Loading indicator -->
-                    <div v-if="isLoading" class="flex justify-start">
-                        <div class="bg-white border border-gray-200 rounded-2xl rounded-bl-sm px-4 py-3">
-                            <div class="flex gap-1">
-                                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
-                                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
-                                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+                        <!-- Loading -->
+                        <div v-if="isLoading" class="ne-izlesem__msg ne-izlesem__msg--ai">
+                            <div class="ne-izlesem__msg-avatar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M15.91 11.72a.5.5 0 010 .56l-1.2 2.08a.5.5 0 01-.43.25H12.6a.5.5 0 01-.44-.25l-1.2-2.08a.5.5 0 010-.56l1.2-2.08a.5.5 0 01.44-.25h1.68a.5.5 0 01.43.25l1.2 2.08z"/>
+                                    <circle cx="12" cy="12" r="10"/>
+                                </svg>
+                            </div>
+                            <div class="ne-izlesem__msg-bubble">
+                                <div class="ne-izlesem__typing">
+                                    <span></span><span></span><span></span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Recommended Posts -->
-                <div v-if="recommendedPosts.length > 0" class="mb-4">
-                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Önerilen Yazılar</h3>
-                    <div class="flex gap-3 overflow-x-auto pb-2">
-                        <Link
-                            v-for="post in recommendedPosts"
-                            :key="post.id"
-                            :href="`/yazi/${post.slug}`"
-                            class="flex-shrink-0 w-48 bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
-                        >
-                            <img v-if="post.cover_image" :src="post.cover_image" class="w-full h-28 object-cover" />
-                            <div class="p-3">
-                                <h4 class="text-sm font-semibold text-gray-900 line-clamp-2">{{ post.title }}</h4>
-                                <p class="text-xs text-gray-500 mt-1">{{ post.user?.name }}</p>
-                            </div>
-                        </Link>
+                    <!-- Recommended Posts -->
+                    <div v-if="recommendedPosts.length > 0" class="ne-izlesem__recs">
+                        <h3 class="ne-izlesem__recs-title">ÖNERİLEN YAZILAR</h3>
+                        <div class="ne-izlesem__recs-grid">
+                            <Link
+                                v-for="post in recommendedPosts"
+                                :key="post.id"
+                                :href="`/yazi/${post.slug}`"
+                                class="ne-izlesem__rec-card"
+                            >
+                                <img v-if="post.cover_image" :src="post.cover_image" :alt="post.title" class="ne-izlesem__rec-img" />
+                                <div class="ne-izlesem__rec-body">
+                                    <h4 class="ne-izlesem__rec-title">{{ post.title }}</h4>
+                                    <span class="ne-izlesem__rec-author">{{ post.user?.name }}</span>
+                                </div>
+                            </Link>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Error -->
-                <div v-if="error" class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
-                    {{ error }}
-                </div>
+                    <!-- Error -->
+                    <div v-if="error" class="ne-izlesem__error">
+                        {{ error }}
+                    </div>
 
-                <!-- Input -->
-                <form @submit.prevent="sendMessage" class="flex gap-2">
-                    <input
-                        v-model="input"
-                        type="text"
-                        placeholder="Ruh halini veya ne izlemek istediğini yaz..."
-                        maxlength="500"
-                        :disabled="isLoading"
-                        class="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-sm"
-                        @keydown.enter.prevent="sendMessage"
-                    />
-                    <button
-                        type="submit"
-                        :disabled="isLoading || !input.trim()"
-                        class="px-6 py-3 bg-red-600 text-white font-medium rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
-                    </button>
-                </form>
+                    <!-- Input -->
+                    <form @submit.prevent="sendMessage" class="ne-izlesem__form">
+                        <input
+                            v-model="input"
+                            type="text"
+                            placeholder="Ruh halini veya ne izlemek istediğini yaz..."
+                            maxlength="500"
+                            :disabled="isLoading"
+                            class="ne-izlesem__input"
+                            @keydown.enter.prevent="sendMessage"
+                        />
+                        <button
+                            type="submit"
+                            :disabled="isLoading || !input.trim()"
+                            class="ne-izlesem__send"
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                            <span>Gönder</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </AppLayout>
 </template>
+
+<style scoped>
+.ne-izlesem {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Header ── */
+.ne-izlesem__header {
+    border-bottom: 3px solid var(--bi-ink);
+    background: var(--bi-paper);
+}
+.ne-izlesem__header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 1.5rem;
+}
+.ne-izlesem__kicker {
+    font-family: var(--bi-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--bi-red);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+.ne-izlesem__title {
+    font-family: var(--bi-serif);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    color: var(--bi-ink);
+    line-height: 1.1;
+    margin: 0;
+}
+.ne-izlesem__subtitle {
+    font-family: var(--bi-mono);
+    font-size: 0.8rem;
+    color: var(--bi-muted);
+    margin-top: 0.5rem;
+    line-height: 1.5;
+}
+.ne-izlesem__badge {
+    display: inline-block;
+    background: var(--bi-ink);
+    color: var(--bi-paper);
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    letter-spacing: 0.1em;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
+/* ── Body ── */
+.ne-izlesem__body {
+    flex: 1;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+.ne-izlesem__chat-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Messages ── */
+.ne-izlesem__messages {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 1rem;
+    max-height: calc(100vh - 380px);
+    min-height: 300px;
+}
+
+/* ── Empty State ── */
+.ne-izlesem__empty {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+.ne-izlesem__empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    color: var(--bi-ink);
+    opacity: 0.6;
+}
+.ne-izlesem__empty-icon svg { width: 100%; height: 100%; }
+.ne-izlesem__empty-title {
+    font-family: var(--bi-serif);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--bi-ink);
+    margin-bottom: 0.5rem;
+}
+.ne-izlesem__empty-desc {
+    font-family: var(--bi-mono);
+    font-size: 0.8rem;
+    color: var(--bi-muted);
+    max-width: 400px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+/* ── Quick Prompts ── */
+.ne-izlesem__prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+.ne-izlesem__prompt-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--bi-ink);
+    background: var(--bi-paper);
+    color: var(--bi-ink);
+    font-family: var(--bi-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-height: 44px;
+}
+.ne-izlesem__prompt-btn:hover {
+    background: var(--bi-ink);
+    color: var(--bi-paper);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--bi-ink);
+}
+.ne-izlesem__prompt-icon { font-size: 1rem; }
+
+/* ── Message Bubbles ── */
+.ne-izlesem__msg {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    animation: msgIn 0.3s ease;
+}
+@keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.ne-izlesem__msg--user {
+    flex-direction: row-reverse;
+}
+.ne-izlesem__msg-avatar {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 2px solid var(--bi-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bi-paper);
+    margin-top: 2px;
+}
+.ne-izlesem__msg-avatar svg { width: 18px; height: 18px; color: var(--bi-ink); }
+
+.ne-izlesem__msg-bubble {
+    max-width: 75%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+.ne-izlesem__msg--user .ne-izlesem__msg-bubble {
+    background: var(--bi-ink);
+    color: var(--bi-paper);
+    border: 2px solid var(--bi-ink);
+    font-family: var(--bi-mono);
+    font-size: 0.8rem;
+}
+.ne-izlesem__msg--ai .ne-izlesem__msg-bubble {
+    background: white;
+    color: var(--bi-ink);
+    border: 2px solid var(--bi-ink);
+    font-family: var(--bi-serif);
+}
+.ne-izlesem__msg-text :deep(strong) {
+    font-weight: 800;
+    color: var(--bi-red);
+}
+.ne-izlesem__msg-text :deep(em) {
+    font-style: italic;
+    color: var(--bi-muted);
+}
+
+/* ── Typing Indicator ── */
+.ne-izlesem__typing {
+    display: flex;
+    gap: 4px;
+    padding: 4px 0;
+}
+.ne-izlesem__typing span {
+    width: 6px;
+    height: 6px;
+    background: var(--bi-ink);
+    border-radius: 50%;
+    animation: typingBounce 1.2s infinite;
+}
+.ne-izlesem__typing span:nth-child(2) { animation-delay: 0.15s; }
+.ne-izlesem__typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+    30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ── Recommended Posts ── */
+.ne-izlesem__recs {
+    border-top: 2px solid var(--bi-ink);
+    padding-top: 1rem;
+    margin-bottom: 1rem;
+}
+.ne-izlesem__recs-title {
+    font-family: var(--bi-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--bi-red);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+.ne-izlesem__recs-grid {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+.ne-izlesem__rec-card {
+    flex-shrink: 0;
+    width: 200px;
+    border: 2px solid var(--bi-ink);
+    background: white;
+    overflow: hidden;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: inherit;
+}
+.ne-izlesem__rec-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--bi-ink);
+}
+.ne-izlesem__rec-img {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    border-bottom: 2px solid var(--bi-ink);
+}
+.ne-izlesem__rec-body { padding: 0.75rem; }
+.ne-izlesem__rec-title {
+    font-family: var(--bi-serif);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--bi-ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.ne-izlesem__rec-author {
+    font-family: var(--bi-mono);
+    font-size: 0.65rem;
+    color: var(--bi-muted);
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* ── Error ── */
+.ne-izlesem__error {
+    border: 2px solid var(--bi-red);
+    background: #fef2f2;
+    color: var(--bi-red-dark);
+    padding: 0.75rem 1rem;
+    font-family: var(--bi-mono);
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+}
+
+/* ── Input Form ── */
+.ne-izlesem__form {
+    display: flex;
+    gap: 0.5rem;
+    border-top: 2px solid var(--bi-ink);
+    padding-top: 1rem;
+}
+.ne-izlesem__input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--bi-ink);
+    background: white;
+    font-family: var(--bi-mono);
+    font-size: 0.85rem;
+    color: var(--bi-ink);
+    outline: none;
+    transition: box-shadow 0.15s;
+    min-height: 44px;
+}
+.ne-izlesem__input::placeholder {
+    color: var(--bi-muted);
+    font-size: 0.8rem;
+}
+.ne-izlesem__input:focus {
+    box-shadow: 3px 3px 0 var(--bi-ink);
+}
+.ne-izlesem__send {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--bi-red);
+    color: white;
+    border: 2px solid var(--bi-ink);
+    font-family: var(--bi-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-height: 44px;
+}
+.ne-izlesem__send:hover:not(:disabled) {
+    background: var(--bi-red-dark);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--bi-ink);
+}
+.ne-izlesem__send:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.ne-izlesem__send svg { width: 16px; height: 16px; }
+.ne-izlesem__send span { display: none; }
+
+@media (min-width: 640px) {
+    .ne-izlesem__send span { display: inline; }
+}
+</style>
