@@ -39,6 +39,10 @@ const form = useForm({
     excerpt: props.post.excerpt || '',
     content: props.post.content,
     cover_image: null,
+    cover_image_focus_x: props.post.cover_image_focus_x ?? 50,
+    cover_image_focus_y: props.post.cover_image_focus_y ?? 50,
+    cover_image_mobile_focus_x: props.post.cover_image_mobile_focus_x ?? props.post.cover_image_focus_x ?? 50,
+    cover_image_mobile_focus_y: props.post.cover_image_mobile_focus_y ?? props.post.cover_image_focus_y ?? 50,
     status: props.post.status,
     scheduled_at: props.post.scheduled_at || '',
     reading_time_minutes: props.post.reading_time_minutes || 1,
@@ -59,6 +63,10 @@ const editDraftPayload = computed(() => ({
     excerpt: form.excerpt,
     content: form.content,
     status: form.status,
+    cover_image_focus_x: form.cover_image_focus_x,
+    cover_image_focus_y: form.cover_image_focus_y,
+    cover_image_mobile_focus_x: form.cover_image_mobile_focus_x,
+    cover_image_mobile_focus_y: form.cover_image_mobile_focus_y,
     scheduled_at: form.scheduled_at,
     reading_time_minutes: form.reading_time_minutes,
     user_id: form.user_id,
@@ -78,6 +86,10 @@ const {
         excerpt: props.post.excerpt || '',
         content: props.post.content,
         status: props.post.status,
+        cover_image_focus_x: props.post.cover_image_focus_x ?? 50,
+        cover_image_focus_y: props.post.cover_image_focus_y ?? 50,
+        cover_image_mobile_focus_x: props.post.cover_image_mobile_focus_x ?? props.post.cover_image_focus_x ?? 50,
+        cover_image_mobile_focus_y: props.post.cover_image_mobile_focus_y ?? props.post.cover_image_focus_y ?? 50,
         scheduled_at: props.post.scheduled_at || '',
         reading_time_minutes: props.post.reading_time_minutes || 1,
         user_id: props.post.user_id,
@@ -107,6 +119,10 @@ const applyDraft = (draft) => {
     form.excerpt = draft.excerpt ?? '';
     form.content = draft.content ?? props.post.content;
     form.status = draft.status ?? props.post.status;
+    form.cover_image_focus_x = draft.cover_image_focus_x ?? props.post.cover_image_focus_x ?? 50;
+    form.cover_image_focus_y = draft.cover_image_focus_y ?? props.post.cover_image_focus_y ?? 50;
+    form.cover_image_mobile_focus_x = draft.cover_image_mobile_focus_x ?? props.post.cover_image_mobile_focus_x ?? props.post.cover_image_focus_x ?? 50;
+    form.cover_image_mobile_focus_y = draft.cover_image_mobile_focus_y ?? props.post.cover_image_mobile_focus_y ?? props.post.cover_image_focus_y ?? 50;
     form.scheduled_at = draft.scheduled_at ?? '';
     form.reading_time_minutes = draft.reading_time_minutes ?? props.post.reading_time_minutes ?? 1;
     form.user_id = draft.user_id ?? props.post.user_id;
@@ -120,6 +136,12 @@ const discardFormDraft = () => {
     clearFormDraft();
     localStorage.removeItem(draftKey.value);
 };
+
+const coverPositionStyle = (mode = 'desktop') => ({
+    objectPosition: mode === 'mobile'
+        ? `${form.cover_image_mobile_focus_x}% ${form.cover_image_mobile_focus_y}%`
+        : `${form.cover_image_focus_x}% ${form.cover_image_focus_y}%`,
+});
 
 const submit = (publish = false) => {
     action.value = form.scheduled_at ? 'schedule' : publish ? 'publish' : 'draft';
@@ -323,7 +345,49 @@ const requestDelete = () => {
                         :class="{ 'border-red-500': form.errors.cover_image }"
                     />
                     <p v-if="form.errors.cover_image" class="mt-1 text-sm text-red-600">{{ form.errors.cover_image }}</p>
-                    <img v-if="coverPreview" :src="coverPreview" class="mt-4 max-h-48 border-2 border-[var(--bi-ink)]" />
+
+                    <div class="mt-4 space-y-4 border border-[var(--bi-ink)] bg-[var(--bi-paper)] p-4">
+                        <div>
+                            <div class="text-sm font-bold text-[var(--bi-ink)]">Anasayfa Kırpma ve Odak</div>
+                            <p class="mt-1 text-xs text-[var(--bi-muted)]">
+                                Web ve mobil manşet kırpması ayrı kaydedilir. Daha basık hero için odak noktasını buradan ayarla.
+                            </p>
+                        </div>
+
+                        <div class="grid gap-4 lg:grid-cols-2">
+                            <div class="space-y-3">
+                                <div class="text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">Web</div>
+                                <div class="overflow-hidden border border-[var(--bi-ink)] bg-black">
+                                    <img v-if="coverPreview" :src="coverPreview" class="h-[112px] w-full object-cover opacity-95" :style="coverPositionStyle('desktop')" />
+                                    <div v-else class="grid h-[112px] place-items-center text-xs font-bold uppercase tracking-[0.08em] text-white/60 bi-mono">Önizleme</div>
+                                </div>
+                                <label class="block text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">
+                                    Yatay: {{ form.cover_image_focus_x }}%
+                                    <input v-model="form.cover_image_focus_x" type="range" min="0" max="100" class="mt-2 w-full" />
+                                </label>
+                                <label class="block text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">
+                                    Dikey: {{ form.cover_image_focus_y }}%
+                                    <input v-model="form.cover_image_focus_y" type="range" min="0" max="100" class="mt-2 w-full" />
+                                </label>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">Mobil</div>
+                                <div class="mx-auto w-[180px] overflow-hidden border border-[var(--bi-ink)] bg-black">
+                                    <img v-if="coverPreview" :src="coverPreview" class="h-[112px] w-full object-cover opacity-95" :style="coverPositionStyle('mobile')" />
+                                    <div v-else class="grid h-[112px] place-items-center text-xs font-bold uppercase tracking-[0.08em] text-white/60 bi-mono">Önizleme</div>
+                                </div>
+                                <label class="block text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">
+                                    Yatay: {{ form.cover_image_mobile_focus_x }}%
+                                    <input v-model="form.cover_image_mobile_focus_x" type="range" min="0" max="100" class="mt-2 w-full" />
+                                </label>
+                                <label class="block text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">
+                                    Dikey: {{ form.cover_image_mobile_focus_y }}%
+                                    <input v-model="form.cover_image_mobile_focus_y" type="range" min="0" max="100" class="mt-2 w-full" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Categories -->
