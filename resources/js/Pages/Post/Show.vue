@@ -39,6 +39,7 @@ const { formatDate, timeAgo } = useDate();
 const showLoginModal = ref(false);
 const readingProgress = ref(0);
 const articleBody = ref(null);
+let readingProgressFrame = null;
 const coverImage = computed(() => buildResponsiveImage(props.post.cover_image, {
     widths: [768, 1280, 1600],
     sizes: '100vw',
@@ -170,14 +171,19 @@ const updateReadingProgress = () => {
 };
 
 onMounted(() => {
-    updateReadingProgress();
-    window.addEventListener('scroll', updateReadingProgress, { passive: true });
-    window.addEventListener('resize', updateReadingProgress);
+    const syncReadingProgress = () => {
+        updateReadingProgress();
+        readingProgressFrame = window.requestAnimationFrame(syncReadingProgress);
+    };
+
+    syncReadingProgress();
 });
 
 onBeforeUnmount(() => {
-    window.removeEventListener('scroll', updateReadingProgress);
-    window.removeEventListener('resize', updateReadingProgress);
+    if (readingProgressFrame !== null) {
+        window.cancelAnimationFrame(readingProgressFrame);
+        readingProgressFrame = null;
+    }
 });
 </script>
 
