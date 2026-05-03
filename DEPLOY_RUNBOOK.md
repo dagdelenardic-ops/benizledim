@@ -41,6 +41,23 @@ php artisan event:cache
 
 Do not run `route:cache` until closure routes are removed.
 
+## Optional Inertia SSR
+The repository now builds both client and SSR bundles with:
+
+```bash
+npm run build
+```
+
+This produces the server bundle under `bootstrap/ssr/`.
+
+If the host supports a persistent Node.js process, start SSR with:
+
+```bash
+php artisan inertia:start-ssr
+```
+
+On shared hosting where a long-running Node.js process is not available, the app safely falls back to client rendering while keeping the SSR bundle ready for compatible environments.
+
 ## Production Domain Baseline
 Use these production values when the canonical host is `https://benizledim.com`:
 

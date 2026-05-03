@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 import RelatedPosts from '../../Components/Post/RelatedPosts.vue';
@@ -37,6 +37,8 @@ const props = defineProps({
 
 const { formatDate, timeAgo } = useDate();
 const showLoginModal = ref(false);
+const readingProgress = ref(0);
+const articleBody = ref(null);
 const coverImage = computed(() => buildResponsiveImage(props.post.cover_image, {
     widths: [768, 1280, 1600],
     sizes: '100vw',
@@ -45,12 +47,72 @@ const coverImage = computed(() => buildResponsiveImage(props.post.cover_image, {
 
 const canonicalUrl = computed(() => `https://benizledim.com/yazi/${props.post.slug}`);
 
-const articleJsonLd = computed(() => JSON.stringify({
+const toAbsoluteUrl = (value) => {
+    if (!value) return 'https://benizledim.com/images/og-default.png';
+    return value.startsWith('http') ? value : `https://benizledim.com${value}`;
+};
+
+const stripHtml = (value = '') => value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+const slugifyHeading = (value = '') => value
+    .toLocaleLowerCase('tr-TR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+
+const analyzeContent = (html = '') => {
+    const seen = new Map();
+    const items = [];
+
+    const processedHtml = html.replace(/<(h2|h3)([^>]*)>(.*?)<\/\1>/gis, (match, tag, attrs = '', inner = '') => {
+        const text = stripHtml(inner);
+
+        if (!text) {
+            return match;
+        }
+
+        const baseId = slugifyHeading(text) || `section-${items.length + 1}`;
+        const seenCount = seen.get(baseId) || 0;
+        seen.set(baseId, seenCount + 1);
+        const id = seenCount ? `${baseId}-${seenCount + 1}` : baseId;
+        const cleanedAttrs = attrs.replace(/\sid=(['"]).*?\1/i, '');
+
+        items.push({
+            id,
+            text,
+            level: tag.toLowerCase(),
+        });
+
+        return `<${tag}${cleanedAttrs} id="${id}">${inner}</${tag}>`;
+    });
+
+    const wordCount = stripHtml(html).split(/\s+/).filter(Boolean).length;
+
+    return {
+        html: processedHtml,
+        items,
+        wordCount,
+    };
+};
+
+const contentAnalysis = computed(() => analyzeContent(props.post.content || ''));
+const processedContent = computed(() => contentAnalysis.value.html);
+const tocItems = computed(() => contentAnalysis.value.items);
+const shouldShowToc = computed(() => {
+    const isStandardPost = !props.post.format || props.post.format === 'standard';
+
+    return isStandardPost && contentAnalysis.value.wordCount > 1500 && tocItems.value.length >= 3;
+});
+
+const articleSchema = computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'Article',
     'headline': props.post.title,
     'description': props.post.excerpt || '',
-    'image': props.post.cover_image || 'https://benizledim.com/images/og-default.png',
+    'image': [toAbsoluteUrl(props.post.cover_image)],
     'datePublished': props.post.published_at,
     'dateModified': props.post.updated_at || props.post.published_at,
     'author': {
@@ -68,6 +130,12 @@ const articleJsonLd = computed(() => JSON.stringify({
     },
 }));
 
+const articleMeta = computed(() => ([
+    { property: 'article:published_time', content: props.post.published_at || '' },
+    { property: 'article:modified_time', content: props.post.updated_at || props.post.published_at || '' },
+    { property: 'article:author', content: props.post.user?.name || 'Ben İzledim' },
+].filter((item) => item.content)));
+
 const formatReadingTime = (minutes) => {
     if (!minutes) return '2 dk okuma';
     return `${minutes} dk okuma`;
@@ -80,6 +148,39 @@ const openLoginModal = () => {
 const closeLoginModal = () => {
     showLoginModal.value = false;
 };
+
+const updateReadingProgress = () => {
+    if (!articleBody.value || typeof window === 'undefined') {
+        return;
+    }
+
+    const top = window.scrollY + articleBody.value.getBoundingClientRect().top;
+    const start = top - 140;
+    const end = start + articleBody.value.offsetHeight - window.innerHeight * 0.55;
+
+    if (window.scrollY <= start) {
+        readingProgress.value = 0;
+        return;
+    }
+
+    if (window.scrollY >= end) {
+        readingProgress.value = 1;
+        return;
+    }
+
+    readingProgress.value = (window.scrollY - start) / Math.max(end - start, 1);
+};
+
+onMounted(() => {
+    updateReadingProgress();
+    window.addEventListener('scroll', updateReadingProgress, { passive: true });
+    window.addEventListener('resize', updateReadingProgress);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', updateReadingProgress);
+    window.removeEventListener('resize', updateReadingProgress);
+});
 </script>
 
 <template>
@@ -88,9 +189,13 @@ const closeLoginModal = () => {
         :description="post.excerpt || 'Film, Dizi ve Belgesel eleştirileri - Ben İzledim'"
         :og-image="post.cover_image || '/images/og-default.png'"
         :canonical-url="canonicalUrl"
+        og-type="article"
+        :schema-nodes="[articleSchema]"
+        :extra-meta="articleMeta"
     >
-        <!-- Article JSON-LD -->
-        <component :is="'script'" type="application/ld+json" v-html="articleJsonLd" />
+        <div class="fixed inset-x-0 top-0 z-[80] h-1 bg-black/5">
+            <div class="h-full origin-left bg-red-600 transition-transform duration-150 ease-out" :style="{ transform: `scaleX(${readingProgress})` }"></div>
+        </div>
 
         <article class="min-h-screen bg-white">
             <!-- Cover Image -->
@@ -118,7 +223,7 @@ const closeLoginModal = () => {
             </div>
 
             <!-- Content Container -->
-            <div class="max-w-4xl mx-auto px-4 -mt-32 relative z-10">
+            <div class="max-w-6xl mx-auto px-4 -mt-32 relative z-10">
                 <div class="bg-white rounded-t-2xl md:rounded-2xl shadow-sm p-6 md:p-10">
                     <!-- Categories -->
                     <div class="flex flex-wrap gap-2 mb-4">
@@ -202,13 +307,34 @@ const closeLoginModal = () => {
                     />
 
                     <!-- Excerpt -->
-                    <div v-if="post.excerpt" class="text-xl text-gray-600 italic mb-8 leading-relaxed">
+                    <div v-if="post.excerpt" class="mx-auto mb-8 max-w-[750px] text-xl leading-relaxed text-gray-600 italic">
                         {{ post.excerpt }}
                     </div>
 
                     <!-- Content: Standard Format -->
-                    <div v-if="!post.format || post.format === 'standard'" class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:hover:text-red-700">
-                        <div v-html="post.content"></div>
+                    <div v-if="!post.format || post.format === 'standard'" class="lg:grid lg:grid-cols-[minmax(0,750px)_240px] lg:items-start lg:gap-10">
+                        <div ref="articleBody" class="min-w-0">
+                            <div class="prose prose-lg mx-auto max-w-[750px] prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:hover:text-red-700">
+                                <div v-html="processedContent"></div>
+                            </div>
+                        </div>
+
+                        <aside v-if="shouldShowToc" class="hidden lg:block">
+                            <div class="sticky top-24 border border-gray-200 bg-gray-50 p-4">
+                                <div class="text-xs font-bold uppercase tracking-[0.08em] text-gray-500">İçindekiler</div>
+                                <nav class="mt-3 space-y-2">
+                                    <a
+                                        v-for="item in tocItems"
+                                        :key="item.id"
+                                        :href="`#${item.id}`"
+                                        class="block text-sm leading-5 text-gray-600 transition-colors hover:text-red-600"
+                                        :class="item.level === 'h3' ? 'pl-4' : ''"
+                                    >
+                                        {{ item.text }}
+                                    </a>
+                                </nav>
+                            </div>
+                        </aside>
                     </div>
 
                     <!-- Content: Dialogue Format -->
@@ -227,7 +353,7 @@ const closeLoginModal = () => {
                     />
 
                     <!-- Tags -->
-                    <div v-if="post.tags?.length > 0" class="mt-10 pt-8 border-t border-gray-200">
+                    <div v-if="post.tags?.length > 0" class="mx-auto mt-10 max-w-[750px] border-t border-gray-200 pt-8">
                         <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Etiketler</h3>
                         <div class="flex flex-wrap gap-2">
                             <span
@@ -241,7 +367,7 @@ const closeLoginModal = () => {
                     </div>
 
                     <!-- Engagement Stats -->
-                    <div class="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-8 border-t border-gray-200">
+                    <div class="mx-auto mt-8 flex max-w-[750px] flex-col gap-4 border-t border-gray-200 pt-8 sm:flex-row sm:items-center sm:justify-between">
                         <LikeButton
                             :post-slug="post.slug"
                             :likes-count="post.likes?.length || 0"

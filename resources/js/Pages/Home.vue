@@ -32,6 +32,7 @@ const featuredImage = computed(() => buildResponsiveImage(featuredPost.value?.co
     sizes: '100vw',
     fallbackWidth: 1280,
 }));
+const homeDescription = 'Film, dizi ve belgesel eleştirileri, izleme önerileri, podcast notları ve festival rehberi.';
 
 const firstCategoryName = (post) => {
     return post?.categories?.[0]?.name || 'Yazı';
@@ -55,7 +56,7 @@ const subscribe = () => {
 </script>
 
 <template>
-    <AppLayout title="Ana Sayfa">
+    <AppLayout title="Ana Sayfa" :description="homeDescription" :canonical-url="'https://benizledim.com/'" :og-image="featuredPost?.cover_image || '/images/og-default.png'">
         <section class="border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper)]">
             <div v-if="featuredPost" class="bi-wrap py-5">
                 <div class="grid gap-5">

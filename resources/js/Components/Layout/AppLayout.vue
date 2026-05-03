@@ -18,6 +18,18 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    ogType: {
+        type: String,
+        default: 'website',
+    },
+    schemaNodes: {
+        type: Array,
+        default: () => [],
+    },
+    extraMeta: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const baseUrl = 'https://benizledim.com';
@@ -31,6 +43,39 @@ const fullOgImage = computed(() => {
     return `${baseUrl}${props.ogImage}`;
 });
 const fullTitle = computed(() => props.title ? `${props.title} - Ben İzledim` : 'Ben İzledim - Film, Dizi ve Belgesel Eleştiri Platformu');
+const websiteSchema = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    'name': 'Ben İzledim',
+    'url': baseUrl,
+    'description': 'Film, Dizi ve Belgeseller hakkında eleştiri ve tavsiye yazıları',
+    'inLanguage': 'tr-TR',
+    'potentialAction': {
+        '@type': 'SearchAction',
+        'target': 'https://benizledim.com/ara?q={search_term_string}',
+        'query-input': 'required name=search_term_string'
+    }
+}));
+const webPageSchema = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    'name': props.title || 'Ben İzledim',
+    'headline': props.title || 'Ben İzledim',
+    'description': props.description,
+    'url': currentCanonical.value,
+    'image': fullOgImage.value,
+    'inLanguage': 'tr-TR',
+    'isPartOf': {
+        '@type': 'WebSite',
+        'name': 'Ben İzledim',
+        'url': baseUrl,
+    },
+}));
+const resolvedSchemaNodes = computed(() => [
+    websiteSchema.value,
+    webPageSchema.value,
+    ...props.schemaNodes.filter(Boolean),
+]);
 
 const page = usePage();
 const authUser = page.props.auth?.user;
@@ -117,9 +162,10 @@ export default {
         <meta property="og:description" :content="description" />
         <meta property="og:image" :content="fullOgImage" />
         <meta property="og:url" :content="currentCanonical" />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" :content="ogType" />
         <meta property="og:site_name" content="Ben İzledim" />
         <meta property="og:locale" content="tr_TR" />
+        <meta v-for="(meta, index) in extraMeta" :key="`meta-${index}`" v-bind="meta.property ? { property: meta.property } : { name: meta.name }" :content="meta.content" />
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" :content="title || 'Ben İzledim'" />
@@ -127,20 +173,13 @@ export default {
         <meta name="twitter:image" :content="fullOgImage" />
     </Head>
 
-    <!-- JSON-LD WebSite Schema -->
-    <component :is="'script'" type="application/ld+json" v-html="JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        'name': 'Ben İzledim',
-        'url': 'https://benizledim.com',
-        'description': 'Film, Dizi ve Belgeseller hakkında eleştiri ve tavsiye yazıları',
-        'inLanguage': 'tr-TR',
-        'potentialAction': {
-            '@type': 'SearchAction',
-            'target': 'https://benizledim.com/ara?q={search_term_string}',
-            'query-input': 'required name=search_term_string'
-        }
-    })" />
+    <component
+        :is="'script'"
+        v-for="(schema, index) in resolvedSchemaNodes"
+        :key="`schema-${index}`"
+        type="application/ld+json"
+        v-html="JSON.stringify(schema)"
+    />
 
     <header class="border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper)]">
         <div class="bg-[var(--bi-ink)] text-[var(--bi-paper)]">

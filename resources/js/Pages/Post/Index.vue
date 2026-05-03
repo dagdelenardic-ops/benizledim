@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 import PostGrid from '../../Components/Post/PostGrid.vue';
@@ -32,10 +33,38 @@ const getPageTitle = () => {
 const isActiveCategory = (slug) => {
     return props.filters.category === slug;
 };
+
+const pageDescription = computed(() => {
+    if (props.filters.category) {
+        const category = props.categories.find((item) => item.slug === props.filters.category);
+        return category
+            ? `${category.name} kategorisindeki film, dizi ve belgesel yazıları.`
+            : 'Ben İzledim arşivindeki tüm yazılar.';
+    }
+
+    if (props.filters.tag) {
+        return `${props.filters.tag} etiketiyle işaretlenmiş Ben İzledim yazıları.`;
+    }
+
+    return 'Ben İzledim arşivindeki tüm film, dizi ve belgesel yazıları.';
+});
+
+const currentCanonical = computed(() => {
+    const params = new URLSearchParams();
+
+    if (props.filters.category) params.set('category', props.filters.category);
+    if (props.filters.tag) params.set('tag', props.filters.tag);
+
+    const queryString = params.toString();
+
+    return queryString
+        ? `https://benizledim.com/yazilar?${queryString}`
+        : 'https://benizledim.com/yazilar';
+});
 </script>
 
 <template>
-    <AppLayout :title="getPageTitle()">
+    <AppLayout :title="getPageTitle()" :description="pageDescription" :canonical-url="currentCanonical">
         <div class="min-h-screen bg-[var(--bi-paper)]">
             <div class="border-b-2 border-[var(--bi-ink)]">
                 <div class="bi-wrap py-8">
