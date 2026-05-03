@@ -54,7 +54,7 @@ const subscribe = () => {
             <div v-if="featuredPost" class="bi-wrap py-5">
                 <div class="grid gap-5">
                     <Link :href="`/yazi/${featuredPost.slug}`" class="group overflow-hidden border border-[var(--bi-ink)] bg-[var(--bi-paper-deep)]">
-                        <div class="relative h-[124px] overflow-hidden border-b border-[var(--bi-ink)] bg-[var(--bi-ink)] md:h-[148px] lg:h-[164px]">
+                        <div class="relative h-[150px] overflow-hidden border-b border-[var(--bi-ink)] bg-[var(--bi-ink)] md:h-[174px] lg:h-[190px]">
                             <img
                                 v-if="featuredPost.cover_image"
                                 :src="featuredPost.cover_image"
@@ -75,7 +75,7 @@ const subscribe = () => {
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
                                         <span class="bi-kicker">{{ firstCategoryName(featuredPost) }}</span>
-                                        <h1 class="bi-serif mt-3 max-w-4xl text-[clamp(2.4rem,5vw,4.7rem)] font-bold leading-[0.94] text-[var(--bi-ink)]">
+                                        <h1 class="bi-serif mt-3 max-w-4xl text-[clamp(2rem,4.2vw,3.9rem)] font-bold leading-[0.96] text-[var(--bi-ink)]">
                                             {{ featuredPost.title }}
                                         </h1>
                                     </div>
