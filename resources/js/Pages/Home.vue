@@ -46,8 +46,8 @@ const subscribe = () => {
 <template>
     <AppLayout title="Ana Sayfa">
         <section class="border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper)]">
-            <div v-if="featuredPost" class="bi-wrap grid gap-5 py-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
-                <div class="order-2 grid gap-5 lg:order-1">
+            <div v-if="featuredPost" class="bi-wrap py-5">
+                <div class="grid gap-5">
                     <div class="relative border border-[var(--bi-ink)] bg-[var(--bi-paper-deep)] p-5 md:p-6">
                         <div class="flex items-start justify-between gap-4">
                             <div>
@@ -112,31 +112,6 @@ const subscribe = () => {
                     </div>
                 </div>
 
-                <div class="order-1 flex items-start lg:order-2 lg:justify-end">
-                    <Link href="/ne-izlesem" class="ne-izlesem-promo group relative w-full max-w-[335px] overflow-hidden border border-[var(--bi-ink)] bg-[#111111] p-4 text-white shadow-[6px_6px_0_var(--bi-ink)] transition-transform duration-200 hover:-translate-y-1">
-                        <div class="relative z-10 flex items-center justify-between gap-3">
-                            <div>
-                                <span class="block text-[0.65rem] font-bold uppercase tracking-[0.14em] text-white/70 bi-mono">AI öneri rehberi</span>
-                                <div class="mt-2 inline-flex items-center bg-[#d00016] px-3 py-2">
-                                    <svg viewBox="0 0 166 26" class="ne-izlesem-promo__wordmark h-5 w-[138px]" aria-label="Ne Izlesem">
-                                        <text x="0" y="19" class="ne-izlesem-promo__svg-text">NE İZLESEM?</text>
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <span class="inline-flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-white/82 bi-mono">
-                                Tıkla
-                                <svg class="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-                                </svg>
-                            </span>
-                        </div>
-
-                        <p class="relative z-10 mt-3 max-w-[24ch] text-xs leading-5 text-white/70">
-                            Ruh haline gore hizli film ve dizi onerisi al.
-                        </p>
-                    </Link>
-                </div>
             </div>
 
             <div v-else class="bi-wrap py-16">
@@ -285,44 +260,4 @@ const subscribe = () => {
     scrollbar-width: none;
 }
 
-.ne-izlesem-promo {
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
-        #111111;
-}
-
-.ne-izlesem-promo::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(90deg, rgba(208, 0, 22, 0.22), transparent 34%),
-        linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.04));
-    pointer-events: none;
-}
-
-.ne-izlesem-promo__wordmark {
-    overflow: visible;
-}
-
-.ne-izlesem-promo__svg-text {
-    fill: white;
-    font-family: 'Bricolage Grotesque', 'Arial Black', sans-serif;
-    font-size: 21px;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-    animation: promo-nudge 3.6s ease-in-out infinite;
-}
-
-@keyframes promo-nudge {
-    0%, 100% { transform: translateX(0); }
-    45% { transform: translateX(1.5px); }
-    55% { transform: translateX(0); }
-}
-
-@media (max-width: 767px) {
-    .ne-izlesem-promo {
-        max-width: none;
-    }
-}
 </style>
