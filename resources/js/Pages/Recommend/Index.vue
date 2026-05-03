@@ -1,5 +1,5 @@
 <script setup>
-import { ref, nextTick, onMounted, computed } from 'vue';
+import { ref, nextTick, onMounted, onBeforeUnmount, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 import axios from 'axios';
@@ -10,11 +10,22 @@ const props = defineProps({
 });
 
 const messages = ref([...props.messages]);
+const conversationId = ref(props.conversationId);
 const input = ref('');
 const isLoading = ref(false);
 const error = ref('');
 const chatContainer = ref(null);
-const recommendedPosts = ref([]);
+const waitingLabel = ref('İzliyor');
+const waitingTimer = ref(null);
+
+const waitingPhrases = [
+    'İzliyor',
+    'Tenkit ediyor',
+    'Drama tartıyor',
+    'Eleştirmenim lan ben',
+    'Kurguyu kurcalıyor',
+    'Sahneleri yokluyor',
+];
 
 const scrollToBottom = async () => {
     await nextTick();
@@ -33,6 +44,23 @@ const renderMarkdown = (text) => {
         .replace(/\n/g, '<br>');
 };
 
+const assistantMeta = (msg) => msg?.meta || {};
+
+const startWaitingAnimation = () => {
+    stopWaitingAnimation();
+    waitingLabel.value = waitingPhrases[Math.floor(Math.random() * waitingPhrases.length)];
+    waitingTimer.value = window.setInterval(() => {
+        waitingLabel.value = waitingPhrases[Math.floor(Math.random() * waitingPhrases.length)];
+    }, 950);
+};
+
+const stopWaitingAnimation = () => {
+    if (waitingTimer.value) {
+        window.clearInterval(waitingTimer.value);
+        waitingTimer.value = null;
+    }
+};
+
 const sendMessage = async () => {
     const text = input.value.trim();
     if (!text || isLoading.value) return;
@@ -40,6 +68,7 @@ const sendMessage = async () => {
     error.value = '';
     input.value = '';
     isLoading.value = true;
+    startWaitingAnimation();
 
     messages.value.push({
         id: Date.now(),
@@ -50,9 +79,12 @@ const sendMessage = async () => {
     scrollToBottom();
 
     try {
-        const response = await axios.post('/ne-izlesem/chat', { message: text });
+        const response = await axios.post('/ne-izlesem/chat', {
+            message: text,
+            conversation_id: conversationId.value,
+        });
         messages.value.push(response.data.message);
-        recommendedPosts.value = response.data.recommended_posts || [];
+        conversationId.value = response.data.message?.conversation_id || conversationId.value;
     } catch (err) {
         if (err.response?.status === 429) {
             error.value = err.response.data.error;
@@ -61,6 +93,7 @@ const sendMessage = async () => {
         }
     } finally {
         isLoading.value = false;
+        stopWaitingAnimation();
         scrollToBottom();
     }
 };
@@ -80,6 +113,7 @@ const sendQuickPrompt = (prompt) => {
 };
 
 onMounted(scrollToBottom);
+onBeforeUnmount(stopWaitingAnimation);
 </script>
 
 <template>
@@ -152,7 +186,54 @@ onMounted(scrollToBottom);
                             </div>
                             <div class="ne-izlesem__msg-bubble">
                                 <div v-if="msg.role === 'user'" class="ne-izlesem__msg-text">{{ msg.content }}</div>
-                                <div v-else class="ne-izlesem__msg-text" v-html="renderMarkdown(msg.content)"></div>
+                                <template v-else>
+                                    <div class="ne-izlesem__msg-text" v-html="renderMarkdown(msg.content)"></div>
+
+                                    <div v-if="assistantMeta(msg).site_posts?.length" class="ne-izlesem__link-block">
+                                        <div class="ne-izlesem__link-title">Ben İzledim içinde</div>
+                                        <div class="ne-izlesem__suggestion-grid">
+                                            <Link
+                                                v-for="post in assistantMeta(msg).site_posts"
+                                                :key="`site-${post.id}`"
+                                                :href="`/yazi/${post.slug}`"
+                                                class="ne-izlesem__suggestion-card"
+                                            >
+                                                <span class="ne-izlesem__suggestion-kicker">Yazı linki</span>
+                                                <span class="ne-izlesem__suggestion-name">{{ post.title }}</span>
+                                            </Link>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="assistantMeta(msg).external_suggestions?.length" class="ne-izlesem__link-block">
+                                        <div class="ne-izlesem__link-title">Site dışında da bak</div>
+                                        <div class="ne-izlesem__suggestion-grid">
+                                            <a
+                                                v-for="item in assistantMeta(msg).external_suggestions"
+                                                :key="`${item.title}-${item.year || 'na'}`"
+                                                :href="item.url"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="ne-izlesem__suggestion-card ne-izlesem__suggestion-card--external"
+                                            >
+                                                <span class="ne-izlesem__suggestion-kicker">{{ item.type === 'series' ? 'Dizi' : 'Film' }}{{ item.year ? ` / ${item.year}` : '' }}</span>
+                                                <span class="ne-izlesem__suggestion-name">{{ item.title }}</span>
+                                                <span v-if="item.reason" class="ne-izlesem__suggestion-desc">{{ item.reason }}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="assistantMeta(msg).follow_up_options?.length" class="ne-izlesem__followups">
+                                        <button
+                                            v-for="option in assistantMeta(msg).follow_up_options"
+                                            :key="option"
+                                            type="button"
+                                            class="ne-izlesem__followup-btn"
+                                            @click="sendQuickPrompt(option)"
+                                        >
+                                            {{ option }}
+                                        </button>
+                                    </div>
+                                </template>
                             </div>
                         </div>
 
@@ -165,29 +246,21 @@ onMounted(scrollToBottom);
                                 </svg>
                             </div>
                             <div class="ne-izlesem__msg-bubble">
-                                <div class="ne-izlesem__typing">
-                                    <span></span><span></span><span></span>
+                                <div class="ne-izlesem__loading-wrap">
+                                    <div class="ne-izlesem__loading-label">{{ waitingLabel }}</div>
+                                    <div class="ne-izlesem__loading-svg" aria-hidden="true">
+                                        <svg viewBox="0 0 120 24" fill="none">
+                                            <rect x="2" y="5" width="26" height="14" rx="1.5" />
+                                            <rect x="34" y="5" width="26" height="14" rx="1.5" />
+                                            <rect x="66" y="5" width="26" height="14" rx="1.5" />
+                                            <path d="M98 12H118" stroke-linecap="square" />
+                                        </svg>
+                                    </div>
+                                    <div class="ne-izlesem__typing">
+                                        <span></span><span></span><span></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Recommended Posts -->
-                    <div v-if="recommendedPosts.length > 0" class="ne-izlesem__recs">
-                        <h3 class="ne-izlesem__recs-title">ÖNERİLEN YAZILAR</h3>
-                        <div class="ne-izlesem__recs-grid">
-                            <Link
-                                v-for="post in recommendedPosts"
-                                :key="post.id"
-                                :href="`/yazi/${post.slug}`"
-                                class="ne-izlesem__rec-card"
-                            >
-                                <img v-if="post.cover_image" :src="post.cover_image" :alt="post.title" class="ne-izlesem__rec-img" />
-                                <div class="ne-izlesem__rec-body">
-                                    <h4 class="ne-izlesem__rec-title">{{ post.title }}</h4>
-                                    <span class="ne-izlesem__rec-author">{{ post.user?.name }}</span>
-                                </div>
-                            </Link>
                         </div>
                     </div>
 
@@ -417,7 +490,138 @@ onMounted(scrollToBottom);
     color: var(--bi-muted);
 }
 
+.ne-izlesem__link-block {
+    margin-top: 0.9rem;
+}
+
+.ne-izlesem__link-title {
+    font-family: var(--bi-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    color: var(--bi-muted);
+}
+
+.ne-izlesem__suggestion-grid {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.ne-izlesem__suggestion-card {
+    display: block;
+    border: 1px solid var(--bi-ink);
+    padding: 0.7rem 0.8rem;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.7);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ne-izlesem__suggestion-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--bi-ink);
+}
+
+.ne-izlesem__suggestion-card--external {
+    background: #faf7ef;
+}
+
+.ne-izlesem__suggestion-kicker {
+    display: block;
+    font-family: var(--bi-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bi-red);
+}
+
+.ne-izlesem__suggestion-name {
+    display: block;
+    margin-top: 0.3rem;
+    font-family: var(--bi-serif);
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.ne-izlesem__suggestion-desc {
+    display: block;
+    margin-top: 0.35rem;
+    font-family: var(--bi-mono);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    color: var(--bi-muted);
+}
+
+.ne-izlesem__followups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+}
+
+.ne-izlesem__followup-btn {
+    border: 1px solid var(--bi-ink);
+    background: var(--bi-paper);
+    color: var(--bi-ink);
+    font-family: var(--bi-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.45rem 0.7rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.ne-izlesem__followup-btn:hover {
+    background: var(--bi-ink);
+    color: var(--bi-paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--bi-ink);
+}
+
 /* ── Typing Indicator ── */
+.ne-izlesem__loading-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ne-izlesem__loading-label {
+    font-family: var(--bi-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.ne-izlesem__loading-svg svg {
+    width: 120px;
+    height: 24px;
+    stroke: var(--bi-ink);
+}
+
+.ne-izlesem__loading-svg rect {
+    stroke-width: 1.5;
+    animation: loadingBlocks 1.8s ease-in-out infinite;
+}
+
+.ne-izlesem__loading-svg rect:nth-child(2) {
+    animation-delay: 0.18s;
+}
+
+.ne-izlesem__loading-svg rect:nth-child(3) {
+    animation-delay: 0.36s;
+}
+
+.ne-izlesem__loading-svg path {
+    stroke-width: 1.5;
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    animation: loadingLine 1.8s ease-in-out infinite;
+}
+
 .ne-izlesem__typing {
     display: flex;
     gap: 4px;
@@ -437,64 +641,16 @@ onMounted(scrollToBottom);
     30% { transform: translateY(-6px); opacity: 1; }
 }
 
-/* ── Recommended Posts ── */
-.ne-izlesem__recs {
-    border-top: 2px solid var(--bi-ink);
-    padding-top: 1rem;
-    margin-bottom: 1rem;
+@keyframes loadingBlocks {
+    0%, 100% { fill: transparent; }
+    35% { fill: rgba(198, 0, 23, 0.2); }
+    65% { fill: rgba(17, 17, 17, 0.12); }
 }
-.ne-izlesem__recs-title {
-    font-family: var(--bi-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--bi-red);
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-}
-.ne-izlesem__recs-grid {
-    display: flex;
-    gap: 0.75rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-}
-.ne-izlesem__rec-card {
-    flex-shrink: 0;
-    width: 200px;
-    border: 2px solid var(--bi-ink);
-    background: white;
-    overflow: hidden;
-    transition: all 0.15s;
-    text-decoration: none;
-    color: inherit;
-}
-.ne-izlesem__rec-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 var(--bi-ink);
-}
-.ne-izlesem__rec-img {
-    width: 100%;
-    height: 110px;
-    object-fit: cover;
-    border-bottom: 2px solid var(--bi-ink);
-}
-.ne-izlesem__rec-body { padding: 0.75rem; }
-.ne-izlesem__rec-title {
-    font-family: var(--bi-serif);
-    font-size: 0.8rem;
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--bi-ink);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-.ne-izlesem__rec-author {
-    font-family: var(--bi-mono);
-    font-size: 0.65rem;
-    color: var(--bi-muted);
-    margin-top: 0.25rem;
-    display: block;
+
+@keyframes loadingLine {
+    0% { stroke-dashoffset: 24; opacity: 0.3; }
+    50% { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: -24; opacity: 0.3; }
 }
 
 /* ── Error ── */

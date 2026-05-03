@@ -30,6 +30,7 @@ class AiRecommendationController extends Controller
     {
         $request->validate([
             'message' => 'required|string|max:500',
+            'conversation_id' => 'nullable|integer|exists:ai_conversations,id',
         ]);
 
         $sessionId = $request->session()->getId();
@@ -46,7 +47,13 @@ class AiRecommendationController extends Controller
             ], 429);
         }
 
-        $conversation = AiConversation::firstOrCreate(
+        $conversation = null;
+
+        if ($request->filled('conversation_id')) {
+            $conversation = AiConversation::whereKey($request->integer('conversation_id'))->first();
+        }
+
+        $conversation ??= AiConversation::firstOrCreate(
             ['session_id' => $sessionId],
             ['user_id' => auth()->id()],
         );

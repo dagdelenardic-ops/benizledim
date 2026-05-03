@@ -10,13 +10,14 @@ class AiMessage extends \Illuminate\Database\Eloquent\Model
 
     protected $fillable = [
         'conversation_id', 'role', 'content',
-        'recommended_post_ids', 'created_at',
+        'recommended_post_ids', 'meta', 'created_at',
     ];
 
     protected function casts(): array
     {
         return [
             'recommended_post_ids' => 'array',
+            'meta' => 'array',
             'created_at' => 'datetime',
         ];
     }
