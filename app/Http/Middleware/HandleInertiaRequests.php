@@ -37,6 +37,10 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'authProviders' => [
+                'google' => $this->isProviderConfigured('google'),
+                'facebook' => $this->isProviderConfigured('facebook'),
+            ],
             'auth' => [
                 'user' => $request->user() ? [
                     'id' => $request->user()->id,
@@ -53,5 +57,12 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn () => $request->session()->get('error'),
             ],
         ];
+    }
+
+    private function isProviderConfigured(string $provider): bool
+    {
+        return filled(config("services.{$provider}.client_id"))
+            && filled(config("services.{$provider}.client_secret"))
+            && filled(config("services.{$provider}.redirect"));
     }
 }

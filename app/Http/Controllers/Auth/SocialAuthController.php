@@ -13,6 +13,10 @@ class SocialAuthController extends Controller
 {
     public function redirectToGoogle(): RedirectResponse
     {
+        if (!$this->isProviderConfigured('google')) {
+            return redirect('/')->with('error', 'Google girişi henüz yapılandırılmadı.');
+        }
+
         try {
             return Socialite::driver('google')->redirect();
         } catch (\Throwable $e) {
@@ -107,6 +111,10 @@ class SocialAuthController extends Controller
 
     public function redirectToFacebook(): RedirectResponse
     {
+        if (!$this->isProviderConfigured('facebook')) {
+            return redirect('/')->with('error', 'Facebook girişi henüz yapılandırılmadı.');
+        }
+
         try {
             return Socialite::driver('facebook')->redirect();
         } catch (\Throwable $e) {
@@ -124,11 +132,13 @@ class SocialAuthController extends Controller
             return redirect('/')->with('error', 'Facebook girişi başarısız.');
         }
 
+        if (empty($socialUser->email)) {
+            return redirect('/')->with('error', 'Facebook hesabınızda e-posta izni aktif değil. E-posta izniyle tekrar deneyin.');
+        }
+
         $adminEmails = config('benizledim.admin_emails', []);
 
-        $user = User::where('provider', 'facebook')
-            ->where('provider_id', $socialUser->id)
-            ->first();
+        $user = $this->resolveFacebookUser((string) $socialUser->id, (string) $socialUser->email);
 
         if (!$user) {
             $isAdminEmail = in_array(strtolower((string) $socialUser->email), $adminEmails, true);
@@ -140,6 +150,14 @@ class SocialAuthController extends Controller
                 'provider_id' => $socialUser->id,
                 'role' => $isAdminEmail ? 'admin' : 'author',
             ]);
+        } else {
+            $user->update([
+                'provider' => 'facebook',
+                'provider_id' => $socialUser->id,
+                'email' => $socialUser->email,
+                'name' => $user->name ?: $socialUser->name,
+                'avatar' => $user->avatar ?? $socialUser->avatar,
+            ]);
         }
 
         if (in_array(strtolower((string) $user->email), $adminEmails, true) && $user->role !== 'admin') {
@@ -149,5 +167,30 @@ class SocialAuthController extends Controller
         Auth::login($user);
 
         return redirect($user->canAccessCms() ? '/admin' : '/');
+    }
+
+    private function resolveFacebookUser(string $providerId, string $email): ?User
+    {
+        $socialEmail = strtolower($email);
+
+        $linkedUser = User::query()
+            ->where('provider', 'facebook')
+            ->where('provider_id', $providerId)
+            ->first();
+
+        if ($linkedUser) {
+            return $linkedUser;
+        }
+
+        return User::query()
+            ->whereRaw('LOWER(email) = ?', [$socialEmail])
+            ->first();
+    }
+
+    private function isProviderConfigured(string $provider): bool
+    {
+        return filled(config("services.{$provider}.client_id"))
+            && filled(config("services.{$provider}.client_secret"))
+            && filled(config("services.{$provider}.redirect"));
     }
 }

@@ -54,6 +54,7 @@ const menuItems = computed(() => {
     }
 
     if (isAdmin.value) {
+        items.push({ name: 'Ayarlar', href: '/admin/settings', icon: 'settings', roles: ['admin'] });
         items.push({ name: 'Kullanıcılar', href: '/admin/users', icon: 'users', roles: ['admin'] });
     }
 

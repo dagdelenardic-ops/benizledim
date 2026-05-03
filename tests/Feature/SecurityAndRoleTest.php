@@ -77,4 +77,22 @@ class SecurityAndRoleTest extends TestCase
         //    'deletion_requested_at' => now()
         // ]);
     }
+
+    #[Test]
+    public function giris_route_redirects_to_login_alias()
+    {
+        $response = $this->get('/giris');
+
+        $response->assertRedirect('/login');
+    }
+
+    #[Test]
+    public function only_admin_can_access_settings_page()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $editor = User::factory()->create(['role' => 'editor']);
+
+        $this->actingAs($admin)->get('/admin/settings')->assertStatus(200);
+        $this->actingAs($editor)->get('/admin/settings')->assertStatus(403);
+    }
 }

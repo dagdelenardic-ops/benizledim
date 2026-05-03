@@ -17,8 +17,10 @@ class ImportWixImages extends Command
     {
         $dryRun = $this->option('dry-run');
         $posts = Post::whereNotNull('cover_image')
-            ->where('cover_image', 'like', '%wix%')
-            ->orWhere('cover_image', 'like', '%static.wixstatic%')
+            ->where(function ($query) {
+                $query->where('cover_image', 'like', '%wix%')
+                    ->orWhere('cover_image', 'like', '%static.wixstatic%');
+            })
             ->get();
 
         $this->info("Wix görseli bulunan yazı sayısı: {$posts->count()}");
@@ -39,7 +41,8 @@ class ImportWixImages extends Command
                 $response = Http::timeout(30)->get($post->cover_image);
 
                 if ($response->successful()) {
-                    $extension = pathinfo(parse_url($post->cover_image, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+                    $rawExtension = pathinfo((string) parse_url($post->cover_image, PHP_URL_PATH), PATHINFO_EXTENSION);
+                    $extension = preg_match('/^(jpg|jpeg|png|webp|gif)$/i', (string) $rawExtension) ? strtolower($rawExtension) : 'jpg';
                     $filename = 'posts/' . Str::slug($post->title) . '-' . $post->id . '.' . $extension;
 
                     Storage::disk('public')->put($filename, $response->body());

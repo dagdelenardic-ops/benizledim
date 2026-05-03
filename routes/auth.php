@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 // Login page route for auth redirects
 Route::get('/login', fn () => redirect('/'))->name('login');
+Route::get('/giris', fn () => redirect('/login', 301));
 
 // Email/Password auth
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('login.attempt');

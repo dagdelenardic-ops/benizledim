@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\AdminFestivalEventController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminNewsletterController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\CinemaReviewController;
@@ -150,6 +151,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
         Route::put('/posts/{post:id}/owner', [AdminPostController::class, 'updateOwner'])->name('posts.updateOwner');
         Route::post('/posts/{post:id}/approve-deletion', [AdminPostController::class, 'approveDeletion'])->name('posts.approveDeletion');
         Route::post('/posts/{post:id}/reject-deletion', [AdminPostController::class, 'rejectDeletion'])->name('posts.rejectDeletion');
+
+        // Site ayarları
+        Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [AdminSettingsController::class, 'update'])->name('settings.update');
 
         // Kullanıcılar
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
