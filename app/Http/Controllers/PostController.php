@@ -40,17 +40,21 @@ class PostController extends Controller
         ]);
     }
 
-    public function show(Post $post)
+    public function show(Request $request, Post $post)
     {
         if (!$post->published_at || $post->status !== 'published' || $post->deletion_requested_at) {
             abort(404);
         }
 
-        // View count artır
-        $post->increment('view_count');
+        // View count: session-based dedup to prevent bot/refresh inflation
+        $viewKey = 'viewed_post_' . $post->id;
+        if (!$request->session()->has($viewKey)) {
+            $post->increment('view_count');
+            $request->session()->put($viewKey, true);
+        }
 
         $post->load([
-            'user', 'categories', 'tags', 'comments.user', 'likes',
+            'user', 'categories', 'tags', 'comments.user',
             'entries.user', 'entries.votes',
             'originalPost:id,title,slug,published_at',
             'revisits' => fn ($q) => $q->published()->select('id', 'title', 'slug', 'published_at', 'parent_post_id'),
@@ -58,10 +62,10 @@ class PostController extends Controller
             'dialogueExchanges.user:id,name,avatar',
             'visualEssayBlocks',
         ]);
+        $post->loadCount('likes');
 
-        // Mevcut kullanıcı beğenmiş mi?
         $isLiked = auth()->check()
-            ? $post->likes->contains('user_id', auth()->id())
+            ? $post->likes()->where('user_id', auth()->id())->exists()
             : false;
 
         $relatedPosts = Post::published()

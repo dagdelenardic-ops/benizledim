@@ -15,7 +15,7 @@ class EnsurePrimaryAdmin extends Command
     {
         $email = strtolower((string) ($this->option('email') ?: config('benizledim.primary_admin.email')));
         $name = (string) ($this->option('name') ?: config('benizledim.primary_admin.name') ?: 'Admin');
-        $password = (string) ($this->option('password') ?: env('PRIMARY_ADMIN_PASSWORD', ''));
+        $password = (string) ($this->option('password') ?: config('benizledim.primary_admin.password', ''));
 
         if ($email === '' || $password === '') {
             $this->error('Admin hesabı için email ve password zorunlu. --email/--password verin veya PRIMARY_ADMIN_* env tanımlayın.');

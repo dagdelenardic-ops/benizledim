@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    // Note: 'role' is fillable for internal User::create() calls (auth, import).
+    // Never pass unvalidated user input to User::create/update with role.
     protected $fillable = [
         'name',
         'email',

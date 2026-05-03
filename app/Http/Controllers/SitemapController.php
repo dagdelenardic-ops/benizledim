@@ -10,8 +10,11 @@ class SitemapController extends Controller
 {
     public function index()
     {
-        $posts = Post::published()->latest('published_at')->get();
-        $categories = Category::all();
+        $posts = Post::published()
+            ->select('slug', 'published_at', 'updated_at')
+            ->latest('published_at')
+            ->cursor();
+        $categories = Category::select('slug')->cursor();
 
         $content = view('sitemap', compact('posts', 'categories'))->render();
 

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
@@ -125,33 +124,30 @@ class SocialAuthController extends Controller
             return redirect('/')->with('error', 'Facebook girişi başarısız.');
         }
 
+        $adminEmails = config('benizledim.admin_emails', []);
+
         $user = User::where('provider', 'facebook')
             ->where('provider_id', $socialUser->id)
             ->first();
 
         if (!$user) {
+            $isAdminEmail = in_array(strtolower((string) $socialUser->email), $adminEmails, true);
             $user = User::create([
                 'name' => $socialUser->name,
                 'email' => $socialUser->email,
                 'avatar' => $socialUser->avatar,
                 'provider' => 'facebook',
                 'provider_id' => $socialUser->id,
-                'role' => 'author',
+                'role' => $isAdminEmail ? 'admin' : 'author',
             ]);
+        }
+
+        if (in_array(strtolower((string) $user->email), $adminEmails, true) && $user->role !== 'admin') {
+            $user->update(['role' => 'admin']);
         }
 
         Auth::login($user);
 
         return redirect($user->canAccessCms() ? '/admin' : '/');
-    }
-
-    public function logout(Request $request): RedirectResponse
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/');
     }
 }

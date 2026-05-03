@@ -27,8 +27,8 @@ class RunWixScraper extends Command
             return self::FAILURE;
         }
 
-        $pythonBinary = (string) ($this->option('python') ?: env('SCRAPER_PYTHON_BINARY', 'python3'));
-        $timeout = (int) ($this->option('timeout') ?: env('SCRAPER_PROCESS_TIMEOUT', 1800));
+        $pythonBinary = (string) ($this->option('python') ?: config('benizledim.scraper.python_binary', 'python3'));
+        $timeout = (int) ($this->option('timeout') ?: config('benizledim.scraper.process_timeout', 1800));
 
         if ($this->option('queued')) {
             RunExternalScriptJob::dispatch(

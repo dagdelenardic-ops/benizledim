@@ -30,9 +30,9 @@ class RunExternalScriptJob implements ShouldQueue
 
     public function handle(): void
     {
-        $pythonBinary = $this->pythonBinary ?: (string) env('SCRAPER_PYTHON_BINARY', 'python3');
+        $pythonBinary = $this->pythonBinary ?: (string) config('benizledim.scraper.python_binary', 'python3');
         $workingDirectory = $this->workingDirectory ?: base_path();
-        $processTimeout = $this->processTimeout ?: (int) env('SCRAPER_PROCESS_TIMEOUT', 1800);
+        $processTimeout = $this->processTimeout ?: (int) config('benizledim.scraper.process_timeout', 1800);
 
         $command = array_merge([$pythonBinary, $this->scriptPath], $this->arguments);
 

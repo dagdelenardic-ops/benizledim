@@ -14,11 +14,12 @@ class SearchController extends Controller
         $posts = collect();
 
         if (strlen($query) >= 2) {
+            $escaped = str_replace(['%', '_'], ['\\%', '\\_'], $query);
             $posts = Post::published()
-                ->where(function ($q) use ($query) {
-                    $q->where('title', 'like', "%{$query}%")
-                      ->orWhere('excerpt', 'like', "%{$query}%")
-                      ->orWhere('content', 'like', "%{$query}%");
+                ->where(function ($q) use ($escaped) {
+                    $q->where('title', 'like', "%{$escaped}%")
+                      ->orWhere('excerpt', 'like', "%{$escaped}%")
+                      ->orWhere('content', 'like', "%{$escaped}%");
                 })
                 ->with(['user', 'categories'])
                 ->withCount(['comments', 'likes'])

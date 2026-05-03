@@ -356,8 +356,14 @@ class AdminPostController extends Controller
 
     private function hardDeletePost(Post $post): void
     {
+        $entryIds = $post->entries()->pluck('id');
+        \App\Models\EntryVote::whereIn('entry_id', $entryIds)->delete();
+
+        $post->entries()->delete();
         $post->comments()->delete();
         $post->likes()->delete();
+        $post->dialogueExchanges()->delete();
+        $post->visualEssayBlocks()->delete();
         $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();

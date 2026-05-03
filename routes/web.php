@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CommentController;
@@ -26,6 +26,7 @@ use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\CinemaReviewController;
 use App\Http\Controllers\AiRecommendationController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\WixRedirectController;
 
 Route::get('/up', function () {
     return response()->json([
@@ -37,22 +38,7 @@ Route::get('/up', function () {
 // Sitemap
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
-Route::get('/', function () {
-    // Ana sayfa: son yazıları göster
-    $posts = \App\Models\Post::published()
-        ->with(['user', 'categories', 'tags'])
-        ->withCount(['comments', 'likes'])
-        ->latest('published_at')
-        ->take(8)
-        ->get();
-
-    $categories = \App\Models\Category::withCount('posts')->get();
-
-    return Inertia::render('Home', [
-        'posts' => $posts,
-        'categories' => $categories,
-    ]);
-});
+Route::get('/', [HomeController::class, 'index']);
 
 // Yazı listesi (kategori/tag filtreleme)
 Route::get('/yazilar', [PostController::class, 'index'])->name('posts.index');
@@ -64,11 +50,11 @@ Route::get('/yazi/{post}', [PostController::class, 'show'])->name('posts.show');
 Route::get('/ara', [SearchController::class, 'index'])->name('search');
 
 // Yorum
-Route::post('/yazi/{post}/yorum', [CommentController::class, 'store'])->name('comments.store');
-Route::delete('/yorum/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::post('/yazi/{post}/yorum', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+Route::delete('/yorum/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy')->middleware('auth');
 
 // Beğeni (toggle)
-Route::post('/yazi/{post}/begen', [LikeController::class, 'toggle'])->name('likes.toggle');
+Route::post('/yazi/{post}/begen', [LikeController::class, 'toggle'])->name('likes.toggle')->middleware('auth');
 
 // Entry (sosyal tartışma)
 Route::post('/yazi/{post}/entry', [EntryController::class, 'store'])->name('entries.store');
@@ -78,8 +64,8 @@ Route::delete('/entry/{entry}', [EntryController::class, 'destroy'])->name('entr
 // Sinemalar
 Route::get('/sinemalar', [CinemaController::class, 'index'])->name('cinemas.index');
 Route::get('/sinema/{cinema}', [CinemaController::class, 'show'])->name('cinemas.show');
-Route::post('/sinema/{cinema}/yorum', [CinemaReviewController::class, 'store'])->name('cinema-reviews.store');
-Route::delete('/sinema-yorum/{cinemaReview}', [CinemaReviewController::class, 'destroy'])->name('cinema-reviews.destroy');
+Route::post('/sinema/{cinema}/yorum', [CinemaReviewController::class, 'store'])->name('cinema-reviews.store')->middleware('auth');
+Route::delete('/sinema-yorum/{cinemaReview}', [CinemaReviewController::class, 'destroy'])->name('cinema-reviews.destroy')->middleware('auth');
 
 // Ne Izlesem (AI Recommendation)
 Route::get('/ne-izlesem', [AiRecommendationController::class, 'index'])->name('recommend.index');
@@ -169,18 +155,5 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 });
 
 // Wix Redirect'leri (eski URL yapısından yeni yapıya)
-// Wix blog post formatı: /post/yazi-basligi
-Route::get('/post/{slug}', function (string $slug) {
-    $post = \App\Models\Post::where('slug', $slug)->first();
-
-    if ($post) {
-        return redirect("/yazi/{$post->slug}", 301);
-    }
-
-    return redirect('/yazilar', 302);
-});
-
-// Wix kategori formatı
-Route::get('/blog/categories/{slug}', function (string $slug) {
-    return redirect("/yazilar?category={$slug}", 301);
-});
+Route::get('/post/{slug}', [WixRedirectController::class, 'post']);
+Route::get('/blog/categories/{slug}', [WixRedirectController::class, 'category']);

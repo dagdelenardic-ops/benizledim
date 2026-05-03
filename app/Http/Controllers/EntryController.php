@@ -47,11 +47,6 @@ class EntryController extends Controller
 
     public function vote(Request $request, Entry $entry)
     {
-        $this->middleware('auth');
-
-        if (!auth()->check()) {
-            abort(403);
-        }
 
         $request->validate([
             'vote' => 'required|integer|in:-1,1',

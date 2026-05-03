@@ -35,7 +35,11 @@ const copyLink = async () => {
             showCopiedTooltip.value = false;
         }, 2000);
     } catch (err) {
-        console.error('Link kopyalanamadı:', err);
+        // Fallback: show error state via existing tooltip
+        showCopiedTooltip.value = true;
+        setTimeout(() => {
+            showCopiedTooltip.value = false;
+        }, 2000);
     }
 };
 </script>

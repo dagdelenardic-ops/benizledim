@@ -18,7 +18,7 @@ class CinemaController extends Controller
             $query->where('district', $request->district);
         }
 
-        $cinemas = $query->orderBy('name')->get();
+        $cinemas = $query->orderBy('name')->paginate(20);
 
         $districts = Cinema::active()
             ->select('district')
@@ -36,7 +36,7 @@ class CinemaController extends Controller
     public function show(Cinema $cinema)
     {
         $cinema->load([
-            'screenings' => fn ($q) => $q->where('starts_at', '<=', now()->addDays(30))->orderBy('starts_at'),
+            'screenings' => fn ($q) => $q->where('starts_at', '>=', now())->where('starts_at', '<=', now()->addDays(30))->orderBy('starts_at'),
             'reviews.user',
         ]);
         $cinema->loadCount('reviews');
