@@ -178,6 +178,12 @@ export default {
             </p>
 
             <div class="flex flex-wrap items-center gap-3 lg:justify-end">
+                <Link
+                    href="/ne-izlesem"
+                    class="ne-izlesem-nav-button inline-flex min-h-11 items-center justify-center px-3 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-white bi-mono lg:hidden"
+                >
+                    Ne İzlesem?
+                </Link>
                 <SearchBar placeholder="Film, dizi, yazar ara..." />
                 <button
                     v-if="!authUser"

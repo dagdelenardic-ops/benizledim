@@ -126,23 +126,6 @@ const subscribe = () => {
             </div>
         </section>
 
-        <section class="border-b border-[var(--bi-ink)] bg-[var(--bi-paper)]">
-            <div class="bi-wrap py-5">
-                <div class="flex flex-wrap items-center gap-3 pb-2 md:flex-nowrap md:overflow-x-auto md:scrollbar-hide">
-                    <span class="shrink-0 text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">Keşfet</span>
-                    <Link
-                        v-for="category in categories"
-                        :key="category.id"
-                        :href="`/yazilar?category=${category.slug}`"
-                        class="bi-chip whitespace-nowrap"
-                    >
-                        {{ category.name }}
-                        <span class="text-current/60">{{ category.posts_count }}</span>
-                    </Link>
-                </div>
-            </div>
-        </section>
-
         <section class="bi-wrap grid gap-8 py-8 lg:grid-cols-[1fr_320px]">
             <div>
                 <div class="mb-6 flex items-end justify-between border-b border-[var(--bi-ink)] pb-4">
@@ -250,6 +233,34 @@ const subscribe = () => {
                     </form>
                     <p v-if="form.errors.email" class="mt-2 text-sm text-red-300">{{ form.errors.email }}</p>
                 </div>
+            </div>
+        </section>
+
+        <section class="border-t border-[var(--bi-rule-soft)] bg-[var(--bi-paper)]">
+            <div class="bi-wrap py-8">
+                <details class="border border-[var(--bi-rule-soft)] bg-[var(--bi-paper-deep)] open:bg-[var(--bi-paper)]">
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-4 text-left">
+                        <span>
+                            <span class="block text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">İstersen bak</span>
+                            <span class="bi-serif mt-1 block text-2xl font-bold text-[var(--bi-ink)]">Keşfet</span>
+                        </span>
+                        <span class="text-xs font-bold uppercase tracking-[0.08em] text-red-700 bi-mono">Kategorileri Aç</span>
+                    </summary>
+
+                    <div class="border-t border-[var(--bi-rule-soft)] px-4 py-4">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <Link
+                                v-for="category in categories"
+                                :key="category.id"
+                                :href="`/yazilar?category=${category.slug}`"
+                                class="bi-chip whitespace-nowrap"
+                            >
+                                {{ category.name }}
+                                <span class="text-current/60">{{ category.posts_count }}</span>
+                            </Link>
+                        </div>
+                    </div>
+                </details>
             </div>
         </section>
     </AppLayout>
