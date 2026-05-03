@@ -129,7 +129,9 @@ jobs:
           ^\.git
           ^\.github
           ^node_modules
+          ^vendor
           ^tests
+          ^storage/logs
           ^database/data/.*\.sqlite$
           ^\.env$
           ^\.env\.
@@ -180,12 +182,13 @@ jobs:
           set ftp:passive-mode true
           set ftp:ssl-force true
           set ssl:verify-certificate false
-          set net:timeout 60
-          set net:max-retries 5
-          set net:reconnect-interval-base 10
+          set net:timeout 120
+          set net:max-retries 15
+          set net:reconnect-interval-base 5
           set net:reconnect-interval-multiplier 2
+          set ftp:ssl-protect-data true
           set mirror:parallel-directories true
-          mirror --reverse --delete --verbose=1 --parallel=4 \
+          mirror --reverse --delete --verbose=1 --parallel=2 \
             --exclude-rx-from=/tmp/lftp-exclude.txt \
             . public_html/
           bye
