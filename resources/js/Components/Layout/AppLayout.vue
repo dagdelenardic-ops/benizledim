@@ -232,7 +232,7 @@ export default {
                 <Link href="/podcast" class="border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Podcast</Link>
                 <Link href="/festival" class="border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Festival</Link>
             </div>
-            <Link href="/ne-izlesem" class="bg-red-700 px-5 py-3 text-xs font-bold uppercase tracking-[0.08em] text-white hover:bg-[var(--bi-ink)] bi-mono">
+            <Link href="/ne-izlesem" class="ne-izlesem-nav-button px-4 py-2 text-[11px] font-bold uppercase tracking-[0.08em] text-white bi-mono">
                 Ne İzlesem?
             </Link>
         </nav>
@@ -345,3 +345,22 @@ export default {
     <!-- Login Modal -->
     <LoginModal :show="showLoginModal" @close="closeLoginModal" />
 </template>
+
+<style scoped>
+.ne-izlesem-nav-button {
+    background: linear-gradient(90deg, #161616 0%, #ae0015 52%, #d10a1b 100%);
+    background-size: 180% 100%;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    animation: ne-izlesem-button-shift 4.8s ease-in-out infinite;
+}
+
+.ne-izlesem-nav-button:hover {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+@keyframes ne-izlesem-button-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+</style>

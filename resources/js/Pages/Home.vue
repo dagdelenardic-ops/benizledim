@@ -47,39 +47,9 @@ const subscribe = () => {
     <AppLayout title="Ana Sayfa">
         <section class="border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper)]">
             <div v-if="featuredPost" class="bi-wrap py-5">
-                <div class="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_320px] lg:items-stretch">
-                    <Link :href="`/yazi/${featuredPost.slug}`" class="group grid overflow-hidden border border-[var(--bi-ink)] bg-[var(--bi-paper-deep)] lg:grid-cols-[1.05fr_0.95fr]">
-                        <div class="relative flex flex-col p-5 md:p-6">
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <span class="bi-kicker">{{ firstCategoryName(featuredPost) }}</span>
-                                    <h1 class="bi-serif mt-3 max-w-4xl text-[clamp(2.4rem,5vw,4.7rem)] font-bold leading-[0.94] text-[var(--bi-ink)]">
-                                        {{ featuredPost.title }}
-                                    </h1>
-                                </div>
-                                <span class="hidden text-6xl font-bold leading-none text-black/5 bi-serif md:block">01</span>
-                            </div>
-
-                            <p class="mt-4 max-w-2xl text-sm leading-6 text-[var(--bi-muted)] md:text-base md:leading-7">
-                                {{ featuredPost.excerpt }}
-                            </p>
-
-                            <div class="mt-5 flex flex-wrap items-center gap-3">
-                                <span class="inline-flex items-center gap-3 bg-[var(--bi-ink)] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-[var(--bi-paper)] transition group-hover:bg-red-700 bi-mono">
-                                    Yazıyı oku
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-                                    </svg>
-                                </span>
-                                <div class="text-xs uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">
-                                    {{ featuredPost.user?.name || 'Ben İzledim' }}
-                                    <span class="mx-2 text-black/20">/</span>
-                                    {{ formatReadingTime(featuredPost.reading_time_minutes) }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="relative min-h-[260px] overflow-hidden border-t border-[var(--bi-ink)] bg-[var(--bi-ink)] md:min-h-[300px] lg:border-t-0 lg:border-l">
+                <div class="grid gap-5">
+                    <Link :href="`/yazi/${featuredPost.slug}`" class="group overflow-hidden border border-[var(--bi-ink)] bg-[var(--bi-paper-deep)]">
+                        <div class="relative min-h-[260px] overflow-hidden border-b border-[var(--bi-ink)] bg-[var(--bi-ink)] md:min-h-[300px]">
                             <img
                                 v-if="featuredPost.cover_image"
                                 :src="featuredPost.cover_image"
@@ -94,32 +64,36 @@ const subscribe = () => {
                                 <span class="block text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">Bu haftanın yazısı</span>
                             </div>
                         </div>
-                    </Link>
-
-                    <Link href="/ne-izlesem" class="ne-izlesem-card group relative flex min-h-[260px] flex-col justify-between overflow-hidden border border-[var(--bi-ink)] p-5 text-white md:min-h-[300px]">
-                        <div class="relative z-10">
-                            <span class="inline-flex rounded-full border border-white/20 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-white/80 bi-mono">AI öneri</span>
-                            <div class="mt-5 inline-flex items-center rounded-sm bg-[#c40017] px-3 py-2 shadow-[4px_4px_0_rgba(0,0,0,0.16)]">
-                                <svg viewBox="0 0 178 28" class="ne-izlesem-card__svg h-6 w-[150px]" aria-label="Ne İzlesem?">
-                                    <text x="0" y="20" class="ne-izlesem-card__svg-text">NE İZLESEM?</text>
-                                </svg>
-                            </div>
-                            <p class="mt-5 max-w-[24ch] text-sm leading-6 text-white/80">
-                                Modunu yaz, hızlı film ve dizi önerisi al. Hafif, direkt, anında.
-                            </p>
-                        </div>
-
-                        <div class="relative z-10 flex items-end justify-between gap-4 border-t border-white/15 pt-4">
+                        <div class="relative flex flex-col p-5 md:p-6">
                             <div>
-                                <div class="text-xl font-bold leading-none bi-serif">Ne izlesem?</div>
-                                <div class="mt-1 text-[0.68rem] uppercase tracking-[0.12em] text-white/60 bi-mono">Tıkla ve sor</div>
+                                <div class="flex items-start justify-between gap-4">
+                                    <div>
+                                        <span class="bi-kicker">{{ firstCategoryName(featuredPost) }}</span>
+                                        <h1 class="bi-serif mt-3 max-w-4xl text-[clamp(2.4rem,5vw,4.7rem)] font-bold leading-[0.94] text-[var(--bi-ink)]">
+                                            {{ featuredPost.title }}
+                                        </h1>
+                                    </div>
+                                    <span class="hidden text-6xl font-bold leading-none text-black/5 bi-serif md:block">01</span>
+                                </div>
+
+                                <p class="mt-4 max-w-2xl text-sm leading-6 text-[var(--bi-muted)] md:text-base md:leading-7">
+                                    {{ featuredPost.excerpt }}
+                                </p>
                             </div>
-                            <span class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] bi-mono">
-                                Aç
-                                <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-                                </svg>
-                            </span>
+
+                            <div class="mt-5 flex flex-wrap items-center gap-3">
+                                <span class="inline-flex items-center gap-3 bg-[var(--bi-ink)] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-[var(--bi-paper)] transition group-hover:bg-red-700 bi-mono">
+                                    Yazıyı oku
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
+                                    </svg>
+                                </span>
+                                <div class="text-xs uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">
+                                    {{ featuredPost.user?.name || 'Ben İzledim' }}
+                                    <span class="mx-2 text-black/20">/</span>
+                                    {{ formatReadingTime(featuredPost.reading_time_minutes) }}
+                                </div>
+                            </div>
                         </div>
                     </Link>
                 </div>
@@ -269,51 +243,6 @@ const subscribe = () => {
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
-}
-
-.ne-izlesem-card {
-    background:
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 30%),
-        linear-gradient(135deg, #0f0f10 0%, #18181b 30%, #8d0011 68%, #111111 100%);
-    background-size: 140% 140%;
-    animation: ne-izlesem-shift 10s ease-in-out infinite;
-}
-
-.ne-izlesem-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 35%, rgba(255, 255, 255, 0.04) 60%, transparent 80%);
-    transform: translateX(-110%);
-    animation: ne-izlesem-sheen 8s ease-in-out infinite;
-}
-
-.ne-izlesem-card__svg {
-    overflow: visible;
-}
-
-.ne-izlesem-card__svg-text {
-    fill: #ffffff;
-    font-family: 'Bricolage Grotesque', 'Arial Black', sans-serif;
-    font-size: 23px;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-    animation: ne-izlesem-float 2.8s ease-in-out infinite;
-}
-
-@keyframes ne-izlesem-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-@keyframes ne-izlesem-sheen {
-    0%, 100% { transform: translateX(-110%); }
-    45%, 65% { transform: translateX(110%); }
-}
-
-@keyframes ne-izlesem-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-1.5px); }
 }
 
 </style>
