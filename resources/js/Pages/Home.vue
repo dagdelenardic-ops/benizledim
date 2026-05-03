@@ -112,36 +112,29 @@ const subscribe = () => {
                     </div>
                 </div>
 
-                <div class="order-1 lg:order-2">
-                    <Link href="/ne-izlesem" class="ne-izlesem-promo group relative flex h-full min-h-[280px] flex-col justify-between overflow-hidden border border-[var(--bi-ink)] p-5 text-white md:min-h-[360px] md:p-7">
-                        <div class="absolute inset-0 ne-izlesem-promo__glow"></div>
-                        <div class="relative z-10 flex items-center justify-between gap-4">
-                            <span class="rounded-full border border-white/30 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] bi-mono">AI ÖNERİ REHBERİ</span>
-                            <span class="text-xs uppercase tracking-[0.1em] text-white/70 bi-mono">Anında cevap</span>
-                        </div>
-
-                        <div class="relative z-10 py-8 md:py-10">
-                            <svg viewBox="0 0 460 200" class="w-full max-w-[420px] drop-shadow-[0_8px_18px_rgba(0,0,0,0.2)]" aria-label="Ne Izlesem">
-                                <text x="0" y="78" class="ne-izlesem-promo__svg-text">NE</text>
-                                <text x="0" y="150" class="ne-izlesem-promo__svg-text">İZLESEM?</text>
-                            </svg>
-                            <p class="mt-4 max-w-sm text-sm leading-6 text-white/82 md:text-base">
-                                Ruh halini yaz, sana film ve dizi önerelim. Sonra ilgili Ben İzledim yazılarıyla daha derine in.
-                            </p>
-                        </div>
-
-                        <div class="relative z-10 flex items-end justify-between gap-4 border-t border-white/20 pt-4">
+                <div class="order-1 flex items-start lg:order-2 lg:justify-end">
+                    <Link href="/ne-izlesem" class="ne-izlesem-promo group relative w-full max-w-[335px] overflow-hidden border border-[var(--bi-ink)] bg-[#111111] p-4 text-white shadow-[6px_6px_0_var(--bi-ink)] transition-transform duration-200 hover:-translate-y-1">
+                        <div class="relative z-10 flex items-center justify-between gap-3">
                             <div>
-                                <div class="text-2xl font-bold leading-none bi-serif">Hızlı, yönlendirici, canlı</div>
-                                <div class="mt-1 text-xs uppercase tracking-[0.08em] text-white/70 bi-mono">İlk ekranda keşfet</div>
+                                <span class="block text-[0.65rem] font-bold uppercase tracking-[0.14em] text-white/70 bi-mono">AI öneri rehberi</span>
+                                <div class="mt-2 inline-flex items-center bg-[#d00016] px-3 py-2">
+                                    <svg viewBox="0 0 166 26" class="ne-izlesem-promo__wordmark h-5 w-[138px]" aria-label="Ne Izlesem">
+                                        <text x="0" y="19" class="ne-izlesem-promo__svg-text">NE İZLESEM?</text>
+                                    </svg>
+                                </div>
                             </div>
-                            <span class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.08em] bi-mono group-hover:translate-x-1 transition-transform">
-                                Aç
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                            <span class="inline-flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-white/82 bi-mono">
+                                Tıkla
+                                <svg class="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
                                 </svg>
                             </span>
                         </div>
+
+                        <p class="relative z-10 mt-3 max-w-[24ch] text-xs leading-5 text-white/70">
+                            Ruh haline gore hizli film ve dizi onerisi al.
+                        </p>
                     </Link>
                 </div>
             </div>
@@ -294,47 +287,42 @@ const subscribe = () => {
 
 .ne-izlesem-promo {
     background:
-        radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 34%),
-        linear-gradient(135deg, #b00020 0%, #d4122c 48%, #111111 100%);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+        #111111;
 }
 
 .ne-izlesem-promo::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, rgba(255, 255, 255, 0.1), transparent 35%, rgba(255, 255, 255, 0.08) 65%, transparent 75%);
-    transform: translateX(-100%);
-    animation: promo-sheen 12s ease-in-out infinite;
+    background:
+        linear-gradient(90deg, rgba(208, 0, 22, 0.22), transparent 34%),
+        linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.04));
+    pointer-events: none;
 }
 
-.ne-izlesem-promo__glow {
-    background:
-        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.24), transparent 26%),
-        radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.35), transparent 34%);
-    animation: promo-pulse 8s ease-in-out infinite;
+.ne-izlesem-promo__wordmark {
+    overflow: visible;
 }
 
 .ne-izlesem-promo__svg-text {
     fill: white;
     font-family: 'Bricolage Grotesque', 'Arial Black', sans-serif;
-    font-size: 74px;
+    font-size: 21px;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 1.2px;
+    animation: promo-nudge 3.6s ease-in-out infinite;
 }
 
-@keyframes promo-pulse {
-    0%, 100% { opacity: 0.55; transform: scale(1); }
-    50% { opacity: 0.9; transform: scale(1.04); }
-}
-
-@keyframes promo-sheen {
-    0%, 18% { transform: translateX(-100%); }
-    30%, 100% { transform: translateX(120%); }
+@keyframes promo-nudge {
+    0%, 100% { transform: translateX(0); }
+    45% { transform: translateX(1.5px); }
+    55% { transform: translateX(0); }
 }
 
 @media (max-width: 767px) {
-    .ne-izlesem-promo__svg-text {
-        font-size: 56px;
+    .ne-izlesem-promo {
+        max-width: none;
     }
 }
 </style>
