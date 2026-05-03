@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('APP_ENV') === 'testing' ? env('DB_CONNECTION', 'sqlite') : 'mysql',
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
