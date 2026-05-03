@@ -176,7 +176,7 @@ PROMPT;
         $decoded = json_decode($payloadText, true);
 
         if (!is_array($decoded)) {
-            return $this->buildFallbackPayload($userMessage, $postContext, $userTurns, $payloadText);
+            return $this->buildFallbackPayload($userMessage, $postContext, $userTurns);
         }
 
         $recommendedIds = array_values(array_intersect(
@@ -309,11 +309,11 @@ PROMPT;
         return ['message' => $msg, 'recommended_posts' => $payload['meta']['site_posts'] ?? []];
     }
 
-    private function buildFallbackPayload(string $userMessage, array $postContext, int $userTurns, string $fallbackReply = ''): array
+    private function buildFallbackPayload(string $userMessage, array $postContext, int $userTurns): array
     {
         $recommendedIds = $this->pickRelevantPostIds($userMessage, $postContext);
         $externalSuggestions = $this->pickExternalSuggestions($userMessage);
-        $reply = trim($fallbackReply) ?: $this->buildFallbackReply($userMessage, $recommendedIds, $externalSuggestions, $postContext);
+        $reply = $this->buildFallbackReply($userMessage, $recommendedIds, $externalSuggestions, $postContext);
 
         return $this->finalizePayload(
             $reply,
