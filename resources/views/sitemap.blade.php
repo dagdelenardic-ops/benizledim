@@ -20,9 +20,19 @@
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
+    <url>
+        <loc>https://benizledim.com/sinemalar</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://benizledim.com/ne-izlesem</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
     @foreach($categories as $category)
     <url>
-        <loc>https://benizledim.com/yazilar?category={{ $category->slug }}</loc>
+        <loc>https://benizledim.com/yazilar/{{ $category->slug }}</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

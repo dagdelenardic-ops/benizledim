@@ -40,6 +40,24 @@ class PostController extends Controller
         ]);
     }
 
+    public function indexByCategory(Request $request, Category $category)
+    {
+        $posts = Post::published()
+            ->with(['user', 'categories', 'tags'])
+            ->withCount(['comments', 'likes'])
+            ->whereHas('categories', fn ($q) => $q->where('categories.id', $category->id))
+            ->latest('published_at')
+            ->paginate(12);
+
+        $categories = Category::withCount('posts')->get();
+
+        return Inertia::render('Post/Index', [
+            'posts' => $posts,
+            'categories' => $categories,
+            'filters' => ['category' => $category->slug],
+        ]);
+    }
+
     public function show(Request $request, Post $post)
     {
         if (!$post->published_at || $post->status !== 'published' || $post->deletion_requested_at) {

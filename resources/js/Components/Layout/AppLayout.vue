@@ -110,6 +110,7 @@ export default {
     <Head>
         <title>{{ fullTitle }}</title>
         <link rel="canonical" :href="currentCanonical" />
+        <link rel="alternate" type="application/rss+xml" title="Ben İzledim RSS" href="https://benizledim.com/feed" />
         <meta name="description" :content="description" />
         <!-- Open Graph -->
         <meta property="og:title" :content="title || 'Ben İzledim'" />

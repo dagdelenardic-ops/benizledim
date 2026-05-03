@@ -26,6 +26,7 @@ use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\CinemaReviewController;
 use App\Http\Controllers\AiRecommendationController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\RssFeedController;
 use App\Http\Controllers\WixRedirectController;
 
 Route::get('/up', function () {
@@ -35,13 +36,16 @@ Route::get('/up', function () {
     ]);
 })->name('health.up');
 
-// Sitemap
+// Sitemap & RSS
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/feed', [RssFeedController::class, 'index'])->name('feed');
+Route::get('/rss', [RssFeedController::class, 'index']);
 
 Route::get('/', [HomeController::class, 'index']);
 
 // Yazı listesi (kategori/tag filtreleme)
 Route::get('/yazilar', [PostController::class, 'index'])->name('posts.index');
+Route::get('/yazilar/{category:slug}', [PostController::class, 'indexByCategory'])->name('posts.category');
 
 // Yazı detay (slug ile)
 Route::get('/yazi/{post}', [PostController::class, 'show'])->name('posts.show');
