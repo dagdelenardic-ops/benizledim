@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -93,6 +94,7 @@ class AdminPostController extends Controller
             'content' => 'required|string',
             'cover_image' => 'nullable|image|max:2048',
             'status' => 'required|in:draft,published',
+            'scheduled_at' => 'nullable|date',
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'tags' => 'nullable|array',
@@ -101,76 +103,17 @@ class AdminPostController extends Controller
 
         $wordCount = str_word_count(strip_tags($validated['content']));
         $readingTime = max(1, ceil($wordCount / 200));
-        $targetStatus = $this->resolveTargetStatus($request->user(), $validated['status']);
+        $scheduledAt = $validated['scheduled_at'] ?? null;
+        $targetStatus = $scheduledAt ? 'draft' : $this->resolveTargetStatus($request->user(), $validated['status']);
 
         $postData = [
             'user_id' => auth()->id(),
             'title' => $validated['title'],
             'excerpt' => $validated['excerpt'],
             'content' => $validated['content'],
-            'reading_time_minutes' => $readingTime,
-            'status' => $targetStatus,
-            'published_at' => $targetStatus === 'published' ? now() : null,
-            'pending_review_at' => $targetStatus === 'pending_review' ? now() : null,
-            'pending_review_by' => $targetStatus === 'pending_review' ? $request->user()->id : null,
-            'reviewed_at' => $targetStatus === 'published' ? now() : null,
-            'reviewed_by' => $targetStatus === 'published' ? $request->user()->id : null,
-            'deletion_requested_at' => null,
-            'deletion_requested_by' => null,
-            'deletion_approved_at' => null,
-            'deletion_approved_by' => null,
-        ];
-
-        if ($request->hasFile('cover_image')) {
-            $path = $request->file('cover_image')->store('posts', 'public');
-            $postData['cover_image'] = '/storage/' . $path;
-        }
-
-        $post = Post::create($postData);
-
-        $post->categories()->sync($validated['categories']);
-        $post->tags()->sync($validated['tags'] ?? []);
-
-        $message = $targetStatus === 'pending_review'
-            ? 'Yazı incelemeye gönderildi.'
-            : 'Yazı başarıyla oluşturuldu!';
-
-        return redirect()->route('admin.posts.index')
-            ->with('success', $message);
-    }
-
-    public function edit(Post $post): Response
-    {
-        $this->authorizePostAccess($post, request()->user());
-
-        $post->load(['categories', 'tags', 'pendingReviewBy', 'reviewedBy']);
-        $categories = Category::all();
-        $tags = Tag::all();
-
-        return Inertia::render('Admin/Posts/Edit', [
-            'post' => $post,
-            'categories' => $categories,
-            'tags' => $tags,
-            'owners' => request()->user()?->isAdmin()
-                ? User::query()->orderBy('name')->get(['id', 'name', 'email', 'role'])
-                : [],
-            'publishMode' => [
-                'requiresReview' => !request()->user()?->canPublishWithoutReview(),
-            ],
-        ]);
-    }
-
-    public function update(Request $request, Post $post)
-    {
-        $user = $request->user();
-        $this->authorizePostAccess($post, $user);
-
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'excerpt' => 'nullable|string|max:500',
-            'content' => 'required|string',
             'cover_image' => 'nullable|image|max:2048',
             'status' => 'required|in:draft,published',
+            'scheduled_at' => 'nullable|date',
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'tags' => 'nullable|array',
@@ -179,7 +122,8 @@ class AdminPostController extends Controller
 
         $wordCount = str_word_count(strip_tags($validated['content']));
         $readingTime = max(1, ceil($wordCount / 200));
-        $targetStatus = $this->resolveTargetStatus($user, $validated['status']);
+        $scheduledAt = $validated['scheduled_at'] ?? null;
+        $targetStatus = $scheduledAt ? 'draft' : $this->resolveTargetStatus($user, $validated['status']);
 
         $updateData = [
             'title' => $validated['title'],
@@ -187,6 +131,7 @@ class AdminPostController extends Controller
             'content' => $validated['content'],
             'reading_time_minutes' => $readingTime,
             'status' => $targetStatus,
+            'scheduled_at' => $scheduledAt ?: null,
             'pending_review_at' => $targetStatus === 'pending_review' ? now() : null,
             'pending_review_by' => $targetStatus === 'pending_review' ? $user->id : null,
             'reviewed_at' => $targetStatus === 'published' ? now() : null,
@@ -367,6 +312,63 @@ class AdminPostController extends Controller
         $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();
+    }
+
+    public function autosave(Request $request, Post $post): JsonResponse
+    {
+        $this->authorize('update', $post);
+
+        $request->validate([
+            'content' => ['required', 'string', 'max:500000'],
+        ]);
+
+        $post->update([
+            'content'    => $request->string('content'),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'saved_at' => $post->updated_at->toISOString(),
+        ]);
+    }
+
+    public function draftStatus(Post $post): JsonResponse
+    {
+        $this->authorize('view', $post);
+
+        return response()->json([
+            'updated_at' => $post->updated_at->toISOString(),
+            'status'     => $post->status,
+        ]);
+    }
+
+    public function searchPosts(Request $request): JsonResponse
+    {
+        $query = $request->string('q')->toString();
+
+        if (mb_strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $posts = Post::published()
+            ->where('title', 'like', "%{$query}%")
+            ->orWhere('excerpt', 'like', "%{$query}%")
+            ->limit(10)
+            ->get(['id', 'title', 'slug']);
+
+        return response()->json($posts);
+    }
+
+    public function checkSlug(Request $request): JsonResponse
+    {
+        $slug = $request->string('slug')->toString();
+        $excludeId = $request->integer('exclude');
+
+        $exists = Post::where('slug', $slug)
+            ->when($excludeId > 0, fn ($q) => $q->where('id', '!=', $excludeId))
+            ->exists();
+
+        return response()->json(['available' => !$exists]);
     }
 
     private function resolveTargetStatus(User $user, string $requestedStatus): string

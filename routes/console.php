@@ -31,3 +31,16 @@ if ((bool) env('RUN_WIX_SCRAPER_SCHEDULED', false)) {
         ->withoutOverlapping()
         ->appendOutputTo(storage_path('logs/scheduler.log'));
 }
+
+Schedule::call(function () {
+    \App\Models\Post::where('status', 'draft')
+        ->whereNotNull('scheduled_at')
+        ->where('scheduled_at', '<=', now())
+        ->each(function ($post) {
+            $post->update([
+                'status' => 'published',
+                'published_at' => now(),
+                'scheduled_at' => null,
+            ]);
+        });
+})->everyMinute()->withoutOverlapping()->appendOutputTo(storage_path('logs/scheduler.log'));

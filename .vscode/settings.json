@@ -22,5 +22,11 @@
     },
     "git.detectSubmodules": false,
     "git.detectSubmodulesLimit": 1,
-    "git.autoRepositoryDetection": "openEditors"
+    "git.autoRepositoryDetection": "openEditors",
+    "chat.tools.terminal.autoApprove": {
+        "/^php artisan test tests/Feature/DeleteWorkflowTest\\.php tests/Feature/AdminPostReviewWorkflowTest\\.php tests/Feature/SecurityAndRoleTest\\.php$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
 }

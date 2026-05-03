@@ -24,6 +24,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
         'reading_time_minutes',
         'status',
         'published_at',
+        'scheduled_at',
         'pending_review_at',
         'pending_review_by',
         'deletion_requested_at',
@@ -46,6 +47,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
     {
         return [
             'published_at' => 'datetime',
+            'scheduled_at' => 'datetime',
             'pending_review_at' => 'datetime',
             'deletion_requested_at' => 'datetime',
             'deletion_approved_at' => 'datetime',

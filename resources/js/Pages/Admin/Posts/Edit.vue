@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import RichTextEditor from '../../../Components/Admin/RichTextEditor.vue';
+import SlugPreview from '../../../Components/Admin/SlugPreview.vue';
 import Icon from '../../../Components/Admin/AdminIcon.vue';
 
 const props = defineProps({
@@ -38,6 +39,8 @@ const form = useForm({
     content: props.post.content,
     cover_image: null,
     status: props.post.status,
+    scheduled_at: props.post.scheduled_at || '',
+    reading_time_minutes: props.post.reading_time_minutes || 1,
     user_id: props.post.user_id,
     categories: props.post.categories?.map(c => c.id) || [],
     tags: props.post.tags?.map(t => t.id) || [],
@@ -46,6 +49,13 @@ const form = useForm({
 
 const coverPreview = ref(props.post.cover_image);
 const action = ref('draft');
+const slugPreviewRef = ref(null);
+const draftKey = computed(() => `benizledim_draft_post_${props.post.id}`);
+const autosaveEndpoint = computed(() => `/admin/posts/${props.post.id}/autosave`);
+
+watch(() => form.title, (title) => {
+    slugPreviewRef.value?.updateFromTitle(title);
+});
 
 const handleCoverChange = (e) => {
     const file = e.target.files[0];
@@ -55,13 +65,25 @@ const handleCoverChange = (e) => {
     }
 };
 
+const onReadingTimeUpdate = (mins) => {
+    form.reading_time_minutes = mins;
+};
+
 const submit = (publish = false) => {
-    action.value = publish ? 'publish' : 'draft';
+    action.value = form.scheduled_at ? 'schedule' : publish ? 'publish' : 'draft';
     if (publish) {
+        form.status = 'published';
+        form.scheduled_at = '';
+    } else if (!form.scheduled_at) {
+        form.status = props.post.status;
+    } else {
         form.status = 'published';
     }
     
     form.post(`/admin/posts/${props.post.id}`, {
+        onSuccess: () => {
+            localStorage.removeItem(draftKey.value);
+        },
         onError: () => {
             if (publish) form.status = props.post.status;
         },
@@ -82,12 +104,12 @@ const requestDelete = () => {
 <template>
     <AdminLayout :title="`Yazı Düzenle`">
         <div class="mx-auto max-w-5xl space-y-6">
+            <!-- Header -->
             <section class="border-2 border-[var(--bi-ink)] bg-[var(--bi-paper)] p-5">
                 <div class="flex items-center justify-between gap-4">
-                    <div class="min-w-0">
-                        <span class="bi-kicker">Üretim</span>
-                        <h1 class="mt-3 truncate text-3xl font-black text-[var(--bi-ink)]">Yazı Düzenle</h1>
-                        <p class="mt-2 truncate text-sm text-[var(--bi-muted)]">{{ post.title }}</p>
+                    <div>
+                        <span class="bi-kicker">Düzenleme</span>
+                        <h1 class="mt-3 text-3xl font-black text-[var(--bi-ink)]">Yazı Düzenle</h1>
                     </div>
                     <Link href="/admin/posts" class="flex items-center gap-1 border border-[var(--bi-ink)] bg-white px-3 py-2 text-sm font-bold text-[var(--bi-ink)] hover:bg-[var(--bi-paper)]">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +137,7 @@ const requestDelete = () => {
                 </div>
             </div>
 
-            <div v-if="post.status === 'pending_review'" class="border-2 border-amber-700 bg-amber-50 p-4">
+            <div v-if="post.status === 'pending_review'" class="border-2 border-amber-500 bg-amber-50 p-4">
                 <div class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -131,29 +153,32 @@ const requestDelete = () => {
             </div>
 
             <!-- Status Badge -->
-            <div class="flex items-center gap-3 border-2 border-[var(--bi-ink)] bg-white p-4">
+            <div class="flex items-center gap-3">
                 <span class="text-sm text-gray-500">Durum:</span>
                 <span 
                     :class="[
-                        'border px-3 py-1 text-sm font-bold',
+                        'px-3 py-1 border-2 text-sm font-bold',
                         post.is_deletion_pending 
-                            ? 'bg-red-100 text-red-700' 
+                            ? 'border-red-700 bg-red-50 text-red-700' 
                             : post.status === 'pending_review'
-                                ? 'bg-amber-100 text-amber-700'
+                                ? 'border-amber-500 bg-amber-50 text-amber-700'
                             : post.status === 'published' 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-yellow-100 text-yellow-700'
+                                ? 'border-green-700 bg-green-50 text-green-700' 
+                                : 'border-[var(--bi-ink)] bg-[var(--bi-paper)] text-[var(--bi-ink)]'
                     ]"
                 >
                     {{ post.is_deletion_pending ? 'Silme Onayı Bekliyor' : post.status === 'pending_review' ? 'İncelemede' : post.status === 'published' ? 'Yayında' : 'Taslak' }}
                 </span>
+                <span v-if="post.scheduled_at" class="px-3 py-1 border-2 border-purple-500 bg-purple-50 text-purple-700 text-sm font-bold">
+                    Zamanlı: {{ new Date(post.scheduled_at).toLocaleString('tr-TR') }}
+                </span>
             </div>
 
-            <div v-if="isAdmin" class="border-2 border-[var(--bi-ink)] bg-white p-5">
+            <div v-if="isAdmin" class="border border-[var(--bi-ink)] bg-[var(--bi-paper)] p-3">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Yazı Sahibi</label>
                 <select
                     v-model="form.user_id"
-                    class="w-full border border-[var(--bi-ink)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-700/20"
+                    class="w-full max-w-xs border border-[var(--bi-ink)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-700/20"
                     disabled
                 >
                     <option v-for="owner in owners" :key="owner.id" :value="owner.id">
@@ -179,6 +204,9 @@ const requestDelete = () => {
                     />
                     <p v-if="form.errors.title" class="mt-1 text-sm text-red-600">{{ form.errors.title }}</p>
                 </div>
+
+                <!-- Slug Preview -->
+                <SlugPreview ref="slugPreviewRef" :model-value="post.slug" :post-id="post.id" />
 
                 <!-- Excerpt -->
                 <div>
@@ -206,7 +234,12 @@ const requestDelete = () => {
                         İçerik
                         <span class="text-red-500">*</span>
                     </label>
-                    <RichTextEditor v-model="form.content" />
+                    <RichTextEditor
+                        v-model="form.content"
+                        :autosave-key="draftKey"
+                        :autosave-endpoint="autosaveEndpoint"
+                        @update:reading-time="onReadingTimeUpdate"
+                    />
                     <p v-if="form.errors.content" class="mt-1 text-sm text-red-600">{{ form.errors.content }}</p>
                 </div>
 
@@ -285,47 +318,63 @@ const requestDelete = () => {
                     <p v-if="form.errors.tags" class="mt-1 text-sm text-red-600">{{ form.errors.tags }}</p>
                 </div>
 
-                <!-- Actions -->
-                <div class="flex flex-col items-stretch justify-between gap-4 border-t-2 border-[var(--bi-ink)] pt-5 sm:flex-row sm:items-center">
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <button
-                            type="submit"
-                            :disabled="form.processing || post.is_deletion_pending"
-                            class="flex items-center justify-center gap-2 border border-[var(--bi-ink)] bg-white px-6 py-3 font-bold text-[var(--bi-ink)] transition-colors hover:bg-[var(--bi-paper)] disabled:opacity-50"
-                        >
-                            <svg v-if="form.processing && action === 'draft'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span>Taslak Olarak Kaydet</span>
-                        </button>
+                <!-- Schedule & Actions -->
+                <div class="flex flex-col gap-4 border-t-2 border-[var(--bi-ink)] pt-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Zamanlı Yayın
+                            <span class="text-gray-400 text-xs ml-1">(opsiyonel)</span>
+                        </label>
+                        <input
+                            v-model="form.scheduled_at"
+                            type="datetime-local"
+                            class="w-full max-w-xs border border-[var(--bi-ink)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-700/20"
+                        />
+                        <p v-if="form.scheduled_at" class="mt-1 text-xs text-amber-600">
+                            Yazı belirtilen tarihte otomatik yayınlanacak.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button
+                                type="submit"
+                                :disabled="form.processing || post.is_deletion_pending"
+                                class="flex items-center justify-center gap-2 border border-[var(--bi-ink)] bg-white px-6 py-3 font-bold text-[var(--bi-ink)] transition-colors hover:bg-[var(--bi-paper)] disabled:opacity-50"
+                            >
+                                <svg v-if="form.processing && action === 'draft'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>Taslak Olarak Kaydet</span>
+                            </button>
+                            <button
+                                type="button"
+                                @click="submit(true)"
+                                :disabled="form.processing || post.is_deletion_pending"
+                                class="flex items-center justify-center gap-2 bg-red-700 px-6 py-3 font-bold text-white transition-colors hover:bg-red-800 disabled:opacity-50"
+                            >
+                                <svg v-if="form.processing && action === 'publish'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <Icon v-else name="check" />
+                                <span>{{ publishMode.requiresReview ? 'İncelemeye Gönder' : post.status === 'published' ? 'Güncelle' : 'Yayınla' }}</span>
+                            </button>
+                        </div>
+                        
                         <button
                             type="button"
-                            @click="submit(true)"
+                            @click="requestDelete"
                             :disabled="form.processing || post.is_deletion_pending"
-                            class="flex items-center justify-center gap-2 bg-red-700 px-6 py-3 font-bold text-white transition-colors hover:bg-red-800 disabled:opacity-50"
+                            class="flex items-center justify-center gap-2 border border-red-300 px-6 py-3 font-bold text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50"
                         >
-                            <svg v-if="form.processing && action === 'publish'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
-                            <Icon v-else name="check" />
-                            <span>{{ publishMode.requiresReview ? 'İncelemeye Gönder' : post.status === 'published' ? 'Güncelle' : 'Yayınla' }}</span>
+                            <span>{{ isAdmin ? 'Sil' : 'Silme Talebi Gönder' }}</span>
                         </button>
                     </div>
-                    
-                    <!-- Delete Button -->
-                    <button
-                        type="button"
-                        @click="requestDelete"
-                        :disabled="form.processing || (!isAdmin && post.is_deletion_pending)"
-                        class="flex items-center justify-center gap-2 border border-red-700 bg-red-50 px-6 py-3 font-bold text-red-800 transition-colors hover:bg-red-100 disabled:opacity-50"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        <span>{{ isAdmin ? 'Sil' : 'Silme Talebi Gönder' }}</span>
-                    </button>
                 </div>
             </form>
         </div>

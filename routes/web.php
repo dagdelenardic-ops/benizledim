@@ -21,6 +21,8 @@ use App\Http\Controllers\Admin\AdminFestivalEventController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminNewsletterController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\PostImageController;
+use App\Http\Controllers\Admin\PostEmbedController;
 use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\CinemaController;
@@ -102,6 +104,22 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('/posts/{post:id}/edit', [AdminPostController::class, 'edit'])->name('posts.edit');
     Route::put('/posts/{post:id}', [AdminPostController::class, 'update'])->name('posts.update');
     Route::delete('/posts/{post:id}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
+
+    // Autosave & draft status
+    Route::put('/posts/{post:id}/autosave', [AdminPostController::class, 'autosave'])->name('posts.autosave');
+    Route::get('/posts/{post:id}/draft-status', [AdminPostController::class, 'draftStatus'])->name('posts.draftStatus');
+
+    // Slug check & post search (inline editör için)
+    Route::get('/posts/check-slug', [AdminPostController::class, 'checkSlug'])->name('posts.checkSlug');
+    Route::get('/posts/search', [AdminPostController::class, 'searchPosts'])->name('posts.search');
+
+    // Görsel yükleme
+    Route::post('/posts/images', [PostImageController::class, 'store'])
+        ->middleware('throttle:60,1')
+        ->name('posts.images.store');
+
+    // Embed çözümleme
+    Route::post('/posts/embed', [PostEmbedController::class, 'oembed'])->name('posts.embed');
 
     Route::middleware('role:admin,editor')->group(function () {
         Route::post('/posts/{post:id}/approve-review', [AdminPostController::class, 'approveReview'])->name('posts.approveReview');

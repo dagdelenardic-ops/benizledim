@@ -1,8 +1,9 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import RichTextEditor from '../../../Components/Admin/RichTextEditor.vue';
+import SlugPreview from '../../../Components/Admin/SlugPreview.vue';
 import Icon from '../../../Components/Admin/AdminIcon.vue';
 
 const props = defineProps({
@@ -26,6 +27,8 @@ const form = useForm({
     content: '',
     cover_image: null,
     status: 'draft',
+    scheduled_at: '',
+    reading_time_minutes: 1,
     categories: props.categories[0]?.id ? [props.categories[0].id] : [],
     tags: [],
 });
@@ -34,11 +37,18 @@ const coverPreview = ref(null);
 const action = ref('draft');
 const formMessage = ref('');
 const hasCategories = computed(() => props.categories.length > 0);
+const slugPreviewRef = ref(null);
+
+const draftKey = 'benizledim_draft_new_' + Date.now();
 
 watch(() => props.categories, (categories) => {
     if (form.categories.length === 0 && categories[0]?.id) {
         form.categories = [categories[0].id];
     }
+});
+
+watch(() => form.title, (title) => {
+    slugPreviewRef.value?.updateFromTitle(title);
 });
 
 const handleCoverChange = (e) => {
@@ -49,6 +59,10 @@ const handleCoverChange = (e) => {
     }
 };
 
+const onReadingTimeUpdate = (mins) => {
+    form.reading_time_minutes = mins;
+};
+
 const submit = (publish = false) => {
     formMessage.value = '';
 
@@ -57,14 +71,20 @@ const submit = (publish = false) => {
         return;
     }
 
-    action.value = publish ? 'publish' : 'draft';
+    action.value = form.scheduled_at ? 'schedule' : publish ? 'publish' : 'draft';
     if (publish) {
         form.status = 'published';
-    } else {
+        form.scheduled_at = '';
+    } else if (!form.scheduled_at) {
         form.status = 'draft';
+    } else {
+        form.status = 'published';
     }
     
     form.post('/admin/posts', {
+        onSuccess: () => {
+            localStorage.removeItem(draftKey);
+        },
         onError: () => {
             formMessage.value = 'Yazı kaydedilemedi. Lütfen işaretli alanları kontrol edin.';
             if (publish) form.status = 'draft';
@@ -115,6 +135,9 @@ const submit = (publish = false) => {
                     <p v-if="form.errors.title" class="mt-1 text-sm text-red-600">{{ form.errors.title }}</p>
                 </div>
 
+                <!-- Slug Preview -->
+                <SlugPreview ref="slugPreviewRef" />
+
                 <!-- Excerpt -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -141,7 +164,11 @@ const submit = (publish = false) => {
                         İçerik
                         <span class="text-red-500">*</span>
                     </label>
-                    <RichTextEditor v-model="form.content" />
+                    <RichTextEditor
+                        v-model="form.content"
+                        :autosave-key="draftKey"
+                        @update:reading-time="onReadingTimeUpdate"
+                    />
                     <p v-if="form.errors.content" class="mt-1 text-sm text-red-600">{{ form.errors.content }}</p>
                 </div>
 
@@ -221,32 +248,49 @@ const submit = (publish = false) => {
                     <p v-if="form.errors.tags" class="mt-1 text-sm text-red-600">{{ form.errors.tags }}</p>
                 </div>
 
-                <!-- Actions -->
-                <div class="flex flex-col items-stretch gap-4 border-t-2 border-[var(--bi-ink)] pt-5 sm:flex-row sm:items-center">
-                    <button
-                        type="submit"
-                        :disabled="form.processing"
-                        class="flex items-center justify-center gap-2 border border-[var(--bi-ink)] bg-white px-6 py-3 font-bold text-[var(--bi-ink)] transition-colors hover:bg-[var(--bi-paper)] disabled:opacity-50"
-                    >
-                        <svg v-if="form.processing && action === 'draft'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span>Taslak Kaydet</span>
-                    </button>
-                    <button
-                        type="button"
-                        @click="submit(true)"
-                        :disabled="form.processing"
-                        class="flex items-center justify-center gap-2 bg-red-700 px-6 py-3 font-bold text-white transition-colors hover:bg-red-800 disabled:opacity-50"
-                    >
-                        <svg v-if="form.processing && action === 'publish'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <Icon v-else name="check" />
-                        <span>{{ publishMode.requiresReview ? 'İncelemeye Gönder' : 'Yayınla' }}</span>
-                    </button>
+                <!-- Schedule & Actions -->
+                <div class="flex flex-col gap-4 border-t-2 border-[var(--bi-ink)] pt-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Zamanlı Yayın
+                            <span class="text-gray-400 text-xs ml-1">(opsiyonel)</span>
+                        </label>
+                        <input
+                            v-model="form.scheduled_at"
+                            type="datetime-local"
+                            class="w-full max-w-xs border border-[var(--bi-ink)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-700/20"
+                        />
+                        <p v-if="form.scheduled_at" class="mt-1 text-xs text-amber-600">
+                            Yazı belirtilen tarihte otomatik yayınlanacak. Şimdi taslak olarak kaydedilir.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            class="flex items-center justify-center gap-2 border border-[var(--bi-ink)] bg-white px-6 py-3 font-bold text-[var(--bi-ink)] transition-colors hover:bg-[var(--bi-paper)] disabled:opacity-50"
+                        >
+                            <svg v-if="form.processing && action === 'draft'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>{{ form.scheduled_at ? 'Zamanla' : 'Taslak Kaydet' }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            @click="submit(true)"
+                            :disabled="form.processing"
+                            class="flex items-center justify-center gap-2 bg-red-700 px-6 py-3 font-bold text-white transition-colors hover:bg-red-800 disabled:opacity-50"
+                        >
+                            <svg v-if="form.processing && action === 'publish'" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <Icon v-else name="check" />
+                            <span>{{ publishMode.requiresReview ? 'İncelemeye Gönder' : 'Yayınla' }}</span>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
