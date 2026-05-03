@@ -23,6 +23,7 @@ const props = defineProps({
     modelValue: { type: String, default: '' },
     autosaveKey: { type: String, default: null },
     autosaveEndpoint: { type: String, default: null },
+    showRestoreBanner: { type: Boolean, default: true },
 });
 
 const emit = defineEmits(['update:modelValue', 'update:readingTime']);
@@ -251,7 +252,7 @@ const togglePreview = () => {
 <template>
     <div class="overflow-hidden border-2 border-[var(--bi-ink)] bg-white">
         <!-- Draft restore banner -->
-        <div v-if="draftRestoreAvailable"
+        <div v-if="props.showRestoreBanner && draftRestoreAvailable"
              class="flex items-center justify-between border-b-2 border-amber-500 bg-amber-50 px-4 py-3">
             <span class="text-sm font-bold text-amber-900">Kaydedilmemiş taslak bulundu ({{ draftSavedAt }})</span>
             <div class="flex gap-2">

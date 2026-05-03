@@ -1,10 +1,11 @@
 <script setup>
-import { computed, ref, watch, onMounted } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import RichTextEditor from '../../../Components/Admin/RichTextEditor.vue';
 import SlugPreview from '../../../Components/Admin/SlugPreview.vue';
 import Icon from '../../../Components/Admin/AdminIcon.vue';
+import { useLocalFormDraft } from '../../../Composables/useLocalFormDraft';
 
 const props = defineProps({
     categories: {
@@ -39,7 +40,30 @@ const formMessage = ref('');
 const hasCategories = computed(() => props.categories.length > 0);
 const slugPreviewRef = ref(null);
 
-const draftKey = 'benizledim_draft_new_' + Date.now();
+const draftKey = 'benizledim_draft_new_post_content';
+const formDraftKey = 'benizledim_draft_new_post_form';
+const createDraftPayload = computed(() => ({
+    title: form.title,
+    excerpt: form.excerpt,
+    content: form.content,
+    status: form.status,
+    scheduled_at: form.scheduled_at,
+    reading_time_minutes: form.reading_time_minutes,
+    categories: [...form.categories],
+    tags: [...form.tags],
+}));
+
+const {
+    clearDraft: clearFormDraft,
+    draftRestoreAvailable,
+    draftSavedAt,
+    restoreDraft,
+} = useLocalFormDraft(createDraftPayload, {
+    storageKey: formDraftKey,
+    isMeaningful: (data) => Boolean(
+        data.title || data.excerpt || data.content || data.scheduled_at || data.tags.length,
+    ),
+});
 
 watch(() => props.categories, (categories) => {
     if (form.categories.length === 0 && categories[0]?.id) {
@@ -63,6 +87,26 @@ const onReadingTimeUpdate = (mins) => {
     form.reading_time_minutes = mins;
 };
 
+const applyDraft = (draft) => {
+    form.title = draft.title ?? '';
+    form.excerpt = draft.excerpt ?? '';
+    form.content = draft.content ?? '';
+    form.status = draft.status ?? 'draft';
+    form.scheduled_at = draft.scheduled_at ?? '';
+    form.reading_time_minutes = draft.reading_time_minutes ?? 1;
+    form.categories = Array.isArray(draft.categories) && draft.categories.length > 0
+        ? draft.categories
+        : (props.categories[0]?.id ? [props.categories[0].id] : []);
+    form.tags = Array.isArray(draft.tags) ? draft.tags : [];
+};
+
+const restoreFormDraft = () => restoreDraft(applyDraft);
+
+const discardFormDraft = () => {
+    clearFormDraft();
+    localStorage.removeItem(draftKey);
+};
+
 const submit = (publish = false) => {
     formMessage.value = '';
 
@@ -83,6 +127,7 @@ const submit = (publish = false) => {
     
     form.post('/admin/posts', {
         onSuccess: () => {
+            clearFormDraft();
             localStorage.removeItem(draftKey);
         },
         onError: () => {
@@ -115,6 +160,18 @@ const submit = (publish = false) => {
             </section>
 
             <form @submit.prevent="submit(false)" class="space-y-6 border-2 border-[var(--bi-ink)] bg-white p-5 md:p-6">
+                <div v-if="draftRestoreAvailable" class="flex items-center justify-between border-2 border-amber-500 bg-amber-50 px-4 py-3">
+                    <span class="text-sm font-bold text-amber-900">Kaydedilmemiş taslak bulundu ({{ draftSavedAt }})</span>
+                    <div class="flex gap-2">
+                        <button type="button" @click="restoreFormDraft" class="border border-amber-500 bg-amber-500 px-3 py-1 text-xs font-bold text-white hover:bg-amber-600">
+                            Devam Et
+                        </button>
+                        <button type="button" @click="discardFormDraft" class="border border-gray-400 bg-white px-3 py-1 text-xs font-bold text-gray-600 hover:bg-gray-50">
+                            Yoksay
+                        </button>
+                    </div>
+                </div>
+
                 <div v-if="formMessage" class="border-2 border-red-700 bg-red-50 px-4 py-3 text-sm font-bold text-red-800">
                     {{ formMessage }}
                 </div>
@@ -167,6 +224,7 @@ const submit = (publish = false) => {
                     <RichTextEditor
                         v-model="form.content"
                         :autosave-key="draftKey"
+                        :show-restore-banner="false"
                         @update:reading-time="onReadingTimeUpdate"
                     />
                     <p v-if="form.errors.content" class="mt-1 text-sm text-red-600">{{ form.errors.content }}</p>

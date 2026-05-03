@@ -5,6 +5,7 @@ import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import RichTextEditor from '../../../Components/Admin/RichTextEditor.vue';
 import SlugPreview from '../../../Components/Admin/SlugPreview.vue';
 import Icon from '../../../Components/Admin/AdminIcon.vue';
+import { useLocalFormDraft } from '../../../Composables/useLocalFormDraft';
 
 const props = defineProps({
     post: {
@@ -50,8 +51,40 @@ const form = useForm({
 const coverPreview = ref(props.post.cover_image);
 const action = ref('draft');
 const slugPreviewRef = ref(null);
-const draftKey = computed(() => `benizledim_draft_post_${props.post.id}`);
+const draftKey = computed(() => `benizledim_draft_post_${props.post.id}_content`);
+const formDraftKey = computed(() => `benizledim_draft_post_${props.post.id}_form`);
 const autosaveEndpoint = computed(() => `/admin/posts/${props.post.id}/autosave`);
+const editDraftPayload = computed(() => ({
+    title: form.title,
+    excerpt: form.excerpt,
+    content: form.content,
+    status: form.status,
+    scheduled_at: form.scheduled_at,
+    reading_time_minutes: form.reading_time_minutes,
+    user_id: form.user_id,
+    categories: [...form.categories],
+    tags: [...form.tags],
+}));
+
+const {
+    clearDraft: clearFormDraft,
+    draftRestoreAvailable,
+    draftSavedAt,
+    restoreDraft,
+} = useLocalFormDraft(editDraftPayload, {
+    storageKey: formDraftKey.value,
+    isMeaningful: (data) => JSON.stringify(data) !== JSON.stringify({
+        title: props.post.title,
+        excerpt: props.post.excerpt || '',
+        content: props.post.content,
+        status: props.post.status,
+        scheduled_at: props.post.scheduled_at || '',
+        reading_time_minutes: props.post.reading_time_minutes || 1,
+        user_id: props.post.user_id,
+        categories: props.post.categories?.map((category) => category.id) || [],
+        tags: props.post.tags?.map((tag) => tag.id) || [],
+    }),
+});
 
 watch(() => form.title, (title) => {
     slugPreviewRef.value?.updateFromTitle(title);
@@ -69,6 +102,25 @@ const onReadingTimeUpdate = (mins) => {
     form.reading_time_minutes = mins;
 };
 
+const applyDraft = (draft) => {
+    form.title = draft.title ?? props.post.title;
+    form.excerpt = draft.excerpt ?? '';
+    form.content = draft.content ?? props.post.content;
+    form.status = draft.status ?? props.post.status;
+    form.scheduled_at = draft.scheduled_at ?? '';
+    form.reading_time_minutes = draft.reading_time_minutes ?? props.post.reading_time_minutes ?? 1;
+    form.user_id = draft.user_id ?? props.post.user_id;
+    form.categories = Array.isArray(draft.categories) ? draft.categories : [];
+    form.tags = Array.isArray(draft.tags) ? draft.tags : [];
+};
+
+const restoreFormDraft = () => restoreDraft(applyDraft);
+
+const discardFormDraft = () => {
+    clearFormDraft();
+    localStorage.removeItem(draftKey.value);
+};
+
 const submit = (publish = false) => {
     action.value = form.scheduled_at ? 'schedule' : publish ? 'publish' : 'draft';
     if (publish) {
@@ -82,6 +134,7 @@ const submit = (publish = false) => {
     
     form.post(`/admin/posts/${props.post.id}`, {
         onSuccess: () => {
+            clearFormDraft();
             localStorage.removeItem(draftKey.value);
         },
         onError: () => {
@@ -189,6 +242,18 @@ const requestDelete = () => {
             </div>
 
             <form @submit.prevent="submit(false)" class="space-y-6 border-2 border-[var(--bi-ink)] bg-white p-5 md:p-6">
+                <div v-if="draftRestoreAvailable" class="flex items-center justify-between border-2 border-amber-500 bg-amber-50 px-4 py-3">
+                    <span class="text-sm font-bold text-amber-900">Kaydedilmemiş taslak bulundu ({{ draftSavedAt }})</span>
+                    <div class="flex gap-2">
+                        <button type="button" @click="restoreFormDraft" class="border border-amber-500 bg-amber-500 px-3 py-1 text-xs font-bold text-white hover:bg-amber-600">
+                            Devam Et
+                        </button>
+                        <button type="button" @click="discardFormDraft" class="border border-gray-400 bg-white px-3 py-1 text-xs font-bold text-gray-600 hover:bg-gray-50">
+                            Yoksay
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Title -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -238,6 +303,7 @@ const requestDelete = () => {
                         v-model="form.content"
                         :autosave-key="draftKey"
                         :autosave-endpoint="autosaveEndpoint"
+                        :show-restore-banner="false"
                         @update:reading-time="onReadingTimeUpdate"
                     />
                     <p v-if="form.errors.content" class="mt-1 text-sm text-red-600">{{ form.errors.content }}</p>
