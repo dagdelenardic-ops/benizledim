@@ -48,7 +48,7 @@ const sendMessage = async () => {
         if (err.response?.status === 429) {
             error.value = err.response.data.error;
         } else {
-            error.value = 'Bir hata olustu. Lutfen tekrar deneyin.';
+            error.value = 'Bir hata oluştu. Lütfen tekrar deneyin.';
         }
     } finally {
         isLoading.value = false;
@@ -57,9 +57,9 @@ const sendMessage = async () => {
 };
 
 const quickPrompts = [
-    'Bugun kisa ve hafif bir sey izlemek istiyorum',
-    'Dusundurucü bir belgesel onerir misin?',
-    'Gerilimli bir dizi ariyorum',
+    'Bugün kısa ve hafif bir şey izlemek istiyorum',
+    'Düşündürücü bir belgesel önerir misin?',
+    'Gerilimli bir dizi arıyorum',
     'Ailecek izlenecek bir film?',
 ];
 
@@ -72,13 +72,13 @@ onMounted(scrollToBottom);
 </script>
 
 <template>
-    <AppLayout title="Ne Izlesem?" description="Ruh haline gore film ve dizi onerisi">
+    <AppLayout title="Ne İzlesem?" description="Ruh haline göre film ve dizi önerisi">
         <div class="min-h-screen bg-gray-50 flex flex-col">
             <!-- Header -->
             <div class="bg-white border-b border-gray-200">
                 <div class="max-w-3xl mx-auto px-4 py-6">
-                    <h1 class="text-2xl font-bold text-gray-900">Ne Izlesem?</h1>
-                    <p class="text-gray-500 text-sm mt-1">Ruh haline ve zamanina gore kisisellestirilmis oneriler</p>
+                    <h1 class="text-2xl font-bold text-gray-900">Ne İzlesem?</h1>
+                    <p class="text-gray-500 text-sm mt-1">Ruh haline ve zamanına göre kişiselleştirilmiş öneriler</p>
                 </div>
             </div>
 
@@ -93,7 +93,7 @@ onMounted(scrollToBottom);
                             </svg>
                         </div>
                         <h2 class="text-lg font-semibold text-gray-800 mb-2">Merhaba! Ne izlemek istersin?</h2>
-                        <p class="text-sm text-gray-500 mb-6">Ruh halini, zamanini veya tercihlerini yaz, sana ozel oneriler sunayim.</p>
+                        <p class="text-sm text-gray-500 mb-6">Ruh halini, zamanını veya tercihlerini yaz, sana özel öneriler sunayım.</p>
 
                         <!-- Quick Prompts -->
                         <div class="flex flex-wrap justify-center gap-2">
@@ -139,7 +139,7 @@ onMounted(scrollToBottom);
 
                 <!-- Recommended Posts -->
                 <div v-if="recommendedPosts.length > 0" class="mb-4">
-                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Onerilen Yazilar</h3>
+                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Önerilen Yazılar</h3>
                     <div class="flex gap-3 overflow-x-auto pb-2">
                         <Link
                             v-for="post in recommendedPosts"
@@ -166,7 +166,7 @@ onMounted(scrollToBottom);
                     <input
                         v-model="input"
                         type="text"
-                        placeholder="Ruh halini veya ne izlemek istedigini yaz..."
+                        placeholder="Ruh halini veya ne izlemek istediğini yaz..."
                         maxlength="500"
                         :disabled="isLoading"
                         class="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-sm"

@@ -42,7 +42,7 @@ class AiRecommendationController extends Controller
 
         if ($todayCount >= 10) {
             return response()->json([
-                'error' => 'Gunluk mesaj limitinize ulastiniz (10/gun). Yarin tekrar deneyin!',
+                'error' => 'Günlük mesaj limitinize ulaştınız (10/gün). Yarın tekrar deneyin!',
             ], 429);
         }
 

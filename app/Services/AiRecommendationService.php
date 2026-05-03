@@ -16,7 +16,7 @@ class AiRecommendationService
     public function __construct()
     {
         $this->apiKey = config('services.gemini.api_key', '');
-        $this->model = config('services.gemini.text_model', 'gemini-3-pro-preview');
+        $this->model = config('services.gemini.text_model', 'gemini-2.5-flash');
     }
 
     public function chat(AiConversation $conversation, string $userMessage): array
@@ -27,15 +27,15 @@ class AiRecommendationService
             'created_at' => now(),
         ]);
 
+        if (blank($this->apiKey)) {
+            Log::error('Gemini API key is not configured');
+            return $this->createErrorResponse($conversation);
+        }
+
         $postContext = $this->buildPostContext($userMessage);
         $conversationHistory = $this->buildConversationHistory($conversation);
 
         try {
-            if (blank($this->apiKey)) {
-                Log::error('Gemini API key is not configured');
-                return $this->createErrorResponse($conversation);
-            }
-
             $response = Http::timeout(30)->post($this->endpoint(), [
                 'systemInstruction' => [
                     'parts' => [
@@ -55,7 +55,7 @@ class AiRecommendationService
             }
 
             $data = $response->json();
-            $assistantContent = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'Bir hata olustu, lutfen tekrar deneyin.';
+            $assistantContent = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'Bir hata oluştu, lütfen tekrar deneyin.';
 
             $recommendedIds = $this->extractPostIds($assistantContent, $postContext);
 
@@ -95,26 +95,26 @@ class AiRecommendationService
         $postList = collect($posts)->map(function ($p) {
             $cats = collect($p['categories'] ?? [])->pluck('name')->join(', ');
             $moods = is_array($p['mood_tags'] ?? null) ? implode(', ', $p['mood_tags']) : '';
-            return "[ID:{$p['id']}] {$p['title']} | Kategori: {$cats} | Ruh hali: {$moods} | Sure: {$p['duration_category']} | Yogunluk: {$p['intensity_level']} | Ozet: {$p['excerpt']}";
+            return "[ID:{$p['id']}] {$p['title']} | Kategori: {$cats} | Ruh hali: {$moods} | Süre: {$p['duration_category']} | Yoğunluk: {$p['intensity_level']} | Özet: {$p['excerpt']}";
         })->join("\n");
 
         return <<<PROMPT
-Sen "Ben Izledim" sitesinin film ve dizi oneri asistanisin. Turkce konusuyorsun.
+Sen "Ben İzledim" sitesinin film ve dizi öneri asistanısın. Türkçe konuşuyorsun.
 
-Gorevlerin:
-1. Kullanicinin ruh haline, zamanina ve tercihlerine gore film/dizi onermek
-2. Sitedeki mevcut yazilari oncelikli olarak onermek (asagidaki liste)
-3. Listede uygun icerik yoksa genel bilgine dayanarak oneri yapmak
-4. Kisa, samimi ve eglenceli bir dilde yazmak
+Görevlerin:
+1. Kullanıcının ruh haline, zamanına ve tercihlerine göre film/dizi önermek
+2. Sitedeki mevcut yazıları öncelikli olarak önermek (aşağıdaki liste)
+3. Listede uygun içerik yoksa genel bilgine dayanarak öneri yapmak
+4. Kısa, samimi ve eğlenceli bir dilde yazmak
 
-Mevcut yazilar:
+Mevcut yazılar:
 {$postList}
 
-Onemli kurallar:
-- Sitedeki yazilardan onerirken [ID:X] formatini kullan ki sisteme baglayabilelim
-- Kullaniciya en fazla 3-4 oneri ver, aciklama ekle
+Önemli kurallar:
+- Sitedeki yazılardan önerirken [ID:X] formatını kullan ki sisteme bağlayabilelim
+- Kullanıcıya en fazla 3-4 öneri ver, açıklama ekle
 - Spoiler verme
-- Kullanici "merhaba" veya genel sohbet yaparsa kisa ve sicak karsilik ver, hemen film sormaya basla
+- Kullanıcı "merhaba" veya genel sohbet yaparsa kısa ve sıcak karşılık ver, hemen film sormaya başla
 PROMPT;
     }
 
@@ -153,7 +153,7 @@ PROMPT;
     {
         $msg = $conversation->messages()->create([
             'role' => 'assistant',
-            'content' => 'Uzgunum, su anda onerilerime ulasilamadi. Lutfen biraz sonra tekrar deneyin.',
+            'content' => 'Üzgünüm, şu anda önerilerime ulaşılamıyor. Lütfen biraz sonra tekrar deneyin.',
             'created_at' => now(),
         ]);
 

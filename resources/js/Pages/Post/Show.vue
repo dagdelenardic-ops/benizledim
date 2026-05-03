@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 import RelatedPosts from '../../Components/Post/RelatedPosts.vue';
@@ -37,6 +37,31 @@ const props = defineProps({
 const { formatDate, timeAgo } = useDate();
 const showLoginModal = ref(false);
 
+const canonicalUrl = computed(() => `https://benizledim.com/yazi/${props.post.slug}`);
+
+const articleJsonLd = computed(() => JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    'headline': props.post.title,
+    'description': props.post.excerpt || '',
+    'image': props.post.cover_image || 'https://benizledim.com/images/og-default.png',
+    'datePublished': props.post.published_at,
+    'dateModified': props.post.updated_at || props.post.published_at,
+    'author': {
+        '@type': 'Person',
+        'name': props.post.user?.name || 'Ben İzledim',
+    },
+    'publisher': {
+        '@type': 'Organization',
+        'name': 'Ben İzledim',
+        'url': 'https://benizledim.com',
+    },
+    'mainEntityOfPage': {
+        '@type': 'WebPage',
+        '@id': canonicalUrl.value,
+    },
+}));
+
 const formatReadingTime = (minutes) => {
     if (!minutes) return '2 dk okuma';
     return `${minutes} dk okuma`;
@@ -55,8 +80,12 @@ const closeLoginModal = () => {
     <AppLayout
         :title="post.title"
         :description="post.excerpt || 'Film, Dizi ve Belgesel eleştirileri - Ben İzledim'"
-        :og-image="post.cover_image || '/images/og-default.jpg'"
+        :og-image="post.cover_image || '/images/og-default.png'"
+        :canonical-url="canonicalUrl"
     >
+        <!-- Article JSON-LD -->
+        <component :is="'script'" type="application/ld+json" v-html="articleJsonLd" />
+
         <article class="min-h-screen bg-white">
             <!-- Cover Image -->
             <div class="w-full h-64 md:h-96 lg:h-[500px] bg-gray-900 relative overflow-hidden">
