@@ -31,6 +31,7 @@ use App\Http\Controllers\AiRecommendationController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\RssFeedController;
 use App\Http\Controllers\WixRedirectController;
+use App\Http\Controllers\ImageVariantController;
 
 Route::get('/up', function () {
     return response()->json([
@@ -38,6 +39,8 @@ Route::get('/up', function () {
         'timestamp' => now()->toIso8601String(),
     ]);
 })->name('health.up');
+
+Route::get('/img/variant', [ImageVariantController::class, 'show'])->name('image.variant');
 
 // Sitemap & RSS
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');

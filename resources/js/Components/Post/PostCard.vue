@@ -1,6 +1,8 @@
 <script setup>
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useDate } from '@/Composables/useDate';
+import { buildResponsiveImage } from '@/Utils/responsiveImage';
 
 const props = defineProps({
     post: {
@@ -10,6 +12,12 @@ const props = defineProps({
 });
 
 const { timeAgo } = useDate();
+
+const coverImage = computed(() => buildResponsiveImage(props.post.cover_image, {
+    widths: [480, 768, 960],
+    sizes: '(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
+    fallbackWidth: 768,
+}));
 
 const formatReadingTime = (minutes) => {
     if (!minutes) return '2 dk';
@@ -22,11 +30,12 @@ const formatReadingTime = (minutes) => {
         <div class="bi-post-card__image">
             <img
                 v-if="post.cover_image"
-                :src="post.cover_image"
+                :src="coverImage.src"
+                :srcset="coverImage.srcset || undefined"
+                :sizes="coverImage.sizes || undefined"
                 :alt="post.title"
                 loading="lazy"
                 decoding="async"
-                sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 width="800"
                 height="500"
             />

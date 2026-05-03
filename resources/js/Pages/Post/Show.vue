@@ -14,6 +14,7 @@ import DialogueView from '../../Components/Post/DialogueView.vue';
 import VisualEssayView from '../../Components/Post/VisualEssayView.vue';
 import LoginModal from '../../Components/Auth/LoginModal.vue';
 import { useDate } from '@/Composables/useDate';
+import { buildResponsiveImage } from '@/Utils/responsiveImage';
 
 const props = defineProps({
     post: {
@@ -36,6 +37,11 @@ const props = defineProps({
 
 const { formatDate, timeAgo } = useDate();
 const showLoginModal = ref(false);
+const coverImage = computed(() => buildResponsiveImage(props.post.cover_image, {
+    widths: [768, 1280, 1600],
+    sizes: '100vw',
+    fallbackWidth: 1280,
+}));
 
 const canonicalUrl = computed(() => `https://benizledim.com/yazi/${props.post.slug}`);
 
@@ -91,13 +97,14 @@ const closeLoginModal = () => {
             <div class="w-full h-64 md:h-96 lg:h-[500px] bg-gray-900 relative overflow-hidden">
                 <img
                     v-if="post.cover_image"
-                    :src="post.cover_image"
+                    :src="coverImage.src"
+                    :srcset="coverImage.srcset || undefined"
+                    :sizes="coverImage.sizes || undefined"
                     :alt="post.title"
                     class="w-full h-full object-cover opacity-90"
                     loading="eager"
                     fetchpriority="high"
                     decoding="async"
-                    sizes="100vw"
                     width="1600"
                     height="900"
                 />

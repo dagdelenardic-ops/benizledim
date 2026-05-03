@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AppLayout from '../Components/Layout/AppLayout.vue';
 import PostGrid from '../Components/Post/PostGrid.vue';
+import { buildResponsiveImage } from '@/Utils/responsiveImage';
 
 const props = defineProps({
     posts: {
@@ -26,6 +27,11 @@ const featuredPost = computed(() => props.posts[0] || null);
 const gridPosts = computed(() => props.posts.slice(1, 7));
 const railPosts = computed(() => props.posts.slice(0, 5));
 const secondarySpotlights = computed(() => props.spotlights.filter((item) => item.label !== 'Ne Izlesem'));
+const featuredImage = computed(() => buildResponsiveImage(featuredPost.value?.cover_image, {
+    widths: [480, 768, 1280, 1600],
+    sizes: '100vw',
+    fallbackWidth: 1280,
+}));
 
 const firstCategoryName = (post) => {
     return post?.categories?.[0]?.name || 'Yazı';
@@ -57,14 +63,15 @@ const subscribe = () => {
                         <div class="relative h-[150px] overflow-hidden border-b border-[var(--bi-ink)] bg-[var(--bi-ink)] md:h-[174px] lg:h-[190px]">
                             <img
                                 v-if="featuredPost.cover_image"
-                                :src="featuredPost.cover_image"
+                                :src="featuredImage.src"
+                                :srcset="featuredImage.srcset || undefined"
+                                :sizes="featuredImage.sizes || undefined"
                                 :alt="featuredPost.title"
                                 :style="coverImageStyle(featuredPost)"
                                 class="featured-hero-image h-full w-full object-cover opacity-95 transition duration-500 group-hover:scale-105"
                                 loading="eager"
                                 fetchpriority="high"
                                 decoding="async"
-                                sizes="100vw"
                                 width="1600"
                                 height="900"
                             />

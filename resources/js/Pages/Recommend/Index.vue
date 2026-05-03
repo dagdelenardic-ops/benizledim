@@ -720,6 +720,86 @@ onBeforeUnmount(stopWaitingAnimation);
 .ne-izlesem__send svg { width: 16px; height: 16px; }
 .ne-izlesem__send span { display: none; }
 
+@media (max-width: 639px) {
+    .ne-izlesem__header-inner {
+        padding: 1.4rem 1rem 1.1rem;
+    }
+
+    .ne-izlesem__body {
+        padding: 1rem 0.85rem 1.25rem;
+    }
+
+    .ne-izlesem__messages {
+        max-height: none;
+        min-height: 0;
+    }
+
+    .ne-izlesem__empty {
+        padding: 1.5rem 0 1rem;
+        text-align: left;
+    }
+
+    .ne-izlesem__empty-desc {
+        margin: 0 0 1.25rem;
+    }
+
+    .ne-izlesem__prompts {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-content: stretch;
+    }
+
+    .ne-izlesem__prompt-btn {
+        justify-content: flex-start;
+        width: 100%;
+        text-align: left;
+    }
+
+    .ne-izlesem__msg {
+        gap: 0.55rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .ne-izlesem__msg-avatar {
+        width: 28px;
+        height: 28px;
+    }
+
+    .ne-izlesem__msg-avatar svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .ne-izlesem__msg-bubble {
+        max-width: calc(100% - 2.1rem);
+        padding: 0.7rem 0.8rem;
+    }
+
+    .ne-izlesem__suggestion-card {
+        padding: 0.65rem 0.7rem;
+    }
+
+    .ne-izlesem__suggestion-name {
+        font-size: 0.94rem;
+    }
+
+    .ne-izlesem__suggestion-desc {
+        font-size: 0.68rem;
+    }
+
+    .ne-izlesem__form {
+        flex-direction: column;
+    }
+
+    .ne-izlesem__send {
+        width: 100%;
+    }
+
+    .ne-izlesem__send span {
+        display: inline;
+    }
+}
+
 @media (min-width: 640px) {
     .ne-izlesem__send span { display: inline; }
 }
