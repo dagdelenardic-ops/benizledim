@@ -318,7 +318,7 @@ const requestDelete = () => {
                     <button
                         type="button"
                         @click="requestDelete"
-                        :disabled="form.processing || post.is_deletion_pending"
+                        :disabled="form.processing || (!isAdmin && post.is_deletion_pending)"
                         class="flex items-center justify-center gap-2 border border-red-700 bg-red-50 px-6 py-3 font-bold text-red-800 transition-colors hover:bg-red-100 disabled:opacity-50"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
