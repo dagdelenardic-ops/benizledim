@@ -61,6 +61,12 @@ const subscribe = () => {
                                 :alt="featuredPost.title"
                                 :style="coverImageStyle(featuredPost)"
                                 class="featured-hero-image h-full w-full object-cover opacity-95 transition duration-500 group-hover:scale-105"
+                                loading="eager"
+                                fetchpriority="high"
+                                decoding="async"
+                                sizes="100vw"
+                                width="1600"
+                                height="900"
                             />
                             <div v-else class="grid h-full place-items-center text-7xl font-bold text-[var(--bi-paper)] bi-serif">
                                 Bİ

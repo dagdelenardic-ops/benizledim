@@ -415,8 +415,9 @@ onBeforeUnmount(stopWaitingAnimation);
 .ne-izlesem__prompt-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.4rem;
-    padding: 0.5rem 1rem;
+    padding: 0.7rem 1rem;
     border: 2px solid var(--bi-ink);
     background: var(--bi-paper);
     color: var(--bi-ink);
@@ -570,7 +571,8 @@ onBeforeUnmount(stopWaitingAnimation);
     font-family: var(--bi-mono);
     font-size: 0.72rem;
     font-weight: 700;
-    padding: 0.45rem 0.7rem;
+    min-height: 44px;
+    padding: 0.55rem 0.8rem;
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
@@ -693,6 +695,7 @@ onBeforeUnmount(stopWaitingAnimation);
 .ne-izlesem__send {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.4rem;
     padding: 0.75rem 1.25rem;
     background: var(--bi-red);
@@ -703,7 +706,7 @@ onBeforeUnmount(stopWaitingAnimation);
     font-weight: 700;
     cursor: pointer;
     transition: all 0.15s;
-    min-height: 44px;
+    min-height: 48px;
 }
 .ne-izlesem__send:hover:not(:disabled) {
     background: var(--bi-red-dark);

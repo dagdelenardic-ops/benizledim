@@ -147,10 +147,10 @@ export default {
             <div class="bi-wrap flex h-8 items-center justify-between gap-4 text-[0.68rem] font-bold uppercase tracking-[0.08em] bi-mono">
                 <span>{{ todayLabel }} · İstanbul</span>
                 <div class="hidden items-center gap-4 sm:flex">
-                    <Link href="/#bulten" class="hover:text-red-300">Bülten</Link>
-                    <Link href="/podcast" class="hover:text-red-300">Podcast</Link>
-                    <button v-if="!authUser" @click="openLoginModal" class="hover:text-red-300">Giriş</button>
-                    <Link v-else-if="canAccessCms" href="/admin" class="hover:text-red-300">Admin</Link>
+                    <Link href="/#bulten" class="inline-flex items-center py-2 hover:text-red-300">Bülten</Link>
+                    <Link href="/podcast" class="inline-flex items-center py-2 hover:text-red-300">Podcast</Link>
+                    <button v-if="!authUser" @click="openLoginModal" class="inline-flex items-center py-2 hover:text-red-300">Giriş</button>
+                    <Link v-else-if="canAccessCms" href="/admin" class="inline-flex items-center py-2 hover:text-red-300">Admin</Link>
                 </div>
             </div>
         </div>
@@ -182,7 +182,7 @@ export default {
                 <button
                     v-if="!authUser"
                     @click="openLoginModal"
-                    class="hidden border border-[var(--bi-ink)] bg-[var(--bi-ink)] px-4 py-2 text-sm font-bold text-[var(--bi-paper)] transition hover:bg-red-700 md:inline-flex"
+                    class="hidden min-h-11 items-center border border-[var(--bi-ink)] bg-[var(--bi-ink)] px-4 py-2 text-sm font-bold text-[var(--bi-paper)] transition hover:bg-red-700 md:inline-flex"
                 >
                     Giriş
                 </button>
@@ -190,7 +190,7 @@ export default {
                 <div v-else class="relative hidden md:block">
                     <button
                         @click="showUserMenu = !showUserMenu"
-                        class="flex items-center gap-2 border border-[var(--bi-ink)] bg-[var(--bi-paper)] px-3 py-2 text-sm font-bold"
+                        class="flex min-h-11 items-center gap-2 border border-[var(--bi-ink)] bg-[var(--bi-paper)] px-3 py-2 text-sm font-bold"
                     >
                         <img v-if="authUser.avatar" :src="authUser.avatar" :alt="authUser.name" class="h-7 w-7 rounded-full object-cover" />
                         <span v-else class="flex h-7 w-7 items-center justify-center rounded-full bg-red-700 text-white">{{ authUser?.name?.charAt(0)?.toUpperCase() || '?' }}</span>
@@ -209,9 +209,9 @@ export default {
                             class="absolute right-0 z-50 mt-2 w-52 border border-[var(--bi-ink)] bg-[var(--bi-paper)] py-1 shadow-[6px_6px_0_var(--bi-ink)]"
                             v-click-outside="() => showUserMenu = false"
                         >
-                            <Link :href="`/profile/${authUser.id}`" class="block px-4 py-2 text-sm hover:bg-[var(--bi-paper-deep)]">Profilim</Link>
-                            <Link v-if="canAccessCms" href="/admin" class="block px-4 py-2 text-sm hover:bg-[var(--bi-paper-deep)]">Admin Panel</Link>
-                            <button @click="logout" class="block w-full px-4 py-2 text-left text-sm hover:bg-[var(--bi-paper-deep)]">Çıkış Yap</button>
+                            <Link :href="`/profile/${authUser.id}`" class="flex min-h-11 items-center px-4 py-2 text-sm hover:bg-[var(--bi-paper-deep)]">Profilim</Link>
+                            <Link v-if="canAccessCms" href="/admin" class="flex min-h-11 items-center px-4 py-2 text-sm hover:bg-[var(--bi-paper-deep)]">Admin Panel</Link>
+                            <button @click="logout" class="flex min-h-11 w-full items-center px-4 py-2 text-left text-sm hover:bg-[var(--bi-paper-deep)]">Çıkış Yap</button>
                         </div>
                     </Transition>
                 </div>
@@ -220,19 +220,19 @@ export default {
 
         <nav class="bi-wrap hidden h-12 items-stretch justify-between border-b border-[var(--bi-ink)] lg:flex">
             <div class="flex">
-                <Link href="/" class="border-x border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Ana Sayfa</Link>
+                <Link href="/" class="inline-flex min-h-12 items-center border-x border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Ana Sayfa</Link>
                 <Link
                     v-for="cat in categoryLinks"
                     :key="cat.slug"
                     :href="`/yazilar?category=${cat.slug}`"
-                    class="border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono"
+                    class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono"
                 >
                     {{ cat.name }}
                 </Link>
-                <Link href="/podcast" class="border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Podcast</Link>
-                <Link href="/festival" class="border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Festival</Link>
+                <Link href="/podcast" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Podcast</Link>
+                <Link href="/festival" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Festival</Link>
             </div>
-            <Link href="/ne-izlesem" class="ne-izlesem-nav-button inline-flex min-w-[132px] items-center justify-center px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-white bi-mono">
+            <Link href="/ne-izlesem" class="ne-izlesem-nav-button inline-flex min-h-12 min-w-[132px] items-center justify-center px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-white bi-mono">
                 Ne İzlesem?
             </Link>
         </nav>

@@ -94,6 +94,12 @@ const closeLoginModal = () => {
                     :src="post.cover_image"
                     :alt="post.title"
                     class="w-full h-full object-cover opacity-90"
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async"
+                    sizes="100vw"
+                    width="1600"
+                    height="900"
                 />
                 <div
                     v-else
@@ -137,6 +143,8 @@ const closeLoginModal = () => {
                                 :src="post.user.avatar"
                                 :alt="post.user.name"
                                 class="w-10 h-10 rounded-full object-cover"
+                                loading="lazy"
+                                decoding="async"
                             />
                             <div
                                 v-else

@@ -24,6 +24,11 @@ const formatReadingTime = (minutes) => {
                 v-if="post.cover_image"
                 :src="post.cover_image"
                 :alt="post.title"
+                loading="lazy"
+                decoding="async"
+                sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                width="800"
+                height="500"
             />
             <div v-else class="bi-post-card__fallback">
                 Bİ
@@ -56,6 +61,8 @@ const formatReadingTime = (minutes) => {
                         :src="post.user.avatar"
                         :alt="post.user.name"
                         class="h-7 w-7 rounded-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                     />
                     <div
                         v-else
