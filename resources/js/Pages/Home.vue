@@ -121,7 +121,7 @@ const subscribe = () => {
 
         <section class="border-b border-[var(--bi-ink)] bg-[var(--bi-paper)]">
             <div class="bi-wrap py-5">
-                <div class="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                <div class="flex flex-wrap items-center gap-3 pb-2 md:flex-nowrap md:overflow-x-auto md:scrollbar-hide">
                     <span class="shrink-0 text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono">Keşfet</span>
                     <Link
                         v-for="category in categories"
