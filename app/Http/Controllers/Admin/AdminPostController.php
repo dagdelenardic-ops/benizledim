@@ -88,6 +88,8 @@ class AdminPostController extends Controller
 
     public function store(Request $request)
     {
+        $user = $request->user();
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'excerpt' => 'nullable|string|max:500',
@@ -104,13 +106,68 @@ class AdminPostController extends Controller
         $wordCount = str_word_count(strip_tags($validated['content']));
         $readingTime = max(1, ceil($wordCount / 200));
         $scheduledAt = $validated['scheduled_at'] ?? null;
-        $targetStatus = $scheduledAt ? 'draft' : $this->resolveTargetStatus($request->user(), $validated['status']);
+        $targetStatus = $scheduledAt ? 'draft' : $this->resolveTargetStatus($user, $validated['status']);
 
         $postData = [
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'title' => $validated['title'],
-            'excerpt' => $validated['excerpt'],
+            'excerpt' => $validated['excerpt'] ?? null,
             'content' => $validated['content'],
+            'status' => $targetStatus,
+            'reading_time_minutes' => $readingTime,
+            'scheduled_at' => $scheduledAt ?: null,
+            'published_at' => $targetStatus === 'published' ? now() : null,
+            'pending_review_at' => $targetStatus === 'pending_review' ? now() : null,
+            'pending_review_by' => $targetStatus === 'pending_review' ? $user->id : null,
+        ];
+
+        $post = Post::create($postData);
+
+        if ($request->hasFile('cover_image')) {
+            $path = $request->file('cover_image')->store('posts', 'public');
+            $post->update(['cover_image' => '/storage/' . $path]);
+        }
+
+        $post->categories()->sync($validated['categories']);
+        $post->tags()->sync($validated['tags'] ?? []);
+
+        $message = $targetStatus === 'pending_review'
+            ? 'Yazı inceleme için gönderildi.'
+            : 'Yazı başarıyla kaydedildi!';
+
+        return redirect()->route('admin.posts.index')
+            ->with('success', $message);
+    }
+
+    public function edit(Post $post): Response
+    {
+        $user = request()->user();
+        $this->authorizePostAccess($post, $user);
+
+        $post->load(['categories', 'tags']);
+
+        return Inertia::render('Admin/Posts/Edit', [
+            'post' => $post,
+            'categories' => Category::all(),
+            'tags' => Tag::all(),
+            'publishMode' => [
+                'requiresReview' => !$user->canPublishWithoutReview(),
+            ],
+            'owners' => $user->canManageAllPosts()
+                ? User::query()->orderBy('name')->get(['id', 'name', 'email', 'role'])
+                : [],
+        ]);
+    }
+
+    public function update(Request $request, Post $post)
+    {
+        $user = $request->user();
+        $this->authorizePostAccess($post, $user);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'excerpt' => 'nullable|string|max:500',
+            'content' => 'required|string',
             'cover_image' => 'nullable|image|max:2048',
             'status' => 'required|in:draft,published',
             'scheduled_at' => 'nullable|date',
@@ -118,6 +175,7 @@ class AdminPostController extends Controller
             'categories.*' => 'exists:categories,id',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
+            'user_id' => 'nullable|exists:users,id',
         ]);
 
         $wordCount = str_word_count(strip_tags($validated['content']));
@@ -127,7 +185,7 @@ class AdminPostController extends Controller
 
         $updateData = [
             'title' => $validated['title'],
-            'excerpt' => $validated['excerpt'],
+            'excerpt' => $validated['excerpt'] ?? null,
             'content' => $validated['content'],
             'reading_time_minutes' => $readingTime,
             'status' => $targetStatus,
@@ -151,7 +209,6 @@ class AdminPostController extends Controller
             $updateData['cover_image'] = '/storage/' . $path;
         }
 
-        // Admin bir yazıyı güncellediyse, isterse silme talebini kaldırabilsin.
         if ($post->isDeletionPending() && $user->isAdmin()) {
             $updateData['deletion_requested_at'] = null;
             $updateData['deletion_requested_by'] = null;

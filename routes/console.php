@@ -43,4 +43,4 @@ Schedule::call(function () {
                 'scheduled_at' => null,
             ]);
         });
-})->everyMinute()->withoutOverlapping()->appendOutputTo(storage_path('logs/scheduler.log'));
+})->name('publish-scheduled-posts')->everyMinute()->withoutOverlapping()->appendOutputTo(storage_path('logs/scheduler.log'));
