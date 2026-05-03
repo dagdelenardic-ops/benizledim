@@ -150,25 +150,23 @@ const closeLoginModal = () => {
 };
 
 const updateReadingProgress = () => {
-    if (!articleBody.value || typeof window === 'undefined') {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
         return;
     }
 
-    const top = window.scrollY + articleBody.value.getBoundingClientRect().top;
-    const start = top - 140;
-    const end = start + articleBody.value.offsetHeight - window.innerHeight * 0.55;
+    const bodyElement = articleBody.value ?? document.querySelector('[data-reading-body]');
+    const proseElement = bodyElement?.querySelector('.prose') ?? bodyElement;
 
-    if (window.scrollY <= start) {
+    if (!proseElement) {
         readingProgress.value = 0;
         return;
     }
 
-    if (window.scrollY >= end) {
-        readingProgress.value = 1;
-        return;
-    }
+    const rect = proseElement.getBoundingClientRect();
+    const totalScrollable = Math.max(rect.height - window.innerHeight * 0.45, 1);
+    const consumed = Math.max(-rect.top + 120, 0);
 
-    readingProgress.value = (window.scrollY - start) / Math.max(end - start, 1);
+    readingProgress.value = Math.min(Math.max(consumed / totalScrollable, 0), 1);
 };
 
 onMounted(() => {
@@ -313,7 +311,7 @@ onBeforeUnmount(() => {
 
                     <!-- Content: Standard Format -->
                     <div v-if="!post.format || post.format === 'standard'" class="lg:grid lg:grid-cols-[minmax(0,750px)_240px] lg:items-start lg:gap-10">
-                        <div ref="articleBody" class="min-w-0">
+                        <div ref="articleBody" data-reading-body class="min-w-0">
                             <div class="prose prose-lg mx-auto max-w-[750px] prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:hover:text-red-700">
                                 <div v-html="processedContent"></div>
                             </div>
