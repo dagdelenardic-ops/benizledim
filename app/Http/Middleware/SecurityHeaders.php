@@ -22,8 +22,8 @@ class SecurityHeaders
         $csp = implode('; ', [
             "default-src 'self'",
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-            "font-src 'self' https://fonts.gstatic.com",
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net",
+            "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net",
             "img-src 'self' data: https: blob:",
             "media-src 'self' https:",
             "connect-src 'self' https://generativelanguage.googleapis.com https://www.google-analytics.com",
