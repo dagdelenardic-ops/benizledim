@@ -49,14 +49,14 @@ const subscribe = () => {
             <div v-if="featuredPost" class="bi-wrap py-5">
                 <div class="grid gap-5">
                     <Link :href="`/yazi/${featuredPost.slug}`" class="group overflow-hidden border border-[var(--bi-ink)] bg-[var(--bi-paper-deep)]">
-                        <div class="relative min-h-[260px] overflow-hidden border-b border-[var(--bi-ink)] bg-[var(--bi-ink)] md:min-h-[300px]">
+                        <div class="relative min-h-[190px] overflow-hidden border-b border-[var(--bi-ink)] bg-[var(--bi-ink)] md:min-h-[220px] lg:min-h-[240px]">
                             <img
                                 v-if="featuredPost.cover_image"
                                 :src="featuredPost.cover_image"
                                 :alt="featuredPost.title"
-                                class="h-full min-h-[260px] w-full object-cover opacity-95 transition duration-500 group-hover:scale-105 md:min-h-[300px]"
+                                class="h-full min-h-[190px] w-full object-cover opacity-95 transition duration-500 group-hover:scale-105 md:min-h-[220px] lg:min-h-[240px]"
                             />
-                            <div v-else class="grid h-full min-h-[260px] place-items-center text-7xl font-bold text-[var(--bi-paper)] bi-serif md:min-h-[300px]">
+                            <div v-else class="grid h-full min-h-[190px] place-items-center text-7xl font-bold text-[var(--bi-paper)] bi-serif md:min-h-[220px] lg:min-h-[240px]">
                                 Bİ
                             </div>
                             <div class="absolute bottom-0 left-0 border-r border-t border-[var(--bi-ink)] bg-[var(--bi-paper)] px-4 py-3">
