@@ -126,7 +126,7 @@ const resultCount = () => {
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="hasResults() && posts.links" class="mt-12 flex justify-center">
+                <div v-if="hasResults() && posts.links && posts.last_page > 1" class="mt-12 flex justify-center">
                     <div class="flex items-center gap-2">
                         <Link
                             v-for="(link, index) in posts.links"

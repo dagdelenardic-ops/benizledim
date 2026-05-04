@@ -24,7 +24,8 @@ class SearchController extends Controller
                 ->with(['user', 'categories'])
                 ->withCount(['comments', 'likes'])
                 ->latest('published_at')
-                ->paginate(12);
+                ->paginate(12)
+                ->appends($request->only('q'));
         }
 
         return Inertia::render('Search/Index', [

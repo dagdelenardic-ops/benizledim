@@ -207,18 +207,20 @@ onBeforeUnmount(stopWaitingAnimation);
                                     <div v-if="assistantMeta(msg).external_suggestions?.length" class="ne-izlesem__link-block">
                                         <div class="ne-izlesem__link-title">Site dışında da bak</div>
                                         <div class="ne-izlesem__suggestion-grid">
-                                            <a
+                                            <component
+                                                :is="item.url ? 'a' : 'div'"
                                                 v-for="item in assistantMeta(msg).external_suggestions"
                                                 :key="`${item.title}-${item.year || 'na'}`"
-                                                :href="item.url"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
+                                                :href="item.url || undefined"
+                                                :target="item.url ? '_blank' : undefined"
+                                                :rel="item.url ? 'noopener noreferrer' : undefined"
                                                 class="ne-izlesem__suggestion-card ne-izlesem__suggestion-card--external"
+                                                :class="{ 'is-disabled': !item.url }"
                                             >
                                                 <span class="ne-izlesem__suggestion-kicker">{{ item.type === 'series' ? 'Dizi' : 'Film' }}{{ item.year ? ` / ${item.year}` : '' }}</span>
                                                 <span class="ne-izlesem__suggestion-name">{{ item.title }}</span>
                                                 <span v-if="item.reason" class="ne-izlesem__suggestion-desc">{{ item.reason }}</span>
-                                            </a>
+                                            </component>
                                         </div>
                                     </div>
 

@@ -133,7 +133,8 @@ Kurallar:
 - reply icinde [ID:X] kullanma, yalnizca duz okunur metin yaz
 - En fazla 3-4 oneriden bahset
 - **Spoiler verme** — kesinlikle hikaye detayı paylaşma
-- Önerileri **kalın** yazarak vurgula (örn: **Film Adı**)
+- Önerileri **kalın** yazarak vurgula (örn: **Film Adı**) — sistem bunları otomatik olarak link haline getirecek, sen sadece bold yaz
+- Hem site_post_ids ile sectiklerini hem external_suggestions icindekileri reply metninde **kalın** olarak adlandır (sistem tutarlılık için her birini link yapacak)
 - Kullanıcı selamlama yaparsa kısa ve sıcak karşılık ver, sonra ne tarz bir şey izlemek istediğini sor
 - Cevaplarını düzenli ve okunabilir yaz, uzun paragraflar yerine kısa maddeler kullan
 - {$followUpRule}
@@ -222,8 +223,10 @@ PROMPT;
             ? $this->normalizeFollowUpOptions($followUpOptions, $userMessage)
             : [];
 
+        $enrichedReply = $this->enrichReplyWithLinks($reply, $sitePosts, $normalizedExternal);
+
         return [
-            'reply' => $reply,
+            'reply' => $enrichedReply,
             'recommended_post_ids' => $recommendedIds,
             'meta' => [
                 'site_posts' => $sitePosts,
@@ -232,6 +235,57 @@ PROMPT;
                 'turn_count' => $userTurns,
             ],
         ];
+    }
+
+    private function enrichReplyWithLinks(string $reply, array $sitePosts, array $externalSuggestions): string
+    {
+        $linkMap = [];
+
+        foreach ($sitePosts as $post) {
+            $title = trim((string) ($post['title'] ?? ''));
+            $slug = trim((string) ($post['slug'] ?? ''));
+            if ($title === '' || $slug === '') {
+                continue;
+            }
+            $linkMap[$title] = '/yazi/' . $slug;
+        }
+
+        foreach ($externalSuggestions as $item) {
+            $title = trim((string) ($item['title'] ?? ''));
+            $url = trim((string) ($item['url'] ?? ''));
+            if ($title === '' || $url === '') {
+                continue;
+            }
+            if (!isset($linkMap[$title])) {
+                $linkMap[$title] = $url;
+            }
+        }
+
+        if (empty($linkMap)) {
+            return $reply;
+        }
+
+        $titles = array_keys($linkMap);
+        usort($titles, fn ($a, $b) => mb_strlen($b) <=> mb_strlen($a));
+
+        foreach ($titles as $title) {
+            $url = $linkMap[$title];
+            $quoted = preg_quote($title, '/');
+
+            $boldPattern = '/(?<!\[)\*\*\s*' . $quoted . '\s*\*\*(?!\])/u';
+            $reply = preg_replace_callback($boldPattern, function () use ($title, $url) {
+                return '[**' . $title . '**](' . $url . ')';
+            }, $reply, 1);
+
+            if (!str_contains($reply, '](' . $url . ')')) {
+                $bareWordPattern = '/(?<![\w\[*\/])' . $quoted . '(?![\w\]\(*])/u';
+                $reply = preg_replace_callback($bareWordPattern, function () use ($title, $url) {
+                    return '[' . $title . '](' . $url . ')';
+                }, $reply, 1);
+            }
+        }
+
+        return $reply;
     }
 
     private function loadRecommendedPosts(array $recommendedIds): array
