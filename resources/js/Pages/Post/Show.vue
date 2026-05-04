@@ -13,6 +13,7 @@ import TimeCapsuleBanner from '../../Components/Post/TimeCapsuleBanner.vue';
 import DialogueView from '../../Components/Post/DialogueView.vue';
 import VisualEssayView from '../../Components/Post/VisualEssayView.vue';
 import LoginModal from '../../Components/Auth/LoginModal.vue';
+import ArticleBody from '../../Components/Article/ArticleBody.vue';
 import { useDate } from '@/Composables/useDate';
 import { buildResponsiveImage } from '@/Utils/responsiveImage';
 
@@ -108,28 +109,45 @@ const shouldShowToc = computed(() => {
     return isStandardPost && contentAnalysis.value.wordCount > 1500 && tocItems.value.length >= 3;
 });
 
-const articleSchema = computed(() => ({
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    'headline': props.post.title,
-    'description': props.post.excerpt || '',
-    'image': [toAbsoluteUrl(props.post.cover_image)],
-    'datePublished': props.post.published_at,
-    'dateModified': props.post.updated_at || props.post.published_at,
-    'author': {
-        '@type': 'Person',
-        'name': props.post.user?.name || 'Ben İzledim',
-    },
-    'publisher': {
-        '@type': 'Organization',
-        'name': 'Ben İzledim',
-        'url': 'https://benizledim.com',
-    },
-    'mainEntityOfPage': {
-        '@type': 'WebPage',
-        '@id': canonicalUrl.value,
-    },
-}));
+const articleSchema = computed(() => {
+    const schema = {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        'headline': props.post.title,
+        'description': props.post.excerpt || '',
+        'image': [toAbsoluteUrl(props.post.cover_image)],
+        'datePublished': props.post.published_at,
+        'dateModified': props.post.updated_at || props.post.published_at,
+        'inLanguage': 'tr-TR',
+        'author': {
+            '@type': 'Person',
+            'name': props.post.user?.name || 'Ben İzledim',
+        },
+        'publisher': {
+            '@type': 'Organization',
+            'name': 'Ben İzledim',
+            'url': 'https://benizledim.com',
+        },
+        'mainEntityOfPage': {
+            '@type': 'WebPage',
+            '@id': canonicalUrl.value,
+        },
+    };
+
+    if (contentAnalysis.value?.wordCount) {
+        schema.wordCount = contentAnalysis.value.wordCount;
+    }
+
+    if (props.post.categories?.length) {
+        schema.articleSection = props.post.categories[0].name;
+    }
+
+    if (props.post.tags?.length) {
+        schema.keywords = props.post.tags.map((t) => t.name).filter(Boolean).join(', ');
+    }
+
+    return schema;
+});
 
 const articleMeta = computed(() => ([
     { property: 'article:published_time', content: props.post.published_at || '' },
@@ -318,9 +336,10 @@ onBeforeUnmount(() => {
                     <!-- Content: Standard Format -->
                     <div v-if="!post.format || post.format === 'standard'" class="lg:grid lg:grid-cols-[minmax(0,750px)_240px] lg:items-start lg:gap-10">
                         <div ref="articleBody" data-reading-body class="min-w-0">
-                            <div class="prose prose-lg mx-auto max-w-[750px] prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:hover:text-red-700">
-                                <div v-html="processedContent"></div>
-                            </div>
+                            <ArticleBody
+                                :html="processedContent"
+                                class="prose prose-lg mx-auto max-w-[750px] prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:hover:text-red-700"
+                            />
                         </div>
 
                         <aside v-if="shouldShowToc" class="hidden lg:block">
