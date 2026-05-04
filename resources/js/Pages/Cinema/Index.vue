@@ -106,13 +106,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <AppLayout title="Sinemalar" description="Istanbul'daki bagimsiz sinemalar ve gosterimleri">
+    <AppLayout title="Sinemalar" description="İstanbul'daki bağımsız sinemalar ve gösterimleri">
         <div class="min-h-screen bg-gray-50">
             <!-- Header -->
             <div class="bg-white border-b border-gray-200">
                 <div class="max-w-7xl mx-auto px-4 py-8">
-                    <h1 class="text-3xl font-bold text-gray-900">Sinema Haritasi</h1>
-                    <p class="mt-2 text-gray-600">Istanbul'daki bagimsiz sinemalar, gosterimdeki filmler ve kullanici yorumlari</p>
+                    <h1 class="text-3xl font-bold text-gray-900">Sinema Haritası</h1>
+                    <p class="mt-2 text-gray-600">İstanbul'daki bağımsız sinemalar, gösterimdeki filmler ve kullanıcı yorumları</p>
                 </div>
             </div>
 

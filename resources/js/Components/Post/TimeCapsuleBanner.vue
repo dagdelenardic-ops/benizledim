@@ -37,11 +37,11 @@ const timeDifference = computed(() => {
         <div>
             <p class="text-sm font-semibold text-amber-800">Zaman Kapsulu</p>
             <p class="text-sm text-amber-700 mt-0.5">
-                Bu yazi,
+                Bu yazı,
                 <Link :href="`/yazi/${originalPost.slug}`" class="font-medium underline hover:text-amber-900">
                     "{{ originalPost.title }}"
                 </Link>
-                yazisinin {{ timeDifference }} tekrar degerlendirmesidir.
+                yazısının {{ timeDifference }} sonra tekrar değerlendirmesidir.
             </p>
             <p class="text-xs text-amber-500 mt-1">
                 Orijinal: {{ formatDate(originalPost.published_at) }}

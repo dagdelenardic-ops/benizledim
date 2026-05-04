@@ -185,5 +185,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 });
 
 // Wix Redirect'leri (eski URL yapısından yeni yapıya)
-Route::get('/post/{slug}', [WixRedirectController::class, 'post']);
+Route::get('/post/{slug}', [WixRedirectController::class, 'post'])->where('slug', '.*');
+Route::get('/blog/{slug}', [WixRedirectController::class, 'post'])->where('slug', '.*');
 Route::get('/blog/categories/{slug}', [WixRedirectController::class, 'category']);

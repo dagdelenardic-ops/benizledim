@@ -26,7 +26,7 @@ const newsletterMessage = computed(() => page.props.flash?.newsletter_message);
 const featuredPost = computed(() => props.posts[0] || null);
 const gridPosts = computed(() => props.posts.slice(1, 7));
 const railPosts = computed(() => props.posts.slice(0, 5));
-const secondarySpotlights = computed(() => props.spotlights.filter((item) => item.label !== 'Ne Izlesem'));
+const secondarySpotlights = computed(() => props.spotlights.filter((item) => item.label !== 'Ne İzlesem'));
 const featuredImage = computed(() => buildResponsiveImage(featuredPost.value?.cover_image, {
     widths: [480, 768, 1280, 1600],
     sizes: '100vw',

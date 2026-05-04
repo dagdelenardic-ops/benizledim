@@ -247,16 +247,23 @@ onBeforeUnmount(() => {
             <!-- Content Container -->
             <div class="max-w-6xl mx-auto px-4 -mt-32 relative z-10">
                 <div class="bg-white rounded-t-2xl md:rounded-2xl shadow-sm p-6 md:p-10">
-                    <!-- Categories -->
+                    <!-- Categories (en fazla 3 göster) -->
                     <div class="flex flex-wrap gap-2 mb-4">
                         <Link
-                            v-for="category in post.categories"
+                            v-for="category in post.categories.slice(0, 3)"
                             :key="category.id"
                             :href="`/yazilar?category=${category.slug}`"
                             class="px-3 py-1 bg-red-600 text-white text-sm font-medium rounded-full hover:bg-red-700 transition-colors"
                         >
                             {{ category.name }}
                         </Link>
+                        <span
+                            v-if="post.categories.length > 3"
+                            class="px-3 py-1 bg-gray-100 text-gray-500 text-sm font-medium rounded-full"
+                            :title="post.categories.slice(3).map((c) => c.name).join(', ')"
+                        >
+                            +{{ post.categories.length - 3 }}
+                        </span>
                     </div>
 
                     <!-- Title -->
