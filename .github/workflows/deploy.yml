@@ -1,10 +1,11 @@
 name: Deploy Laravel to cPanel (FTP)
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+  # NOTE: push trigger devre dışı — paylaşımlı cPanel FTP, GitHub runner IP'lerine
+  # ağır throttle uyguluyor (1h+ transferler max-retries ile fail oluyor). Türkiye'den
+  # `./deploy-manual.sh` ile yerelden deploy 3 dakikada bitiyor. CI yedek olarak
+  # workflow_dispatch ile kalır.
 
 concurrency:
   group: deploy-${{ github.ref }}
