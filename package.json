@@ -19,6 +19,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@headlessui/vue": "^1.7.23",
         "@inertiajs/vue3": "^2.3.15",
         "@tiptap/extension-character-count": "^3.22.5",
         "@tiptap/extension-code-block-lowlight": "^3.22.5",
@@ -33,6 +34,7 @@
         "@tiptap/vue-3": "^3.20.0",
         "@vitejs/plugin-vue": "^6.0.4",
         "@vue/server-renderer": "^3.5.28",
+        "dompurify": "^3.4.2",
         "leaflet": "^1.9.4",
         "lowlight": "^3.3.0",
         "vue": "^3.5.28"

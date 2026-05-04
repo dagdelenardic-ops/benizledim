@@ -181,6 +181,13 @@ export default {
         v-html="JSON.stringify(schema)"
     />
 
+    <a
+        href="#ana-icerik"
+        class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded focus:bg-red-700 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white focus:shadow-lg"
+    >
+        İçeriğe atla
+    </a>
+
     <header class="border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper)]">
         <div class="bg-[var(--bi-ink)] text-[var(--bi-paper)]">
             <div class="bi-wrap flex h-8 items-center justify-between gap-4 text-[0.68rem] font-bold uppercase tracking-[0.08em] bi-mono">
@@ -254,6 +261,10 @@ export default {
                             class="absolute right-0 z-50 mt-2 w-52 border border-[var(--bi-ink)] bg-[var(--bi-paper)] py-1 shadow-[6px_6px_0_var(--bi-ink)]"
                             v-click-outside="() => showUserMenu = false"
                         >
+                            <Link v-if="canAccessCms" href="/admin/posts/create" class="flex min-h-11 items-center gap-2 px-4 py-2 text-sm font-bold text-red-700 hover:bg-[var(--bi-paper-deep)]">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                Yeni Yazı
+                            </Link>
                             <Link :href="`/profile/${authUser.id}`" class="flex min-h-11 items-center px-4 py-2 text-sm hover:bg-[var(--bi-paper-deep)]">Profilim</Link>
                             <Link v-if="canAccessCms" href="/admin" class="flex min-h-11 items-center px-4 py-2 text-sm hover:bg-[var(--bi-paper-deep)]">Admin Panel</Link>
                             <button @click="logout" class="flex min-h-11 w-full items-center px-4 py-2 text-left text-sm hover:bg-[var(--bi-paper-deep)]">Çıkış Yap</button>
@@ -301,14 +312,17 @@ export default {
                     <Link href="/sinemalar" class="bi-chip" @click="showMobileMenu = false">Sinemalar</Link>
                     <Link href="/ne-izlesem" class="bi-chip" @click="showMobileMenu = false">Ne İzlesem?</Link>
                     <button v-if="!authUser" @click="openLoginModal(); showMobileMenu = false" class="bi-chip text-left">Giriş Yap</button>
-                    <Link v-else-if="canAccessCms" href="/admin" class="bi-chip" @click="showMobileMenu = false">Admin Panel</Link>
+                    <template v-else>
+                        <Link v-if="canAccessCms" href="/admin/posts/create" class="bi-chip bi-chip--accent" @click="showMobileMenu = false">✏️ Yeni Yazı</Link>
+                        <Link v-if="canAccessCms" href="/admin" class="bi-chip" @click="showMobileMenu = false">Admin Panel</Link>
+                    </template>
                 </div>
             </div>
         </Transition>
     </header>
 
     <!-- Content -->
-    <main class="min-h-screen">
+    <main id="ana-icerik" class="min-h-screen">
         <slot />
     </main>
 
