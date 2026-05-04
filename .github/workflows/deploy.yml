@@ -117,7 +117,7 @@ jobs:
             done
           done
 
-      - name: 📂 Sync files
+      - name: 📂 Sync files (path-segmented)
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
@@ -125,77 +125,56 @@ jobs:
         run: |
           sudo apt-get install -y lftp -q 2>&1 | tail -3
 
-          cat > /tmp/lftp-exclude.txt << 'EXCEOF'
-          ^\.git
-          ^\.github
-          ^node_modules
-          ^vendor
-          ^tests
-          ^storage/logs
-          ^database/data/.*\.sqlite$
-          ^\.env$
-          ^\.env\.
-          \.env\.example$
-          \.env\.production$
-          \.env\.cpanel$
-          ^CLAUDE\.md$
-          ^AGENTS\.md$
-          ^\.codex-instructions\.md$
-          ^\.kimi-instructions\.md$
-          ^\.qwen-instructions\.md$
-          ^\.claude/
-          ^\.DS_Store$
-          _diag\.php$
-          _probe\.php$
-          _probe\.txt$
-          read_env\.php$
-          check_config\.php$
-          check_db\.php$
-          check_mb\.php$
-          check_sessions\.php$
-          chmod_storage\.php$
-          db_users\.php$
-          debug_laravel\.php$
-          debug_.*\.txt$
-          extract\.php$
-          get_admin\.php$
-          list_users\.php$
-          mkdir_views\.php$
-          read_log\.php$
-          read_pct\.php$
-          reset_admin\.php$
-          reset_gurur\.php$
-          run_artisan\.php$
-          run_cli\.php$
-          save_hash\.php$
-          setup.*\.php$
-          seed_and_import\.php$
-          test_auth\.php$
-          test_hash\.php$
-          unzip\.php$
-          unzip_sys\.php$
-          update_pass\.php$
-          \.zip$
-          EXCEOF
+          # 10 küçük mirror oturumu — biri takılsa diğerleri ilerler
+          PATHS=(
+            "public/build"
+            "bootstrap/ssr"
+            "app"
+            "resources/views"
+            "resources/js"
+            "resources/css"
+            "routes"
+            "config"
+            "database/migrations"
+            "database/seeders"
+          )
 
-          lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftps://${FTP_SERVER}" << 'LFTPEOF'
+          FILES=(
+            "composer.json"
+            "composer.lock"
+            "package.json"
+            "package-lock.json"
+            "artisan"
+          )
+
+          run_lftp () {
+            lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftps://${FTP_SERVER}" << LFTPEOF
           set ftp:passive-mode true
           set ftp:ssl-force true
           set ssl:verify-certificate false
-          set net:timeout 300
-          set net:max-retries 50
-          set net:reconnect-interval-base 10
-          set net:reconnect-interval-multiplier 1.5
-          set net:reconnect-interval-max 90
-          set net:idle 30
           set ftp:ssl-protect-data true
-          set mirror:parallel-directories false
+          set net:timeout 120
+          set net:max-retries 25
+          set net:reconnect-interval-base 6
+          set net:reconnect-interval-multiplier 1.5
+          set net:reconnect-interval-max 60
+          set net:idle 30
           set xfer:clobber on
-          mirror --reverse --delete --verbose=1 --parallel=1 --use-cache \
-            --exclude-rx-from=/tmp/lftp-exclude.txt \
-            . public_html/
+          set mirror:parallel-directories false
+          $1
           bye
           LFTPEOF
+          }
+
+          for path in "${PATHS[@]}"; do
+            echo "▶ ${path}/ → public_html/${path}/"
+            run_lftp "mirror --reverse --delete --verbose=1 --parallel=2 --use-cache ./${path} public_html/${path}"
+          done
+
+          for file in "${FILES[@]}"; do
+            echo "· ${file}"
+            run_lftp "put ${file} -o public_html/${file}" || echo "  ⚠ ${file} skipped"
+          done
 
       - name: 🔧 Post-deploy optimize (optional SSH)
         if: ${{ env.SSH_HOST != '' && env.SSH_USERNAME != '' && env.SSH_PRIVATE_KEY != '' }}
