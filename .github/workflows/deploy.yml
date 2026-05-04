@@ -17,7 +17,7 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 300
     env:
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
@@ -182,13 +182,16 @@ jobs:
           set ftp:passive-mode true
           set ftp:ssl-force true
           set ssl:verify-certificate false
-          set net:timeout 120
-          set net:max-retries 15
-          set net:reconnect-interval-base 5
-          set net:reconnect-interval-multiplier 2
+          set net:timeout 300
+          set net:max-retries 50
+          set net:reconnect-interval-base 10
+          set net:reconnect-interval-multiplier 1.5
+          set net:reconnect-interval-max 90
+          set net:idle 30
           set ftp:ssl-protect-data true
-          set mirror:parallel-directories true
-          mirror --reverse --delete --verbose=1 --parallel=2 \
+          set mirror:parallel-directories false
+          set xfer:clobber on
+          mirror --reverse --delete --verbose=1 --parallel=1 --use-cache \
             --exclude-rx-from=/tmp/lftp-exclude.txt \
             . public_html/
           bye
