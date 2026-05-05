@@ -9,6 +9,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -83,6 +84,40 @@ class AdminPostController extends Controller
             'publishMode' => [
                 'requiresReview' => !request()->user()?->canPublishWithoutReview(),
             ],
+        ]);
+    }
+
+    public function autosaveDraft(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        abort_unless($user && $user->canAccessCms(), 403, 'Bu işlem için yetkiniz yok.');
+
+        $validated = $this->validateAutosavePayload($request);
+        $title = $this->normalizeDraftTitle($validated['title'] ?? null);
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'title' => $title,
+            'slug' => $this->generateUniquePostSlug($title),
+            'excerpt' => $validated['excerpt'] ?? null,
+            'content' => $validated['content'] ?? '',
+            'cover_image_focus_x' => $validated['cover_image_focus_x'] ?? 50,
+            'cover_image_focus_y' => $validated['cover_image_focus_y'] ?? 50,
+            'cover_image_mobile_focus_x' => $validated['cover_image_mobile_focus_x'] ?? 50,
+            'cover_image_mobile_focus_y' => $validated['cover_image_mobile_focus_y'] ?? 50,
+            'status' => 'draft',
+            'reading_time_minutes' => $validated['reading_time_minutes'] ?? 1,
+            'scheduled_at' => $validated['scheduled_at'] ?? null,
+            'published_at' => null,
+        ]);
+
+        $this->syncDraftTaxonomy($post, $validated);
+
+        return response()->json([
+            'post_id' => $post->id,
+            'edit_url' => route('admin.posts.edit', $post),
+            'autosave_endpoint' => route('admin.posts.autosave', $post),
+            'saved_at' => $post->updated_at->toISOString(),
         ]);
     }
 
@@ -230,6 +265,10 @@ class AdminPostController extends Controller
             $updateData['deletion_requested_by'] = null;
             $updateData['deletion_approved_at'] = null;
             $updateData['deletion_approved_by'] = null;
+        }
+
+        if ($this->shouldRefreshPlaceholderSlug($post, $validated['title'])) {
+            $updateData['slug'] = $this->generateUniquePostSlug($validated['title'], $post->id);
         }
 
         $post->update($updateData);
@@ -389,19 +428,52 @@ class AdminPostController extends Controller
 
     public function autosave(Request $request, Post $post): JsonResponse
     {
-        $this->authorize('update', $post);
+        $user = $request->user();
+        $this->authorizePostAccess($post, $user);
 
-        $request->validate([
-            'content' => ['required', 'string', 'max:500000'],
-        ]);
+        $validated = $this->validateAutosavePayload($request);
 
-        $post->update([
-            'content'    => $request->string('content'),
-            'updated_at' => now(),
-        ]);
+        $updateData = [];
+
+        if (array_key_exists('title', $validated)) {
+            $title = $this->normalizeDraftTitle($validated['title']);
+            $updateData['title'] = $title;
+
+            if ($this->shouldRefreshPlaceholderSlug($post, $title)) {
+                $updateData['slug'] = $this->generateUniquePostSlug($title, $post->id);
+            }
+        }
+
+        foreach ([
+            'excerpt',
+            'content',
+            'cover_image_focus_x',
+            'cover_image_focus_y',
+            'cover_image_mobile_focus_x',
+            'cover_image_mobile_focus_y',
+            'reading_time_minutes',
+            'scheduled_at',
+        ] as $field) {
+            if (array_key_exists($field, $validated)) {
+                $updateData[$field] = $field === 'content'
+                    ? (string) ($validated[$field] ?? '')
+                    : $validated[$field];
+            }
+        }
+
+        if ($updateData !== []) {
+            $post->update($updateData);
+        } else {
+            $post->touch();
+        }
+
+        $this->syncDraftTaxonomy($post, $validated);
+
+        $post->refresh();
 
         return response()->json([
             'saved_at' => $post->updated_at->toISOString(),
+            'post_id' => $post->id,
         ]);
     }
 
@@ -442,6 +514,66 @@ class AdminPostController extends Controller
             ->exists();
 
         return response()->json(['available' => !$exists]);
+    }
+
+    private function validateAutosavePayload(Request $request): array
+    {
+        return $request->validate([
+            'title' => 'nullable|string|max:255',
+            'excerpt' => 'nullable|string|max:500',
+            'content' => 'nullable|string|max:500000',
+            'cover_image_focus_x' => 'nullable|integer|min:0|max:100',
+            'cover_image_focus_y' => 'nullable|integer|min:0|max:100',
+            'cover_image_mobile_focus_x' => 'nullable|integer|min:0|max:100',
+            'cover_image_mobile_focus_y' => 'nullable|integer|min:0|max:100',
+            'scheduled_at' => 'nullable|date',
+            'reading_time_minutes' => 'nullable|integer|min:1|max:999',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+        ]);
+    }
+
+    private function syncDraftTaxonomy(Post $post, array $validated): void
+    {
+        if (array_key_exists('categories', $validated)) {
+            $post->categories()->sync($validated['categories'] ?? []);
+        }
+
+        if (array_key_exists('tags', $validated)) {
+            $post->tags()->sync($validated['tags'] ?? []);
+        }
+    }
+
+    private function normalizeDraftTitle(?string $title): string
+    {
+        $title = trim((string) $title);
+
+        return $title !== '' ? $title : 'Adsız Taslak';
+    }
+
+    private function shouldRefreshPlaceholderSlug(Post $post, string $title): bool
+    {
+        return $post->title === 'Adsız Taslak'
+            && trim($title) !== ''
+            && $title !== 'Adsız Taslak';
+    }
+
+    private function generateUniquePostSlug(string $title, ?int $ignorePostId = null): string
+    {
+        $baseSlug = Str::slug($title) ?: 'adsiz-taslak';
+        $slug = $baseSlug;
+        $counter = 2;
+
+        while (Post::where('slug', $slug)
+            ->when($ignorePostId, fn ($query) => $query->where('id', '!=', $ignorePostId))
+            ->exists()) {
+            $slug = $baseSlug.'-'.$counter;
+            $counter++;
+        }
+
+        return $slug;
     }
 
     private function resolveTargetStatus(User $user, string $requestedStatus): string

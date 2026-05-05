@@ -16,6 +16,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+      SSH_APP_PATH: ${{ secrets.SSH_APP_PATH }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -76,7 +82,8 @@ jobs:
       - name: Build upload list
         id: uplist
         run: |
-          # Liste: değişen dosyalar + (build çalıştıysa public/build/, bootstrap/ssr/ klasörleri tamamı)
+          # Build outputs are mirrored in the FTP step; uploading them file-by-file
+          # can trigger repeated mkdir retries on cPanel FTP.
           : > /tmp/uploads.txt
           while IFS= read -r f; do
             [ -z "$f" ] && continue
@@ -84,16 +91,10 @@ jobs:
             case "$f" in
               .github/*|tests/*|.gitignore|.gitattributes|*.md|deploy-*.sh|.env*|CLAUDE.md|AGENTS.md|.codex-*|.kimi-*|.qwen-*|.vscode/*) continue ;;
               .claude/*|.idea/*|.DS_Store) continue ;;
-              public/recache.php) echo "$f" >> /tmp/uploads.txt; continue ;;
               resources/*) continue ;;  # build artifact'i public/build'e gider
             esac
             [ -f "$f" ] && echo "$f" >> /tmp/uploads.txt
           done < /tmp/changed.txt
-
-          if [ "${{ steps.detect.outputs.needs_build }}" = "true" ]; then
-            find public/build -type f >> /tmp/uploads.txt
-            find bootstrap/ssr -type f 2>/dev/null >> /tmp/uploads.txt || true
-          fi
 
           if [ "${{ steps.detect.outputs.needs_composer }}" = "true" ]; then
             echo "  ⚠️  Composer değişti — full vendor sync yapılacak (FTP yavaş, ~3-5 dk)"
@@ -106,7 +107,7 @@ jobs:
           echo "count=$COUNT" >> $GITHUB_OUTPUT
           echo ""
           if [ "$COUNT" = "0" ]; then
-            echo "Hiç dosya değişmemiş, sadece cache temizliği yapılacak."
+            echo "No individual files; build mirror and SSH post-deploy may still run."
           else
             echo "Yüklenecek $COUNT dosya:"
             head -50 /tmp/uploads.txt || true
@@ -116,7 +117,7 @@ jobs:
           fi
 
       - name: FTP upload (targeted)
-        if: steps.uplist.outputs.count != '0'
+        if: steps.uplist.outputs.count != '0' || steps.detect.outputs.needs_build == 'true'
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
@@ -132,10 +133,13 @@ jobs:
             echo "set net:timeout 60"
             echo "set net:max-retries 5"
             echo "set xfer:clobber on"
+            if [ "${{ steps.detect.outputs.needs_build }}" = "true" ]; then
+              echo "mirror --reverse --only-newer --verbose=1 --parallel=2 public/build/ public_html/public/build/"
+              echo "mirror --reverse --only-newer --verbose=1 --parallel=2 bootstrap/ssr/ public_html/bootstrap/ssr/"
+            fi
             while IFS= read -r f; do
               [ -z "$f" ] && continue
               DIR=$(dirname "$f")
-              echo "mkdir -p public_html/${DIR}"
               echo "put -O public_html/${DIR} \"$f\""
             done < /tmp/uploads.txt
             echo "bye"
@@ -143,11 +147,27 @@ jobs:
 
           lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftp://${FTP_SERVER}:21" < /tmp/lftp.cmd
 
-      - name: Clear cache via recache.php
-        run: |
-          sleep 2
-          echo "Calling recache.php..."
-          curl -s --max-time 30 "https://benizledim.com/recache.php?token=bizledim2026" | head -20 || true
+      - name: Post-deploy optimize (optional SSH)
+        if: ${{ env.SSH_HOST != '' && env.SSH_USERNAME != '' && env.SSH_PRIVATE_KEY != '' }}
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USERNAME }}
+          key: ${{ env.SSH_PRIVATE_KEY }}
+          passphrase: ${{ env.SSH_PASSPHRASE }}
+          script_stop: true
+          envs: SSH_APP_PATH
+          script: |
+            APP_PATH="$SSH_APP_PATH"
+            if [ -z "$APP_PATH" ]; then
+              APP_PATH="$HOME/public_html"
+            fi
+            cd "$APP_PATH"
+            php artisan optimize:clear
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan view:cache
+            php artisan event:cache
 
       - name: Done
         run: |

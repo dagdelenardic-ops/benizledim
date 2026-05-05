@@ -1,11 +1,12 @@
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import RichTextEditor from '../../../Components/Admin/RichTextEditor.vue';
 import SlugPreview from '../../../Components/Admin/SlugPreview.vue';
 import Icon from '../../../Components/Admin/AdminIcon.vue';
 import { useLocalFormDraft } from '../../../Composables/useLocalFormDraft';
+import axios from 'axios';
 
 const props = defineProps({
     post: {
@@ -57,7 +58,9 @@ const action = ref('draft');
 const slugPreviewRef = ref(null);
 const draftKey = computed(() => `benizledim_draft_post_${props.post.id}_content`);
 const formDraftKey = computed(() => `benizledim_draft_post_${props.post.id}_form`);
-const autosaveEndpoint = computed(() => `/admin/posts/${props.post.id}/autosave`);
+const serverDraftStatus = ref('idle');
+const serverDraftSavedAt = ref('');
+let serverDraftTimer = null;
 const editDraftPayload = computed(() => ({
     title: form.title,
     excerpt: form.excerpt,
@@ -141,6 +144,79 @@ const coverPositionStyle = (mode = 'desktop') => ({
     objectPosition: mode === 'mobile'
         ? `${form.cover_image_mobile_focus_x}% ${form.cover_image_mobile_focus_y}%`
         : `${form.cover_image_focus_x}% ${form.cover_image_focus_y}%`,
+});
+
+const serverDraftPayload = computed(() => ({
+    title: form.title,
+    excerpt: form.excerpt,
+    content: form.content,
+    cover_image_focus_x: form.cover_image_focus_x,
+    cover_image_focus_y: form.cover_image_focus_y,
+    cover_image_mobile_focus_x: form.cover_image_mobile_focus_x,
+    cover_image_mobile_focus_y: form.cover_image_mobile_focus_y,
+    scheduled_at: form.scheduled_at || null,
+    reading_time_minutes: form.reading_time_minutes,
+    categories: [...form.categories],
+    tags: [...form.tags],
+}));
+
+const formatServerDraftTime = (value) => {
+    if (!value) return '';
+
+    return new Date(value).toLocaleTimeString('tr-TR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+    });
+};
+
+const saveServerDraft = async () => {
+    if (form.processing) return;
+
+    serverDraftStatus.value = 'saving';
+
+    try {
+        const { data } = await axios.put(`/admin/posts/${props.post.id}/autosave`, serverDraftPayload.value);
+        serverDraftSavedAt.value = data.saved_at || new Date().toISOString();
+        serverDraftStatus.value = 'saved';
+
+        window.setTimeout(() => {
+            if (serverDraftStatus.value === 'saved') {
+                serverDraftStatus.value = 'idle';
+            }
+        }, 3000);
+    } catch {
+        serverDraftStatus.value = 'error';
+    }
+};
+
+const scheduleServerDraft = () => {
+    window.clearTimeout(serverDraftTimer);
+    serverDraftTimer = window.setTimeout(saveServerDraft, 2500);
+};
+
+watch(serverDraftPayload, scheduleServerDraft, { deep: true });
+
+const flushServerDraft = () => {
+    window.clearTimeout(serverDraftTimer);
+    saveServerDraft();
+};
+
+const handleVisibilityChange = () => {
+    if (document.visibilityState === 'hidden') {
+        flushServerDraft();
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('beforeunload', flushServerDraft);
+});
+
+onBeforeUnmount(() => {
+    window.clearTimeout(serverDraftTimer);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.removeEventListener('beforeunload', flushServerDraft);
 });
 
 const submit = (publish = false) => {
@@ -276,6 +352,16 @@ const requestDelete = () => {
                     </div>
                 </div>
 
+                <div
+                    v-if="serverDraftStatus !== 'idle' || serverDraftSavedAt"
+                    class="flex items-center justify-between border border-[var(--bi-ink)] bg-[var(--bi-paper)] px-4 py-2 text-xs font-bold text-[var(--bi-muted)]"
+                >
+                    <span v-if="serverDraftStatus === 'saving'">Sunucu taslağı kaydediliyor...</span>
+                    <span v-else-if="serverDraftStatus === 'error'" class="text-red-700">Sunucu taslağı kaydedilemedi; yerel taslak korunuyor.</span>
+                    <span v-else>Sunucu taslağı kaydedildi: {{ formatServerDraftTime(serverDraftSavedAt) }}</span>
+                    <span>#{{ post.id }}</span>
+                </div>
+
                 <!-- Title -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -324,7 +410,6 @@ const requestDelete = () => {
                     <RichTextEditor
                         v-model="form.content"
                         :autosave-key="draftKey"
-                        :autosave-endpoint="autosaveEndpoint"
                         :show-restore-banner="false"
                         @update:reading-time="onReadingTimeUpdate"
                     />

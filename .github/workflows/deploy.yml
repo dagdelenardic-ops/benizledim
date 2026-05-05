@@ -94,6 +94,7 @@ jobs:
             read_env.php
             read_log.php
             read_pct.php
+            recache.php
             reset_admin.php
             reset_gurur.php
             run_artisan.php
@@ -146,7 +147,6 @@ jobs:
             "package.json"
             "package-lock.json"
             "artisan"
-            "public/recache.php"
             "public/.htaccess"
             "public/index.php"
             "public/robots.txt"
@@ -191,6 +191,7 @@ jobs:
           key: ${{ env.SSH_PRIVATE_KEY }}
           passphrase: ${{ env.SSH_PASSPHRASE }}
           script_stop: true
+          envs: SSH_APP_PATH
           script: |
             APP_PATH="$SSH_APP_PATH"
             if [ -z "$APP_PATH" ]; then
