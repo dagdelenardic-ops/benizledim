@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Post::published()
+        $query = Post::articles()
             ->with(['user', 'categories', 'tags'])
             ->withCount(['comments', 'likes'])
             ->latest('published_at');
@@ -42,7 +42,7 @@ class PostController extends Controller
 
     public function indexByCategory(Request $request, Category $category)
     {
-        $posts = Post::published()
+        $posts = Post::articles()
             ->with(['user', 'categories', 'tags'])
             ->withCount(['comments', 'likes'])
             ->whereHas('categories', fn ($q) => $q->where('categories.id', $category->id))
@@ -86,7 +86,7 @@ class PostController extends Controller
             ? $post->likes()->where('user_id', auth()->id())->exists()
             : false;
 
-        $relatedPosts = Post::published()
+        $relatedPosts = Post::articles()
             ->where('id', '!=', $post->id)
             ->whereHas('categories', function ($q) use ($post) {
                 $q->whereIn('categories.id', $post->categories->pluck('id'));

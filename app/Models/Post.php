@@ -163,6 +163,15 @@ class Post extends \Illuminate\Database\Eloquent\Model
             ->whereNull('deletion_requested_at');
     }
 
+    /**
+     * Public yazı feed'leri (Home, kategori, arama, RSS, sitemap) için:
+     * yayınlanmış + watch_log olmayan. Yazar profili Watch-Log sekmesi bu scope'u KULLANMAZ.
+     */
+    public function scopeArticles($query)
+    {
+        return $query->published()->where('format', '!=', 'watch_log');
+    }
+
     public function isDeletionPending(): bool
     {
         return $this->deletion_requested_at !== null;

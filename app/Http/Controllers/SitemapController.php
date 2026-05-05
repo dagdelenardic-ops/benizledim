@@ -10,7 +10,7 @@ class SitemapController extends Controller
 {
     public function index()
     {
-        $posts = Post::published()
+        $posts = Post::articles()
             ->select('slug', 'published_at', 'updated_at')
             ->latest('published_at')
             ->cursor();

@@ -14,7 +14,7 @@ class HomeController extends Controller
 {
     public function index(): Response
     {
-        $posts = Post::published()
+        $posts = Post::articles()
             ->with(['user', 'categories', 'tags'])
             ->withCount(['comments', 'likes'])
             ->latest('published_at')

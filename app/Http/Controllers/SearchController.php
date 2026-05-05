@@ -15,7 +15,7 @@ class SearchController extends Controller
 
         if (strlen($query) >= 2) {
             $escaped = str_replace(['%', '_'], ['\\%', '\\_'], $query);
-            $posts = Post::published()
+            $posts = Post::articles()
                 ->where(function ($q) use ($escaped) {
                     $q->where('title', 'like', "%{$escaped}%")
                       ->orWhere('excerpt', 'like', "%{$escaped}%")

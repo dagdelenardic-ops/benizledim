@@ -9,7 +9,7 @@ class RssFeedController extends Controller
 {
     public function index()
     {
-        $posts = Post::published()
+        $posts = Post::articles()
             ->with(['user', 'categories'])
             ->select('id', 'title', 'slug', 'excerpt', 'cover_image', 'published_at', 'user_id')
             ->latest('published_at')
