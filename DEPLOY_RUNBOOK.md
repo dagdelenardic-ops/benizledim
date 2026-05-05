@@ -41,6 +41,37 @@ php artisan event:cache
 
 Do not run `route:cache` until closure routes are removed.
 
+Temporary public maintenance endpoints such as `public/recache.php` and
+`/_ops/*` must stay removed. Use SSH post-deploy commands above, or run the same
+Artisan commands manually from cPanel Terminal when SSH automation is not
+configured.
+
+## Faz A Production Checklist
+
+Set or verify these production environment values before final smoke testing:
+
+```env
+TMDB_API_KEY=<user-provided key>
+VAPID_PUBLIC_KEY=<local generated public key>
+VAPID_PRIVATE_KEY=<local generated private key>
+VAPID_SUBJECT=mailto:gurursonmez@gmail.com
+LETTERBOXD_SYNC_THROTTLE=60
+```
+
+Then run:
+
+```bash
+php -m | grep -i gmp
+php artisan optimize:clear
+php artisan migrate --force
+php artisan config:cache
+php artisan view:cache
+php artisan event:cache
+```
+
+If `gmp` is missing, enable it from cPanel PHP Selector before relying on web
+push.
+
 ## Optional Inertia SSR
 The repository now builds both client and SSR bundles with:
 
