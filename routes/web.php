@@ -42,6 +42,23 @@ Route::get('/up', function () {
 
 Route::get('/img/variant', [ImageVariantController::class, 'show'])->name('image.variant');
 
+// Tek seferlik cache temizleme - deploy sonrası kullanılıp kaldırılacak
+Route::get('/_ops/clear-cache', function (\Illuminate\Http\Request $request) {
+    if ($request->query('token') !== 'bizledim2026') {
+        abort(403);
+    }
+    $output = [];
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+        $output[] = 'opcache: reset';
+    }
+    foreach (['cache:clear', 'route:clear', 'config:clear', 'view:clear'] as $cmd) {
+        \Illuminate\Support\Facades\Artisan::call($cmd);
+        $output[] = $cmd . ': ' . trim(\Illuminate\Support\Facades\Artisan::output());
+    }
+    return response(implode("\n", $output), 200)->header('Content-Type', 'text/plain');
+});
+
 // Sitemap & RSS
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/feed', [RssFeedController::class, 'index'])->name('feed');
