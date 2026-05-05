@@ -32,6 +32,11 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\RssFeedController;
 use App\Http\Controllers\WixRedirectController;
 use App\Http\Controllers\ImageVariantController;
+use App\Http\Controllers\Api\TmdbSearchController;
+use App\Http\Controllers\QuickLogController;
+use App\Http\Controllers\AuthorHomeController;
+use App\Http\Controllers\PushSubscriptionController;
+use App\Http\Controllers\LetterboxdController;
 
 Route::get('/up', function () {
     return response()->json([
@@ -41,6 +46,16 @@ Route::get('/up', function () {
 })->name('health.up');
 
 Route::get('/img/variant', [ImageVariantController::class, 'show'])->name('image.variant');
+
+// Tek seferlik migration - deploy sonrası kullanılıp kaldırılacak
+Route::get('/_ops/migrate', function (\Illuminate\Http\Request $request) {
+    if ($request->query('token') !== 'bizledim2026') {
+        abort(403);
+    }
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    return response(\Illuminate\Support\Facades\Artisan::output(), 200)
+        ->header('Content-Type', 'text/plain');
+});
 
 // Tek seferlik cache temizleme - deploy sonrası kullanılıp kaldırılacak
 Route::get('/_ops/clear-cache', function (\Illuminate\Http\Request $request) {
@@ -97,6 +112,7 @@ Route::delete('/sinema-yorum/{cinemaReview}', [CinemaReviewController::class, 'd
 // Ne Izlesem (AI Recommendation)
 Route::get('/ne-izlesem', [AiRecommendationController::class, 'index'])->name('recommend.index');
 Route::post('/ne-izlesem/chat', [AiRecommendationController::class, 'chat'])->name('recommend.chat');
+Route::post('/ne-izlesem/new', [AiRecommendationController::class, 'newConversation'])->name('recommend.new');
 
 // Podcast
 Route::get('/podcast', [PodcastController::class, 'index'])->name('podcast.index');
@@ -109,6 +125,34 @@ Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsle
 
 // Yazar Profili
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
+// Yazar Paneli (PWA home)
+Route::get('/yazar', function () {
+    return Inertia::render('Author/Home', [
+        'stats' => [],
+        'recentLogs' => [],
+        'recentPosts' => [],
+        'pendingDrafts' => 0,
+        'letterboxd' => [],
+    ]);
+})->middleware('auth')->name('author.home');
+
+Route::middleware(['auth', 'role:admin,editor,author'])
+    ->get('/yazar', [AuthorHomeController::class, 'index'])
+    ->name('author.home');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/api/quick-log', [QuickLogController::class, 'store'])->name('quick-log.store');
+    Route::get('/api/tmdb/search', [TmdbSearchController::class, 'search'])->name('tmdb.search');
+    Route::post('/api/push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
+    Route::delete('/api/push/subscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
+    Route::get('/api/push/vapid', [PushSubscriptionController::class, 'vapidKey'])->name('push.vapid');
+    Route::post('/api/push/test', [PushSubscriptionController::class, 'test'])->name('push.test');
+    Route::post('/api/letterboxd/connect', [LetterboxdController::class, 'connect'])->name('letterboxd.connect');
+    Route::post('/api/letterboxd/confirm', [LetterboxdController::class, 'confirm'])->name('letterboxd.confirm');
+    Route::post('/api/letterboxd/sync-now', [LetterboxdController::class, 'syncNow'])->name('letterboxd.sync');
+    Route::delete('/api/letterboxd', [LetterboxdController::class, 'disconnect'])->name('letterboxd.disconnect');
+});
 
 // Statik Sayfalar
 Route::get('/sayfa/{page:slug}', [PageController::class, 'show'])->name('pages.show');

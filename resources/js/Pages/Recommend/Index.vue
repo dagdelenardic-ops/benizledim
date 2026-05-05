@@ -2,11 +2,13 @@
 import { ref, nextTick, onMounted, onBeforeUnmount, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
+import ConversationHistory from '../../Components/Recommend/ConversationHistory.vue';
 import axios from 'axios';
 
 const props = defineProps({
     messages: { type: Array, default: () => [] },
     conversationId: { type: Number, default: null },
+    conversations: { type: Array, default: () => [] },
 });
 
 const messages = ref([...props.messages]);
@@ -17,6 +19,9 @@ const error = ref('');
 const chatContainer = ref(null);
 const waitingLabel = ref('İzliyor');
 const waitingTimer = ref(null);
+const showScrollTop = ref(false);
+
+const isReturningUser = computed(() => messages.value.length > 0 && props.conversations.length > 0);
 
 const waitingPhrases = [
     'İzliyor',
@@ -27,6 +32,36 @@ const waitingPhrases = [
     'Sahneleri yokluyor',
 ];
 
+const promptGroups = [
+    {
+        label: 'Ruh Haline Göre',
+        prompts: [
+            { icon: '😌', text: 'Sakin ve huzurlu bir şey izlemek istiyorum' },
+            { icon: '🔥', text: 'Heyecanlı ve tempolu bir şey' },
+            { icon: '😢', text: 'Duygusal bir film önerisi' },
+            { icon: '🤔', text: 'Düşündürücü bir film öner' },
+        ],
+    },
+    {
+        label: 'Türe Göre',
+        prompts: [
+            { icon: '🎭', text: 'Gerilimli bir dizi arıyorum' },
+            { icon: '😂', text: 'Komedi izlemek istiyorum' },
+            { icon: '👻', text: 'Korku filmi önerisi' },
+            { icon: '🔍', text: 'Suç ve gizem türünde bir şey' },
+        ],
+    },
+    {
+        label: 'Zamana Göre',
+        prompts: [
+            { icon: '⏱️', text: 'Kısa ve hafif bir şey (90dk)' },
+            { icon: '📺', text: 'Uzun bir dizi önerisi' },
+            { icon: '🎬', text: 'Son dönemin en iyi filmleri?' },
+            { icon: '📱', text: 'Netflix\'te ne izlesem?' },
+        ],
+    },
+];
+
 const scrollToBottom = async () => {
     await nextTick();
     if (chatContainer.value) {
@@ -34,9 +69,22 @@ const scrollToBottom = async () => {
     }
 };
 
+const scrollToTop = () => {
+    if (chatContainer.value) {
+        chatContainer.value.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+};
+
+const handleScroll = () => {
+    if (chatContainer.value) {
+        showScrollTop.value = chatContainer.value.scrollTop > 300;
+    }
+};
+
 const renderMarkdown = (text) => {
     if (!text) return '';
     return text
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="ne-izlesem__inline-link">$1</a>')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .replace(/\[ID:\d+\]\s*/g, '')
@@ -98,22 +146,20 @@ const sendMessage = async () => {
     }
 };
 
-const quickPrompts = [
-    { icon: '🎭', text: 'Düşündürücü bir film öner' },
-    { icon: '🔥', text: 'Gerilimli bir dizi arıyorum' },
-    { icon: '👨‍👩‍👧', text: 'Ailecek izlenecek bir film?' },
-    { icon: '⏱️', text: 'Kısa ve hafif bir şey izlemek istiyorum' },
-    { icon: '🎬', text: 'Son dönemin en iyi filmleri?' },
-    { icon: '📺', text: 'Netflix\'te ne izlesem?' },
-];
-
 const sendQuickPrompt = (prompt) => {
     input.value = prompt;
     sendMessage();
 };
 
-onMounted(scrollToBottom);
-onBeforeUnmount(stopWaitingAnimation);
+onMounted(() => {
+    scrollToBottom();
+    chatContainer.value?.addEventListener('scroll', handleScroll);
+});
+
+onBeforeUnmount(() => {
+    stopWaitingAnimation();
+    chatContainer.value?.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <template>
@@ -131,169 +177,208 @@ onBeforeUnmount(stopWaitingAnimation);
                 </div>
             </header>
 
-            <!-- Chat Container -->
-            <div class="ne-izlesem__body">
-                <div class="ne-izlesem__chat-wrapper">
-                    <!-- Messages -->
-                    <div ref="chatContainer" class="ne-izlesem__messages">
-                        <!-- Empty State -->
-                        <div v-if="messages.length === 0" class="ne-izlesem__empty">
-                            <div class="ne-izlesem__empty-icon">
-                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="4" y="8" width="40" height="32" rx="2" stroke="currentColor" stroke-width="2"/>
-                                    <rect x="8" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                    <rect x="20" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                    <rect x="32" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                    <rect x="8" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                    <rect x="20" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                    <rect x="32" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
-                                    <rect x="8" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
-                                    <rect x="20" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
-                                    <rect x="32" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
-                                </svg>
-                            </div>
-                            <h2 class="ne-izlesem__empty-title">Merhaba, sinema sever!</h2>
-                            <p class="ne-izlesem__empty-desc">
-                                Ruh halini ya da ne tarz bir şey izlemek istediğini yaz, sana en uygun filmleri ve dizileri önereyim.
-                            </p>
+            <!-- Main Layout -->
+            <div class="ne-izlesem__layout">
+                <!-- Sidebar: Conversation History -->
+                <ConversationHistory
+                    :conversations="conversations"
+                    :active-id="conversationId"
+                />
 
-                            <!-- Quick Prompts -->
-                            <div class="ne-izlesem__prompts">
-                                <button
-                                    v-for="prompt in quickPrompts"
-                                    :key="prompt.text"
-                                    @click="sendQuickPrompt(prompt.text)"
-                                    class="ne-izlesem__prompt-btn"
-                                >
-                                    <span class="ne-izlesem__prompt-icon">{{ prompt.icon }}</span>
-                                    {{ prompt.text }}
-                                </button>
-                            </div>
+                <!-- Chat Container -->
+                <div class="ne-izlesem__body">
+                    <div class="ne-izlesem__chat-wrapper">
+                        <!-- Returning user banner -->
+                        <div v-if="isReturningUser && messages.length > 0" class="ne-izlesem__resume-banner">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 8v4l3 3"/>
+                                <circle cx="12" cy="12" r="9"/>
+                            </svg>
+                            <span>Son sohbetine devam ediyorsun</span>
                         </div>
 
-                        <!-- Message Bubbles -->
-                        <div
-                            v-for="msg in messages"
-                            :key="msg.id"
-                            class="ne-izlesem__msg"
-                            :class="msg.role === 'user' ? 'ne-izlesem__msg--user' : 'ne-izlesem__msg--ai'"
-                        >
-                            <div v-if="msg.role !== 'user'" class="ne-izlesem__msg-avatar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M15.91 11.72a.5.5 0 010 .56l-1.2 2.08a.5.5 0 01-.43.25H12.6a.5.5 0 01-.44-.25l-1.2-2.08a.5.5 0 010-.56l1.2-2.08a.5.5 0 01.44-.25h1.68a.5.5 0 01.43.25l1.2 2.08z"/>
-                                    <circle cx="12" cy="12" r="10"/>
-                                </svg>
-                            </div>
-                            <div class="ne-izlesem__msg-bubble">
-                                <div v-if="msg.role === 'user'" class="ne-izlesem__msg-text">{{ msg.content }}</div>
-                                <template v-else>
-                                    <div class="ne-izlesem__msg-text" v-html="renderMarkdown(msg.content)"></div>
+                        <!-- Messages -->
+                        <div ref="chatContainer" class="ne-izlesem__messages">
+                            <!-- Empty State -->
+                            <div v-if="messages.length === 0" class="ne-izlesem__empty">
+                                <div class="ne-izlesem__empty-icon">
+                                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="4" y="8" width="40" height="32" rx="2" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="8" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="20" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="32" y="12" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="8" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="20" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="32" y="22" width="8" height="6" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="8" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="20" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="32" y="32" width="8" height="4" rx="1" fill="currentColor" opacity="0.3"/>
+                                    </svg>
+                                </div>
+                                <h2 class="ne-izlesem__empty-title">Merhaba, sinema sever!</h2>
+                                <p class="ne-izlesem__empty-desc">
+                                    Ruh halini ya da ne tarz bir şey izlemek istediğini yaz, sana en uygun filmleri ve dizileri önereyim.
+                                </p>
 
-                                    <div v-if="assistantMeta(msg).site_posts?.length" class="ne-izlesem__link-block">
-                                        <div class="ne-izlesem__link-title">Ben İzledim içinde</div>
-                                        <div class="ne-izlesem__suggestion-grid">
-                                            <Link
-                                                v-for="post in assistantMeta(msg).site_posts"
-                                                :key="`site-${post.id}`"
-                                                :href="`/yazi/${post.slug}`"
-                                                class="ne-izlesem__suggestion-card"
+                                <!-- Grouped Quick Prompts -->
+                                <div class="ne-izlesem__prompt-groups">
+                                    <div
+                                        v-for="group in promptGroups"
+                                        :key="group.label"
+                                        class="ne-izlesem__prompt-group"
+                                    >
+                                        <div class="ne-izlesem__prompt-group-label">{{ group.label }}</div>
+                                        <div class="ne-izlesem__prompts">
+                                            <button
+                                                v-for="prompt in group.prompts"
+                                                :key="prompt.text"
+                                                @click="sendQuickPrompt(prompt.text)"
+                                                class="ne-izlesem__prompt-btn"
                                             >
-                                                <span class="ne-izlesem__suggestion-kicker">Yazı linki</span>
-                                                <span class="ne-izlesem__suggestion-name">{{ post.title }}</span>
-                                            </Link>
+                                                <span class="ne-izlesem__prompt-icon">{{ prompt.icon }}</span>
+                                                {{ prompt.text }}
+                                            </button>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div v-if="assistantMeta(msg).external_suggestions?.length" class="ne-izlesem__link-block">
-                                        <div class="ne-izlesem__link-title">Site dışında da bak</div>
-                                        <div class="ne-izlesem__suggestion-grid">
-                                            <component
-                                                :is="item.url ? 'a' : 'div'"
-                                                v-for="item in assistantMeta(msg).external_suggestions"
-                                                :key="`${item.title}-${item.year || 'na'}`"
-                                                :href="item.url || undefined"
-                                                :target="item.url ? '_blank' : undefined"
-                                                :rel="item.url ? 'noopener noreferrer' : undefined"
-                                                class="ne-izlesem__suggestion-card ne-izlesem__suggestion-card--external"
-                                                :class="{ 'is-disabled': !item.url }"
-                                            >
-                                                <span class="ne-izlesem__suggestion-kicker">{{ item.type === 'series' ? 'Dizi' : 'Film' }}{{ item.year ? ` / ${item.year}` : '' }}</span>
-                                                <span class="ne-izlesem__suggestion-name">{{ item.title }}</span>
-                                                <span v-if="item.reason" class="ne-izlesem__suggestion-desc">{{ item.reason }}</span>
-                                            </component>
+                            <!-- Message Bubbles -->
+                            <div
+                                v-for="msg in messages"
+                                :key="msg.id"
+                                class="ne-izlesem__msg"
+                                :class="msg.role === 'user' ? 'ne-izlesem__msg--user' : 'ne-izlesem__msg--ai'"
+                            >
+                                <div v-if="msg.role !== 'user'" class="ne-izlesem__msg-avatar">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M15.91 11.72a.5.5 0 010 .56l-1.2 2.08a.5.5 0 01-.43.25H12.6a.5.5 0 01-.44-.25l-1.2-2.08a.5.5 0 010-.56l1.2-2.08a.5.5 0 01.44-.25h1.68a.5.5 0 01.43.25l1.2 2.08z"/>
+                                        <circle cx="12" cy="12" r="10"/>
+                                    </svg>
+                                </div>
+                                <div class="ne-izlesem__msg-bubble">
+                                    <div v-if="msg.role === 'user'" class="ne-izlesem__msg-text">{{ msg.content }}</div>
+                                    <template v-else>
+                                        <div class="ne-izlesem__msg-text" v-html="renderMarkdown(msg.content)"></div>
+
+                                        <div v-if="assistantMeta(msg).site_posts?.length" class="ne-izlesem__link-block">
+                                            <div class="ne-izlesem__link-title">Ben İzledim içinde</div>
+                                            <div class="ne-izlesem__suggestion-grid">
+                                                <Link
+                                                    v-for="post in assistantMeta(msg).site_posts"
+                                                    :key="`site-${post.id}`"
+                                                    :href="`/yazi/${post.slug}`"
+                                                    class="ne-izlesem__suggestion-card"
+                                                >
+                                                    <span class="ne-izlesem__suggestion-kicker">Yazı linki</span>
+                                                    <span class="ne-izlesem__suggestion-name">{{ post.title }}</span>
+                                                </Link>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div v-if="assistantMeta(msg).follow_up_options?.length" class="ne-izlesem__followups">
-                                        <button
-                                            v-for="option in assistantMeta(msg).follow_up_options"
-                                            :key="option"
-                                            type="button"
-                                            class="ne-izlesem__followup-btn"
-                                            @click="sendQuickPrompt(option)"
-                                        >
-                                            {{ option }}
-                                        </button>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
+                                        <div v-if="assistantMeta(msg).external_suggestions?.length" class="ne-izlesem__link-block">
+                                            <div class="ne-izlesem__link-title">Site dışında da bak</div>
+                                            <div class="ne-izlesem__suggestion-grid">
+                                                <component
+                                                    :is="item.url ? 'a' : 'div'"
+                                                    v-for="item in assistantMeta(msg).external_suggestions"
+                                                    :key="`${item.title}-${item.year || 'na'}`"
+                                                    :href="item.url || undefined"
+                                                    :target="item.url ? '_blank' : undefined"
+                                                    :rel="item.url ? 'noopener noreferrer' : undefined"
+                                                    class="ne-izlesem__suggestion-card ne-izlesem__suggestion-card--external"
+                                                    :class="{ 'is-disabled': !item.url }"
+                                                >
+                                                    <span class="ne-izlesem__suggestion-kicker">{{ item.type === 'series' ? 'Dizi' : 'Film' }}{{ item.year ? ` / ${item.year}` : '' }}</span>
+                                                    <span class="ne-izlesem__suggestion-name">{{ item.title }}</span>
+                                                    <span v-if="item.reason" class="ne-izlesem__suggestion-desc">{{ item.reason }}</span>
+                                                </component>
+                                            </div>
+                                        </div>
 
-                        <!-- Loading -->
-                        <div v-if="isLoading" class="ne-izlesem__msg ne-izlesem__msg--ai">
-                            <div class="ne-izlesem__msg-avatar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M15.91 11.72a.5.5 0 010 .56l-1.2 2.08a.5.5 0 01-.43.25H12.6a.5.5 0 01-.44-.25l-1.2-2.08a.5.5 0 010-.56l1.2-2.08a.5.5 0 01.44-.25h1.68a.5.5 0 01.43.25l1.2 2.08z"/>
-                                    <circle cx="12" cy="12" r="10"/>
-                                </svg>
+                                        <div v-if="assistantMeta(msg).follow_up_options?.length" class="ne-izlesem__followups">
+                                            <button
+                                                v-for="option in assistantMeta(msg).follow_up_options"
+                                                :key="option"
+                                                type="button"
+                                                class="ne-izlesem__followup-btn"
+                                                @click="sendQuickPrompt(option)"
+                                            >
+                                                {{ option }}
+                                            </button>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
-                            <div class="ne-izlesem__msg-bubble">
-                                <div class="ne-izlesem__loading-wrap">
-                                    <div class="ne-izlesem__loading-label">{{ waitingLabel }}</div>
-                                    <div class="ne-izlesem__loading-svg" aria-hidden="true">
-                                        <svg viewBox="0 0 120 24" fill="none">
-                                            <rect x="2" y="5" width="26" height="14" rx="1.5" />
-                                            <rect x="34" y="5" width="26" height="14" rx="1.5" />
-                                            <rect x="66" y="5" width="26" height="14" rx="1.5" />
-                                            <path d="M98 12H118" stroke-linecap="square" />
-                                        </svg>
-                                    </div>
-                                    <div class="ne-izlesem__typing">
-                                        <span></span><span></span><span></span>
+
+                            <!-- Loading -->
+                            <div v-if="isLoading" class="ne-izlesem__msg ne-izlesem__msg--ai">
+                                <div class="ne-izlesem__msg-avatar">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M15.91 11.72a.5.5 0 010 .56l-1.2 2.08a.5.5 0 01-.43.25H12.6a.5.5 0 01-.44-.25l-1.2-2.08a.5.5 0 010-.56l1.2-2.08a.5.5 0 01.44-.25h1.68a.5.5 0 01.43.25l1.2 2.08z"/>
+                                        <circle cx="12" cy="12" r="10"/>
+                                    </svg>
+                                </div>
+                                <div class="ne-izlesem__msg-bubble">
+                                    <div class="ne-izlesem__loading-wrap">
+                                        <div class="ne-izlesem__loading-label">{{ waitingLabel }}</div>
+                                        <div class="ne-izlesem__loading-svg" aria-hidden="true">
+                                            <svg viewBox="0 0 120 24" fill="none">
+                                                <rect x="2" y="5" width="26" height="14" rx="1.5" />
+                                                <rect x="34" y="5" width="26" height="14" rx="1.5" />
+                                                <rect x="66" y="5" width="26" height="14" rx="1.5" />
+                                                <path d="M98 12H118" stroke-linecap="square" />
+                                            </svg>
+                                        </div>
+                                        <div class="ne-izlesem__typing">
+                                            <span></span><span></span><span></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Error -->
-                    <div v-if="error" class="ne-izlesem__error">
-                        {{ error }}
-                    </div>
-
-                    <!-- Input -->
-                    <form @submit.prevent="sendMessage" class="ne-izlesem__form">
-                        <input
-                            v-model="input"
-                            type="text"
-                            placeholder="Ruh halini veya ne izlemek istediğini yaz..."
-                            maxlength="500"
-                            :disabled="isLoading"
-                            class="ne-izlesem__input"
-                            @keydown.enter.prevent="sendMessage"
-                        />
+                        <!-- Scroll to Top -->
                         <button
-                            type="submit"
-                            :disabled="isLoading || !input.trim()"
-                            class="ne-izlesem__send"
+                            v-show="showScrollTop"
+                            class="ne-izlesem__scroll-top"
+                            @click="scrollToTop"
+                            aria-label="Basa don"
                         >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="22" y1="2" x2="11" y2="13"/>
-                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="18 15 12 9 6 15"/>
                             </svg>
-                            <span>Gönder</span>
                         </button>
-                    </form>
+
+                        <!-- Error -->
+                        <div v-if="error" class="ne-izlesem__error">
+                            {{ error }}
+                        </div>
+
+                        <!-- Input -->
+                        <form @submit.prevent="sendMessage" class="ne-izlesem__form">
+                            <input
+                                v-model="input"
+                                type="text"
+                                placeholder="Ruh halini veya ne izlemek istediğini yaz..."
+                                maxlength="500"
+                                :disabled="isLoading"
+                                class="ne-izlesem__input"
+                                @keydown.enter.prevent="sendMessage"
+                            />
+                            <button
+                                type="submit"
+                                :disabled="isLoading || !input.trim()"
+                                class="ne-izlesem__send"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                                <span>Gönder</span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -307,13 +392,13 @@ onBeforeUnmount(stopWaitingAnimation);
     flex-direction: column;
 }
 
-/* ── Header ── */
+/* -- Header -- */
 .ne-izlesem__header {
     border-bottom: 3px solid var(--bi-ink);
     background: var(--bi-paper);
 }
 .ne-izlesem__header-inner {
-    max-width: 800px;
+    max-width: 1060px;
     margin: 0 auto;
     padding: 2rem 1.5rem 1.5rem;
 }
@@ -353,15 +438,23 @@ onBeforeUnmount(stopWaitingAnimation);
     margin-left: 4px;
 }
 
-/* ── Body ── */
-.ne-izlesem__body {
+/* -- Layout -- */
+.ne-izlesem__layout {
     flex: 1;
-    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    max-width: 1060px;
     width: 100%;
     margin: 0 auto;
+}
+
+/* -- Body -- */
+.ne-izlesem__body {
+    flex: 1;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 .ne-izlesem__chat-wrapper {
     flex: 1;
@@ -369,7 +462,26 @@ onBeforeUnmount(stopWaitingAnimation);
     flex-direction: column;
 }
 
-/* ── Messages ── */
+/* -- Resume Banner -- */
+.ne-izlesem__resume-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--bi-rule);
+    background: #faf7ef;
+    font-family: var(--bi-mono);
+    font-size: 0.72rem;
+    color: var(--bi-muted);
+    margin-bottom: 0.75rem;
+}
+.ne-izlesem__resume-banner svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* -- Messages -- */
 .ne-izlesem__messages {
     flex: 1;
     overflow-y: auto;
@@ -378,10 +490,9 @@ onBeforeUnmount(stopWaitingAnimation);
     min-height: 300px;
 }
 
-/* ── Empty State ── */
+/* -- Empty State -- */
 .ne-izlesem__empty {
-    text-align: center;
-    padding: 3rem 1rem;
+    padding: 2rem 1rem 1rem;
 }
 .ne-izlesem__empty-icon {
     width: 64px;
@@ -397,34 +508,49 @@ onBeforeUnmount(stopWaitingAnimation);
     font-weight: 800;
     color: var(--bi-ink);
     margin-bottom: 0.5rem;
+    text-align: center;
 }
 .ne-izlesem__empty-desc {
     font-family: var(--bi-mono);
     font-size: 0.8rem;
     color: var(--bi-muted);
-    max-width: 400px;
+    max-width: 420px;
     margin: 0 auto 2rem;
     line-height: 1.6;
+    text-align: center;
 }
 
-/* ── Quick Prompts ── */
+/* -- Grouped Quick Prompts -- */
+.ne-izlesem__prompt-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+.ne-izlesem__prompt-group-label {
+    font-family: var(--bi-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bi-muted);
+    margin-bottom: 0.4rem;
+    padding-left: 0.2rem;
+}
 .ne-izlesem__prompts {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    justify-content: center;
 }
 .ne-izlesem__prompt-btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 0.4rem;
-    padding: 0.7rem 1rem;
+    padding: 0.6rem 0.9rem;
     border: 2px solid var(--bi-ink);
     background: var(--bi-paper);
     color: var(--bi-ink);
     font-family: var(--bi-mono);
-    font-size: 0.75rem;
+    font-size: 0.73rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s;
@@ -438,7 +564,7 @@ onBeforeUnmount(stopWaitingAnimation);
 }
 .ne-izlesem__prompt-icon { font-size: 1rem; }
 
-/* ── Message Bubbles ── */
+/* -- Message Bubbles -- */
 .ne-izlesem__msg {
     display: flex;
     gap: 0.75rem;
@@ -491,6 +617,15 @@ onBeforeUnmount(stopWaitingAnimation);
 .ne-izlesem__msg-text :deep(em) {
     font-style: italic;
     color: var(--bi-muted);
+}
+.ne-izlesem__msg-text :deep(.ne-izlesem__inline-link) {
+    color: var(--bi-red);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.ne-izlesem__msg-text :deep(.ne-izlesem__inline-link:hover) {
+    color: var(--bi-ink);
 }
 
 .ne-izlesem__link-block {
@@ -586,7 +721,37 @@ onBeforeUnmount(stopWaitingAnimation);
     box-shadow: 3px 3px 0 var(--bi-ink);
 }
 
-/* ── Typing Indicator ── */
+/* -- Scroll to Top -- */
+.ne-izlesem__scroll-top {
+    position: absolute;
+    bottom: 5.5rem;
+    right: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--bi-ink);
+    background: var(--bi-paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    z-index: 10;
+}
+.ne-izlesem__scroll-top svg {
+    width: 18px;
+    height: 18px;
+    color: var(--bi-ink);
+}
+.ne-izlesem__scroll-top:hover {
+    background: var(--bi-ink);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--bi-ink);
+}
+.ne-izlesem__scroll-top:hover svg {
+    color: var(--bi-paper);
+}
+
+/* -- Typing Indicator -- */
 .ne-izlesem__loading-wrap {
     display: flex;
     flex-direction: column;
@@ -657,7 +822,7 @@ onBeforeUnmount(stopWaitingAnimation);
     100% { stroke-dashoffset: -24; opacity: 0.3; }
 }
 
-/* ── Error ── */
+/* -- Error -- */
 .ne-izlesem__error {
     border: 2px solid var(--bi-red);
     background: #fef2f2;
@@ -668,7 +833,7 @@ onBeforeUnmount(stopWaitingAnimation);
     margin-bottom: 0.75rem;
 }
 
-/* ── Input Form ── */
+/* -- Input Form -- */
 .ne-izlesem__form {
     display: flex;
     gap: 0.5rem;
@@ -722,7 +887,12 @@ onBeforeUnmount(stopWaitingAnimation);
 .ne-izlesem__send svg { width: 16px; height: 16px; }
 .ne-izlesem__send span { display: none; }
 
-@media (max-width: 639px) {
+/* -- Mobile -- */
+@media (max-width: 767px) {
+    .ne-izlesem__layout {
+        flex-direction: column;
+    }
+
     .ne-izlesem__header-inner {
         padding: 1.4rem 1rem 1.1rem;
     }
@@ -738,17 +908,11 @@ onBeforeUnmount(stopWaitingAnimation);
 
     .ne-izlesem__empty {
         padding: 1.5rem 0 1rem;
-        text-align: left;
-    }
-
-    .ne-izlesem__empty-desc {
-        margin: 0 0 1.25rem;
     }
 
     .ne-izlesem__prompts {
         display: grid;
         grid-template-columns: 1fr;
-        justify-content: stretch;
     }
 
     .ne-izlesem__prompt-btn {
@@ -800,9 +964,18 @@ onBeforeUnmount(stopWaitingAnimation);
     .ne-izlesem__send span {
         display: inline;
     }
+
+    .ne-izlesem__scroll-top {
+        bottom: 7.5rem;
+        right: 1rem;
+    }
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
+    .ne-izlesem__layout {
+        flex-direction: row;
+    }
+
     .ne-izlesem__send span { display: inline; }
 }
 </style>

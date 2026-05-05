@@ -2,6 +2,17 @@
 
 namespace App\Providers;
 
+use App\Listeners\ClaimGuestConversations;
+use App\Models\Comment;
+use App\Models\Entry;
+use App\Models\Like;
+use App\Models\Post;
+use App\Observers\CommentObserver;
+use App\Observers\EntryObserver;
+use App\Observers\LikeObserver;
+use App\Observers\PostObserver;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +31,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Event::listen(Login::class, ClaimGuestConversations::class);
+
+        Comment::observe(CommentObserver::class);
+        Entry::observe(EntryObserver::class);
+        Like::observe(LikeObserver::class);
+        Post::observe(PostObserver::class);
+
         if (! app()->environment('production')) {
             return;
         }

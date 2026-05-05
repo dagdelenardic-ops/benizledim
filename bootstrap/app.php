@@ -43,6 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\CanonicalHostMiddleware::class,
+            \App\Http\Middleware\EnsureVisitorId::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
         $middleware->alias([

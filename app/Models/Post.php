@@ -45,6 +45,14 @@ class Post extends \Illuminate\Database\Eloquent\Model
         'mood_tags',
         'duration_category',
         'intensity_level',
+        'tmdb_id',
+        'tmdb_type',
+        'external_title',
+        'external_year',
+        'watched_on',
+        'rating',
+        'letterboxd_uri',
+        'meta',
     ];
 
     protected function casts(): array
@@ -62,6 +70,8 @@ class Post extends \Illuminate\Database\Eloquent\Model
             'reviewed_at' => 'datetime',
             'is_revisit' => 'boolean',
             'mood_tags' => 'array',
+            'watched_on' => 'date',
+            'meta' => 'array',
         ];
     }
 
