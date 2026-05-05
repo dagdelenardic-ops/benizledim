@@ -146,6 +146,11 @@ jobs:
             "package.json"
             "package-lock.json"
             "artisan"
+            "public/recache.php"
+            "public/.htaccess"
+            "public/index.php"
+            "public/robots.txt"
+            "public/favicon.ico"
           )
 
           run_lftp () {

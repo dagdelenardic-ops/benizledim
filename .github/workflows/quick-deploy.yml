@@ -105,9 +105,15 @@ jobs:
           COUNT=$(wc -l < /tmp/uploads.txt | tr -d ' ')
           echo "count=$COUNT" >> $GITHUB_OUTPUT
           echo ""
-          echo "Yüklenecek $COUNT dosya:"
-          head -50 /tmp/uploads.txt
-          [ "$COUNT" -gt 50 ] && echo "  ... ve $((COUNT - 50)) dosya daha"
+          if [ "$COUNT" = "0" ]; then
+            echo "Hiç dosya değişmemiş, sadece cache temizliği yapılacak."
+          else
+            echo "Yüklenecek $COUNT dosya:"
+            head -50 /tmp/uploads.txt || true
+            if [ "$COUNT" -gt 50 ]; then
+              echo "  ... ve $((COUNT - 50)) dosya daha"
+            fi
+          fi
 
       - name: FTP upload (targeted)
         if: steps.uplist.outputs.count != '0'
