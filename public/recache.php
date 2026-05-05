@@ -2,6 +2,7 @@
 // Tek seferlik: Laravel cache klasörünü temizler ve OPcache'i sıfırlar.
 // Cache temizlendikten sonra silinmeli.
 // URL: https://benizledim.com/recache.php?token=bizledim2026
+// v2 — force redeploy
 
 if (($_GET['token'] ?? '') !== 'bizledim2026') {
     http_response_code(403);
