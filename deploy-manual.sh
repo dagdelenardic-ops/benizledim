@@ -89,7 +89,7 @@ echo "🚀 lftp ile $FTP_SERVER → public_html/ senkronize ediliyor..."
 echo "   (sertleştirilmiş ayarlar: 50 retry, sıralı transfer, 5dk timeout)"
 echo ""
 
-lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftps://${FTP_SERVER}" << 'LFTPEOF'
+lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftp://${FTP_SERVER}:21" << 'LFTPEOF'
 set ftp:passive-mode true
 set ftp:ssl-force true
 set ssl:verify-certificate false
