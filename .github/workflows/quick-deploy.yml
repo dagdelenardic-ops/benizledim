@@ -141,7 +141,7 @@ jobs:
             echo "bye"
           } > /tmp/lftp.cmd
 
-          lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftp://${FTP_SERVER}:21" -f /tmp/lftp.cmd
+          lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftp://${FTP_SERVER}:21" < /tmp/lftp.cmd
 
       - name: Clear cache via recache.php
         run: |
