@@ -47,17 +47,17 @@ Route::get('/up', function () {
 
 Route::get('/img/variant', [ImageVariantController::class, 'show'])->name('image.variant');
 
-// Tek seferlik migration - deploy sonrası kullanılıp kaldırılacak
+// Ops endpoints - deploy sonrası kullanılıp kaldırılacak
 Route::get('/_ops/migrate', function (\Illuminate\Http\Request $request) {
     if ($request->query('token') !== 'bizledim2026') {
         abort(403);
     }
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-    return response(\Illuminate\Support\Facades\Artisan::output(), 200)
-        ->header('Content-Type', 'text/plain');
+    $output = trim(\Illuminate\Support\Facades\Artisan::output());
+
+    return response($output ?: 'No pending migrations.', 200)->header('Content-Type', 'text/plain');
 });
 
-// Tek seferlik cache temizleme - deploy sonrası kullanılıp kaldırılacak
 Route::get('/_ops/clear-cache', function (\Illuminate\Http\Request $request) {
     if ($request->query('token') !== 'bizledim2026') {
         abort(403);
@@ -126,17 +126,6 @@ Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsle
 // Yazar Profili
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 
-// Yazar Paneli (PWA home)
-Route::get('/yazar', function () {
-    return Inertia::render('Author/Home', [
-        'stats' => [],
-        'recentLogs' => [],
-        'recentPosts' => [],
-        'pendingDrafts' => 0,
-        'letterboxd' => [],
-    ]);
-})->middleware('auth')->name('author.home');
-
 Route::middleware(['auth', 'role:admin,editor,author'])
     ->get('/yazar', [AuthorHomeController::class, 'index'])
     ->name('author.home');
@@ -164,6 +153,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     // Yazılar (admin, editör, yazar)
     Route::get('/posts', [AdminPostController::class, 'index'])->name('posts.index');
     Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');
+    Route::post('/posts/autosave-draft', [AdminPostController::class, 'autosaveDraft'])->name('posts.autosaveDraft');
     Route::post('/posts', [AdminPostController::class, 'store'])->name('posts.store');
     Route::get('/posts/{post:id}/edit', [AdminPostController::class, 'edit'])->name('posts.edit');
     Route::put('/posts/{post:id}', [AdminPostController::class, 'update'])->name('posts.update');

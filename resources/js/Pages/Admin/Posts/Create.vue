@@ -1,11 +1,12 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import RichTextEditor from '../../../Components/Admin/RichTextEditor.vue';
 import SlugPreview from '../../../Components/Admin/SlugPreview.vue';
 import Icon from '../../../Components/Admin/AdminIcon.vue';
 import { useLocalFormDraft } from '../../../Composables/useLocalFormDraft';
+import axios from 'axios';
 
 const props = defineProps({
     categories: {
@@ -43,6 +44,10 @@ const action = ref('draft');
 const formMessage = ref('');
 const hasCategories = computed(() => props.categories.length > 0);
 const slugPreviewRef = ref(null);
+const serverDraftId = ref(null);
+const serverDraftStatus = ref('idle');
+const serverDraftSavedAt = ref('');
+let serverDraftTimer = null;
 
 const draftKey = 'benizledim_draft_new_post_content';
 const formDraftKey = 'benizledim_draft_new_post_form';
@@ -125,6 +130,98 @@ const coverPositionStyle = (mode = 'desktop') => ({
         : `${form.cover_image_focus_x}% ${form.cover_image_focus_y}%`,
 });
 
+const plainContent = computed(() => String(form.content || '').replace(/<[^>]*>/g, '').trim());
+
+const hasMeaningfulDraft = computed(() => Boolean(
+    form.title?.trim()
+        || form.excerpt?.trim()
+        || plainContent.value
+        || form.scheduled_at
+        || form.tags.length,
+));
+
+const serverDraftPayload = computed(() => ({
+    title: form.title,
+    excerpt: form.excerpt,
+    content: form.content,
+    cover_image_focus_x: form.cover_image_focus_x,
+    cover_image_focus_y: form.cover_image_focus_y,
+    cover_image_mobile_focus_x: form.cover_image_mobile_focus_x,
+    cover_image_mobile_focus_y: form.cover_image_mobile_focus_y,
+    scheduled_at: form.scheduled_at || null,
+    reading_time_minutes: form.reading_time_minutes,
+    categories: [...form.categories],
+    tags: [...form.tags],
+}));
+
+const formatServerDraftTime = (value) => {
+    if (!value) return '';
+
+    return new Date(value).toLocaleTimeString('tr-TR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+    });
+};
+
+const saveServerDraft = async () => {
+    if (!hasMeaningfulDraft.value || form.processing) return;
+
+    serverDraftStatus.value = 'saving';
+
+    try {
+        const endpoint = serverDraftId.value
+            ? `/admin/posts/${serverDraftId.value}/autosave`
+            : '/admin/posts/autosave-draft';
+        const method = serverDraftId.value ? 'put' : 'post';
+        const { data } = await axios[method](endpoint, serverDraftPayload.value);
+
+        if (data.post_id) {
+            serverDraftId.value = data.post_id;
+        }
+
+        serverDraftSavedAt.value = data.saved_at || new Date().toISOString();
+        serverDraftStatus.value = 'saved';
+
+        window.setTimeout(() => {
+            if (serverDraftStatus.value === 'saved') {
+                serverDraftStatus.value = 'idle';
+            }
+        }, 3000);
+    } catch {
+        serverDraftStatus.value = 'error';
+    }
+};
+
+const scheduleServerDraft = () => {
+    window.clearTimeout(serverDraftTimer);
+    serverDraftTimer = window.setTimeout(saveServerDraft, 2500);
+};
+
+watch(serverDraftPayload, scheduleServerDraft, { deep: true });
+
+const flushServerDraft = () => {
+    window.clearTimeout(serverDraftTimer);
+    saveServerDraft();
+};
+
+const handleVisibilityChange = () => {
+    if (document.visibilityState === 'hidden') {
+        flushServerDraft();
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('beforeunload', flushServerDraft);
+});
+
+onBeforeUnmount(() => {
+    window.clearTimeout(serverDraftTimer);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.removeEventListener('beforeunload', flushServerDraft);
+});
+
 const submit = (publish = false) => {
     formMessage.value = '';
 
@@ -143,16 +240,21 @@ const submit = (publish = false) => {
         form.status = 'published';
     }
     
-    form.post('/admin/posts', {
-        onSuccess: () => {
-            clearFormDraft();
-            localStorage.removeItem(draftKey);
-        },
-        onError: () => {
-            formMessage.value = 'Yazı kaydedilemedi. Lütfen işaretli alanları kontrol edin.';
-            if (publish) form.status = 'draft';
-        },
-    });
+    const endpoint = serverDraftId.value ? `/admin/posts/${serverDraftId.value}` : '/admin/posts';
+
+    form
+        .transform((data) => serverDraftId.value ? { ...data, _method: 'PUT' } : data)
+        .post(endpoint, {
+            forceFormData: true,
+            onSuccess: () => {
+                clearFormDraft();
+                localStorage.removeItem(draftKey);
+            },
+            onError: () => {
+                formMessage.value = 'Yazı kaydedilemedi. Lütfen işaretli alanları kontrol edin.';
+                if (publish) form.status = 'draft';
+            },
+        });
 };
 </script>
 
@@ -192,6 +294,16 @@ const submit = (publish = false) => {
 
                 <div v-if="formMessage" class="border-2 border-red-700 bg-red-50 px-4 py-3 text-sm font-bold text-red-800">
                     {{ formMessage }}
+                </div>
+
+                <div
+                    v-if="serverDraftStatus !== 'idle' || serverDraftSavedAt"
+                    class="flex items-center justify-between border border-[var(--bi-ink)] bg-[var(--bi-paper)] px-4 py-2 text-xs font-bold text-[var(--bi-muted)]"
+                >
+                    <span v-if="serverDraftStatus === 'saving'">Sunucu taslağı kaydediliyor...</span>
+                    <span v-else-if="serverDraftStatus === 'error'" class="text-red-700">Sunucu taslağı kaydedilemedi; yerel taslak korunuyor.</span>
+                    <span v-else>Sunucu taslağı kaydedildi: {{ formatServerDraftTime(serverDraftSavedAt) }}</span>
+                    <span v-if="serverDraftId">#{{ serverDraftId }}</span>
                 </div>
 
                 <!-- Title -->

@@ -76,7 +76,8 @@ class AiRecommendationServiceTest extends TestCase
         $result = app(AiRecommendationService::class)->chat($conversation, 'Merhaba');
 
         $this->assertSame('assistant', $result['message']->role);
-        $this->assertSame('Üzgünüm, şu anda önerilerime ulaşılamıyor. Lütfen biraz sonra tekrar deneyin.', $result['message']->content);
+        $this->assertStringContainsString('Tam senlik birkaç seçenek çıkardım.', $result['message']->content);
         $this->assertSame([], $result['recommended_posts']);
+        $this->assertCount(3, $result['message']->meta['external_suggestions']);
     }
 }

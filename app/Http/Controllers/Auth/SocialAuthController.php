@@ -53,7 +53,7 @@ class SocialAuthController extends Controller
                 'avatar' => $user->avatar ?? $socialUser->avatar,
             ]);
         } else {
-            $role = $isAdminEmail ? 'admin' : 'author';
+            $role = $isAdminEmail ? 'admin' : 'reader';
             $user = User::create([
                 'name' => $socialUser->name,
                 'email' => $socialUser->email,
@@ -148,7 +148,7 @@ class SocialAuthController extends Controller
                 'avatar' => $socialUser->avatar,
                 'provider' => 'facebook',
                 'provider_id' => $socialUser->id,
-                'role' => $isAdminEmail ? 'admin' : 'author',
+                'role' => $isAdminEmail ? 'admin' : 'reader',
             ]);
         } else {
             $user->update([

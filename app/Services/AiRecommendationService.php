@@ -177,7 +177,15 @@ PROMPT;
         $decoded = json_decode($payloadText, true);
 
         if (!is_array($decoded)) {
-            return $this->buildFallbackPayload($userMessage, $postContext, $userTurns);
+            return $this->finalizePayload(
+                trim($payloadText) ?: 'Sana birkaç iyi seçenek çıkardım.',
+                $this->extractPostIds($payloadText, $postContext),
+                [],
+                [],
+                $userMessage,
+                $postContext,
+                $userTurns,
+            );
         }
 
         $recommendedIds = array_values(array_intersect(

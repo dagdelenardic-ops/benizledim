@@ -45,10 +45,11 @@ class AiRecommendationFallbackTest extends TestCase
     {
         config()->set('services.gemini.api_key', '');
 
+        $user = User::factory()->reader()->create();
         $conversationId = null;
 
         for ($turn = 0; $turn < 4; $turn++) {
-            $response = $this->postJson('/ne-izlesem/chat', [
+            $response = $this->actingAs($user)->postJson('/ne-izlesem/chat', [
                 'message' => 'Biraz daha karanlık olsun',
                 'conversation_id' => $conversationId,
             ])->assertOk();
@@ -56,7 +57,7 @@ class AiRecommendationFallbackTest extends TestCase
             $conversationId = $response->json('message.conversation_id');
         }
 
-        $response = $this->postJson('/ne-izlesem/chat', [
+        $response = $this->actingAs($user)->postJson('/ne-izlesem/chat', [
             'message' => 'Bir tane daha ver',
             'conversation_id' => $conversationId,
         ]);
