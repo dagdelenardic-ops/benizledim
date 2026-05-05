@@ -1,0 +1,149 @@
+name: Quick Deploy (30s)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quick-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect what changed
+        id: detect
+        run: |
+          # Bu commit ile öncekini karşılaştır
+          BEFORE="${{ github.event.before }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE="HEAD~1"
+          fi
+          CHANGED=$(git diff --name-only "$BEFORE" HEAD 2>/dev/null || git diff --name-only HEAD~1 HEAD)
+          echo "$CHANGED" > /tmp/changed.txt
+          echo "Changed files:"
+          cat /tmp/changed.txt
+
+          # Build gerekiyor mu?
+          if echo "$CHANGED" | grep -qE '^(resources/|vite\.config|tailwind\.config|postcss\.config|package\.json|package-lock\.json)'; then
+            echo "needs_build=true" >> $GITHUB_OUTPUT
+          else
+            echo "needs_build=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Composer gerekiyor mu?
+          if echo "$CHANGED" | grep -qE '^(composer\.json|composer\.lock)$'; then
+            echo "needs_composer=true" >> $GITHUB_OUTPUT
+          else
+            echo "needs_composer=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Node (only if needed)
+        if: steps.detect.outputs.needs_build == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: npm ci + build (only if needed)
+        if: steps.detect.outputs.needs_build == 'true'
+        run: |
+          npm ci --no-audit --no-fund --prefer-offline
+          npm run build
+
+      - name: Setup PHP + Composer (only if needed)
+        if: steps.detect.outputs.needs_composer == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: composer install (only if needed)
+        if: steps.detect.outputs.needs_composer == 'true'
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+      - name: Build upload list
+        id: uplist
+        run: |
+          # Liste: değişen dosyalar + (build çalıştıysa public/build/, bootstrap/ssr/ klasörleri tamamı)
+          : > /tmp/uploads.txt
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            # Server'da olmayacak/silmen gereken dosyaları atla
+            case "$f" in
+              .github/*|tests/*|.gitignore|.gitattributes|*.md|deploy-*.sh|.env*|CLAUDE.md|AGENTS.md|.codex-*|.kimi-*|.qwen-*|.vscode/*) continue ;;
+              .claude/*|.idea/*|.DS_Store) continue ;;
+              public/recache.php) echo "$f" >> /tmp/uploads.txt; continue ;;
+              resources/*) continue ;;  # build artifact'i public/build'e gider
+            esac
+            [ -f "$f" ] && echo "$f" >> /tmp/uploads.txt
+          done < /tmp/changed.txt
+
+          if [ "${{ steps.detect.outputs.needs_build }}" = "true" ]; then
+            find public/build -type f >> /tmp/uploads.txt
+            find bootstrap/ssr -type f 2>/dev/null >> /tmp/uploads.txt || true
+          fi
+
+          if [ "${{ steps.detect.outputs.needs_composer }}" = "true" ]; then
+            echo "  ⚠️  Composer değişti — full vendor sync yapılacak (FTP yavaş, ~3-5 dk)"
+            find vendor -type f >> /tmp/uploads.txt
+          fi
+
+          # Tekrar edenleri çıkar
+          sort -u /tmp/uploads.txt -o /tmp/uploads.txt
+          COUNT=$(wc -l < /tmp/uploads.txt | tr -d ' ')
+          echo "count=$COUNT" >> $GITHUB_OUTPUT
+          echo ""
+          echo "Yüklenecek $COUNT dosya:"
+          head -50 /tmp/uploads.txt
+          [ "$COUNT" -gt 50 ] && echo "  ... ve $((COUNT - 50)) dosya daha"
+
+      - name: FTP upload (targeted)
+        if: steps.uplist.outputs.count != '0'
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          sudo apt-get install -y -qq lftp >/dev/null 2>&1
+          # Lftp script üret: her dosya için mkdir -fp + put
+          {
+            echo "set ftp:passive-mode true"
+            echo "set ftp:ssl-force true"
+            echo "set ssl:verify-certificate false"
+            echo "set ftp:ssl-protect-data true"
+            echo "set net:timeout 60"
+            echo "set net:max-retries 5"
+            echo "set xfer:clobber on"
+            while IFS= read -r f; do
+              [ -z "$f" ] && continue
+              DIR=$(dirname "$f")
+              echo "mkdir -fp public_html/${DIR}"
+              echo "put -O public_html/${DIR} \"$f\""
+            done < /tmp/uploads.txt
+            echo "bye"
+          } > /tmp/lftp.cmd
+
+          lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" "ftp://${FTP_SERVER}:21" -f /tmp/lftp.cmd
+
+      - name: Clear cache via recache.php
+        run: |
+          sleep 2
+          echo "Calling recache.php..."
+          curl -s --max-time 30 "https://benizledim.com/recache.php?token=bizledim2026" | head -20 || true
+
+      - name: Done
+        run: |
+          echo "✅ Quick deploy tamamlandı"
+          echo "Build: ${{ steps.detect.outputs.needs_build }}, Composer: ${{ steps.detect.outputs.needs_composer }}, Files: ${{ steps.uplist.outputs.count }}"
