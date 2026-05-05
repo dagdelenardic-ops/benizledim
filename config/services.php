@@ -57,4 +57,21 @@ return [
         'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4-5-20250514'),
     ],
 
+    'tmdb' => [
+        'api_key' => env('TMDB_API_KEY'),
+        'base' => env('TMDB_BASE_URL', 'https://api.themoviedb.org/3'),
+        'image_base' => env('TMDB_IMAGE_BASE_URL', 'https://image.tmdb.org/t/p'),
+    ],
+
+    'webpush' => [
+        'vapid_public' => env('VAPID_PUBLIC_KEY'),
+        'vapid_private' => env('VAPID_PRIVATE_KEY'),
+        'vapid_subject' => env('VAPID_SUBJECT', 'mailto:gurursonmez@gmail.com'),
+    ],
+
+    'letterboxd' => [
+        'sync_throttle_minutes' => (int) env('LETTERBOXD_SYNC_THROTTLE', 60),
+        'base' => env('LETTERBOXD_BASE_URL', 'https://letterboxd.com'),
+    ],
+
 ];

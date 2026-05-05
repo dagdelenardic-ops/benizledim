@@ -32,6 +32,11 @@ if ((bool) env('RUN_WIX_SCRAPER_SCHEDULED', false)) {
         ->appendOutputTo(storage_path('logs/scheduler.log'));
 }
 
+Schedule::command('letterboxd:sync')
+    ->dailyAt('03:00')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/scheduler.log'));
+
 Schedule::call(function () {
     \App\Models\Post::where('status', 'draft')
         ->whereNotNull('scheduled_at')

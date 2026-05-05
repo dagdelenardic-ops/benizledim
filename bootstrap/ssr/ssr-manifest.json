@@ -1,7 +1,7 @@
 {
   "\u0000plugin-vue:export-helper": [
-    "/build/assets/AppLayout-DLzUu67n.js",
-    "/build/assets/AppLayout-CR7L8czn.css"
+    "/build/assets/AppLayout-BbFbHk45.js",
+    "/build/assets/AppLayout-C8qVauAf.css"
   ],
   "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
   "resources/css/app.css": [],
@@ -27,51 +27,67 @@
     "/build/assets/useLocalFormDraft-CADHagWC.js"
   ],
   "resources/js/Components/Article/ArticleBody.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Article/ArticleBody.vue?vue&type=style&index=0&scoped=c4199799&lang.css": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Auth/LoginModal.vue": [
-    "/build/assets/AppLayout-DLzUu67n.js",
-    "/build/assets/AppLayout-CR7L8czn.css"
+    "/build/assets/AppLayout-BbFbHk45.js",
+    "/build/assets/AppLayout-C8qVauAf.css"
+  ],
+  "resources/js/Components/Author/AuthorStatCard.vue": [
+    "/build/assets/WatchLogCard-CjKvGqAo.js"
+  ],
+  "resources/js/Components/Author/LetterboxdConnectCard.vue": [
+    "/build/assets/Home-Dvf9XBfE.js"
+  ],
+  "resources/js/Components/Author/PushOptInCard.vue": [
+    "/build/assets/Home-Dvf9XBfE.js"
+  ],
+  "resources/js/Components/Author/QuickLogModal.vue": [
+    "/build/assets/Home-Dvf9XBfE.js"
   ],
   "resources/js/Components/Comment/CommentForm.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Comment/CommentList.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Comment/WixComments.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Entry/EntryCard.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Entry/EntryForm.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Entry/EntrySection.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Layout/AppLayout.vue": [
-    "/build/assets/AppLayout-DLzUu67n.js",
-    "/build/assets/AppLayout-CR7L8czn.css"
+    "/build/assets/AppLayout-BbFbHk45.js",
+    "/build/assets/AppLayout-C8qVauAf.css"
   ],
-  "resources/js/Components/Layout/AppLayout.vue?vue&type=style&index=0&scoped=7e723f5a&lang.css": [
-    "/build/assets/AppLayout-DLzUu67n.js",
-    "/build/assets/AppLayout-CR7L8czn.css"
+  "resources/js/Components/Layout/AppLayout.vue?vue&type=style&index=0&scoped=32005913&lang.css": [
+    "/build/assets/AppLayout-BbFbHk45.js",
+    "/build/assets/AppLayout-C8qVauAf.css"
+  ],
+  "resources/js/Components/Layout/AuthorBottomNav.vue": [
+    "/build/assets/AppLayout-BbFbHk45.js",
+    "/build/assets/AppLayout-C8qVauAf.css"
   ],
   "resources/js/Components/Post/DialogueView.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/PostCard.vue": [
@@ -81,28 +97,39 @@
     "/build/assets/PostGrid-XfxM0aNu.js"
   ],
   "resources/js/Components/Post/RelatedPosts.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/ShareButtons.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/TimeCapsuleBanner.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/VisualEssayView.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
+  "resources/js/Components/Post/WatchLogCard.vue": [
+    "/build/assets/WatchLogCard-CjKvGqAo.js"
+  ],
+  "resources/js/Components/Recommend/ConversationHistory.vue": [
+    "/build/assets/Index-C3-oo3bK.js",
+    "/build/assets/Index-6hxdgyyZ.css"
+  ],
+  "resources/js/Components/Recommend/ConversationHistory.vue?vue&type=style&index=0&scoped=d825bab5&lang.css": [
+    "/build/assets/Index-C3-oo3bK.js",
+    "/build/assets/Index-6hxdgyyZ.css"
+  ],
   "resources/js/Components/UI/LikeButton.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/UI/SearchBar.vue": [
-    "/build/assets/AppLayout-DLzUu67n.js",
-    "/build/assets/AppLayout-CR7L8czn.css"
+    "/build/assets/AppLayout-BbFbHk45.js",
+    "/build/assets/AppLayout-C8qVauAf.css"
   ],
   "resources/js/Composables/useAutosave.js": [
     "/build/assets/RichTextEditor-B1ICi6UT.js",
@@ -113,6 +140,13 @@
   ],
   "resources/js/Composables/useLocalFormDraft.js": [
     "/build/assets/useLocalFormDraft-CADHagWC.js"
+  ],
+  "resources/js/Composables/usePushSubscription.js": [
+    "/build/assets/Home-Dvf9XBfE.js"
+  ],
+  "resources/js/Composables/useUnreadNotifications.js": [
+    "/build/assets/AppLayout-BbFbHk45.js",
+    "/build/assets/AppLayout-C8qVauAf.css"
   ],
   "resources/js/Extensions/EmbedExtension.js": [
     "/build/assets/RichTextEditor-B1ICi6UT.js",
@@ -161,65 +195,68 @@
   "resources/js/Pages/Admin/Users/Index.vue": [
     "/build/assets/Index-BgJJzDHk.js"
   ],
+  "resources/js/Pages/Author/Home.vue": [
+    "/build/assets/Home-Dvf9XBfE.js"
+  ],
   "resources/js/Pages/Category/Show.vue": [
-    "/build/assets/Show-DlSkJJyr.js"
+    "/build/assets/Show-DU6t_7NW.js"
   ],
   "resources/js/Pages/Cinema/Index.vue": [
-    "/build/assets/Index-B4mpPVDL.js"
+    "/build/assets/Index-DyEAggUT.js"
   ],
   "resources/js/Pages/Cinema/Show.vue": [
-    "/build/assets/Show-BoPCA-51.js"
+    "/build/assets/Show-viDY3-KP.js"
   ],
   "resources/js/Pages/Festival/Index.vue": [
-    "/build/assets/Index-CeAglSpX.js"
+    "/build/assets/Index-B6HnQvnt.js"
   ],
   "resources/js/Pages/Home.vue": [
-    "/build/assets/Home-n3ss1TSY.js",
+    "/build/assets/Home-DweGnKDI.js",
     "/build/assets/Home-B2YDaE6F.css"
   ],
   "resources/js/Pages/Home.vue?vue&type=style&index=0&scoped=c67ba9b4&lang.css": [
-    "/build/assets/Home-n3ss1TSY.js",
+    "/build/assets/Home-DweGnKDI.js",
     "/build/assets/Home-B2YDaE6F.css"
   ],
   "resources/js/Pages/Page/Show.vue": [
-    "/build/assets/Show-smtOEBjE.js",
+    "/build/assets/Show-BU5JtrtB.js",
     "/build/assets/Show-8E3e3bwP.css"
   ],
   "resources/js/Pages/Page/Show.vue?vue&type=style&index=0&scoped=e5c83ea9&lang.css": [
-    "/build/assets/Show-smtOEBjE.js",
+    "/build/assets/Show-BU5JtrtB.js",
     "/build/assets/Show-8E3e3bwP.css"
   ],
   "resources/js/Pages/Podcast/Index.vue": [
-    "/build/assets/Index-BtgOjIrX.js"
+    "/build/assets/Index-Vy9vJSEw.js"
   ],
   "resources/js/Pages/Post/Index.vue": [
-    "/build/assets/Index-BQRGzu6u.js",
+    "/build/assets/Index-DAUau9By.js",
     "/build/assets/Index-BfBAZ5vb.css"
   ],
   "resources/js/Pages/Post/Index.vue?vue&type=style&index=0&scoped=dff0dbf0&lang.css": [
-    "/build/assets/Index-BQRGzu6u.js",
+    "/build/assets/Index-DAUau9By.js",
     "/build/assets/Index-BfBAZ5vb.css"
   ],
   "resources/js/Pages/Post/Show.vue": [
-    "/build/assets/Show-Vdp-YdLA.js",
+    "/build/assets/Show-CSdu7AFF.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Pages/Profile/Show.vue": [
-    "/build/assets/Show-BXWYaCG8.js"
+    "/build/assets/Show-B8cTXAU2.js"
   ],
   "resources/js/Pages/Recommend/Index.vue": [
-    "/build/assets/Index-D0V--CNj.js",
-    "/build/assets/Index-CmpiCgN-.css"
+    "/build/assets/Index-C3-oo3bK.js",
+    "/build/assets/Index-6hxdgyyZ.css"
   ],
-  "resources/js/Pages/Recommend/Index.vue?vue&type=style&index=0&scoped=57b2de67&lang.css": [
-    "/build/assets/Index-D0V--CNj.js",
-    "/build/assets/Index-CmpiCgN-.css"
+  "resources/js/Pages/Recommend/Index.vue?vue&type=style&index=0&scoped=b5999232&lang.css": [
+    "/build/assets/Index-C3-oo3bK.js",
+    "/build/assets/Index-6hxdgyyZ.css"
   ],
   "resources/js/Pages/Search/Index.vue": [
-    "/build/assets/Index-CyLpM4Cm.js"
+    "/build/assets/Index-BSUGcfNS.js"
   ],
   "resources/js/Pages/Tag/Show.vue": [
-    "/build/assets/Show-CRcvUXMV.js"
+    "/build/assets/Show-_kO0X2mw.js"
   ],
   "resources/js/Utils/responsiveImage.js": [
     "/build/assets/PostCard-BwkqJ6T-.js"

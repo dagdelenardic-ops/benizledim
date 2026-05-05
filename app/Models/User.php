@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, HasPushSubscriptions, Notifiable;
 
     // Note: 'role' is fillable for internal User::create() calls (auth, import).
     // Never pass unvalidated user input to User::create/update with role.
@@ -22,6 +23,9 @@ class User extends Authenticatable
         'provider_id',
         'role',
         'bio',
+        'letterboxd_username',
+        'last_letterboxd_sync_at',
+        'letterboxd_sync_enabled',
     ];
 
     protected $hidden = [
@@ -34,6 +38,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_letterboxd_sync_at' => 'datetime',
+            'letterboxd_sync_enabled' => 'boolean',
         ];
     }
 

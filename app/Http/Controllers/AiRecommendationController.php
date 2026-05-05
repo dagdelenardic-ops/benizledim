@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AiConversation;
+use App\Models\AiMessage;
 use App\Services\AiRecommendationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,18 +12,38 @@ class AiRecommendationController extends Controller
 {
     public function index(Request $request)
     {
-        $sessionId = $request->session()->getId();
+        [$userId, $visitorId] = $this->resolveOwner($request);
 
-        $conversation = AiConversation::where('session_id', $sessionId)
-            ->with('messages')
-            ->latest()
-            ->first();
+        $conversationId = $request->integer('conversation_id') ?: null;
 
-        $messages = $conversation?->messages ?? collect();
+        if ($conversationId) {
+            $conversation = AiConversation::forOwner($userId, $visitorId)
+                ->where('id', $conversationId)
+                ->with('messages')
+                ->first();
+        } else {
+            $conversation = AiConversation::forOwner($userId, $visitorId)
+                ->with('messages')
+                ->latest('updated_at')
+                ->first();
+        }
+
+        $conversations = AiConversation::forOwner($userId, $visitorId)
+            ->withCount('messages')
+            ->latest('updated_at')
+            ->limit(20)
+            ->get()
+            ->map(fn ($c) => [
+                'id' => $c->id,
+                'title' => $c->title ?: 'Sohbet #'.$c->id,
+                'created_at' => $c->created_at?->diffForHumans(),
+                'message_count' => $c->messages_count,
+            ]);
 
         return Inertia::render('Recommend/Index', [
-            'messages' => $messages,
+            'messages' => $conversation?->messages ?? collect(),
             'conversationId' => $conversation?->id,
+            'conversations' => $conversations,
         ]);
     }
 
@@ -33,10 +54,9 @@ class AiRecommendationController extends Controller
             'conversation_id' => 'nullable|integer|exists:ai_conversations,id',
         ]);
 
-        $sessionId = $request->session()->getId();
+        [$userId, $visitorId] = $this->resolveOwner($request);
 
-        // Rate limit: max 10 messages per day per session
-        $todayCount = \App\Models\AiMessage::whereHas('conversation', fn ($q) => $q->where('session_id', $sessionId))
+        $todayCount = AiMessage::whereHas('conversation', fn ($q) => $q->forOwner($userId, $visitorId))
             ->where('role', 'user')
             ->where('created_at', '>=', now()->startOfDay())
             ->count();
@@ -50,16 +70,48 @@ class AiRecommendationController extends Controller
         $conversation = null;
 
         if ($request->filled('conversation_id')) {
-            $conversation = AiConversation::whereKey($request->integer('conversation_id'))->first();
+            $conversation = AiConversation::forOwner($userId, $visitorId)
+                ->whereKey($request->integer('conversation_id'))
+                ->first();
         }
 
-        $conversation ??= AiConversation::firstOrCreate(
-            ['session_id' => $sessionId],
-            ['user_id' => auth()->id()],
-        );
+        $conversation ??= AiConversation::create([
+            'user_id' => $userId,
+            'visitor_id' => $visitorId,
+            'session_id' => $request->session()->getId(),
+        ]);
 
         $result = $service->chat($conversation, $request->message);
 
+        if (!$conversation->title && $conversation->messages()->where('role', 'user')->count() === 1) {
+            $conversation->update([
+                'title' => mb_substr($request->message, 0, 50),
+            ]);
+        }
+
+        $conversation->touch();
+
         return response()->json($result);
+    }
+
+    public function newConversation(Request $request)
+    {
+        [$userId, $visitorId] = $this->resolveOwner($request);
+
+        $conversation = AiConversation::create([
+            'user_id' => $userId,
+            'visitor_id' => $visitorId,
+            'session_id' => $request->session()->getId(),
+        ]);
+
+        return response()->json(['conversationId' => $conversation->id]);
+    }
+
+    private function resolveOwner(Request $request): array
+    {
+        $userId = auth()->id();
+        $visitorId = $request->attributes->get('visitor_id');
+
+        return [$userId, $visitorId];
     }
 }

@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, usePage, router, Link, useForm } from '@inertiajs/vue3';
 import LoginModal from '@/Components/Auth/LoginModal.vue';
 import SearchBar from '@/Components/UI/SearchBar.vue';
+import AuthorBottomNav from '@/Components/Layout/AuthorBottomNav.vue';
 
 const props = defineProps({
     title: String,
@@ -322,7 +323,7 @@ export default {
     </header>
 
     <!-- Content -->
-    <main id="ana-icerik" class="min-h-screen">
+    <main id="ana-icerik" class="min-h-screen pb-20 lg:pb-0">
         <slot />
     </main>
 
@@ -400,6 +401,9 @@ export default {
             </div>
         </div>
     </footer>
+
+    <!-- Mobile Bottom Nav (only for CMS users) -->
+    <AuthorBottomNav v-if="canAccessCms" />
 
     <!-- Login Modal -->
     <LoginModal :show="showLoginModal" @close="closeLoginModal" />
