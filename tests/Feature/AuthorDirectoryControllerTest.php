@@ -39,4 +39,14 @@ class AuthorDirectoryControllerTest extends TestCase
                 return $row && $row['is_following'] === true;
             });
     }
+
+    public function test_author_search_endpoint_returns_slugified_usernames(): void
+    {
+        User::factory()->author()->create(['name' => 'Ayse Sinema']);
+
+        $this->getJson(route('authors.search', ['q' => 'Ayse']))
+            ->assertOk()
+            ->assertJsonPath('0.name', 'Ayse Sinema')
+            ->assertJsonPath('0.username', 'ayse-sinema');
+    }
 }

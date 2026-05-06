@@ -85,6 +85,9 @@ class PostController extends Controller
         $isLiked = auth()->check()
             ? $post->likes()->where('user_id', auth()->id())->exists()
             : false;
+        $isWatchlisted = auth()->check()
+            ? $post->watchlistedBy()->where('users.id', auth()->id())->exists()
+            : false;
 
         $relatedPosts = Post::articles()
             ->where('id', '!=', $post->id)
@@ -109,6 +112,7 @@ class PostController extends Controller
             'post' => $post,
             'relatedPosts' => $relatedPosts,
             'isLiked' => $isLiked,
+            'isWatchlisted' => $isWatchlisted,
             'userEntryVotes' => $userEntryVotes,
         ]);
     }

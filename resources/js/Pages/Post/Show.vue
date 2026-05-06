@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 import RelatedPosts from '../../Components/Post/RelatedPosts.vue';
 import CommentForm from '../../Components/Comment/CommentForm.vue';
@@ -14,6 +14,7 @@ import DialogueView from '../../Components/Post/DialogueView.vue';
 import VisualEssayView from '../../Components/Post/VisualEssayView.vue';
 import LoginModal from '../../Components/Auth/LoginModal.vue';
 import ArticleBody from '../../Components/Article/ArticleBody.vue';
+import WatchlistButton from '../../Components/Social/WatchlistButton.vue';
 import { useDate } from '@/Composables/useDate';
 import { buildResponsiveImage } from '@/Utils/responsiveImage';
 
@@ -30,6 +31,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isWatchlisted: {
+        type: Boolean,
+        default: false,
+    },
     userEntryVotes: {
         type: Object,
         default: () => ({}),
@@ -38,6 +43,8 @@ const props = defineProps({
 
 const { formatDate, timeAgo } = useDate();
 const showLoginModal = ref(false);
+const page = usePage();
+const authUser = computed(() => page.props.auth?.user);
 const readingProgress = ref(0);
 const articleBody = ref(null);
 let readingProgressFrame = null;
@@ -398,12 +405,19 @@ onBeforeUnmount(() => {
 
                     <!-- Engagement Stats -->
                     <div class="mx-auto mt-8 flex max-w-[750px] flex-col gap-4 border-t border-gray-200 pt-8 sm:flex-row sm:items-center sm:justify-between">
-                        <LikeButton
-                            :post-slug="post.slug"
-                            :likes-count="post.likes?.length || 0"
-                            :is-liked="isLiked"
-                            @open-login="openLoginModal"
-                        />
+                        <div class="flex items-center gap-3">
+                            <LikeButton
+                                :post-slug="post.slug"
+                                :likes-count="post.likes_count || 0"
+                                :is-liked="isLiked"
+                                @open-login="openLoginModal"
+                            />
+                            <WatchlistButton
+                                v-if="authUser"
+                                :post="post"
+                                :initial-watchlisted="isWatchlisted"
+                            />
+                        </div>
                         <ShareButtons
                             :title="post.title"
                             :url="typeof window !== 'undefined' ? window.location.href : ''"

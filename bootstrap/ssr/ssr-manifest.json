@@ -27,11 +27,11 @@
     "/build/assets/useLocalFormDraft-CADHagWC.js"
   ],
   "resources/js/Components/Article/ArticleBody.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Article/ArticleBody.vue?vue&type=style&index=0&scoped=c4199799&lang.css": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Auth/LoginModal.vue": [
@@ -51,27 +51,27 @@
     "/build/assets/Home-CaMjci8o.js"
   ],
   "resources/js/Components/Comment/CommentForm.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Comment/CommentList.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Comment/WixComments.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Entry/EntryCard.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Entry/EntryForm.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Entry/EntrySection.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Layout/AppLayout.vue": [
@@ -87,7 +87,7 @@
     "/build/assets/AppLayout-C8qVauAf.css"
   ],
   "resources/js/Components/Post/DialogueView.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/PostCard.vue": [
@@ -97,19 +97,19 @@
     "/build/assets/PostGrid-XfxM0aNu.js"
   ],
   "resources/js/Components/Post/RelatedPosts.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/ShareButtons.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/TimeCapsuleBanner.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/VisualEssayView.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/Post/WatchLogCard.vue": [
@@ -127,10 +127,18 @@
     "/build/assets/Index-QpTYza8I.js"
   ],
   "resources/js/Components/Social/FollowButton.vue": [
-    "/build/assets/Index-36K8Lpeo.js"
+    "/build/assets/FollowButton-B1R8OU26.js"
+  ],
+  "resources/js/Components/Social/WatchlistButton.vue": [
+    "/build/assets/Show-YmG8yMBX.js",
+    "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/UI/LikeButton.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
+    "/build/assets/Show-CCheAIdr.css"
+  ],
+  "resources/js/Components/UI/MentionTextarea.vue": [
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Components/UI/SearchBar.vue": [
@@ -208,7 +216,7 @@
     "/build/assets/Home-CaMjci8o.js"
   ],
   "resources/js/Pages/Author/Index.vue": [
-    "/build/assets/Index-36K8Lpeo.js"
+    "/build/assets/Index-D1qIP9bf.js"
   ],
   "resources/js/Pages/Category/Show.vue": [
     "/build/assets/Show-IKDn1K6f.js"
@@ -250,11 +258,11 @@
     "/build/assets/Index-BfBAZ5vb.css"
   ],
   "resources/js/Pages/Post/Show.vue": [
-    "/build/assets/Show-CO8cW8vy.js",
+    "/build/assets/Show-YmG8yMBX.js",
     "/build/assets/Show-CCheAIdr.css"
   ],
   "resources/js/Pages/Profile/Show.vue": [
-    "/build/assets/Show-BgMJ7T_j.js"
+    "/build/assets/Show-cjPdvxQ1.js"
   ],
   "resources/js/Pages/Recommend/Index.vue": [
     "/build/assets/Index-CUVILAol.js",
