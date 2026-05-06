@@ -224,7 +224,33 @@ benizledim/
 <claude-mem-context>
 # Memory Context
 
-# [Benizledim] recent context, 2026-05-02 11:43pm GMT+3
+# [Benizledim] recent context, 2026-05-06 6:28am GMT+3
 
-No previous sessions found.
+Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision
+Format: ID TIME TYPE TITLE
+Fetch details: get_observations([IDs]) | Search: mem-search skill
+
+Stats: 18 obs (5,940t read) | 627,187t work | 99% savings
+
+### May 5, 2026
+1717 4:56p 🔵 Benizledim.store — Wix'ten Kendi Sunucuya Geçiş Durumu ve Codex'e Devir
+1719 5:01p ⚖️ Benizledim.store — Wix'ten Özel Sunucuya Geçiş Planı
+1724 5:05p 🔵 Benizledim — Wix'ten Kendi Sunucusuna Geçiş: Açık Sorunlar ve Hedefler
+1727 5:07p ⚖️ Benizledim — FTP Deploy Stratejisi Benimsendi, GitHub Deploy Terk Edildi
+1730 5:09p 🔵 Benizledim — Wix'ten cPanel/FTP Sunucusuna Geçiş: Mevcut Durum ve Açık Sorunlar
+1736 5:12p 🔵 Benizledim — Wix'ten cPanel/FTP Sunucusuna Geçiş: Durum ve Gereksinimler
+1739 5:14p 🔴 Benizledim routes/web.php — Git Merge Conflict ve Duplicate Route Temizlendi
+1740 " 🟣 Benizledim — Otomatik Taslak Kaydetme (Autosave Draft) Endpoint'i Eklendi
+1741 " 🔴 Benizledim — Social Auth: Yeni Kullanıcılara Varsayılan Rol 'author' → 'reader' Olarak Düzeltildi
+1748 5:18p 🟣 Benizledim — Create.vue ve Edit.vue'ye Server-Side Otomatik Taslak Kaydetme Sistemi Eklendi
+1749 " 🟣 Benizledim — Autosave ve Social Auth Rol Değişiklikleri İçin Feature Testler Eklendi
+1750 " 🔵 Benizledim — Git Branch fix/prod-stabilization: 3 Dosyada Hâlâ Merge Conflict Mevcut
+1751 5:20p 🔴 Benizledim — AiRecommendationFallbackTest: /ne-izlesem/chat Auth Gerektiriyor, Test Güncellendi
+1754 5:22p 🔵 Benizledim — Tam Test Süiti: 83 Geçti, 2 Başarısız (AiRecommendationServiceTest)
+1755 " 🔴 Benizledim — AiRecommendationService: Plain Text Gemini Yanıtı Artık Fallback Yerine Direkt İşleniyor
+1765 5:25p 🔵 Benizledim — cPanel/FTP Sunucu Erişim Bilgileri ve Geçiş Durumu
+1766 " ⚖️ Benizledim Deploy Stratejisi — FTP Birincil, GitHub Save-State Olarak Kesinleşti
+1767 " 🟣 Benizledim — Yazar UX Gereksinimleri: Otomatik Taslak, Rol Yönetimi, Yazı Kaybı Önleme
+
+Access 627k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>
