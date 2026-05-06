@@ -132,6 +132,11 @@ class Post extends \Illuminate\Database\Eloquent\Model
         return $this->hasMany(Like::class);
     }
 
+    public function watchlistedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'watchlist_items')->withPivot(['status', 'note', 'watched_at'])->withTimestamps();
+    }
+
     public function entries(): HasMany
     {
         return $this->hasMany(Entry::class);

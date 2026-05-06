@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -56,6 +57,31 @@ class User extends Authenticatable
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id')->withTimestamps();
+    }
+
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id')->withTimestamps();
+    }
+
+    public function watchlistItems(): HasMany
+    {
+        return $this->hasMany(WatchlistItem::class);
+    }
+
+    public function activityItems(): HasMany
+    {
+        return $this->hasMany(ActivityItem::class, 'actor_id');
+    }
+
+    public function isFollowing(User $user): bool
+    {
+        return $this->following()->whereKey($user->getKey())->exists();
     }
 
     public function isAdmin(): bool

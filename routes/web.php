@@ -37,6 +37,10 @@ use App\Http\Controllers\QuickLogController;
 use App\Http\Controllers\AuthorHomeController;
 use App\Http\Controllers\PushSubscriptionController;
 use App\Http\Controllers\LetterboxdController;
+use App\Http\Controllers\FollowController;
+use App\Http\Controllers\WatchlistController;
+use App\Http\Controllers\ActivityFeedController;
+use App\Http\Controllers\AuthorDirectoryController;
 
 Route::get('/up', function () {
     return response()->json([
@@ -98,12 +102,20 @@ Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsle
 
 // Yazar Profili
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+Route::get('/yazarlar', [AuthorDirectoryController::class, 'index'])->name('authors.index');
 
 Route::middleware(['auth', 'role:admin,editor,author'])
     ->get('/yazar', [AuthorHomeController::class, 'index'])
     ->name('author.home');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/akis', [ActivityFeedController::class, 'index'])->name('activity.index');
+    Route::get('/watchlist', [WatchlistController::class, 'index'])->name('watchlist.index');
+    Route::post('/api/users/{user}/follow', [FollowController::class, 'store'])->name('users.follow');
+    Route::delete('/api/users/{user}/follow', [FollowController::class, 'destroy'])->name('users.unfollow');
+    Route::post('/api/watchlist/{post}', [WatchlistController::class, 'store'])->name('watchlist.store');
+    Route::patch('/api/watchlist/{post}', [WatchlistController::class, 'update'])->name('watchlist.update');
+    Route::delete('/api/watchlist/{post}', [WatchlistController::class, 'destroy'])->name('watchlist.destroy');
     Route::post('/api/quick-log', [QuickLogController::class, 'store'])->name('quick-log.store');
     Route::get('/api/tmdb/search', [TmdbSearchController::class, 'search'])->name('tmdb.search');
     Route::post('/api/push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');

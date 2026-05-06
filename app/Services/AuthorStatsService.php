@@ -61,7 +61,7 @@ class AuthorStatsService
             'avg_rating' => $this->averageRating($watchLogs),
             'last_log_at' => optional($watchLogs->filter(fn (Post $post) => $post->watched_on)->sortByDesc('watched_on')->first()?->watched_on)?->toDateString(),
             'current_streak' => 0,
-            'followers_count' => 0,
+            'followers_count' => $user->followers()->count(),
         ];
     }
 
