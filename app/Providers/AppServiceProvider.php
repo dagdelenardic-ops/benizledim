@@ -14,6 +14,7 @@ use App\Observers\PostObserver;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
         if (! app()->environment('production')) {
             return;
         }
+
+        Vite::createAssetPathsUsing(fn (string $path): string => '/'.ltrim($path, '/'));
 
         $canonicalUrl = rtrim((string) config('benizledim.canonical_url', config('app.url')), '/');
 
