@@ -103,6 +103,7 @@ Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsle
 // Yazar Profili
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 Route::get('/yazarlar', [AuthorDirectoryController::class, 'index'])->name('authors.index');
+Route::get('/api/authors/search', [AuthorDirectoryController::class, 'search'])->name('authors.search');
 
 Route::middleware(['auth', 'role:admin,editor,author'])
     ->get('/yazar', [AuthorHomeController::class, 'index'])

@@ -1,12 +1,11 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
+import MentionTextarea from '../UI/MentionTextarea.vue';
 
 const props = defineProps({
     postSlug: { type: String, required: true },
 });
-
-const emit = defineEmits(['open-login']);
 
 const page = usePage();
 const authUser = page.props.auth?.user;
@@ -50,13 +49,15 @@ const submit = () => {
 
             <!-- Content -->
             <div class="relative">
-                <textarea
+                <MentionTextarea
                     v-model="form.content"
-                    rows="3"
+                    :rows="3"
                     placeholder="Bu film/dizi hakkında kısa görüşünüz..."
-                    class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/20"
+                    :max-length="maxLength"
+                    :disabled="form.processing"
+                    class="text-sm"
                     :class="{ 'border-red-400': isOverLimit }"
-                ></textarea>
+                />
                 <div
                     class="absolute bottom-2 right-3 text-xs"
                     :class="{

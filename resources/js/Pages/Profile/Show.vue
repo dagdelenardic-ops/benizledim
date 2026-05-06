@@ -5,6 +5,7 @@ import AppLayout from '../../Components/Layout/AppLayout.vue';
 import PostGrid from '../../Components/Post/PostGrid.vue';
 import AuthorStatCard from '../../Components/Author/AuthorStatCard.vue';
 import WatchLogCard from '../../Components/Post/WatchLogCard.vue';
+import FollowButton from '../../Components/Social/FollowButton.vue';
 
 const props = defineProps({
     author: { type: Object, required: true },
@@ -14,6 +15,7 @@ const props = defineProps({
 });
 
 const page = usePage();
+const authUser = computed(() => page.props.auth?.user);
 
 const tabs = [
     { key: 'standard', label: 'Yazılar' },
@@ -57,6 +59,15 @@ const getRoleColor = (role) => {
                             </div>
                             <p v-if="author.bio" class="text-gray-600 max-w-2xl">{{ author.bio }}</p>
                             <p v-else class="text-gray-500 italic">Henüz biyografi eklenmemiş.</p>
+                            <div class="mt-4">
+                                <FollowButton
+                                    v-if="authUser && authUser.id !== author.id"
+                                    :user="author"
+                                    :initial-following="author.is_following"
+                                    :initial-followers-count="stats.followers_count || 0"
+                                />
+                                <p v-else class="text-sm font-semibold text-gray-500">{{ stats.followers_count || 0 }} takipçi</p>
+                            </div>
                         </div>
                     </div>
                 </div>

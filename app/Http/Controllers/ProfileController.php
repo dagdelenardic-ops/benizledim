@@ -16,6 +16,7 @@ class ProfileController extends Controller
     public function show(Request $request, User $user)
     {
         $format = $request->string('format')->toString() ?: 'standard';
+        $authUser = $request->user();
 
         $posts = $user->posts()
             ->published()
@@ -33,6 +34,7 @@ class ProfileController extends Controller
                 'avatar' => $user->avatar,
                 'bio' => $user->bio,
                 'role' => $user->role,
+                'is_following' => $authUser ? $authUser->isFollowing($user) : false,
             ],
             'format' => $format,
             'stats' => $this->stats->forUser($user),

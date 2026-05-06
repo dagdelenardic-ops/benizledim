@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
+import MentionTextarea from '../UI/MentionTextarea.vue';
 
 const props = defineProps({
     postSlug: {
@@ -11,6 +12,7 @@ const props = defineProps({
 
 const page = usePage();
 const authUser = page.props.auth?.user;
+defineEmits(['open-login']);
 
 const form = useForm({
     content: '',
@@ -49,13 +51,14 @@ const submit = () => {
         <!-- Comment Form -->
         <form v-else @submit.prevent="submit">
             <div class="relative">
-                <textarea
+                <MentionTextarea
                     v-model="form.content"
-                    rows="4"
+                    :rows="4"
                     placeholder="Düşüncelerinizi paylaşın..."
-                    class="w-full px-4 py-3 border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                    :max-length="maxLength"
+                    :disabled="form.processing"
                     :class="{ 'border-red-500 focus:border-red-500': isOverLimit }"
-                ></textarea>
+                />
                 
                 <!-- Character Counter -->
                 <div class="absolute bottom-3 right-3 text-sm"
