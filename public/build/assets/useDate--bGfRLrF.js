@@ -1,1 +1,0 @@
-function c(){return{formatDate:n=>new Date(n).toLocaleDateString("tr-TR",{year:"numeric",month:"long",day:"numeric"}),timeAgo:n=>{const e=new Date(n),r=new Date-e,t=Math.floor(r/(1e3*60*60*24));return t===0?"Bugün":t===1?"Dün":t<7?`${t} gün önce`:t<30?`${Math.floor(t/7)} hafta önce`:t<365?`${Math.floor(t/30)} ay önce`:`${Math.floor(t/365)} yıl önce`}}}export{c as u};

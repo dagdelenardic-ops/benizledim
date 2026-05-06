@@ -1,6 +1,23 @@
 export function useDate() {
+    const parseDate = (dateString) => {
+        if (!dateString) {
+            return null;
+        }
+
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            return new Date(`${dateString}T00:00:00`);
+        }
+
+        return new Date(dateString);
+    };
+
     const formatDate = (dateString) => {
-        const date = new Date(dateString);
+        const date = parseDate(dateString);
+
+        if (!date || Number.isNaN(date.getTime())) {
+            return '';
+        }
+
         return date.toLocaleDateString('tr-TR', {
             year: 'numeric',
             month: 'long',
@@ -9,7 +26,12 @@ export function useDate() {
     };
 
     const timeAgo = (dateString) => {
-        const date = new Date(dateString);
+        const date = parseDate(dateString);
+
+        if (!date || Number.isNaN(date.getTime())) {
+            return '';
+        }
+
         const now = new Date();
         const diffMs = now - date;
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));

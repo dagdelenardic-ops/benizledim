@@ -8,17 +8,17 @@ class QuickLogRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->canAccessCms() ?? false;
+        return $this->user() !== null;
     }
 
     public function rules(): array
     {
         return [
             'tmdb_id' => ['nullable', 'integer', 'required_without:external_title'],
-            'tmdb_type' => ['nullable', 'in:movie,tv'],
+            'tmdb_type' => ['nullable', 'required_with:tmdb_id', 'in:movie,tv'],
             'external_title' => ['nullable', 'string', 'max:255', 'required_without:tmdb_id'],
             'external_year' => ['nullable', 'integer', 'between:1880,2100'],
-            'rating' => ['nullable', 'integer', 'between:1,10'],
+            'rating' => ['required', 'integer', 'between:1,10'],
             'mood_tags' => ['nullable', 'array', 'max:3'],
             'mood_tags.*' => ['string', 'max:30'],
             'note' => ['nullable', 'string', 'max:280'],

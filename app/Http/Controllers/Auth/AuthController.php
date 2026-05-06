@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     public function login(Request $request): RedirectResponse
     {
-        $throttleKey = Str::lower((string) $request->input('email')) . '|' . $request->ip();
+        $throttleKey = Str::lower((string) $request->input('email')).'|'.$request->ip();
 
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
@@ -37,6 +37,10 @@ class AuthController extends Controller
             RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
+            if ($request->header('X-Inertia') === 'true') {
+                return back(303);
+            }
+
             $target = $request->user()?->canAccessCms() ? '/admin' : '/';
 
             return redirect()->intended($target);
@@ -54,6 +58,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

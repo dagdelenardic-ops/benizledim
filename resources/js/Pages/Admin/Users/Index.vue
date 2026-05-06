@@ -1,6 +1,6 @@
 <script setup>
-import { ref, reactive } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '../../../Components/Admin/AdminLayout.vue';
 import { useDate } from '@/Composables/useDate';
 
@@ -21,15 +21,15 @@ const updateRole = (user, newRole) => {
 
 const setPassword = (user) => {
     passwordUser.value = user;
+    passwordForm.reset();
+    passwordForm.clearErrors();
     passwordForm.email = user.email;
-    passwordForm.password = '';
-    passwordForm.password_confirmation = '';
     showPasswordModal.value = true;
 };
 
 const showPasswordModal = ref(false);
 const passwordUser = ref(null);
-const passwordForm = reactive({
+const passwordForm = useForm({
     email: '',
     password: '',
     password_confirmation: '',
@@ -37,22 +37,23 @@ const passwordForm = reactive({
 
 const submitPassword = () => {
     if (!passwordUser.value) return;
-    if (passwordForm.password !== passwordForm.password_confirmation) {
-        alert('Şifre tekrarı eşleşmiyor.');
-        return;
-    }
-    router.put(`/admin/users/${passwordUser.value.id}/password`, {
-        password: passwordForm.password,
-        password_confirmation: passwordForm.password_confirmation,
-    }, {
+
+    passwordForm.put(`/admin/users/${passwordUser.value.id}/password`, {
         preserveScroll: true,
         onSuccess: () => {
             showPasswordModal.value = false;
             passwordUser.value = null;
-            passwordForm.password = '';
-            passwordForm.password_confirmation = '';
+            passwordForm.reset();
+            passwordForm.clearErrors();
         },
     });
+};
+
+const closePasswordModal = () => {
+    showPasswordModal.value = false;
+    passwordUser.value = null;
+    passwordForm.reset();
+    passwordForm.clearErrors();
 };
 
 const getRoleBadge = (role) => {
@@ -200,7 +201,7 @@ const getProviderLabel = (user) => {
 
         <!-- Password Modal -->
         <Teleport to="body">
-            <div v-if="showPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showPasswordModal = false">
+            <div v-if="showPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="closePasswordModal">
                 <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 p-6">
                     <h3 class="text-lg font-bold text-gray-900 mb-4">Şifre Ata: {{ passwordForm.email }}</h3>
                     <form @submit.prevent="submitPassword" class="space-y-4">
@@ -214,6 +215,8 @@ const getProviderLabel = (user) => {
                                 placeholder="En az 10 karakter"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
                             />
+                            <p class="mt-1 text-xs text-gray-500">En az 10 karakter; küçük harf, büyük harf, rakam ve sembol içermeli.</p>
+                            <p v-if="passwordForm.errors.password" class="mt-1 text-sm text-red-600">{{ passwordForm.errors.password }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Şifre Tekrarı</label>
@@ -225,20 +228,22 @@ const getProviderLabel = (user) => {
                                 placeholder="Şifreyi tekrar girin"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
                             />
+                            <p v-if="passwordForm.errors.password_confirmation" class="mt-1 text-sm text-red-600">{{ passwordForm.errors.password_confirmation }}</p>
                         </div>
                         <div class="flex gap-2 justify-end">
                             <button
                                 type="button"
-                                @click="showPasswordModal = false"
+                                @click="closePasswordModal"
                                 class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                             >
                                 İptal
                             </button>
                             <button
                                 type="submit"
+                                :disabled="passwordForm.processing"
                                 class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                             >
-                                Kaydet
+                                {{ passwordForm.processing ? 'Kaydediliyor...' : 'Kaydet' }}
                             </button>
                         </div>
                     </form>

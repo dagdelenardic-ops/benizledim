@@ -9,23 +9,32 @@ use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
-    public function __construct(private readonly AuthorStatsService $stats)
-    {
-    }
+    public function __construct(private readonly AuthorStatsService $stats) {}
 
     public function show(Request $request, User $user)
     {
         $format = $request->string('format')->toString() ?: 'standard';
         $authUser = $request->user();
 
-        $posts = $user->posts()
+        $postsQuery = $user->posts()
             ->published()
             ->with(['categories', 'tags'])
-            ->withCount(['comments', 'likes'])
-            ->when($format === 'watch_log', fn ($query) => $query->where('format', 'watch_log'))
-            ->when($format === 'standard', fn ($query) => $query->where('format', '!=', 'watch_log'))
-            ->latest('published_at')
-            ->paginate(12);
+            ->withCount(['comments', 'likes']);
+
+        if ($format === 'watch_log') {
+            $postsQuery
+                ->where('format', 'watch_log')
+                ->orderByDesc('watched_on')
+                ->orderByDesc('published_at');
+        } else {
+            $postsQuery
+                ->where('format', '!=', 'watch_log')
+                ->latest('published_at');
+        }
+
+        $posts = $postsQuery
+            ->paginate(12)
+            ->withQueryString();
 
         return Inertia::render('Profile/Show', [
             'author' => [
@@ -37,6 +46,7 @@ class ProfileController extends Controller
                 'is_following' => $authUser ? $authUser->isFollowing($user) : false,
             ],
             'format' => $format,
+            'activeTab' => $format,
             'stats' => $this->stats->forUser($user),
             'posts' => $posts,
         ]);

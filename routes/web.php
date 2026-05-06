@@ -1,46 +1,46 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\LikeController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\PodcastController;
-use App\Http\Controllers\FestivalController;
-use App\Http\Controllers\NewsletterController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\AdminTagController;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminCommentController;
-use App\Http\Controllers\Admin\AdminPodcastController;
-use App\Http\Controllers\Admin\AdminPageController;
-use App\Http\Controllers\Admin\AdminPostController;
-use App\Http\Controllers\Admin\AdminFestivalEventController;
+use App\Http\Controllers\ActivityFeedController;
 use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminCommentController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminFestivalEventController;
 use App\Http\Controllers\Admin\AdminNewsletterController;
-use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Admin\PostImageController;
-use App\Http\Controllers\Admin\PostEmbedController;
+use App\Http\Controllers\Admin\AdminPageController;
+use App\Http\Controllers\Admin\AdminPodcastController;
+use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminSettingsController;
-use App\Http\Controllers\EntryController;
+use App\Http\Controllers\Admin\AdminTagController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\PostEmbedController;
+use App\Http\Controllers\Admin\PostImageController;
+use App\Http\Controllers\AiRecommendationController;
+use App\Http\Controllers\Api\TmdbSearchController;
+use App\Http\Controllers\AuthorDirectoryController;
+use App\Http\Controllers\AuthorHomeController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\CinemaReviewController;
-use App\Http\Controllers\AiRecommendationController;
-use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\RssFeedController;
-use App\Http\Controllers\WixRedirectController;
-use App\Http\Controllers\ImageVariantController;
-use App\Http\Controllers\Api\TmdbSearchController;
-use App\Http\Controllers\QuickLogController;
-use App\Http\Controllers\AuthorHomeController;
-use App\Http\Controllers\PushSubscriptionController;
-use App\Http\Controllers\LetterboxdController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\EntryController;
+use App\Http\Controllers\FestivalController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageVariantController;
+use App\Http\Controllers\LetterboxdController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\PodcastController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PushSubscriptionController;
+use App\Http\Controllers\QuickLogController;
+use App\Http\Controllers\RssFeedController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\WatchlistController;
-use App\Http\Controllers\ActivityFeedController;
-use App\Http\Controllers\AuthorDirectoryController;
+use App\Http\Controllers\WixRedirectController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/up', function () {
     return response()->json([
@@ -105,7 +105,7 @@ Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile
 Route::get('/yazarlar', [AuthorDirectoryController::class, 'index'])->name('authors.index');
 Route::get('/api/authors/search', [AuthorDirectoryController::class, 'search'])->name('authors.search');
 
-Route::middleware(['auth', 'role:admin,editor,author'])
+Route::middleware('auth')
     ->get('/yazar', [AuthorHomeController::class, 'index'])
     ->name('author.home');
 

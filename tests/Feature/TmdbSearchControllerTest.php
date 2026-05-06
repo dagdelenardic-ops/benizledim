@@ -58,4 +58,21 @@ class TmdbSearchControllerTest extends TestCase
             ->assertStatus(400)
             ->assertJsonStructure(['message', 'errors' => ['q']]);
     }
+
+    public function test_it_reports_when_tmdb_is_not_configured(): void
+    {
+        config([
+            'services.tmdb.access_token' => null,
+            'services.tmdb.api_key' => null,
+        ]);
+
+        $user = User::factory()->author()->create();
+
+        $this->actingAs($user)
+            ->getJson(route('tmdb.search', ['q' => 'superman', 'type' => 'multi']))
+            ->assertOk()
+            ->assertJsonPath('available', false)
+            ->assertJsonPath('results', [])
+            ->assertJsonPath('message', 'TMDB aramasi bu ortamda henuz etkin degil.');
+    }
 }

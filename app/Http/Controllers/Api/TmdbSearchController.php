@@ -10,9 +10,7 @@ use Illuminate\Validation\ValidationException;
 
 class TmdbSearchController extends Controller
 {
-    public function __construct(private readonly TmdbService $tmdb)
-    {
-    }
+    public function __construct(private readonly TmdbService $tmdb) {}
 
     public function search(Request $request): JsonResponse
     {
@@ -28,7 +26,16 @@ class TmdbSearchController extends Controller
             ], 400);
         }
 
+        if (! $this->tmdb->isConfigured()) {
+            return response()->json([
+                'available' => false,
+                'message' => 'TMDB aramasi bu ortamda henuz etkin degil.',
+                'results' => [],
+            ]);
+        }
+
         return response()->json([
+            'available' => true,
             'results' => $this->tmdb->search($validated['q'], $validated['type'] ?? 'multi'),
         ]);
     }

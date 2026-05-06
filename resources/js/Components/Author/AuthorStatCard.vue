@@ -8,7 +8,22 @@ const props = defineProps({
 
 const totalLogs = computed(() => (props.stats.posts_count || 0) + (props.stats.watch_logs_count || 0));
 const avgRating = computed(() => props.stats.avg_rating ? Number(props.stats.avg_rating).toFixed(1) : null);
-const topMoods = computed(() => (props.stats.top_mood_tags || []).slice(0, 3));
+const topMoods = computed(() => (
+    props.stats.top_mood_tags || []
+)
+    .slice(0, 3)
+    .map((mood) => {
+        if (typeof mood === 'string') {
+            return { tag: mood, count: null };
+        }
+
+        if (mood && typeof mood.tag === 'string' && mood.tag !== '') {
+            return mood;
+        }
+
+        return null;
+    })
+    .filter(Boolean));
 </script>
 
 <template>
@@ -43,7 +58,9 @@ const topMoods = computed(() => (props.stats.top_mood_tags || []).slice(0, 3));
         <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
             <div class="text-xs text-gray-500 mb-1">Mood Paletin</div>
             <div class="flex flex-wrap gap-1">
-                <span v-for="mood in topMoods" :key="mood" class="px-2 py-0.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-full">{{ mood }}</span>
+                <span v-for="mood in topMoods" :key="mood.tag" class="px-2 py-0.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-full">
+                    {{ mood.tag }}
+                </span>
                 <span v-if="!topMoods.length" class="text-xs text-gray-400">Henüz yok</span>
             </div>
         </div>

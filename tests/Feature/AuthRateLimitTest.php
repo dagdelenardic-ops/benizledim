@@ -40,12 +40,12 @@ class AuthRateLimitTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('email');
-        
+
         $errors = session('errors');
         $this->assertNotNull($errors);
         $errorMessages = $errors->get('email');
         $this->assertTrue(
-            collect($errorMessages)->contains(fn($error) => str_contains($error, 'Çok fazla giriş denemesi')),
+            collect($errorMessages)->contains(fn ($error) => str_contains($error, 'Çok fazla giriş denemesi')),
             'Rate limit devreye girmeli ve "Çok fazla giriş denemesi" hatası vermeli.'
         );
     }
@@ -85,8 +85,28 @@ class AuthRateLimitTest extends TestCase
         $this->assertNotNull($errors);
         $errorMessages = $errors->get('email');
         $this->assertFalse(
-            collect($errorMessages)->contains(fn($error) => str_contains($error, 'Çok fazla giriş denemesi')),
+            collect($errorMessages)->contains(fn ($error) => str_contains($error, 'Çok fazla giriş denemesi')),
             'Farklı email için rate limit devreye girmemeli.'
         );
+    }
+
+    public function test_successful_inertia_login_redirects_back_to_current_page(): void
+    {
+        User::factory()->create([
+            'email' => 'reader@example.com',
+            'password' => Hash::make('ValidPass123!'),
+            'role' => 'reader',
+        ]);
+
+        $response = $this
+            ->withHeader('X-Inertia', 'true')
+            ->from('https://benizledim.com/')
+            ->post(route('login.attempt'), [
+                'email' => 'reader@example.com',
+                'password' => 'ValidPass123!',
+            ]);
+
+        $response->assertRedirect('https://benizledim.com/');
+        $this->assertAuthenticated();
     }
 }

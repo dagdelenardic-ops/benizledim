@@ -12,9 +12,9 @@ class QuickLogControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_author_can_create_a_watch_log_from_manual_title(): void
+    public function test_reader_can_create_a_watch_log_from_manual_title(): void
     {
-        $author = User::factory()->author()->create();
+        $author = User::factory()->reader()->create();
         $category = Category::create(['name' => 'Sinema', 'slug' => 'sinema']);
 
         $response = $this->actingAs($author)->postJson(route('quick-log.store'), [
@@ -44,15 +44,42 @@ class QuickLogControllerTest extends TestCase
         $this->assertTrue($post->categories->contains($category));
     }
 
-    public function test_reader_cannot_create_quick_log(): void
+    public function test_guest_cannot_create_quick_log(): void
+    {
+        $this
+            ->postJson(route('quick-log.store'), [
+                'external_title' => 'Blocked',
+                'rating' => 6,
+                'status' => 'draft',
+            ])
+            ->assertUnauthorized();
+    }
+
+    public function test_rating_is_required(): void
     {
         $reader = User::factory()->reader()->create();
 
         $this->actingAs($reader)
             ->postJson(route('quick-log.store'), [
-                'external_title' => 'Blocked',
-                'status' => 'draft',
+                'external_title' => 'No Rating',
+                'status' => 'published',
             ])
-            ->assertForbidden();
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('rating');
+    }
+
+    public function test_mood_tags_are_limited_to_three(): void
+    {
+        $reader = User::factory()->reader()->create();
+
+        $this->actingAs($reader)
+            ->postJson(route('quick-log.store'), [
+                'external_title' => 'Too Many Moods',
+                'rating' => 7,
+                'mood_tags' => ['gerilim', 'sessiz', 'duygusal', 'retro'],
+                'status' => 'published',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('mood_tags');
     }
 }

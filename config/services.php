@@ -58,6 +58,7 @@ return [
     ],
 
     'tmdb' => [
+        'access_token' => env('TMDB_ACCESS_TOKEN'),
         'api_key' => env('TMDB_API_KEY'),
         'base' => env('TMDB_BASE_URL', 'https://api.themoviedb.org/3'),
         'image_base' => env('TMDB_IMAGE_BASE_URL', 'https://image.tmdb.org/t/p'),

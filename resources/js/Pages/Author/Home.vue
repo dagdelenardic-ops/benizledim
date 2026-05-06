@@ -1,11 +1,10 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 import AuthorStatCard from '../../Components/Author/AuthorStatCard.vue';
 import PushOptInCard from '../../Components/Author/PushOptInCard.vue';
 import LetterboxdConnectCard from '../../Components/Author/LetterboxdConnectCard.vue';
-import QuickLogModal from '../../Components/Author/QuickLogModal.vue';
 import WatchLogCard from '../../Components/Post/WatchLogCard.vue';
 import PostCard from '../../Components/Post/PostCard.vue';
 
@@ -17,19 +16,19 @@ const props = defineProps({
     letterboxd: { type: Object, default: () => ({}) },
 });
 
-const quickLogModal = ref(null);
+const page = usePage();
+const canAccessCms = computed(() => ['admin', 'editor', 'author'].includes(page.props.auth?.user?.role || ''));
 
-const openLog = () => quickLogModal.value?.show();
+const openLog = () => window.dispatchEvent(new CustomEvent('quick-log:open'));
 </script>
 
 <template>
-    <AppLayout title="Yazar Paneli">
+    <AppLayout title="Panelim">
         <div class="max-w-5xl mx-auto px-4 py-8 space-y-8">
-            <!-- Welcome -->
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-black text-[var(--bi-ink)]">Hoş geldin, {{ $page.props.auth.user?.name }}</h1>
-                    <p class="text-sm text-[var(--bi-muted)] mt-1">Film günlüğüne not ekle veya yazı yaz.</p>
+                    <p class="text-sm text-[var(--bi-muted)] mt-1">{{ canAccessCms ? 'Film günlüğüne not ekle veya yazı yaz.' : 'Film günlüğüne hızlıca not ekle.' }}</p>
                 </div>
                 <button @click="openLog" class="flex items-center gap-2 bg-red-700 text-white px-5 py-3 font-bold hover:bg-red-800 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -79,7 +78,5 @@ const openLog = () => quickLogModal.value?.show();
                 <p class="text-sm text-gray-400 mt-1">+ butonuna tıklayarak ilk notunu ekle!</p>
             </div>
         </div>
-
-        <QuickLogModal ref="quickLogModal" @close="() => {}" @submitted="() => window.location.reload()" />
     </AppLayout>
 </template>

@@ -1,31 +1,47 @@
 <script setup>
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import { useDate } from '../../Composables/useDate';
 
 const props = defineProps({
     post: { type: Object, required: true },
 });
+
+const { formatDate } = useDate();
+
+const formattedWatchedOn = computed(() => (
+    props.post?.watched_on ? formatDate(props.post.watched_on) : null
+));
+
+const visibleMoods = computed(() => (
+    Array.isArray(props.post?.mood_tags) ? props.post.mood_tags.slice(0, 3) : []
+));
+
+const fallbackMonogram = computed(() => (
+    props.post?.title?.charAt(0)?.toUpperCase() || 'B'
+));
 </script>
 
 <template>
-    <Link :href="`/yazi/${post.slug}`" class="block bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <Link :href="`/yazi/${post.slug}`" class="flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
         <div class="relative aspect-[2/3] bg-gray-100">
             <img v-if="post.cover_image" :src="post.cover_image" :alt="post.title" class="w-full h-full object-cover" loading="lazy" />
-            <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <div v-else class="flex h-full w-full items-end bg-gradient-to-br from-stone-100 via-white to-stone-200 p-3">
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">Watch Log</p>
+                    <p class="mt-2 text-4xl font-black text-gray-800">{{ fallbackMonogram }}</p>
+                </div>
             </div>
-            <div class="absolute top-2 left-2 flex items-center gap-1.5">
-                <img v-if="post.user?.avatar" :src="post.user.avatar" class="w-6 h-6 rounded-full border border-white" />
-                <span class="text-[10px] font-medium text-white drop-shadow">{{ post.user?.name }}</span>
-            </div>
-            <div v-if="post.rating" class="absolute top-2 right-2 bg-white/90 rounded px-1.5 py-0.5 text-xs font-bold text-yellow-600">
-                {{ '★'.repeat(post.rating) }}
+            <div v-if="post.rating" class="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-1 text-[11px] font-bold text-yellow-700 shadow-sm">
+                {{ post.rating }}/10
             </div>
         </div>
-        <div class="p-3">
-            <h3 class="text-sm font-bold text-gray-900 truncate">{{ post.title }}</h3>
-            <p v-if="post.watched_at" class="text-xs text-gray-400 mt-0.5">{{ post.watched_at }}</p>
-            <div v-if="post.mood_tags?.length" class="flex flex-wrap gap-1 mt-1.5">
-                <span v-for="mood in post.mood_tags.slice(0, 2)" :key="mood" class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">{{ mood }}</span>
+        <div class="flex flex-1 flex-col p-3">
+            <h3 class="line-clamp-2 text-sm font-bold text-gray-900">{{ post.title }}</h3>
+            <p v-if="formattedWatchedOn" class="mt-1 text-xs text-gray-400">{{ formattedWatchedOn }}</p>
+            <p v-if="post.excerpt" class="mt-2 line-clamp-3 text-xs leading-5 text-gray-600">{{ post.excerpt }}</p>
+            <div v-if="visibleMoods.length" class="mt-3 flex flex-wrap gap-1">
+                <span v-for="mood in visibleMoods" :key="mood" class="rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600">{{ mood }}</span>
             </div>
         </div>
     </Link>

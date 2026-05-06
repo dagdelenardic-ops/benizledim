@@ -1,24 +1,63 @@
-<script setup>
-import { ref, onMounted } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
-const deferredPrompt = ref(null);
-const canInstall = ref(false);
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+export function usePWAInstall() {
+    const deferredPrompt = ref(null);
+    const canInstall = ref(false);
+    const isIOS = ref(false);
+    const isStandalone = ref(false);
+    const installed = ref(false);
 
-onMounted(() => {
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt.value = e;
+    const detectStandalone = () => {
+        if (typeof window === 'undefined') return false;
+
+        return window.matchMedia?.('(display-mode: standalone)').matches
+            || window.navigator.standalone === true;
+    };
+
+    const handleBeforeInstallPrompt = (event) => {
+        event.preventDefault();
+        deferredPrompt.value = event;
         canInstall.value = true;
-    });
-});
+    };
 
-const install = async () => {
-    if (!deferredPrompt.value) return;
-    deferredPrompt.value.prompt();
-    await deferredPrompt.value.userChoice;
-    deferredPrompt.value = null;
-    canInstall.value = false;
-};
-</script>
+    const handleInstalled = () => {
+        installed.value = true;
+        canInstall.value = false;
+        deferredPrompt.value = null;
+    };
+
+    onMounted(() => {
+        isIOS.value = /iPad|iPhone|iPod/.test(window.navigator.userAgent);
+        isStandalone.value = detectStandalone();
+        installed.value = isStandalone.value;
+
+        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        window.addEventListener('appinstalled', handleInstalled);
+    });
+
+    onUnmounted(() => {
+        if (typeof window === 'undefined') return;
+
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        window.removeEventListener('appinstalled', handleInstalled);
+    });
+
+    const install = async () => {
+        if (!deferredPrompt.value) return null;
+
+        deferredPrompt.value.prompt();
+        const choice = await deferredPrompt.value.userChoice;
+        deferredPrompt.value = null;
+        canInstall.value = false;
+
+        return choice;
+    };
+
+    return {
+        canInstall,
+        installed: computed(() => installed.value || isStandalone.value),
+        isIOS,
+        isStandalone,
+        install,
+    };
+}

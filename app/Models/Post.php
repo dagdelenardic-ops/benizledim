@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\User;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -70,7 +69,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
             'reviewed_at' => 'datetime',
             'is_revisit' => 'boolean',
             'mood_tags' => 'array',
-            'watched_on' => 'date',
+            'watched_on' => 'date:Y-m-d',
             'meta' => 'array',
         ];
     }

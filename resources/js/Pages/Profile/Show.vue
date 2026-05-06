@@ -25,7 +25,7 @@ const tabs = [
 
 const switchTab = (tab) => {
     if (tab.disabled) return;
-    router.get(page.url, { format: tab.key }, { preserveState: true, preserveScroll: true, replace: true });
+    router.get(`/profile/${props.author.id}`, { format: tab.key }, { preserveState: true, preserveScroll: true, replace: true });
 };
 
 const getRoleLabel = (role) => {

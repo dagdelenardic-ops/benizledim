@@ -1,9 +1,11 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { Head, usePage, router, Link, useForm } from '@inertiajs/vue3';
 import LoginModal from '@/Components/Auth/LoginModal.vue';
 import SearchBar from '@/Components/UI/SearchBar.vue';
 import AuthorBottomNav from '@/Components/Layout/AuthorBottomNav.vue';
+import QuickLogModal from '@/Components/Author/QuickLogModal.vue';
+import InstallAppPrompt from '@/Components/PWA/InstallAppPrompt.vue';
 
 const props = defineProps({
     title: String,
@@ -79,15 +81,16 @@ const resolvedSchemaNodes = computed(() => [
 ]);
 
 const page = usePage();
-const authUser = page.props.auth?.user;
+const authUser = computed(() => page.props.auth?.user);
 const newsletterMessage = computed(() => page.props.flash?.newsletter_message);
 const canAccessCms = computed(() => {
-    return ['admin', 'editor', 'author'].includes(authUser?.role || '');
+    return ['admin', 'editor', 'author'].includes(authUser.value?.role || '');
 });
 
 const showLoginModal = ref(false);
 const showUserMenu = ref(false);
 const showMobileMenu = ref(false);
+const quickLogModal = ref(null);
 
 const openLoginModal = () => {
     showLoginModal.value = true;
@@ -96,6 +99,31 @@ const openLoginModal = () => {
 const closeLoginModal = () => {
     showLoginModal.value = false;
 };
+
+const openQuickLog = () => {
+    showMobileMenu.value = false;
+    showUserMenu.value = false;
+
+    if (!authUser.value) {
+        openLoginModal();
+        return;
+    }
+
+    quickLogModal.value?.show();
+};
+
+const refreshAfterQuickLog = () => {
+    router.reload({
+        only: ['stats', 'recentLogs', 'recentPosts', 'pendingDrafts', 'posts', 'items'],
+        preserveScroll: true,
+    });
+};
+
+const shouldOpenQuickLog = (url) => {
+    return new URLSearchParams(url.split('?')[1] || '').get('action') === 'log';
+};
+
+const handleQuickLogEvent = () => openQuickLog();
 
 const logout = () => {
     router.post('/logout');
@@ -130,6 +158,27 @@ const todayLabel = computed(() => {
         year: 'numeric',
     }).format(new Date());
 });
+
+onMounted(() => {
+    window.addEventListener('quick-log:open', handleQuickLogEvent);
+
+    if (shouldOpenQuickLog(page.url || '')) {
+        openQuickLog();
+    }
+});
+
+onUnmounted(() => {
+    window.removeEventListener('quick-log:open', handleQuickLogEvent);
+});
+
+watch(
+    () => page.url,
+    (url) => {
+        if (shouldOpenQuickLog(url || '')) {
+            openQuickLog();
+        }
+    },
+);
 </script>
 
 <script>
@@ -231,6 +280,13 @@ export default {
                 >
                     Ne İzlesem?
                 </Link>
+                <button
+                    type="button"
+                    @click="openQuickLog"
+                    class="hidden min-h-11 items-center border border-red-700 bg-red-700 px-4 py-2 text-sm font-bold text-white transition hover:bg-red-800 md:inline-flex"
+                >
+                    Hemen İncele
+                </button>
                 <SearchBar placeholder="Film, dizi, yazar ara..." />
                 <button
                     v-if="!authUser"
@@ -262,6 +318,10 @@ export default {
                             class="absolute right-0 z-50 mt-2 w-52 border border-[var(--bi-ink)] bg-[var(--bi-paper)] py-1 shadow-[6px_6px_0_var(--bi-ink)]"
                             v-click-outside="() => showUserMenu = false"
                         >
+                            <button @click="openQuickLog" class="flex min-h-11 w-full items-center gap-2 px-4 py-2 text-left text-sm font-bold text-red-700 hover:bg-[var(--bi-paper-deep)]">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                Hızlı Not
+                            </button>
                             <Link v-if="canAccessCms" href="/admin/posts/create" class="flex min-h-11 items-center gap-2 px-4 py-2 text-sm font-bold text-red-700 hover:bg-[var(--bi-paper-deep)]">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                                 Yeni Yazı
@@ -314,6 +374,8 @@ export default {
                     <Link href="/ne-izlesem" class="bi-chip" @click="showMobileMenu = false">Ne İzlesem?</Link>
                     <button v-if="!authUser" @click="openLoginModal(); showMobileMenu = false" class="bi-chip text-left">Giriş Yap</button>
                     <template v-else>
+                        <button @click="openQuickLog" class="bi-chip bi-chip--accent text-left">Hemen İncele</button>
+                        <Link href="/yazar" class="bi-chip" @click="showMobileMenu = false">Panelim</Link>
                         <Link v-if="canAccessCms" href="/admin/posts/create" class="bi-chip bi-chip--accent" @click="showMobileMenu = false">✏️ Yeni Yazı</Link>
                         <Link v-if="canAccessCms" href="/admin" class="bi-chip" @click="showMobileMenu = false">Admin Panel</Link>
                     </template>
@@ -402,8 +464,12 @@ export default {
         </div>
     </footer>
 
-    <!-- Mobile Bottom Nav (only for CMS users) -->
-    <AuthorBottomNav v-if="canAccessCms" />
+    <InstallAppPrompt />
+
+    <!-- Mobile Bottom Nav -->
+    <AuthorBottomNav v-if="authUser" @quick-log="openQuickLog" />
+
+    <QuickLogModal v-if="authUser" ref="quickLogModal" @submitted="refreshAfterQuickLog" />
 
     <!-- Login Modal -->
     <LoginModal :show="showLoginModal" @close="closeLoginModal" />

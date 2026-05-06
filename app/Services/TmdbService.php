@@ -8,22 +8,24 @@ use Illuminate\Support\Facades\Http;
 
 class TmdbService
 {
+    public function isConfigured(): bool
+    {
+        return filled(config('services.tmdb.access_token')) || filled(config('services.tmdb.api_key'));
+    }
+
     public function search(string $query, string $type = 'multi'): array
     {
         $query = trim($query);
 
-        if ($query === '' || mb_strlen($query) < 2 || blank(config('services.tmdb.api_key'))) {
+        if ($query === '' || mb_strlen($query) < 2 || ! $this->isConfigured()) {
             return [];
         }
 
         return Cache::remember($this->cacheKey('search', $query, $type), 86400, function () use ($query, $type) {
-            $response = Http::baseUrl((string) config('services.tmdb.base'))
-                ->acceptJson()
-                ->get("/search/{$type}", [
-                    'api_key' => config('services.tmdb.api_key'),
-                    'query' => $query,
-                    'language' => 'tr-TR',
-                ]);
+            $response = $this->newRequest()->get("/search/{$type}", $this->withAuthQuery([
+                'query' => $query,
+                'language' => 'tr-TR',
+            ]));
 
             if (! $response->successful()) {
                 return [];
@@ -37,26 +39,64 @@ class TmdbService
         });
     }
 
-    public function details(int $id, string $type): array
+    public function details(int $id, string $type, array $appendToResponse = [], array $query = []): array
     {
-        if ($id < 1 || ! in_array($type, ['movie', 'tv'], true) || blank(config('services.tmdb.api_key'))) {
+        if ($id < 1 || ! in_array($type, ['movie', 'tv'], true) || ! $this->isConfigured()) {
             return [];
         }
 
-        return Cache::remember($this->cacheKey('details', (string) $id, $type), 86400, function () use ($id, $type) {
-            $response = Http::baseUrl((string) config('services.tmdb.base'))
-                ->acceptJson()
-                ->get("/{$type}/{$id}", [
-                    'api_key' => config('services.tmdb.api_key'),
-                    'language' => 'tr-TR',
-                ]);
+        $appendToResponse = collect($appendToResponse)
+            ->filter(fn ($value) => is_string($value) && $value !== '')
+            ->values()
+            ->all();
+
+        $query = array_filter($query, fn ($value) => $value !== null && $value !== '');
+
+        $cacheValue = json_encode([
+            'id' => $id,
+            'append' => $appendToResponse,
+            'query' => $query,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        return Cache::remember($this->cacheKey('details', (string) $cacheValue, $type), 86400, function () use ($id, $type, $appendToResponse, $query) {
+            $response = $this->newRequest()->get("/{$type}/{$id}", $this->withAuthQuery([
+                'language' => 'tr-TR',
+                'append_to_response' => $appendToResponse !== [] ? implode(',', $appendToResponse) : null,
+                ...$query,
+            ]));
 
             if (! $response->successful()) {
                 return [];
             }
 
-            return $this->normalize($response->json(), $type) ?? [];
+            return $this->normalizeDetails($response->json(), $type, $appendToResponse);
         });
+    }
+
+    private function newRequest()
+    {
+        $request = Http::baseUrl((string) config('services.tmdb.base'))
+            ->acceptJson();
+
+        $accessToken = config('services.tmdb.access_token');
+
+        if (filled($accessToken)) {
+            $request = $request->withToken((string) $accessToken);
+        }
+
+        return $request;
+    }
+
+    private function withAuthQuery(array $query): array
+    {
+        if (filled(config('services.tmdb.access_token'))) {
+            return array_filter($query, fn ($value) => $value !== null && $value !== '');
+        }
+
+        return array_filter([
+            'api_key' => config('services.tmdb.api_key'),
+            ...$query,
+        ], fn ($value) => $value !== null && $value !== '');
     }
 
     private function cacheKey(string $prefix, string $value, string $type): string
@@ -102,6 +142,19 @@ class TmdbService
                 ->values()
                 ->all(),
         ];
+    }
+
+    private function normalizeDetails(array $item, string $fallbackType, array $appendToResponse): array
+    {
+        $normalized = $this->normalize($item, $fallbackType) ?? [];
+
+        foreach ($appendToResponse as $key) {
+            if (array_key_exists($key, $item)) {
+                $normalized[$key] = $item[$key];
+            }
+        }
+
+        return $normalized;
     }
 
     private function extractYear(mixed $date): ?int
