@@ -178,6 +178,13 @@ class Post extends \Illuminate\Database\Eloquent\Model
             ->whereNull('deletion_requested_at');
     }
 
+    public function isPubliclyViewable(): bool
+    {
+        return $this->status === 'published'
+            && $this->published_at !== null
+            && $this->deletion_requested_at === null;
+    }
+
     /**
      * Public yazı feed'leri (Home, kategori, arama, RSS, sitemap) için:
      * yayınlanmış + watch_log olmayan. Yazar profili Watch-Log sekmesi bu scope'u KULLANMAZ.

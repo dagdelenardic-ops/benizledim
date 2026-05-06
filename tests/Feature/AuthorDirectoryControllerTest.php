@@ -40,13 +40,13 @@ class AuthorDirectoryControllerTest extends TestCase
             });
     }
 
-    public function test_author_search_endpoint_returns_slugified_usernames(): void
+    public function test_author_search_endpoint_returns_unique_mention_handles(): void
     {
-        User::factory()->author()->create(['name' => 'Ayse Sinema']);
+        $author = User::factory()->author()->create(['name' => 'Ayse Sinema']);
 
         $this->getJson(route('authors.search', ['q' => 'Ayse']))
             ->assertOk()
             ->assertJsonPath('0.name', 'Ayse Sinema')
-            ->assertJsonPath('0.username', 'ayse-sinema');
+            ->assertJsonPath('0.username', $author->mentionHandle());
     }
 }

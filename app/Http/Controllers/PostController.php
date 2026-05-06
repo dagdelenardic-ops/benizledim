@@ -60,7 +60,7 @@ class PostController extends Controller
 
     public function show(Request $request, Post $post)
     {
-        if (!$post->published_at || $post->status !== 'published' || $post->deletion_requested_at) {
+        if (! $post->isPubliclyViewable()) {
             abort(404);
         }
 

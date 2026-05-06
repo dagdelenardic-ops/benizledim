@@ -14,6 +14,7 @@ class WatchlistController extends Controller
     {
         $items = $request->user()
             ->watchlistItems()
+            ->whereHas('post', fn ($query) => $query->published())
             ->with(['post.user:id,name,avatar'])
             ->when($request->filled('status'), fn ($query) => $query->where('status', $request->string('status')))
             ->latest()
@@ -28,6 +29,8 @@ class WatchlistController extends Controller
 
     public function store(Request $request, Post $post): JsonResponse
     {
+        $this->abortUnlessPubliclyViewable($post);
+
         $data = $request->validate([
             'status' => 'nullable|in:planned,watching,watched',
             'note' => 'nullable|string|max:500',
@@ -47,6 +50,8 @@ class WatchlistController extends Controller
 
     public function update(Request $request, Post $post): JsonResponse
     {
+        $this->abortUnlessPubliclyViewable($post);
+
         $data = $request->validate([
             'status' => 'required|in:planned,watching,watched',
             'note' => 'nullable|string|max:500',
@@ -55,7 +60,7 @@ class WatchlistController extends Controller
         $item = $request->user()->watchlistItems()->firstOrCreate(['post_id' => $post->id]);
         $item->update([
             'status' => $data['status'],
-            'note' => $data['note'] ?? $item->note,
+            'note' => array_key_exists('note', $data) ? $data['note'] : $item->note,
             'watched_at' => $data['status'] === 'watched' ? ($item->watched_at ?? now()) : null,
         ]);
 
@@ -64,6 +69,8 @@ class WatchlistController extends Controller
 
     public function destroy(Request $request, Post $post): JsonResponse
     {
+        $this->abortUnlessPubliclyViewable($post);
+
         $request->user()->watchlistItems()->where('post_id', $post->id)->delete();
 
         return response()->json(['watchlisted' => false, 'item' => null]);
@@ -86,5 +93,12 @@ class WatchlistController extends Controller
                 'author' => $item->post->user ? ['id' => $item->post->user->id, 'name' => $item->post->user->name] : null,
             ] : null,
         ];
+    }
+
+    private function abortUnlessPubliclyViewable(Post $post): void
+    {
+        if (! $post->isPubliclyViewable()) {
+            abort(404);
+        }
     }
 }

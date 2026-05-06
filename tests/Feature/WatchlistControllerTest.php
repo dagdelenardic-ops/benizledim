@@ -63,4 +63,72 @@ class WatchlistControllerTest extends TestCase
                 return count($items['data']) === 1 && $items['data'][0]['post']['id'] === $post->id;
             });
     }
+
+    public function test_watchlist_actions_reject_posts_that_are_not_publicly_viewable(): void
+    {
+        $user = User::factory()->reader()->create();
+        $draft = Post::factory()->draft()->create();
+        $pendingDeletion = Post::factory()->published()->deletionPending()->create();
+
+        foreach ([$draft, $pendingDeletion] as $post) {
+            $this->actingAs($user)
+                ->postJson(route('watchlist.store', $post), ['status' => 'planned'])
+                ->assertNotFound();
+
+            $this->actingAs($user)
+                ->patchJson(route('watchlist.update', $post), ['status' => 'watched'])
+                ->assertNotFound();
+
+            $this->actingAs($user)
+                ->deleteJson(route('watchlist.destroy', $post))
+                ->assertNotFound();
+
+            $this->assertDatabaseMissing('watchlist_items', [
+                'user_id' => $user->id,
+                'post_id' => $post->id,
+            ]);
+        }
+    }
+
+    public function test_watchlist_page_hides_items_for_posts_that_are_not_publicly_viewable(): void
+    {
+        $user = User::factory()->reader()->create();
+        $published = Post::factory()->published()->create(['title' => 'Public']);
+        $draft = Post::factory()->draft()->create(['title' => 'Draft']);
+        $pendingDeletion = Post::factory()->published()->deletionPending()->create(['title' => 'Pending Deletion']);
+
+        $user->watchlistItems()->create(['post_id' => $published->id]);
+        $user->watchlistItems()->create(['post_id' => $draft->id]);
+        $user->watchlistItems()->create(['post_id' => $pendingDeletion->id]);
+
+        $this->actingAs($user)
+            ->get(route('watchlist.index'))
+            ->assertOk()
+            ->assertViewHas('page.props.items', function (array $items) use ($published) {
+                return count($items['data']) === 1 && $items['data'][0]['post']['id'] === $published->id;
+            });
+    }
+
+    public function test_user_can_clear_watchlist_note_with_explicit_null(): void
+    {
+        $user = User::factory()->reader()->create();
+        $post = Post::factory()->published()->create();
+
+        $user->watchlistItems()->create([
+            'post_id' => $post->id,
+            'status' => 'planned',
+            'note' => 'Eski not',
+        ]);
+
+        $this->actingAs($user)
+            ->patchJson(route('watchlist.update', $post), ['status' => 'planned', 'note' => null])
+            ->assertOk()
+            ->assertJsonPath('item.note', null);
+
+        $this->assertDatabaseHas('watchlist_items', [
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+            'note' => null,
+        ]);
+    }
 }

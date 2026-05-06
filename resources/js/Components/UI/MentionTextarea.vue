@@ -61,7 +61,7 @@ async function fetchSuggestions(query) {
 function detectMention(target) {
     const cursor = target.selectionStart ?? 0;
     const beforeCursor = value.value.slice(0, cursor);
-    const match = beforeCursor.match(/(^|\s)@([a-z0-9-]{1,40})$/i);
+    const match = beforeCursor.match(/(^|\s)@([a-z0-9-]{1,80})$/i);
 
     if (!match) {
         closeSuggestions();

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 
 class User extends Authenticatable
@@ -122,5 +123,15 @@ class User extends Authenticatable
     public function hasGoogleConnection(): bool
     {
         return $this->provider === 'google' && filled($this->provider_id);
+    }
+
+    public function mentionBaseHandle(): string
+    {
+        return Str::slug($this->name);
+    }
+
+    public function mentionHandle(): string
+    {
+        return $this->mentionBaseHandle().'-'.$this->id;
     }
 }
