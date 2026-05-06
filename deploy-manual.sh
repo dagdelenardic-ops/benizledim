@@ -10,6 +10,10 @@ set -e
 
 cd "$(dirname "$0")"
 
+if [ -z "$FTP_SERVER" ] && [ -f "$HOME/.config/benizledim/deploy.env" ]; then
+  set -a; . "$HOME/.config/benizledim/deploy.env"; set +a
+fi
+
 # Credentials kontrol
 for k in FTP_SERVER FTP_USERNAME FTP_PASSWORD; do
   if [ -z "${!k}" ]; then
