@@ -17,12 +17,23 @@ const visibilityDelayMs = 14000;
 
 let revealTimer = null;
 
-onMounted(() => {
+onMounted(async () => {
     const dismissedAt = Number(localStorage.getItem(storageKey) || 0);
     dismissed.value = dismissedAt > 0 && Date.now() - dismissedAt < fourteenDays;
 
     if (supported) {
-        checkSubscription().catch(() => {});
+        await checkSubscription().catch(() => {});
+
+        // Silent recovery: permission was granted previously but the worker
+        // never registered the subscription server-side (old /build/ scope
+        // bug). Try once now without nagging the user again.
+        if (
+            !isSubscribed.value
+            && typeof Notification !== 'undefined'
+            && Notification.permission === 'granted'
+        ) {
+            subscribe().catch(() => { /* swallow — best effort */ });
+        }
     }
 
     revealTimer = setTimeout(() => {
@@ -46,6 +57,10 @@ const shouldShow = computed(() => {
     if (!supported) return false;
     if (isSubscribed.value) return false;
     if (permission.value === 'denied') return false;
+    // Permission already granted but no subscription yet: a previous attempt
+    // failed (e.g. SW not ready). Don't keep nagging — silent retry happens
+    // on the next page that has the prompt mounted.
+    if (permission.value === 'granted') return false;
     if (iOSNeedsInstall.value) return false;
 
     return true;

@@ -24,7 +24,15 @@
     @inertia
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => navigator.serviceWorker.register('/build/sw.js'));
+        window.addEventListener('load', () => {
+          // Register at root so scope = '/'. Push subscriptions and
+          // navigator.serviceWorker.ready need the worker to control the page;
+          // scoping it to /build/ caused the "yeni yazılardan haberdar ol"
+          // prompt to hang forever on subscribe (ready never resolved).
+          navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.warn('SW register failed', err);
+          });
+        });
       }
     </script>
 </body>

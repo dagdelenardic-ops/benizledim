@@ -22,6 +22,14 @@ export function usePushSubscription() {
         return data.publicKey;
     };
 
+    const waitForReady = (timeoutMs = 8000) => Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise((_, reject) => setTimeout(
+            () => reject(new Error('Service worker hazır değil — sayfayı yenileyip tekrar dene')),
+            timeoutMs,
+        )),
+    ]);
+
     const subscribe = async (vapidPublicKey = null) => {
         if (!supported) throw new Error('Push desteklenmiyor');
 
@@ -29,7 +37,7 @@ export function usePushSubscription() {
         if (perm !== 'granted') throw new Error('İzin verilmedi');
 
         const key = vapidPublicKey || await fetchVapidKey();
-        const reg = await navigator.serviceWorker.ready;
+        const reg = await waitForReady();
         const sub = await reg.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(key),
