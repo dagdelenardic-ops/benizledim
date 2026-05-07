@@ -38,10 +38,11 @@ class ImportWixImages extends Command
 
         foreach ($posts as $post) {
             try {
-                $response = Http::timeout(30)->get($post->cover_image);
+                $sourceUrl = \App\Support\MediaUrl::upgradeToOriginal($post->cover_image);
+                $response = Http::timeout(30)->get($sourceUrl);
 
                 if ($response->successful()) {
-                    $rawExtension = pathinfo((string) parse_url($post->cover_image, PHP_URL_PATH), PATHINFO_EXTENSION);
+                    $rawExtension = pathinfo((string) parse_url($sourceUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
                     $extension = preg_match('/^(jpg|jpeg|png|webp|gif)$/i', (string) $rawExtension) ? strtolower($rawExtension) : 'jpg';
                     $filename = 'posts/' . Str::slug($post->title) . '-' . $post->id . '.' . $extension;
 
