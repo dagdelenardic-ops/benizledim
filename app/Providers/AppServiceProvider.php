@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Listeners\ClaimGuestConversations;
+use App\Listeners\LogSuccessfulLogin;
 use App\Models\Comment;
 use App\Models\Entry;
 use App\Models\Like;
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Event::listen(Login::class, ClaimGuestConversations::class);
+        Event::listen(Login::class, LogSuccessfulLogin::class);
 
         Comment::observe(CommentObserver::class);
         Entry::observe(EntryObserver::class);

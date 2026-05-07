@@ -32,10 +32,58 @@ if ((bool) env('RUN_WIX_SCRAPER_SCHEDULED', false)) {
         ->appendOutputTo(storage_path('logs/scheduler.log'));
 }
 
+// One-shot: ilk schedule:run tetiklemesinde flash_news migration'ını çalıştır.
+// Marker dosyası yazılınca tekrar çalışmaz. Güvenli silindi sayılır.
+Schedule::call(function () {
+    $marker = storage_path('app/.flash_news_migrated');
+    if (file_exists($marker)) {
+        return;
+    }
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    \Illuminate\Support\Facades\Artisan::call('config:clear');
+    \Illuminate\Support\Facades\Artisan::call('route:clear');
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    @file_put_contents($marker, now()->toIso8601String());
+})->name('one-shot-flashnews-migrate')->everyMinute();
+
+Schedule::command('flashnews:fetch')
+    ->dailyAt('08:00')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/flashnews.log'));
+
+Schedule::command('flashnews:fetch')
+    ->dailyAt('14:00')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/flashnews.log'));
+
+Schedule::command('flashnews:fetch')
+    ->dailyAt('20:00')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/flashnews.log'));
+
 Schedule::command('letterboxd:sync')
     ->dailyAt('03:00')
     ->withoutOverlapping()
     ->appendOutputTo(storage_path('logs/scheduler.log'));
+
+Schedule::command('push:daily-digest')
+    ->dailyAt('19:00')
+    ->timezone('Europe/Istanbul')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/push.log'));
+
+// One-shot: guest_push_subscribers migration'ını tetikle, marker yazılınca tekrar çalışmaz.
+Schedule::call(function () {
+    $marker = storage_path('app/.guest_push_subscribers_migrated');
+    if (file_exists($marker)) {
+        return;
+    }
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    \Illuminate\Support\Facades\Artisan::call('config:clear');
+    \Illuminate\Support\Facades\Artisan::call('route:clear');
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    @file_put_contents($marker, now()->toIso8601String());
+})->name('one-shot-guest-push-migrate')->everyMinute();
 
 Schedule::call(function () {
     \App\Models\Post::where('status', 'draft')
@@ -49,3 +97,28 @@ Schedule::call(function () {
             ]);
         });
 })->name('publish-scheduled-posts')->everyMinute()->withoutOverlapping()->appendOutputTo(storage_path('logs/scheduler.log'));
+
+// One-shot: analytics tabloları (page_views, daily_stats, user_login_events, users.last_login_at vb.)
+Schedule::call(function () {
+    $marker = storage_path('app/.analytics_migrated');
+    if (file_exists($marker)) {
+        return;
+    }
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    \Illuminate\Support\Facades\Artisan::call('config:clear');
+    \Illuminate\Support\Facades\Artisan::call('route:clear');
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    @file_put_contents($marker, now()->toIso8601String());
+})->name('one-shot-analytics-migrate')->everyMinute();
+
+Schedule::command('stats:aggregate')
+    ->dailyAt('00:15')
+    ->timezone('Europe/Istanbul')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/analytics.log'));
+
+Schedule::command('stats:cleanup --days=90')
+    ->dailyAt('03:30')
+    ->timezone('Europe/Istanbul')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/analytics.log'));

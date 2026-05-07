@@ -22,6 +22,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    analytics: {
+        type: Object,
+        default: null,
+    },
 });
 
 const { timeAgo } = useDate();
@@ -115,6 +119,33 @@ const resolveStatus = (post) => (post.deletion_requested_at ? 'pending_deletion'
                         >
                             <Icon :name="card.icon" />
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <section v-if="analytics" class="border-2 border-[var(--bi-ink)] bg-white">
+                <div class="flex items-center justify-between border-b-2 border-[var(--bi-ink)] px-5 py-4">
+                    <h2 class="text-lg font-black text-[var(--bi-ink)]">Bugün Sitede</h2>
+                    <Link href="/admin/analytics" class="bi-mono text-xs font-bold uppercase tracking-[0.08em] text-red-700 hover:text-red-900">
+                        Tüm Analitik
+                    </Link>
+                </div>
+                <div class="grid gap-px bg-[var(--bi-rule-soft)] sm:grid-cols-4">
+                    <div class="bg-white px-5 py-4">
+                        <p class="bi-mono text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)]">Bugünkü Tekil Ziyaretçi</p>
+                        <p class="mt-2 text-2xl font-black text-[var(--bi-ink)]">{{ analytics.today_unique_visitors.toLocaleString() }}</p>
+                    </div>
+                    <div class="bg-white px-5 py-4">
+                        <p class="bi-mono text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)]">Bugünkü Görüntüleme</p>
+                        <p class="mt-2 text-2xl font-black text-[var(--bi-ink)]">{{ analytics.today_pageviews.toLocaleString() }}</p>
+                    </div>
+                    <div class="bg-white px-5 py-4">
+                        <p class="bi-mono text-[0.65rem] font-bold uppercase tracking-[0.08em] text-emerald-800">Anlık Çevrimiçi</p>
+                        <p class="mt-2 text-2xl font-black text-emerald-800">{{ analytics.active_visitors }}</p>
+                    </div>
+                    <div class="bg-white px-5 py-4">
+                        <p class="bi-mono text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--bi-muted)]">Online Yazar</p>
+                        <p class="mt-2 text-2xl font-black text-[var(--bi-ink)]">{{ analytics.online_authors }}</p>
                     </div>
                 </div>
             </section>

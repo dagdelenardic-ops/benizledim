@@ -44,6 +44,8 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\CanonicalHostMiddleware::class,
             \App\Http\Middleware\EnsureVisitorId::class,
+            \App\Http\Middleware\UpdateUserLastSeen::class,
+            \App\Http\Middleware\TrackPageView::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
         $middleware->alias([

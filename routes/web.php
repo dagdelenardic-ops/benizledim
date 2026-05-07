@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityFeedController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCommentController;
+use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFestivalEventController;
 use App\Http\Controllers\Admin\AdminNewsletterController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\CinemaReviewController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\FestivalController;
+use App\Http\Controllers\FlashNewsController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageVariantController;
@@ -57,6 +59,12 @@ Route::get('/feed', [RssFeedController::class, 'index'])->name('feed');
 Route::get('/rss', [RssFeedController::class, 'index']);
 
 Route::get('/', [HomeController::class, 'index']);
+
+// Flash News
+Route::get('/haber/{slug}', [FlashNewsController::class, 'show'])->name('flashnews.show');
+// Fetch endpoint (token korumalı, cron tarafından tetiklenir)
+Route::match(['get', 'post'], '/api/flashnews/fetch', [FlashNewsController::class, 'fetch'])
+    ->name('flashnews.fetch');
 
 // Yazı listesi (kategori/tag filtreleme)
 Route::get('/yazilar', [PostController::class, 'index'])->name('posts.index');
@@ -119,15 +127,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/api/watchlist/{post}', [WatchlistController::class, 'destroy'])->name('watchlist.destroy');
     Route::post('/api/quick-log', [QuickLogController::class, 'store'])->name('quick-log.store');
     Route::get('/api/tmdb/search', [TmdbSearchController::class, 'search'])->name('tmdb.search');
-    Route::post('/api/push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
-    Route::delete('/api/push/subscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
-    Route::get('/api/push/vapid', [PushSubscriptionController::class, 'vapidKey'])->name('push.vapid');
-    Route::post('/api/push/test', [PushSubscriptionController::class, 'test'])->name('push.test');
     Route::post('/api/letterboxd/connect', [LetterboxdController::class, 'connect'])->name('letterboxd.connect');
     Route::post('/api/letterboxd/confirm', [LetterboxdController::class, 'confirm'])->name('letterboxd.confirm');
     Route::post('/api/letterboxd/sync-now', [LetterboxdController::class, 'syncNow'])->name('letterboxd.sync');
     Route::delete('/api/letterboxd', [LetterboxdController::class, 'disconnect'])->name('letterboxd.disconnect');
 });
+
+// Push abonelikleri (misafir + giriş yapmış kullanıcı)
+Route::post('/api/push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
+Route::delete('/api/push/subscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
+Route::get('/api/push/vapid', [PushSubscriptionController::class, 'vapidKey'])->name('push.vapid');
+Route::post('/api/push/test', [PushSubscriptionController::class, 'test'])->name('push.test');
 
 // Statik Sayfalar
 Route::get('/sayfa/{page:slug}', [PageController::class, 'show'])->name('pages.show');
@@ -162,6 +172,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::post('/posts/embed', [PostEmbedController::class, 'oembed'])->name('posts.embed');
 
     Route::middleware('role:admin,editor')->group(function () {
+        // Analitik
+        Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/analytics/summary', [AdminAnalyticsController::class, 'summary'])->name('analytics.summary');
+        Route::get('/analytics/realtime', [AdminAnalyticsController::class, 'realtime'])->name('analytics.realtime');
+        Route::get('/analytics/authors', [AdminAnalyticsController::class, 'authors'])->name('analytics.authors');
+
         Route::post('/posts/{post:id}/approve-review', [AdminPostController::class, 'approveReview'])->name('posts.approveReview');
         Route::post('/posts/{post:id}/reject-review', [AdminPostController::class, 'rejectReview'])->name('posts.rejectReview');
 
@@ -225,3 +241,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 Route::get('/post/{slug}', [WixRedirectController::class, 'post'])->where('slug', '.*');
 Route::get('/blog/{slug}', [WixRedirectController::class, 'post'])->where('slug', '.*');
 Route::get('/blog/categories/{slug}', [WixRedirectController::class, 'category']);
+Route::get('/blog/tags/{slug}', fn () => redirect('/yazilar', 301))->where('slug', '.*');
+Route::get('/en/{any?}', fn () => redirect('/', 301))->where('any', '.*');
+Route::get('/profile/{name}/profile', fn () => redirect('/', 301))->where('name', '[^/]+');
+Route::get('/search', fn () => redirect('/yazilar', 301));

@@ -50,6 +50,7 @@ const menuItems = computed(() => {
     ];
 
     if (isManager.value) {
+        items.push({ name: 'Analitik', href: '/admin/analytics', icon: 'dashboard', roles: ['admin', 'editor'] });
         items.push({ name: 'Bülten', href: '/admin/newsletters', icon: 'mail', roles: ['admin', 'editor'] });
     }
 

@@ -7,10 +7,13 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Newsletter;
+use App\Services\AnalyticsService;
 use Inertia\Inertia;
 
 class AdminDashboardController extends Controller
 {
+    public function __construct(private readonly AnalyticsService $analytics) {}
+
     public function index()
     {
         $user = request()->user();
@@ -58,11 +61,28 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
+        $analytics = null;
+        if ($user->canManageAllPosts()) {
+            try {
+                $todaySummary = $this->analytics->summary('today');
+                $realtime = $this->analytics->realtime();
+                $analytics = [
+                    'today_unique_visitors' => $todaySummary['unique_visitors'],
+                    'today_pageviews' => $todaySummary['total_pageviews'],
+                    'active_visitors' => $realtime['active_visitors'],
+                    'online_authors' => count($realtime['online_authors']),
+                ];
+            } catch (\Throwable $e) {
+                $analytics = null;
+            }
+        }
+
         return Inertia::render('Admin/Dashboard', [
             'stats' => $stats,
             'recentPosts' => $recentPosts,
             'recentComments' => $recentComments,
             'authorBreakdown' => $authorBreakdown,
+            'analytics' => $analytics,
         ]);
     }
 }

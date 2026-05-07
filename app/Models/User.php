@@ -27,6 +27,9 @@ class User extends Authenticatable
         'letterboxd_username',
         'last_letterboxd_sync_at',
         'letterboxd_sync_enabled',
+        'last_login_at',
+        'last_seen_at',
+        'login_count',
     ];
 
     protected $hidden = [
@@ -41,7 +44,21 @@ class User extends Authenticatable
             'password' => 'hashed',
             'last_letterboxd_sync_at' => 'datetime',
             'letterboxd_sync_enabled' => 'boolean',
+            'last_login_at' => 'datetime',
+            'last_seen_at' => 'datetime',
+            'login_count' => 'integer',
         ];
+    }
+
+    public function loginEvents(): HasMany
+    {
+        return $this->hasMany(UserLoginEvent::class);
+    }
+
+    public function isOnline(int $thresholdMinutes = 5): bool
+    {
+        return $this->last_seen_at !== null
+            && $this->last_seen_at->gt(now()->subMinutes($thresholdMinutes));
     }
 
     public function posts(): HasMany
