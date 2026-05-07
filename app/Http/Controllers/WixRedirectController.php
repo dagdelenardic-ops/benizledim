@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class WixRedirectController extends Controller
 {
@@ -21,7 +22,13 @@ class WixRedirectController extends Controller
             return redirect("/yazi/{$laravelSlug}", 301);
         }
 
-        return redirect('/yazilar', 302);
+        $asciiSlug = Str::slug($slug);
+
+        if ($asciiSlug !== $slug && Post::where('slug', $asciiSlug)->exists()) {
+            return redirect("/yazi/{$asciiSlug}", 301);
+        }
+
+        return redirect('/yazilar', 301);
     }
 
     public function category(string $slug)

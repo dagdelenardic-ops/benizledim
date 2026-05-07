@@ -62,6 +62,7 @@ class AdminDashboardController extends Controller
             ->get();
 
         $analytics = null;
+        $pageviewSeries = [];
         if ($user->canManageAllPosts()) {
             try {
                 $todaySummary = $this->analytics->summary('today');
@@ -72,8 +73,10 @@ class AdminDashboardController extends Controller
                     'active_visitors' => $realtime['active_visitors'],
                     'online_authors' => count($realtime['online_authors']),
                 ];
+                $pageviewSeries = $this->analytics->timeseries('7d');
             } catch (\Throwable $e) {
                 $analytics = null;
+                $pageviewSeries = [];
             }
         }
 
@@ -83,6 +86,7 @@ class AdminDashboardController extends Controller
             'recentComments' => $recentComments,
             'authorBreakdown' => $authorBreakdown,
             'analytics' => $analytics,
+            'pageviewSeries' => $pageviewSeries,
         ]);
     }
 }

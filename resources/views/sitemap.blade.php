@@ -45,4 +45,12 @@
         <priority>0.7</priority>
     </url>
     @endforeach
+    @foreach($flashNews ?? [] as $news)
+    <url>
+        <loc>https://benizledim.com/haber/{{ $news->slug }}</loc>
+        <lastmod>{{ ($news->updated_at ?? $news->published_at)->toIso8601String() }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    @endforeach
 </urlset>

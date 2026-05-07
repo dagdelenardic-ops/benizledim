@@ -9,6 +9,12 @@
     <meta name="apple-mobile-web-app-title" content="Ben/İzledim">
     <link rel="apple-touch-icon" href="/icons/192.png">
     <link rel="manifest" href="/build/manifest.webmanifest">
+    @php
+        $canonical = 'https://benizledim.com' . preg_replace('#/+$#', '', request()->getRequestUri());
+        if ($canonical === 'https://benizledim.com') { $canonical .= '/'; }
+    @endphp
+    <link rel="canonical" href="{{ $canonical }}">
+    <meta property="og:url" content="{{ $canonical }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -57,6 +57,10 @@ return [
         'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4-5-20250514'),
     ],
 
+    'flashnews' => [
+        'token' => env('FLASHNEWS_TOKEN'),
+    ],
+
     'tmdb' => [
         'access_token' => env('TMDB_ACCESS_TOKEN'),
         'api_key' => env('TMDB_API_KEY'),
@@ -73,6 +77,11 @@ return [
     'letterboxd' => [
         'sync_throttle_minutes' => (int) env('LETTERBOXD_SYNC_THROTTLE', 60),
         'base' => env('LETTERBOXD_BASE_URL', 'https://letterboxd.com'),
+    ],
+
+    'xai' => [
+        'api_key' => env('XAI_API_KEY'),
+        'image_model' => env('XAI_IMAGE_MODEL', 'grok-imagine-image-pro'),
     ],
 
 ];

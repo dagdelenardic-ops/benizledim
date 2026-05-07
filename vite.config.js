@@ -53,4 +53,21 @@ export default defineConfig({
             ignored: ['**/storage/framework/views/**'],
         },
     },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (!id.includes('node_modules')) return undefined;
+                    if (id.includes('@inertiajs')) return 'vendor-inertia';
+                    if (id.includes('@tiptap') || id.includes('lowlight') || id.includes('prosemirror')) return 'vendor-tiptap';
+                    if (id.includes('leaflet')) return 'vendor-leaflet';
+                    if (id.includes('chart.js') || id.includes('vue-chartjs')) return 'vendor-charts';
+                    if (id.includes('axios')) return 'vendor-axios';
+                    if (id.includes('workbox')) return 'vendor-workbox';
+                    if (id.includes('vue') || id.includes('@vue')) return 'vendor-vue';
+                    return 'vendor';
+                },
+            },
+        },
+    },
 });

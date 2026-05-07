@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AppLayout from '../Components/Layout/AppLayout.vue';
 import PostGrid from '../Components/Post/PostGrid.vue';
+import FlashNewsSection from '../Components/Post/FlashNewsSection.vue';
 import { buildResponsiveImage } from '@/Utils/responsiveImage';
 
 const props = defineProps({
@@ -15,6 +16,10 @@ const props = defineProps({
         default: () => [],
     },
     spotlights: {
+        type: Array,
+        default: () => [],
+    },
+    flashNews: {
         type: Array,
         default: () => [],
     },
@@ -126,6 +131,8 @@ const subscribe = () => {
                 </div>
             </div>
         </section>
+
+        <FlashNewsSection :items="flashNews" />
 
         <section class="bi-wrap grid gap-8 py-8 lg:grid-cols-[1fr_320px]">
             <div>

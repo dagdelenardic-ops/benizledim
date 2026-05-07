@@ -6,6 +6,7 @@ import SearchBar from '@/Components/UI/SearchBar.vue';
 import AuthorBottomNav from '@/Components/Layout/AuthorBottomNav.vue';
 import QuickLogModal from '@/Components/Author/QuickLogModal.vue';
 import InstallAppPrompt from '@/Components/PWA/InstallAppPrompt.vue';
+import PushOptInPrompt from '@/Components/PWA/PushOptInPrompt.vue';
 
 const props = defineProps({
     title: String,
@@ -465,6 +466,7 @@ export default {
     </footer>
 
     <InstallAppPrompt />
+    <PushOptInPrompt />
 
     <!-- Mobile Bottom Nav -->
     <AuthorBottomNav v-if="authUser" @quick-log="openQuickLog" />

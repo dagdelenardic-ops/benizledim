@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use App\Models\Category;
-use Illuminate\Http\Response;
+use App\Models\FlashNews;
+use App\Models\Post;
 
 class SitemapController extends Controller
 {
@@ -16,7 +16,18 @@ class SitemapController extends Controller
             ->cursor();
         $categories = Category::select('slug')->cursor();
 
-        $content = view('sitemap', compact('posts', 'categories'))->render();
+        $flashNews = collect();
+        try {
+            $flashNews = FlashNews::published()
+                ->select('slug', 'published_at', 'updated_at')
+                ->latest('published_at')
+                ->limit(500)
+                ->get();
+        } catch (\Throwable $e) {
+            // table not yet created
+        }
+
+        $content = view('sitemap', compact('posts', 'categories', 'flashNews'))->render();
 
         return response($content, 200)
             ->header('Content-Type', 'text/xml');

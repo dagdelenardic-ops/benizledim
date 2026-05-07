@@ -4,6 +4,7 @@ export function usePWAInstall() {
     const deferredPrompt = ref(null);
     const canInstall = ref(false);
     const isIOS = ref(false);
+    const isMobile = ref(false);
     const isStandalone = ref(false);
     const installed = ref(false);
 
@@ -12,6 +13,15 @@ export function usePWAInstall() {
 
         return window.matchMedia?.('(display-mode: standalone)').matches
             || window.navigator.standalone === true;
+    };
+
+    const detectMobile = () => {
+        if (typeof window === 'undefined') return false;
+
+        const ua = window.navigator.userAgent || '';
+        if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) return true;
+
+        return window.matchMedia?.('(max-width: 768px)').matches ?? false;
     };
 
     const handleBeforeInstallPrompt = (event) => {
@@ -28,6 +38,7 @@ export function usePWAInstall() {
 
     onMounted(() => {
         isIOS.value = /iPad|iPhone|iPod/.test(window.navigator.userAgent);
+        isMobile.value = detectMobile();
         isStandalone.value = detectStandalone();
         installed.value = isStandalone.value;
 
@@ -57,6 +68,7 @@ export function usePWAInstall() {
         canInstall,
         installed: computed(() => installed.value || isStandalone.value),
         isIOS,
+        isMobile,
         isStandalone,
         install,
     };

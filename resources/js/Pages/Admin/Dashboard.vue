@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import AdminLayout from '../../Components/Admin/AdminLayout.vue';
 import Icon from '../../Components/Admin/AdminIcon.vue';
+import PageviewChart from '../../Components/Admin/PageviewChart.vue';
 import { useDate } from '@/Composables/useDate';
 
 const props = defineProps({
@@ -25,6 +26,10 @@ const props = defineProps({
     analytics: {
         type: Object,
         default: null,
+    },
+    pageviewSeries: {
+        type: Array,
+        default: () => [],
     },
 });
 
@@ -120,6 +125,18 @@ const resolveStatus = (post) => (post.deletion_requested_at ? 'pending_deletion'
                             <Icon :name="card.icon" />
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <section v-if="pageviewSeries.length" class="border-2 border-[var(--bi-ink)] bg-white">
+                <div class="flex items-center justify-between border-b-2 border-[var(--bi-ink)] px-5 py-4">
+                    <h2 class="text-lg font-black text-[var(--bi-ink)]">Son 7 Gün</h2>
+                    <Link href="/admin/analytics" class="bi-mono text-xs font-bold uppercase tracking-[0.08em] text-red-700 hover:text-red-900">
+                        Detaylı Analitik
+                    </Link>
+                </div>
+                <div class="px-5 py-5">
+                    <PageviewChart :series="pageviewSeries" />
                 </div>
             </section>
 

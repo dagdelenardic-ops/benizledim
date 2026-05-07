@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Cinema;
 use App\Models\FestivalEvent;
+use App\Models\FlashNews;
 use App\Models\Podcast;
 use App\Models\Post;
 use Inertia\Inertia;
@@ -20,6 +21,16 @@ class HomeController extends Controller
             ->latest('published_at')
             ->take(8)
             ->get();
+
+        $flashNews = collect();
+        try {
+            $flashNews = FlashNews::published()
+                ->orderByDesc('published_at')
+                ->take(8)
+                ->get(['id', 'title_tr', 'slug', 'summary_tr', 'content_tr', 'source_url', 'source_name', 'image_url', 'published_at']);
+        } catch (\Throwable $e) {
+            \Log::warning('FlashNews load failed: '.$e->getMessage());
+        }
 
         $categories = Category::withCount('posts')->get();
         $latestPodcast = Podcast::query()->latest('published_at')->first();
@@ -69,6 +80,7 @@ class HomeController extends Controller
             'posts' => $posts,
             'categories' => $categories,
             'spotlights' => $spotlights,
+            'flashNews' => $flashNews,
         ]);
     }
 }
