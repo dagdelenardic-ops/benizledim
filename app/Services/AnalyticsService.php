@@ -266,6 +266,7 @@ class AnalyticsService
             ? (int) DB::table('page_views')
                 ->whereBetween('viewed_at', [$start, $end])
                 ->whereNotNull('session_id')
+                ->select('session_id')
                 ->groupBy('session_id')
                 ->havingRaw('COUNT(*) = 1')
                 ->get()
