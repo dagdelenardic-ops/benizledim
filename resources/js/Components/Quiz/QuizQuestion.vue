@@ -71,6 +71,13 @@ const cardImageUrl = (optIdx) => {
     if (!qid || !oid) return null;
     return `/images/quiz/cards/${qid}_${oid}.webp`;
 };
+
+const vsImageUrl = (optIdx) => {
+    const qid = props.question?.id;
+    const oid = props.question?.options?.[optIdx]?.id;
+    if (!qid || !oid) return null;
+    return `/images/quiz/vs/${qid}_${oid}.webp`;
+};
 </script>
 
 <template>
@@ -129,10 +136,20 @@ const cardImageUrl = (optIdx) => {
                 :class="['qz-vs-side', picked === i ? 'is-picked' : '']"
                 @click="onPick(i)"
             >
-                <div :style="{ fontFamily: 'var(--qz-display)', fontSize: '24px', textTransform: 'uppercase', lineHeight: 1.1 }">
-                    {{ opt.text_tr }}
+                <img
+                    v-if="vsImageUrl(i)"
+                    :src="vsImageUrl(i)"
+                    :alt="opt.text_tr"
+                    class="qz-vs-img"
+                    loading="lazy"
+                    @error="(e) => e.target.style.display = 'none'"
+                />
+                <div class="qz-vs-text">
+                    <div :style="{ fontFamily: 'var(--qz-display)', fontSize: '24px', textTransform: 'uppercase', lineHeight: 1.1 }">
+                        {{ opt.text_tr }}
+                    </div>
+                    <small>Seçenek {{ letters[i] }}</small>
                 </div>
-                <small>Seçenek {{ letters[i] }}</small>
             </div>
             <div class="qz-vs-divider">VS</div>
         </div>

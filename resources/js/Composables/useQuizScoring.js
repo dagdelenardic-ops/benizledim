@@ -93,10 +93,25 @@ export function useQuizScoring(traits, questions, characters, recommendation) {
             archetype: c.result_archetype_tr,
         }));
 
-        const topTraits = [...traitKeys]
+        const allTraits = [...traitKeys]
             .map(k => ({ key: k, value: Math.round(userTraits.value[k] * 10) / 10, label: traits.find(t => t.key === k)?.label_tr || k }))
-            .sort((a, b) => b.value - a.value)
-            .slice(0, 5);
+            .sort((a, b) => b.value - a.value);
+
+        const topTraits = allTraits.slice(0, 5);
+        const bottomTraits = [...allTraits].reverse().slice(0, 3);
+
+        const opposite = scored[scored.length - 1];
+
+        const userMap = userTraits.value;
+        const t = (k) => userMap[k] ?? baseline;
+        const profile = {
+            relationships: t('empathy') + t('sociability') + t('sensitivity') + t('loyalty'),
+            career: t('ambition') + t('leadership') + t('logic') + t('control'),
+            stress: t('resilience') + t('humor') + (10 - t('control')),
+            shadow: bottomTraits,
+            mbti: best.mbti_hint || '',
+            tags: best.tags || [],
+        };
 
         result.value = {
             character: best,
@@ -104,6 +119,15 @@ export function useQuizScoring(traits, questions, characters, recommendation) {
             similar: scored.slice(1, topN + 1),
             distribution,
             topTraits,
+            bottomTraits,
+            opposite: opposite ? {
+                id: opposite.id,
+                name: opposite.name,
+                work: opposite.work,
+                year: opposite.year,
+                archetype: opposite.result_archetype_tr,
+            } : null,
+            profile,
             userTraits: { ...userTraits.value },
         };
 

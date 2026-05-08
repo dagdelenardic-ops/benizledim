@@ -76,6 +76,196 @@ function copyLink() {
 function pad(n) {
     return String(n).padStart(2, '0');
 }
+
+const TRAIT_COPY = {
+    leadership: {
+        high: 'Sahnede sen varsan, plan da sende olur. İnsanlar nereye gideceklerini sana bakarak öğrenir.',
+        low: 'Yönetmek senin oyunun değil — sen kendi yolunu çiziyorsun, başkalarını sürüklemek istemiyorsun.',
+        verb: 'Yönlendirme',
+    },
+    logic: {
+        high: 'Önce kafanda kurarsın, sonra söze dökersin. Karmaşık şeyleri sade hale getirmek senin doğan.',
+        low: 'Sen analizden çok sezgiyle hareket ediyorsun. Her şeyi tablolaştırmak hayatı sıkıcı kılar diye düşünüyorsun.',
+        verb: 'Mantık',
+    },
+    empathy: {
+        high: 'Karşındaki söylemeden anlıyorsun. Bu seni güvenli liman yapıyor — ama bazen başkasının yükünü çok taşıyorsun.',
+        low: 'Empatin selektif: hak edene açık, klişeye değil. Acıma değil anlama tarzındasın.',
+        verb: 'Empati',
+    },
+    ambition: {
+        high: 'Hedef görürsen rahat duramıyorsun. Konfor sana enerji değil, durgunluk veriyor.',
+        low: 'Yarış senin oyunun değil. Mutluluğu hedefte değil, anın içinde arıyorsun.',
+        verb: 'Hırs',
+    },
+    risk: {
+        high: 'Belirsizliği sevmiyorsun, koklayarak gidiyorsun. Riski hesapladığında atlamaktan çekinmiyorsun.',
+        low: 'Önce zemini kontrol edersin, sonra adım atarsın. Sürpriz pek senin tarzın değil.',
+        verb: 'Risk',
+    },
+    integrity: {
+        high: 'Söz verirsen yapıyorsun, yalanı görürsen geri çekilmiyorsun. Bu seni az ama derin ilişki sahibi yapıyor.',
+        low: 'İlkelerinde esneksin — bağlam senin için kuraldan önemli. "Duruma göre" sözü senin için klişe değil, prensip.',
+        verb: 'İlkesellik',
+    },
+    loyalty: {
+        high: 'Bir defa girdiğin çekmeceden çıkmıyorsun. Senin kaybedişlerin de, sevdiklerin de uzun.',
+        low: 'Sadakatini hak etmek lazım. Otomatik bağlanmak senin tarzın değil; insan değişirse sen de değişirsin.',
+        verb: 'Sadakat',
+    },
+    independence: {
+        high: 'Tek başınalık seni yormuyor, tam tersi şarj ediyor. Birinin onayını beklemek seni boğuyor.',
+        low: 'Yalnız iyi değilsin — paylaşmak senin için lüks değil, ihtiyaç. Ekipte daha hızlısın.',
+        verb: 'Bağımsızlık',
+    },
+    sociability: {
+        high: 'Kalabalık seni şarj ediyor. Tanıştığın insanları hatırlıyor, yeni bağlar kurmakta hızlısın.',
+        low: 'Az ama derin — tarzın bu. Yapay sohbet yerine sessizlik tercih edersin.',
+        verb: 'Sosyallik',
+    },
+    humor: {
+        high: 'Mizah senin için kalkan değil; zekânın doğal hali. En zor sahnede bile bir cümlelik şaka çıkarabilirsin.',
+        low: 'Espri yapmaktan çok izlemekten zevk alıyorsun. Ciddiyetinin altında hassas bir kalp var.',
+        verb: 'Mizah',
+    },
+    creativity: {
+        high: 'Standart çözümler seni sıkıyor. Beynin sürekli "ya şöyle olsa" diye soruyor.',
+        low: 'Çark çalışıyor mu, dokunma; senin tarzın bu. Yenilik için yenilik istemiyorsun.',
+        verb: 'Yaratıcılık',
+    },
+    resilience: {
+        high: 'Dibine vursan toparlıyorsun. Senin "tamam" demen başkasının "henüz başlıyorum" demesi gibi.',
+        low: 'Darbeleri içine atıyorsun ama atlatmak zaman alıyor. İyileşmek için sessizliğe ihtiyacın var.',
+        verb: 'Dayanıklılık',
+    },
+    control: {
+        high: 'Plan, takvim, liste — bunlar seni rahatlatıyor. Belirsizliği azaltmak için her zaman bir tedbir alırsın.',
+        low: 'Akış senin için pusula. Çok planlamak yaratıcılığını kısıtladığını biliyorsun.',
+        verb: 'Kontrol',
+    },
+    sensitivity: {
+        high: 'Detayları, tonu, bakışı yakalıyorsun. Bu hem sanatına hem yorgunluğuna yansıyor.',
+        low: 'Sen frekansı düşük tutuyorsun — duygulara değil mantığa odaklanıyorsun. Bu seni krizde sabit tutuyor.',
+        verb: 'Hassasiyet',
+    },
+};
+
+function levelOf(value) {
+    if (value >= 7) return 'high';
+    if (value <= 4) return 'low';
+    return 'mid';
+}
+
+const superpower = computed(() => {
+    const top = props.result.topTraits[0];
+    const second = props.result.topTraits[1];
+    if (!top) return null;
+    const tCopy = TRAIT_COPY[top.key];
+    const sCopy = second ? TRAIT_COPY[second.key] : null;
+    return {
+        title: tCopy?.verb || top.label,
+        body: tCopy?.high || '',
+        combo: sCopy ? `${tCopy?.verb || top.label} × ${sCopy?.verb || second.label}` : null,
+    };
+});
+
+const shadowSide = computed(() => {
+    const bottom = (props.result.bottomTraits || [])[0];
+    if (!bottom) return null;
+    const tCopy = TRAIT_COPY[bottom.key];
+    return {
+        title: tCopy?.verb || bottom.label,
+        body: tCopy?.low || '',
+        value: bottom.value,
+    };
+});
+
+const shineMoments = computed(() => {
+    const u = props.result.userTraits || {};
+    const out = [];
+    if ((u.leadership ?? 5) >= 7) out.push('Karar verilmesi gereken zor bir toplantıda — sana güveniyorlar.');
+    if ((u.logic ?? 5) >= 7) out.push('Karmaşık bir problemi parçalara ayırırken — gözlerin parlıyor.');
+    if ((u.empathy ?? 5) >= 7) out.push('Bir arkadaşın seni zor gününde araması — sözleri sende yer buluyor.');
+    if ((u.creativity ?? 5) >= 7) out.push('Hiç kimsenin düşünmediği çözümün senden çıktığı an.');
+    if ((u.humor ?? 5) >= 7) out.push('Tansiyonun yüksek olduğu bir ortamı bir cümleyle gevşettiğinde.');
+    if ((u.resilience ?? 5) >= 7) out.push('Herkes pes ettiğinde seni "ayakta nasıl duruyor" diye izleyenlerin gözünde.');
+    if ((u.independence ?? 5) >= 7) out.push('Tek başına bir şeyi sıfırdan kurduğunda — kimseye sormadın, oldu.');
+    return out.slice(0, 4);
+});
+
+const struggleMoments = computed(() => {
+    const u = props.result.userTraits || {};
+    const out = [];
+    if ((u.sociability ?? 5) <= 4) out.push('Tanımadığın insanlarla zorunlu small talk yaparken.');
+    if ((u.control ?? 5) >= 7) out.push('Plan dışı bir şey çıktığında — esnekleşmek için bir an gerekiyor.');
+    if ((u.humor ?? 5) <= 4) out.push('Klişe esprilere doğal tepki veremediğinde.');
+    if ((u.empathy ?? 5) <= 4) out.push('Birinin "anlamak değil sadece dinle" istediğini fark ettiğinde.');
+    if ((u.risk ?? 5) <= 4) out.push('Hesapsız bir karar vermen gerektiğinde — beynin durmuyor.');
+    if ((u.resilience ?? 5) <= 4) out.push('Üst üste gelen darbelerden sonra toparlanma süren uzadığında.');
+    if ((u.independence ?? 5) <= 4) out.push('Uzun süre yalnız çalışmak zorunda kaldığında — sosyal pile ihtiyacın var.');
+    if ((u.leadership ?? 5) <= 4) out.push('Kimse karar vermiyorsa ve sıra sana geliyorsa.');
+    return out.slice(0, 3);
+});
+
+const relationshipText = computed(() => {
+    const score = props.result.profile?.relationships ?? 20;
+    if (score >= 30) return 'İlişkilerinde derin ve sıcaksın. İnsanlar seninle kendilerini güvende hissediyor; ama bazen başkasının duygusal yükünü taşımaktan yoruluyorsun. Sınır koymak öğrenilesi bir kas senin için.';
+    if (score >= 22) return 'İlişkilerinde dengeli; yakın ama mesafeli durabilen biri. Az ama gerçek bağ kurmayı seçiyorsun. Yapay yakınlık seni rahatsız ediyor.';
+    return 'İlişkilerinde özgürlük öncelik. Birine bağlanırken kendini kaybetmemek senin için kritik. Bu seni soğuk değil, kendine sadık yapıyor.';
+});
+
+const careerText = computed(() => {
+    const score = props.result.profile?.career ?? 20;
+    if (score >= 32) return 'Kariyerde rotada giden tipsin. Hedef belirleyip ona kilitlenmen kolay; "ne istediğini bilmek" senin avantajın. Risk: tükenmişlik. Mola da bir strateji.';
+    if (score >= 24) return 'Kariyerde ne çok yarışçı ne de pasif — kendi temponla ilerliyorsun. Ölçüsünü kendin koyuyorsun, dış başarı kriterleri seni o kadar etkilemiyor.';
+    return 'Kariyer senin için bir öncelik değil, anlam senin için öncelik. Klasik başarı çizelgesi yerine "kendine yakın hissettiğin iş" peşindesin.';
+});
+
+const stressText = computed(() => {
+    const u = props.result.userTraits || {};
+    if ((u.humor ?? 5) >= 7) return 'Stres anında mizaha kaçıyorsun — kendinle dalga geçmek senin sigortan. Bu sağlıklı bir kas, ama bazen hissi de çağırmayı dene.';
+    if ((u.resilience ?? 5) >= 7) return 'Stres seni kolay yıkmıyor. Ama "yıkılmamak" hissetmemekle aynı şey değil — toparlanma süreni de hak ediyorsun.';
+    if ((u.control ?? 5) >= 7) return 'Stres anında plan yaparak rahatlıyorsun. Listeler, tablolar, takvimler senin nefesin. Belirsizlikle barışmak öğrenilesi.';
+    return 'Stres anında içine çekiliyor, sessizliği seçiyorsun. Bu senin işleme tarzın; ama yalnızlık çok uzarsa konuşacak biri lazım.';
+});
+
+const weekTip = computed(() => {
+    const u = props.result.userTraits || {};
+    const tips = [];
+    if ((u.creativity ?? 5) >= 7) tips.push('Bu hafta hiç planlamadığın bir film aç. Yorum okumadan bitir, sonra hissini yaz.');
+    if ((u.empathy ?? 5) >= 7) tips.push('Bir yakınına "sadece dinlemek istedim" diye mesaj at. Cevap bekleme.');
+    if ((u.control ?? 5) >= 7) tips.push('Bu hafta tek bir günü "plansız" geçir. Gerilimi yeniden gözlemle.');
+    if ((u.humor ?? 5) >= 7) tips.push('En sevdiğin komedi karakterini izle — kendini görüyor olabilirsin.');
+    if ((u.independence ?? 5) >= 7) tips.push('Bu hafta birinden küçük bir şey iste. Yardım kabul etmek de bir kas.');
+    if ((u.sensitivity ?? 5) >= 7) tips.push('Hissettiğini hemen yazmaya çalışma. 24 saat bekle, sonra bak.');
+    return tips.length ? tips[0] : 'Bu hafta hiç tanışmadığın bir yönetmenin filmiyle başla. Yeni bir frekans dene.';
+});
+
+const tagLabels = {
+    pratik_zeka: 'Pratik zekâ',
+    dayanıklılık: 'Dayanıklılık',
+    mizah: 'Mizah',
+    problem_cozucu: 'Problem çözücü',
+    lider: 'Lider',
+    karizma: 'Karizma',
+    cesaret: 'Cesaret',
+    zekâ: 'Zekâ',
+    analitik: 'Analitik',
+    duygusal: 'Duygusal',
+    yaratıcı: 'Yaratıcı',
+    bağımsız: 'Bağımsız',
+    sadık: 'Sadık',
+    empatik: 'Empatik',
+    karanlık: 'Karanlık',
+    vizyoner: 'Vizyoner',
+    direngen: 'Dirençli',
+    sosyal: 'Sosyal',
+    melankolik: 'Melankolik',
+};
+
+const characterTags = computed(() => {
+    return (character.value.tags || []).map(t => tagLabels[t] || t.replace(/_/g, ' '));
+});
 </script>
 
 <template>
@@ -155,13 +345,132 @@ function pad(n) {
 
                 <p class="qz-result__bio">{{ character.result_blurb_tr }}</p>
 
-                <div class="qz-share-row" :style="{ marginTop: '8px' }">
+                <div v-if="characterTags.length" class="qz-row" :style="{ gap: '6px', flexWrap: 'wrap', marginTop: '10px' }">
+                    <span v-for="tag in characterTags" :key="tag" class="qz-sticker" :style="{ background: 'var(--qz-paper)', fontSize: '11px', padding: '4px 10px' }">
+                        #{{ tag }}
+                    </span>
+                </div>
+
+                <div v-if="result.profile?.mbti" class="qz-kicker" :style="{ marginTop: '14px', fontFamily: 'var(--qz-mono)', color: 'var(--qz-ink-soft)' }">
+                    MBTI ipucu: <b :style="{ color: 'var(--qz-ink)' }">{{ result.profile.mbti }}</b>
+                </div>
+
+                <div class="qz-share-row" :style="{ marginTop: '14px' }">
                     <button class="qz-btn qz-btn--ghost" @click="(e) => { emit('tapFeedback', 'tap'); copyLink(); }">
                         <QuizIcon name="link" :size="18" /> Linki kopyala
                     </button>
                     <button class="qz-btn qz-btn--ghost" @click="emit('tapFeedback', 'tap')">
                         <QuizIcon name="twitter" :size="18" /> Paylaş
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Süper Güç + Karanlık Taraf -->
+        <div class="qz-section qz-twocol" v-if="superpower">
+            <div class="qz-card-feature qz-card-feature--bright">
+                <div class="qz-kicker">// SÜPER GÜCÜN //</div>
+                <h2 class="qz-display qz-chroma" :style="{ fontSize: 'clamp(38px, 5vw, 64px)', lineHeight: '0.9', margin: '8px 0 12px' }">
+                    {{ superpower.title }}
+                </h2>
+                <p class="qz-feature-body">{{ superpower.body }}</p>
+                <div v-if="superpower.combo" class="qz-sticker" :style="{ background: 'var(--qz-yellow)', marginTop: '14px' }">
+                    KOMBO · {{ superpower.combo }}
+                </div>
+            </div>
+            <div v-if="shadowSide" class="qz-card-feature qz-card-feature--dark">
+                <div class="qz-kicker" :style="{ color: 'var(--qz-paper)' }">// KARANLIK TARAFIN //</div>
+                <h2 class="qz-display" :style="{ fontSize: 'clamp(38px, 5vw, 64px)', lineHeight: '0.9', margin: '8px 0 12px', color: 'var(--qz-paper)' }">
+                    {{ shadowSide.title }}
+                </h2>
+                <p class="qz-feature-body" :style="{ color: 'var(--qz-paper)' }">{{ shadowSide.body }}</p>
+                <div class="qz-sticker" :style="{ background: 'var(--qz-red)', color: 'var(--qz-paper)', marginTop: '14px' }">
+                    {{ shadowSide.value }}/10 · GELİŞİM ALANI
+                </div>
+            </div>
+        </div>
+
+        <!-- Nasıl Parlarsın / Nerede Zorlanırsın -->
+        <div class="qz-section qz-twocol">
+            <div v-if="shineMoments.length">
+                <h3>Nasıl parlarsın?</h3>
+                <div class="qz-kicker" :style="{ marginBottom: '14px' }">
+                    Bu sahnelerde sen tam kendinsin —
+                </div>
+                <ul class="qz-list">
+                    <li v-for="(m, i) in shineMoments" :key="i">
+                        <span class="qz-list-num">{{ pad(i + 1) }}</span>
+                        {{ m }}
+                    </li>
+                </ul>
+            </div>
+            <div v-if="struggleMoments.length">
+                <h3>Nerede zorlanırsın?</h3>
+                <div class="qz-kicker" :style="{ marginBottom: '14px' }">
+                    Bu anlarda sen biraz kendinden uzaktasın —
+                </div>
+                <ul class="qz-list qz-list--alt">
+                    <li v-for="(m, i) in struggleMoments" :key="i">
+                        <span class="qz-list-num">{{ pad(i + 1) }}</span>
+                        {{ m }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 3 hayat alanı -->
+        <div class="qz-section">
+            <h3>Hayatın üç alanında sen</h3>
+            <div class="qz-kicker" :style="{ marginBottom: '18px' }">
+                İlişkilerin · Kariyerin · Stres anın
+            </div>
+            <div class="qz-life">
+                <div class="qz-life-card">
+                    <div class="qz-life-icon" :style="{ background: 'var(--qz-pink)' }">♥</div>
+                    <div class="qz-life-title">İlişkilerinde</div>
+                    <p>{{ relationshipText }}</p>
+                </div>
+                <div class="qz-life-card">
+                    <div class="qz-life-icon" :style="{ background: 'var(--qz-yellow)' }">★</div>
+                    <div class="qz-life-title">İş & kariyerinde</div>
+                    <p>{{ careerText }}</p>
+                </div>
+                <div class="qz-life-card">
+                    <div class="qz-life-icon" :style="{ background: 'var(--qz-blue)', color: 'var(--qz-paper)' }">⚡</div>
+                    <div class="qz-life-title">Stres anında</div>
+                    <p>{{ stressText }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bu hafta için -->
+        <div class="qz-section qz-week-tip">
+            <div class="qz-kicker">// BU HAFTA İÇİN BİR DENEY //</div>
+            <h2 class="qz-display" :style="{ fontSize: 'clamp(28px, 4vw, 44px)', margin: '10px 0' }">
+                {{ weekTip }}
+            </h2>
+            <small :style="{ fontFamily: 'var(--qz-mono)', color: 'var(--qz-ink-soft)' }">
+                Quiz'in sana özel önerisi · 7 gün sonra kendine sor
+            </small>
+        </div>
+
+        <!-- Zıt kutbun -->
+        <div v-if="result.opposite" class="qz-section qz-opposite">
+            <div class="qz-row" :style="{ gap: '18px', alignItems: 'center', flexWrap: 'wrap' }">
+                <img
+                    :src="`/images/quiz/characters/${result.opposite.id}.webp`"
+                    :alt="result.opposite.name"
+                    class="qz-opposite-img"
+                    loading="lazy"
+                />
+                <div :style="{ flex: '1 1 280px' }">
+                    <div class="qz-kicker">// EN UZAK FREKANSIN //</div>
+                    <h3 :style="{ margin: '6px 0 8px' }">{{ result.opposite.name }} senin zıt kutbun.</h3>
+                    <p :style="{ margin: 0, color: 'var(--qz-ink-soft)' }">
+                        <em>{{ result.opposite.work }}</em> ({{ result.opposite.year }}) · {{ result.opposite.archetype }}.
+                        Bu karakter sana yabancı geliyor; ama tam olarak senin geliştirmediğin yanların onda var.
+                        Bir akşam onun filmini izle — kendine yabancı bir şey öğrenmek için.
+                    </p>
                 </div>
             </div>
         </div>

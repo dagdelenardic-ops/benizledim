@@ -442,11 +442,24 @@
 }
 .quiz-shell .qz-vs-side {
   position: relative;
-  padding: 28px 22px;
-  min-height: 280px;
+  padding: 0;
+  min-height: 320px;
   cursor: pointer;
-  display: flex; flex-direction: column; justify-content: space-between;
+  display: flex; flex-direction: column;
+  overflow: hidden;
   transition: transform .12s ease, background .15s ease, color .15s ease;
+}
+.quiz-shell .qz-vs-img {
+  width: 100%;
+  aspect-ratio: 1.6 / 1;
+  object-fit: cover;
+  display: block;
+  border-bottom: 2.5px solid var(--qz-ink);
+}
+.quiz-shell .qz-vs-text {
+  padding: 22px 22px 24px;
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
 }
 .quiz-shell .qz-vs-side + .qz-vs-side { border-left: 2.5px solid var(--qz-ink); }
 @media (max-width: 640px) {
@@ -910,4 +923,140 @@
 }
 @media (max-width: 640px) {
   .quiz-shell .qz-start__how { grid-template-columns: 1fr; }
+}
+
+/* ─── Result deep analysis sections ────────────── */
+.quiz-shell .qz-twocol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 880px) {
+  .quiz-shell .qz-twocol { grid-template-columns: 1fr; }
+}
+
+.quiz-shell .qz-card-feature {
+  border: 3px solid var(--qz-ink);
+  border-radius: var(--qz-r-md);
+  padding: 28px 26px;
+  box-shadow: 8px 8px 0 var(--qz-ink);
+  background: var(--qz-paper);
+  position: relative;
+  overflow: hidden;
+}
+.quiz-shell .qz-card-feature--bright {
+  background: linear-gradient(135deg, var(--qz-yellow) 0%, var(--qz-pink) 100%);
+}
+.quiz-shell .qz-card-feature--dark {
+  background: var(--qz-ink);
+  color: var(--qz-paper);
+}
+.quiz-shell .qz-feature-body {
+  font-family: var(--qz-serif);
+  font-size: 18px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.quiz-shell .qz-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.quiz-shell .qz-list li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  background: var(--qz-paper);
+  border: 2px solid var(--qz-ink);
+  border-radius: var(--qz-r-sm);
+  font-family: var(--qz-sans);
+  font-size: 15px;
+  line-height: 1.4;
+}
+.quiz-shell .qz-list--alt li { background: #faf2e6; }
+.quiz-shell .qz-list-num {
+  font-family: var(--qz-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--qz-ink-soft);
+  flex-shrink: 0;
+  padding-top: 2px;
+  letter-spacing: 0.1em;
+}
+
+.quiz-shell .qz-life {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+@media (max-width: 880px) {
+  .quiz-shell .qz-life { grid-template-columns: 1fr; }
+}
+.quiz-shell .qz-life-card {
+  background: var(--qz-paper);
+  border: 2.5px solid var(--qz-ink);
+  border-radius: var(--qz-r-md);
+  padding: 22px 20px;
+  box-shadow: 6px 6px 0 var(--qz-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.quiz-shell .qz-life-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2.5px solid var(--qz-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--qz-display);
+  box-shadow: 3px 3px 0 var(--qz-ink);
+}
+.quiz-shell .qz-life-title {
+  font-family: var(--qz-display);
+  font-size: 22px;
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+.quiz-shell .qz-life-card p {
+  font-family: var(--qz-sans);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0;
+  color: var(--qz-ink);
+}
+
+.quiz-shell .qz-week-tip {
+  background: var(--qz-lilac);
+  border: 3px solid var(--qz-ink);
+  border-radius: var(--qz-r-md);
+  padding: 32px 28px;
+  box-shadow: 10px 10px 0 var(--qz-ink);
+  text-align: center;
+}
+
+.quiz-shell .qz-opposite {
+  background: var(--qz-paper);
+  border: 2.5px solid var(--qz-ink);
+  border-radius: var(--qz-r-md);
+  padding: 22px 24px;
+}
+.quiz-shell .qz-opposite-img {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--qz-ink);
+  box-shadow: 4px 4px 0 var(--qz-ink);
+  flex-shrink: 0;
+  filter: grayscale(0.4);
 }
