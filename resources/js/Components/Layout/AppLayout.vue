@@ -245,7 +245,7 @@ export default {
                 <span>{{ todayLabel }} · İstanbul</span>
                 <div class="hidden items-center gap-4 sm:flex">
                     <Link href="/#bulten" class="inline-flex items-center py-2 hover:text-red-300">Bülten</Link>
-                    <Link href="/podcast" class="inline-flex items-center py-2 hover:text-red-300">Podcast</Link>
+                    <Link href="/quiz" class="inline-flex items-center py-2 hover:text-red-300">Quiz</Link>
                     <button v-if="!authUser" @click="openLoginModal" class="inline-flex items-center py-2 hover:text-red-300">Giriş</button>
                     <Link v-else-if="canAccessCms" href="/admin" class="inline-flex items-center py-2 hover:text-red-300">Admin</Link>
                 </div>
@@ -347,7 +347,7 @@ export default {
                 >
                     {{ cat.name }}
                 </Link>
-                <Link href="/podcast" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Podcast</Link>
+                <Link href="/quiz" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Quiz</Link>
                 <Link href="/festival" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Festival</Link>
             </div>
             <Link href="/ne-izlesem" class="ne-izlesem-nav-button inline-flex min-h-12 min-w-[132px] items-center justify-center px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-white bi-mono">
@@ -369,7 +369,7 @@ export default {
                     <Link v-for="cat in categoryLinks" :key="cat.slug" :href="`/yazilar?category=${cat.slug}`" class="bi-chip" @click="showMobileMenu = false">
                         {{ cat.name }}
                     </Link>
-                    <Link href="/podcast" class="bi-chip" @click="showMobileMenu = false">Podcast</Link>
+                    <Link href="/quiz" class="bi-chip" @click="showMobileMenu = false">Quiz</Link>
                     <Link href="/festival" class="bi-chip" @click="showMobileMenu = false">Festival</Link>
                     <Link href="/sinemalar" class="bi-chip" @click="showMobileMenu = false">Sinemalar</Link>
                     <Link href="/ne-izlesem" class="bi-chip" @click="showMobileMenu = false">Ne İzlesem?</Link>
