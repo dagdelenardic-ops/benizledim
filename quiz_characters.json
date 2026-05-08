@@ -60,7 +60,16 @@
         "control": 10,
         "sensitivity": 4
       },
-      "symbol": "⚗️"
+      "symbol": "⚗️",
+      "famous_quote_tr": "Ben tehlikeyim",
+      "depth_tr": "Walter White, sıradan bir kimya öğretmeninden imparatorluk kuran bir barona dönüşürken, bastırılmış hırslarının ve kontrol etme arzusunun esiri olur. Başarısızlık ve değersizlik duyguları, onu suç dünyasına sürükler.",
+      "shadow_tr": "Walter, ailesine sağladığı finansal güvenliği bahaneyle meşrulaştırdığı bencilce güç arzularını görmezden gelir. Kendi egosu, nihayetinde en büyük düşmanı haline gelir.",
+      "challenge_tr": "Walter, kontrolü kaybetme korkusuyla sürekli tetikte yaşar. Hayatını ve sevdiklerini koruma dürtüsü ile içindeki karanlık istekler arasında sıkışır.",
+      "as_friend_tr": "Walter arkadaşın olsaydı, olayları derinlemesine analiz eden ve stratejik önerilerde bulunan biri olurdu, ama duygusal bağ kurmakta zorlanırdı.",
+      "as_partner_tr": "Walter, bir partner olarak koruyucu ve hesapçı olurdu, ancak manipülatif ve baskın tarafı ilişkide huzursuzluk yaratabilirdi. Güven sorunu yaşanabilirdi.",
+      "career_dna_tr": "Walter, günümüzde bir girişimci veya stratejik danışman olarak parlayabilirdi. Karmaşık problemleri çözme yeteneği ve hesaplı risk almadaki ustalığı, onu bu alanlarda öne çıkarırdı.",
+      "growth_arc_tr": "Walter'ın iç yolculuğu, kendisini ve arzularını dürüstçe kabul etmekten geçer. Güç tutkusu ve kontrol ihtiyacıyla yüzleşerek gerçek özgürlüğü bulması gerekir.",
+      "if_you_are_tr": "Sen bir Walter White'san, içindeki potansiyeli ve hırsı keşfetmek için yalnızca fırsata ihtiyaç duyuyorsun. Ancak dikkat etmelisin; kontrol isteğin ve egon seni yanlış yollara sürükleyebilir."
     },
     {
       "id": "series_got_daenerys",
@@ -97,7 +106,16 @@
         "control": 7,
         "sensitivity": 6
       },
-      "symbol": "🐉"
+      "symbol": "🐉",
+      "famous_quote_tr": "Ateş ve kan",
+      "depth_tr": "Daenerys Targaryen, ailesinin yıkımından doğan bir kimlik arayışının içinde güç kazanır. Kendisini halkını kurtaracak bir lider olarak görür, ancak bu misyon, zamanla kör bir güç arzusuna dönüşür.",
+      "shadow_tr": "Daenerys, kendisini kurtarıcı olarak görse de, iktidar hırsı ve intikam duygusu, adalet anlayışını gölgede bırakır.",
+      "challenge_tr": "Daenerys, iktidar ve adalet arasında denge kurmakta zorlanır. Sevdiklerinin ve sadakatlerinin sınırlarıyla yüzleşmek zorunda kalır.",
+      "as_friend_tr": "Daenerys arkadaşın olsaydı, ilham verici ve kararlı bir dost olurdu. Ancak hırslı doğasıyla bazen fazla talepkâr ve hükmedici olabilirdi.",
+      "as_partner_tr": "Daenerys, bir partner olarak tutkulu ve koruyucu bir eş olurdu, ancak liderlik arzusu ve kontrol tutkusu zaman zaman çatışmalara yol açabilirdi.",
+      "career_dna_tr": "Daenerys, günümüzde bir politikacı veya insan hakları savunucusu olarak parlayabilirdi. İdealleri uğruna savaşma azmi ve hitabet yeteneği, ona bu alanlarda güç kazandırırdı.",
+      "growth_arc_tr": "Daenerys'in tamamlaması gereken yolculuk, güç ve şefkat arasında bir denge kurarak gerçek bir lider olmayı öğrenmektir. İktidarın sorumluluğunu anlaması gerekir.",
+      "if_you_are_tr": "Sen bir Daenerys'sen, adaletin ve liderliğin sembolüsün. Ancak dikkat etmelisin; hırsların seni yıkıcı bir yola sürükleyebilir."
     },
     {
       "id": "series_muhtesemyuzyil_hurrem",
@@ -134,7 +152,16 @@
         "control": 9,
         "sensitivity": 6
       },
-      "symbol": "👑"
+      "symbol": "👑",
+      "famous_quote_tr": "Taht oyunları",
+      "depth_tr": "Hürrem Sultan, kölelikten sarayın en güçlü kadınına yükselirken, hem hayatta kalmanın hem de hırslarının peşinden gitmenin zorluklarını yaşar. Geçmişteki acılar ve kayıplar, onu güçlü ve stratejik bir karakter haline getirir.",
+      "shadow_tr": "Hürrem, gücünü koruma uğruna manipülatif ve entrikacı yöntemler kullanır, bu da onun insani yönünü gölgede bırakır.",
+      "challenge_tr": "Hürrem, sevdiklerini koruma ve gücünü kaybetmeme çabası arasında sıkışır. Duygusal bağlarını güç arzusu ile dengelemek zorundadır.",
+      "as_friend_tr": "Hürrem arkadaşın olsaydı, sadık ve stratejik bir dost olurdu. Ancak hedeflerine ulaşmak için sınırları zorlayabilir, bu da bazı çatışmalara yol açabilirdi.",
+      "as_partner_tr": "Hürrem, bir partner olarak tutkulu ve sadık olurdu, ancak güvensizlikleri ve güç tutkusu ilişkide huzursuzluk yaratabilirdi.",
+      "career_dna_tr": "Hürrem, günümüzde bir politika analisti veya stratejik planlayıcı olarak parlayabilirdi. Karmaşık ilişkilerde ustaca manevra yapma yeteneği onu bu alanlarda başarılı kılardı.",
+      "growth_arc_tr": "Hürrem'in tamamlaması gereken iç yolculuk, güç ve duygusallık arasındaki dengeyi kurarak gerçek mutluluğa ulaşmaktır. Duygularını bastırmadan, hedeflerine ulaşmayı öğrenmelidir.",
+      "if_you_are_tr": "Sen bir Hürrem'sen, zekân ve stratejik düşüncenle dikkat çekiyorsun. Ancak dikkat etmelisin; güç tutkusu bazen seni yalnızlaştırabilir."
     },
     {
       "id": "series_askimemnu_bihter",
@@ -171,7 +198,16 @@
         "control": 5,
         "sensitivity": 10
       },
-      "symbol": "💔"
+      "symbol": "💔",
+      "famous_quote_tr": "Yasak aşk",
+      "depth_tr": "Bihter Ziyagil, sevgi ve ilgi arayışında, geçmişindeki travmaların gölgesinde kalır. Annesiyle yaşadığı çatışmalar ve kabul görme isteği, onu tutkulu ama yıkıcı bir aşkın kollarına iter.",
+      "shadow_tr": "Bihter, içindeki boşluğu doldurma çabasıyla bencilce davranır ve bu, çevresindekilere zarar verir. Kendi mutluluğu uğruna başkalarını manipüle eder.",
+      "challenge_tr": "Bihter, kendi duygusal boşluğunu doldurmakta ve gerçek sevgiyi bulmakta zorlanır. İç huzuru bulmak onun için sürekli bir mücadeledir.",
+      "as_friend_tr": "Bihter arkadaşın olsaydı, duygusal ve empatik bir dost olurdu. Ancak zaman zaman kendi dramlarını aşırı önemseyebilir, bu da ilişkide dengesizlik yaratabilirdi.",
+      "as_partner_tr": "Bihter, bir partner olarak tutkulu ve romantik olurdu, ancak güvensizlikleri ve kıskançlıkları ilişkiyi zora sokabilirdi.",
+      "career_dna_tr": "Bihter, günümüzde bir moda tasarımcısı veya yaşam koçu olarak parlayabilirdi. Estetik duyarlılığı ve duygusal derinliği, onu bu alanlarda öne çıkarırdı.",
+      "growth_arc_tr": "Bihter'in tamamlaması gereken iç yolculuk, kendini sevmeyi ve kabul etmeyi öğrenmektir. Dışardan gelen onay yerine, içsel huzuru bulmalıdır.",
+      "if_you_are_tr": "Sen bir Bihter'sen, duygusal derinliğin ve estetik anlayışınla dikkat çekiyorsun. Ancak dikkat etmelisin; duygusal boşluklar seni yanlış ilişkilere sürükleyebilir."
     },
     {
       "id": "series_ezel_ezel",
@@ -208,7 +244,16 @@
         "control": 9,
         "sensitivity": 6
       },
-      "symbol": "🔫"
+      "symbol": "🔫",
+      "famous_quote_tr": "İntikam soğuk yenen bir yemektir",
+      "depth_tr": "Ezel Bayraktar, ihanetin derin yaralarıyla, intikam yolunda kendini yeniden inşa eder. Geçmişin hayal kırıklıkları, onu soğukkanlı ve hesapçı bir insana dönüştürür.",
+      "shadow_tr": "Ezel, intikam arzusuyla kendini kaybetmiş, gerçek duygularını bastırmıştır. Bu, ona hem güç verir hem de içsel huzursuzluk yaratır.",
+      "challenge_tr": "Ezel, intikam hırsıyla adalet duygusu arasında gidip gelir. Geçmişi unutma ve affetme yeteneğini kazanmakta zorlanır.",
+      "as_friend_tr": "Ezel arkadaşın olsaydı, sadık ve stratejik bir dost olurdu. Ancak kendi iç dünyasındaki çatışmaları nedeniyle zaman zaman mesafeli kalabilirdi.",
+      "as_partner_tr": "Ezel, bir partner olarak gizemli ve çekici olurdu, ancak güven sorunları ve intikam arzusuyla ilişkide sorunlar yaşanabilirdi.",
+      "career_dna_tr": "Ezel, günümüzde bir dedektif veya stratejik danışman olarak parlayabilirdi. Analitik zekâsı ve detaylara olan dikkati, onu bu alanlarda başarılı kılardı.",
+      "growth_arc_tr": "Ezel'in tamamlaması gereken iç yolculuk, intikamın ötesine geçip, affetmeyi ve iç huzuru bulmayı öğrenmektir. Geçmişin yüklerinden kurtulması gerekir.",
+      "if_you_are_tr": "Sen bir Ezel'sen, stratejik zekân ve kararlılığınla dikkat çekiyorsun. Ancak dikkat etmelisin; intikam arzun seni tüketebilir ve gerçek mutluluğu gölgeleyebilir."
     },
     {
       "id": "series_behzatc_behzat",
@@ -245,7 +290,16 @@
         "control": 6,
         "sensitivity": 6
       },
-      "symbol": "🕵️‍♂️"
+      "symbol": "🕵️‍♂️",
+      "famous_quote_tr": "Karanlık işler",
+      "depth_tr": "Behzat Ç., adalet arayışında, kendi iç çatışmalarının ve geçmiş travmalarının etkisiyle boğuşur. Suç dünyasında kaybolmuş bir vicdanın izlerini taşır.",
+      "shadow_tr": "Behzat, içindeki karanlık ve öfkeyi bastırmaya çalışırken, zaman zaman adalet ve intikam duyguları arasında sıkışır.",
+      "challenge_tr": "Behzat, adalet arayışı ile iç huzuru bulmak arasında denge kurmakta zorlanır. Geçmişin yüklerini geride bırakmak onun için zordur.",
+      "as_friend_tr": "Behzat arkadaşın olsaydı, dürüst ve sadık bir dost olurdu. Ancak kendi içsel çatışmaları nedeniyle zaman zaman mesafeli ve zorlayıcı olabilirdi.",
+      "as_partner_tr": "Behzat, bir partner olarak koruyucu ve dürüst olurdu, ancak geçmişin izleri ve öfke patlamaları ilişkiyi zora sokabilirdi.",
+      "career_dna_tr": "Behzat, günümüzde bir dedektif veya özel araştırmacı olarak parlayabilirdi. Adalet duygusu ve kararlı yapısı onu bu alanlarda öne çıkarırdı.",
+      "growth_arc_tr": "Behzat'ın tamamlaması gereken iç yolculuk, geçmişin travmalarını geride bırakıp, iç huzuru bulmaktır. Adalet arayışında kendini kaybetmeden, gerçek benliğini bulmalıdır.",
+      "if_you_are_tr": "Sen bir Behzat'san, adaletin ve dürüstlüğün savunucususun. Ancak dikkat etmelisin; içindeki karanlık ve öfke, seni bazen yanlış yollara sürükleyebilir."
     },
     {
       "id": "series_sahsiyet_agah",
@@ -282,7 +336,16 @@
         "control": 7,
         "sensitivity": 7
       },
-      "symbol": "📜"
+      "symbol": "📜",
+      "famous_quote_tr": "Yaşamak için bir sebep yoksa ölmek için bir sebep de yok",
+      "depth_tr": "Agah Beyoğlu, hayatının son demlerinde adalet peşinde koşan bir adamdır. Geçmişin pişmanlıkları ve adaletsizlikleriyle yüzleşmek için ailesinden ve toplumdan koparak kendi yolculuğunu başlatır.",
+      "shadow_tr": "Kendi adaletini sağlamak için yola çıktığında bile, geçmişin hatalarından kaçamayacağını ve yalnızlığının aslında kendi seçimleriyle şekillendiğini görmezden gelir.",
+      "challenge_tr": "Agah, unutulmak ve yaşadığı haksızlıkların hesabını sormadan ölmekten korkar. Toplumsal normlar ve kişisel vicdan arasında sıkışıp kalmıştır.",
+      "as_friend_tr": "Agah arkadaşın olsa, sessiz ama derin bir bilgelik sunar, ancak duygusal olarak mesafeli kalabilir.",
+      "as_partner_tr": "Partner olarak, kararlı ve koruyucu olur, fakat kendi iç hesaplaşmaları nedeniyle duygusal olarak kapalı kalabilir.",
+      "career_dna_tr": "Günümüzde olsa, adaletin ve vicdanın peşinde bir dedektif veya araştırmacı gazeteci olarak parlayabilir. Keskin gözlem yeteneği ve adalete olan bağlılığı bu mesleklerde onu ön plana çıkarır.",
+      "growth_arc_tr": "Agah'ın tamamlaması gereken iç yolculuk, intikam ve adalet arasındaki ince çizgiyi bulması ve geçmişin yüklerinden özgürleşmesidir.",
+      "if_you_are_tr": "Sen bir sessiz hesap isen, içindeki adalet arayışını serbest bırak. Geçmişin yükleri seni ezmesin, kendi adaletini bul ve huzura kavuş."
     },
     {
       "id": "series_birbaskadir_meryem",
@@ -319,7 +382,16 @@
         "control": 5,
         "sensitivity": 9
       },
-      "symbol": "🌌"
+      "symbol": "🌌",
+      "famous_quote_tr": "Bazı şeyler var, içime atıyorum",
+      "depth_tr": "Meryem, geleneksel yapının içinde sıkışmış bir kadındır, fakat içsel sezgileri ve empatisiyle çevresini anlamlandırır. Kendini ifade etme konusunda çekingen olsa da, derin bir içsel güce sahiptir.",
+      "shadow_tr": "Kendi ihtiyaçlarını ve isteklerini sürekli bastırarak varlığını sadece başkalarına adar, bu da kendi benliğini keşfetmesini engeller.",
+      "challenge_tr": "Meryem, kendi sesini bulmak ve toplumun beklentilerini aşmakta zorlanır. Kendi içsel dünyasını keşfetmek yerine başkalarının hayatlarının gölgesinde kalır.",
+      "as_friend_tr": "Meryem arkadaşın olsa, her zaman dinler ve anlar, fakat kendi dertlerini paylaşmakta çekingen davranabilir.",
+      "as_partner_tr": "Partner olarak, sadık ve anlayışlıdır, ancak kendi duygusal ihtiyaçlarını ifade etmekte zorlanabilir, bu da ilişkide dengesizlik yaratabilir.",
+      "career_dna_tr": "Meryem, bir sosyal hizmet uzmanı veya terapist olarak parlayabilir. İnsanları anlama yeteneği ve empatisi, bu tür mesleklerde onu başarılı kılar.",
+      "growth_arc_tr": "Meryem'in iç yolculuğu, kendi sesini bulması ve toplumun sınırlamalarını aşarak kendi gerçekliğini inşa etmesidir.",
+      "if_you_are_tr": "Sen bir sessiz dayanıklılık isen, içindeki gücü keşfet ve kendi sesine kulak ver. Toplumun kurallarından bağımsız olarak kendi yolunu çiz."
     },
     {
       "id": "series_leylailemecnun_mecnun",
@@ -356,7 +428,16 @@
         "control": 2,
         "sensitivity": 10
       },
-      "symbol": "💞"
+      "symbol": "💞",
+      "famous_quote_tr": "Aşksız hayat, hayatsız aşk",
+      "depth_tr": "Mecnun, aşkı hayatının merkezine koyan, hayalperest ve duygusal bir karakterdir. Onun yaşam felsefesi, aşkın her şeyin üstesinden gelebileceğine dair sarsılmaz bir inançtır.",
+      "shadow_tr": "Aşkın peşinde koşarken gerçeklikten kaçma eğilimindedir. Kendi duygusal karmaşasını aşkta kaybolarak çözmeye çalışır.",
+      "challenge_tr": "Mecnun, aşkın ve hayalin peşinde koşarken gerçek dünyayla yüzleşmekte zorlanır. Duygusal dalgalanmaları onu sık sık savunmasız bırakır.",
+      "as_friend_tr": "Mecnun arkadaşın olsa, eğlenceli ve samimi bir dost olur, fakat zaman zaman kendi dünyasında kaybolabilir.",
+      "as_partner_tr": "Partner olarak, romantik ve tutkulu olur, fakat gerçeklerle yüzleşmekten kaçınabilir ve bu da ilişkide sorunlara yol açabilir.",
+      "career_dna_tr": "Mecnun, bir sanatçı veya yazar olarak parlayabilir. Hayal gücü ve duygusal derinliği, onu yaratıcı alanlarda başarılı kılar.",
+      "growth_arc_tr": "Mecnun'un iç yolculuğu, aşk ve gerçeklik arasında denge kurarak duygusal olgunluğa erişmektir.",
+      "if_you_are_tr": "Sen bir hayal gücü kalkanı isen, hayallerinle dünyayı renklendir. Ancak gerçek dünyayı da kabullen, çünkü denge her şeydir."
     },
     {
       "id": "series_bettercallsaul_kim",
@@ -393,7 +474,16 @@
         "control": 9,
         "sensitivity": 6
       },
-      "symbol": "⚖️"
+      "symbol": "⚖️",
+      "famous_quote_tr": "Sınırlarım var ve bunları bilmeni istiyorum",
+      "depth_tr": "Kim Wexler, disiplinli ve çalışkan bir avukattır, fakat içsel olarak sürekli sınırlarını zorlar. Başarıya olan açlığı ve etik değerlere bağlılığı arasında sıkışır.",
+      "shadow_tr": "Kendi sınırlarını ve duygusal ihtiyaçlarını ihmal ederek tükenmişlik yaşar. Başkalarını kurtarmaya çalışırken kendi iç çatışmalarını görmezden gelir.",
+      "challenge_tr": "Kim, profesyonel başarı ve kişisel mutluluk arasında denge kurmakta zorlanır. İdealist beklentileri onu sürekli olarak zorlar.",
+      "as_friend_tr": "Kim arkadaşın olsa, sadık ve destekleyici olur, fakat kendi meselelerini paylaşmakta isteksiz olabilir.",
+      "as_partner_tr": "Partner olarak, güvenilir ve dürüsttür, ancak işine olan bağlılığı duygusal mesafeye neden olabilir.",
+      "career_dna_tr": "Kim, bir hukuk danışmanı veya politik stratejist olarak parlayabilir. Analitik zekası ve kararlılığı bu alanlarda onu ön plana çıkarır.",
+      "growth_arc_tr": "Kim'in iç yolculuğu, profesyonel ve kişisel yaşamı arasında denge kurarak kendi mutluluğunu inşa etmektir.",
+      "if_you_are_tr": "Sen bir disiplinli gerçekçi isen, başarı senin için vazgeçilmezdir. Ancak kişisel mutluluğunu da ihmal etme, denge her şeydir."
     },
     {
       "id": "series_sherlock_sherlock",
@@ -430,7 +520,16 @@
         "control": 8,
         "sensitivity": 4
       },
-      "symbol": "🔍"
+      "symbol": "🔍",
+      "famous_quote_tr": "Basit bir denklem, çözülemeyecek bir şey yok",
+      "depth_tr": "Sherlock Holmes, mantık ve analitik düşüncenin zirvesinde yaşayan bir dedektiftir. İnsanların duygusal karmaşaları yerine zihinsel bulmacalarla ilgilenir.",
+      "shadow_tr": "Duygusal bağlar kurmaktan kaçınarak insan ilişkilerinde zayıf kalır. Empati eksikliği, yalnızlığını derinleştirir.",
+      "challenge_tr": "Sherlock, insanları anlamakta ve duygusal ilişkiler kurmakta zorlanır. Zihinsel üstünlüğü, onu duygusal anlamda yalıtır.",
+      "as_friend_tr": "Sherlock arkadaşın olsa, zekası ve gözlem yeteneğiyle şaşırtır, fakat duygusal destek sunmakta yetersiz kalabilir.",
+      "as_partner_tr": "Partner olarak, entelektüel olarak meydan okur, ancak duygusal yakınlık kurmakta zorlanabilir.",
+      "career_dna_tr": "Sherlock, bir veri analisti veya kriminolog olarak parlayabilir. Analitik zekası ve detaycılığı bu alanlarda onu eşsiz kılar.",
+      "growth_arc_tr": "Sherlock'un iç yolculuğu, mantık ve duygular arasında denge kurarak insan ilişkilerini derinleştirmektir.",
+      "if_you_are_tr": "Sen bir keskin zihin isen, mantığınla dünyayı çözersin. Ancak duygusal bağların da hayatın bir parçası olduğunu unutma."
     },
     {
       "id": "series_house_house",
@@ -467,7 +566,16 @@
         "control": 6,
         "sensitivity": 5
       },
-      "symbol": "🩺"
+      "symbol": "🩺",
+      "famous_quote_tr": "Herkes yalan söyler",
+      "depth_tr": "Gregory House, zeki fakat alaycı bir doktordur ve insan doğasına karşı derin bir şüphecilik besler. Tıbbi bilmeceleri çözmek için sıradışı yöntemler kullanır, fakat kişisel ilişkilerde mesafelidir.",
+      "shadow_tr": "Kendini duygusal olarak kapatarak yalnızlaşır ve empatiden yoksun kalır. İnsanlara güvenmekte zorlanır, bu da ilişkilerini zedeler.",
+      "challenge_tr": "House, hem kendi içsel acılarıyla hem de başkalarının duygusal talepleriyle başa çıkmakta zorlanır. Duygusal izolasyonu onu yıpratır.",
+      "as_friend_tr": "House arkadaşın olsa, zekası ve mizahıyla ilginç bir dost olur, fakat duygusal destek sunmakta zorlanabilir.",
+      "as_partner_tr": "Partner olarak, zekasıyla etkiler, fakat duygusal yakınlık kurma konusunda sıkıntı yaşatabilir, bu da ilişkiyi zorlaştırır.",
+      "career_dna_tr": "House, bir tıbbi dedektif veya biyoteknoloji araştırmacısı olarak parlayabilir. Analitik zekası ve problem çözme yeteneği bu alanlarda onu eşsiz kılar.",
+      "growth_arc_tr": "House'un iç yolculuğu, duygusal bağları kabul edip insanlara güvenmeyi öğrenmektir.",
+      "if_you_are_tr": "Sen bir sivri deha isen, zekanla sorunları çözersin. Ancak duygusal bağların da hayatın bir parçası olduğunu unutma."
     },
     {
       "id": "series_strangerthings_eleven",
@@ -504,7 +612,16 @@
         "control": 4,
         "sensitivity": 9
       },
-      "symbol": "⚡"
+      "symbol": "⚡",
+      "famous_quote_tr": "Gitmek istemiyorum",
+      "depth_tr": "Eleven, deneylerle dolu bir çocukluk geçirirken, ailesizliğin ve güvensizliğin izlerini derinlemesine taşır. Üzerindeki baskılar ve yalnızlık duygusu, onu korumacı bir karaktere dönüştürmüştür.",
+      "shadow_tr": "Kendi bağımsızlığını tam anlamıyla kabul etmekte zorlanır, çünkü sürekli başkalarına bağlı hissetmiştir. Gücünü kontrol etmekte zaman zaman zorlanabilir.",
+      "challenge_tr": "Normal bir yaşam sürdürme arzusu, geçmişinin izleriyle sürekli çarpışır. Kendi kimliğini bulmak en büyük mücadelesidir.",
+      "as_friend_tr": "Sadık ve koruyucu bir arkadaş olurdu, tehlike anında sizi savunur. Ancak, duygusal derinliğini her zaman paylaşmayabilir.",
+      "as_partner_tr": "Duygusal bağ kurmada yetenekli olsa da, geçmiş travmaları nedeniyle ilişkide zaman zaman içe kapanabilir. Güçlü bir destek ve anlayışa ihtiyaç duyar.",
+      "career_dna_tr": "Günümüzde bir sosyal hizmet uzmanı olarak, özellikle de çocuklarla çalışarak parlayabilirdi. Kendi deneyimleri, empati yeteneğini artırır.",
+      "growth_arc_tr": "Kendi kimliğini ve gücünü kabul ederek, geçmişin yüklerinden kurtulup geleceğe umutla bakmayı öğrenmelidir.",
+      "if_you_are_tr": "Sen bir yalnız savaşçıysan, içindeki gücü keşfederken, geçmişinin seni tanımlamadığını hatırla. Kendi yolunu çizmekte özgürsün."
     },
     {
       "id": "series_lacasa_professor",
@@ -541,7 +658,16 @@
         "control": 10,
         "sensitivity": 6
       },
-      "symbol": "🎭"
+      "symbol": "🎭",
+      "famous_quote_tr": "Planın bir parçası",
+      "depth_tr": "The Professor, babasının ölümüyle erken yaşta sorumluluk almak zorunda kalmış, bu da onu bir strateji ustasına dönüştürmüştür. Disiplin ve zekası, onun en güçlü silahlarıdır.",
+      "shadow_tr": "Duygusal bağlar kurmaktan kaçınır ve insanları birer piyon gibi görebilir. Zayıflık olarak gördüğü duygusal yönlerini kabullenmekte zorlanır.",
+      "challenge_tr": "Kontrolü kaybetme korkusu, onu sürekli tetikte tutar. İlişkilerde samimiyeti ve içtenliği bulmakta zorlanır.",
+      "as_friend_tr": "Zeki ve stratejik bir arkadaş olurdu, her zaman bir adım önde düşünüp sizi korur. Ancak duygusal destek sunmada eksik kalabilir.",
+      "as_partner_tr": "Planlı ve detaycı bir partner olurdu, ancak ilişkide spontane olmayı öğrenmesi gerekebilir. Duygusal derinlikte eksiklik hissedebilirsiniz.",
+      "career_dna_tr": "Günümüzde başarılı bir strateji danışmanı veya yönetim analisti olarak parlayabilirdi. Analitik düşünce yeteneği ve planlama becerisi üst seviyededir.",
+      "growth_arc_tr": "Duygusal zırhını indirip, insanlara güvenmeyi öğrenerek daha derin ve anlamlı ilişkiler kurmayı başarmalıdır.",
+      "if_you_are_tr": "Sen bir strateji uzmanıysan, mükemmeliyetçiliğin ve kontrol tutkun seni durdurmasın. İnsanlara güvenmeyi ve duygusal bağlar kurmayı dene."
     },
     {
       "id": "series_queensgambit_beth",
@@ -578,7 +704,16 @@
         "control": 8,
         "sensitivity": 7
       },
-      "symbol": "♟️"
+      "symbol": "♟️",
+      "famous_quote_tr": "Satranç benim dünyam",
+      "depth_tr": "Beth, çocukluk travmaları ve bağımlılıkla dolu bir geçmişe sahiptir. Satranç, onun için bir kaçış ve kendini ifade etme aracıdır, bu yüzden ona tutkuyla bağlıdır.",
+      "shadow_tr": "Bağımlılıkları ve kendine olan güvensizliği, başarılarının önünde engel oluşturur. Duygusal zayıflıklarını kabul etmekte zorlanır.",
+      "challenge_tr": "Kendini ve duygularını yönetmek, özellikle de bağımlılıklarla olan mücadelesi en büyük zorluğudur. Kendi değerini anlamakta zorlanır.",
+      "as_friend_tr": "Zeki ve odaklı bir arkadaş olurdu, sizi motive eder ama duygusal yakınlık kurmakta zorlanabilir. Hırslı doğası gereği bazen kendi dünyasına dalabilir.",
+      "as_partner_tr": "Tutkulu ama karmaşık bir partner olurdu, bağlılıkları ve bağımlılıkları ilişkide dalgalanmalara neden olabilir. Sabır ve destek gerektirir.",
+      "career_dna_tr": "Günümüzde bir satranç koçu veya strateji uzmanı olarak parlayabilirdi. Analitik düşünce ve odaklanma yeteneği dikkat çekicidir.",
+      "growth_arc_tr": "Kendi iç dünyasını ve duygusal bağımlılıklarını yönetmeyi öğrenerek, iç huzuru bulmalıdır. Kendi değerini tanımalı ve kabul etmelidir.",
+      "if_you_are_tr": "Sen bir yalnız usta isen, yeteneklerinin ötesinde içsel huzuru bulmanın yollarını ara. Başarı, sadece dışarıda değil, içinde de aranmalıdır."
     },
     {
       "id": "series_mrrobot_elliot",
@@ -615,7 +750,16 @@
         "control": 7,
         "sensitivity": 9
       },
-      "symbol": "💻"
+      "symbol": "💻",
+      "famous_quote_tr": "Toplum bir hata",
+      "depth_tr": "Elliot, çocukluk travmaları ve yalnızlıkla şekillenen bir iç dünyaya sahiptir. İletişim kurmakta zorlanır, bu yüzden kendini teknolojiyle ifade eder.",
+      "shadow_tr": "Paranoyası ve sosyal izolasyonu, onu gerçek dünyadan koparır. Kendi duygusal zayıflıklarını kabul etmekte zorlanır.",
+      "challenge_tr": "Kendini toplumdan soyutlamış olması, sosyal ilişkilerde büyük bir engeldir. İçsel çatışmaları ve paranoyası, günlük yaşamını zorlaştırır.",
+      "as_friend_tr": "Sadık ama mesafeli bir arkadaş olurdu, derin bir anlayış sunabilir ancak duygusal bağ kurmakta zorlanabilir. Teknolojiyle sizi şaşırtabilir.",
+      "as_partner_tr": "Gizemli ve içe dönük bir partner olarak, ilişkide duygusal iniş çıkışlar yaşatabilir. İlişkinin içinde samimiyet ve güven inşa etmek zaman alır.",
+      "career_dna_tr": "Günümüzde bir siber güvenlik uzmanı veya yazılım geliştirici olarak parlayabilirdi. Teknolojiye olan derin ilgisi ve yeteneği belirgindir.",
+      "growth_arc_tr": "Kendi içsel çatışmalarını ve korkularını aşarak, daha güvenli ve samimi ilişkiler kurmayı öğrenmelidir. Kendine ve başkalarına güvenmeyi başarmalıdır.",
+      "if_you_are_tr": "Sen bir derin yalnızsan, kendi iç dünyanı anlamaya çalışırken, başkalarıyla bağlantı kurmanın yollarını ara. Teknolojiye olan bağlılığın, gerçek dünyadan tamamen kopmana engel olmasın."
     },
     {
       "id": "series_peaky_tommy",
@@ -652,7 +796,16 @@
         "control": 9,
         "sensitivity": 6
       },
-      "symbol": "🎩"
+      "symbol": "🎩",
+      "famous_quote_tr": "İşlerimizi büyütüyoruz",
+      "depth_tr": "Tommy Shelby, savaşın izlerini ve aile sorumluluğunu omuzlarında taşıyan bir liderdir. Güç ve kontrol arayışı, onun yaşamının merkezindedir.",
+      "shadow_tr": "Duygusal yakınlık kurmakta zorlanır ve insanları araç olarak görebilir. Geçmişin acılarıyla yüzleşmekten kaçınır.",
+      "challenge_tr": "Güç ve kontrol arzusu, onu sürekli bir mücadele içinde tutar. Duygusal bağlar kurmak ve güvenmek en büyük zorluklarıdır.",
+      "as_friend_tr": "Sadık ve koruyucu bir arkadaş olurdu, sizi her durumda savunur. Ancak duygusal yönlerini paylaşmakta cimri olabilir.",
+      "as_partner_tr": "Güçlü ve etkileyici bir partner, ancak duygusal derinlikte eksiklik hissedebilirsiniz. Kontrolü elden bırakmakta zorlanabilir.",
+      "career_dna_tr": "Günümüzde başarılı bir iş adamı veya girişimci olarak parlayabilirdi. Liderlik ve stratejik düşünme yetenekleri dikkat çekicidir.",
+      "growth_arc_tr": "Duygusal zırhını indirip, güvenli ve samimi ilişkiler kurmayı öğrenmelidir. Geçmişin yüklerinden kurtulup, huzuru bulmalıdır.",
+      "if_you_are_tr": "Sen bir soğukkanlı lidersen, gücün ve kontrolün seni insanlardan uzaklaştırmasına izin verme. Duygusal bağlar, liderliğinin en güçlü yönlerinden biri olabilir."
     },
     {
       "id": "series_fleabag_fleabag",
@@ -689,7 +842,16 @@
         "control": 3,
         "sensitivity": 9
       },
-      "symbol": "🐾"
+      "symbol": "🐾",
+      "famous_quote_tr": "Hayatım bir karmaşa",
+      "depth_tr": "Fleabag, mizahı ve alaycılığı, kayıplar ve hayal kırıklıklarıyla dolu hayatında bir kalkan olarak kullanır. Duygusal karmaşalarını mizahla örtbas eder.",
+      "shadow_tr": "Duygusal derinliğini ve kırılganlığını kabul etmekten kaçınır. Kendi hatalarını ve acılarını yüzleşmekten çekinir.",
+      "challenge_tr": "Kendi içsel karmaşasını ve kırılganlığını anlamak, en büyük zorluğudur. Duygusal bağlar kurmakta ve sürdürmekte zorlanır.",
+      "as_friend_tr": "Neşeli ve esprili bir arkadaş olurdu, sizi güldürür ve destekler. Ancak duygusal derinlikte eksiklik hissedebilirsiniz.",
+      "as_partner_tr": "Eğlenceli ve esprili bir partner olurdu, ancak ilişkide derinlik arayanlar için yüzeyde kalabilir. Duygusal karmaşası ilişkide dalgalanmalara neden olabilir.",
+      "career_dna_tr": "Günümüzde bir stand-up komedyen veya yazar olarak parlayabilirdi. Mizah yeteneği ve keskin gözlemleri dikkat çekicidir.",
+      "growth_arc_tr": "Duygusal zırhını indirip, kırılganlığını ve gerçek duygularını kabul ederek daha derin ve anlamlı ilişkiler kurmayı öğrenmelidir.",
+      "if_you_are_tr": "Sen bir mizahla hayatta kalansan, duygusal zırhını indir ve gerçek seni keşfet. Mizah, sadece bir kalkan değil, aynı zamanda kendini ifade etmenin güçlü bir yolu olabilir."
     },
     {
       "id": "film_ironman_tony",
@@ -726,7 +888,16 @@
         "control": 6,
         "sensitivity": 5
       },
-      "symbol": "🤖"
+      "symbol": "🤖",
+      "famous_quote_tr": "Endüstriyel ilerlemenin öncüsü",
+      "depth_tr": "Tony Stark, çocuk yaşta babasının gölgesinde büyüyerek kendi kimliğini bulmaya çalıştı. Bu arayış, onu teknoloji dehası ve kendine güvenen bir lider haline getirdi.",
+      "shadow_tr": "İçinde her zaman yetersizlik duygusunu bastırmış, sürekli daha fazlasını istemiştir. Bu doyumsuzluk, onu zaman zaman bencil ve duygusal olarak izole edebilir.",
+      "challenge_tr": "Kendi içindeki boşluğu doldurmak için sürekli yeni projelerle meşgul olur, ancak bu da onu gerçek duygusal bağlardan uzaklaştırır.",
+      "as_friend_tr": "Macera dolu, eğlenceli ve zekice sohbetler sunan bir dost olurdu. Ancak, bazen kendi dünyasına fazlasıyla dalarak arkadaşlarını ihmal edebilir.",
+      "as_partner_tr": "İlişkide tutkulu ve cömert olurdu, ancak duygusal mesafesi ve işkolik yapısı sorun yaratabilir.",
+      "career_dna_tr": "Günümüzde, teknoloji girişimcisi veya yenilikçi bir mühendis olarak parlayabilirdi. Zekası ve vizyoner bakış açısıyla sektörde devrim yaratırdı.",
+      "growth_arc_tr": "Gerçek duygusal bağlar kurarak, kendini sevgi ve kabul yoluyla bütünlemeyi öğrenmesi gerekir.",
+      "if_you_are_tr": "Sen bir vizyonersen, teknoloji ve yenilik peşindeysen, Tony'nin içsel yolculuğuna dikkat et. Dış başarıların, içsel huzurunu gölgelememeli."
     },
     {
       "id": "film_darkknight_batman",
@@ -763,7 +934,16 @@
         "control": 8,
         "sensitivity": 4
       },
-      "symbol": "🦇"
+      "symbol": "🦇",
+      "famous_quote_tr": "Adaletin sessiz koruyucusu",
+      "depth_tr": "Bruce Wayne, ailesinin trajik ölümünden sonra travma ve suçluluk duygusuyla mücadele etti. Bu, onu adalet arayışında kararlı ve içsel olarak yaralı bir kahraman yaptı.",
+      "shadow_tr": "Kendi içindeki karanlık ve intikam arzusu, onu bazen acımasız ve yalnız birine dönüştürebilir.",
+      "challenge_tr": "Kendi içindeki intikam arzusu ve yalnızlık, onu duygusal olarak izole eder ve yakın ilişkiler kurmasını zorlaştırır.",
+      "as_friend_tr": "Sadık ve koruyucu bir arkadaş olurdu, ancak duygularını paylaşmakta zorlanabilir ve mesafeli kalabilir.",
+      "as_partner_tr": "İlişkide derin ve koruyucu olurdu, ancak duygusal mesafesi ve sürekli tehlikeyle iç içe oluşu zorluk yaratabilir.",
+      "career_dna_tr": "Günümüzde, bir savcı veya dedektif olarak adalet peşinde koşarak parlayabilirdi. Analitik zekası ve kararlılığı bu alanlarda ona avantaj sağlar.",
+      "growth_arc_tr": "Kendi içindeki karanlığı kabul ederek, başkalarına daha fazla güvenmeyi ve duygusal dengeyi bulmayı öğrenmesi gerekir.",
+      "if_you_are_tr": "Sen bir adalet savaşçısıysan, Bruce'un içsel çatışmalarıyla yüzleşmeyi öğren. Kendi karanlığınla barışmak, dış dünyayla olan ilişkini güçlendirebilir."
     },
     {
       "id": "film_pirates_jack",
@@ -800,7 +980,16 @@
         "control": 2,
         "sensitivity": 4
       },
-      "symbol": "🏴‍☠️"
+      "symbol": "🏴‍☠️",
+      "famous_quote_tr": "Rüzgar nereye eserse",
+      "depth_tr": "Jack Sparrow, özgürlüğe ve maceraya olan sevgisiyle hareket eder, bu da onu kaotik ve öngörülemez bir korsan yapar. Hayatı, kurallara meydan okuma ve kendi rotasını çizme arayışı içinde geçer.",
+      "shadow_tr": "Kendi çıkarları uğruna başkalarını manipüle edebilir, bu da onu güvenilmez biri haline getirebilir.",
+      "challenge_tr": "İstikrarlı bir yaşam kurmakta zorlanır, sürekli yeni maceralar peşinde koşar ve kök salmayı reddeder.",
+      "as_friend_tr": "Macera dolu, eğlenceli ve esprili bir arkadaş olur, ancak güvenilirlik konusunda sorunlar yaratabilir.",
+      "as_partner_tr": "İlişkide büyüleyici ve enerjik olurdu, ancak kararsızlığı ve bağlılık korkusu sorun yaratabilir.",
+      "career_dna_tr": "Günümüzde, bir seyahat yazarı veya belgesel yapımcısı olarak parlayabilirdi. Macera tutkusu ve hikaye anlatma yeteneği bu alanlarda kendini gösterebilir.",
+      "growth_arc_tr": "Kendi içindeki özgürlük arzusuyla dengeyi bulmayı ve başkalarıyla daha derin bağlar kurmayı öğrenmesi gerekir.",
+      "if_you_are_tr": "Sen bir maceraperestsen, Jack'in özgür ruhunu örnek al. Ancak, kendi yolculuğunda dengeyi ve sorumluluğu unutmamalısın."
     },
     {
       "id": "film_forrestgump_forrest",
@@ -837,7 +1026,16 @@
         "control": 4,
         "sensitivity": 7
       },
-      "symbol": "🏃‍♂️"
+      "symbol": "🏃‍♂️",
+      "famous_quote_tr": "Hayat bir kutu çikolata gibidir",
+      "depth_tr": "Forrest Gump, bazen naif görünen ama derin bir bilgelik taşıyan bir karakterdir. Hayata karşı saf ve açık bir yaklaşımı, onu duygusal olarak güçlü ve kararlı kılar.",
+      "shadow_tr": "Kendi zekasını küçümseyebilir ve başkalarının alaycılığına karşı savunmasız olabilir.",
+      "challenge_tr": "Toplumun beklentileri ve normlarına uyum sağlamakta zorlanabilir, ancak bu zorluklar karşısında içsel gücünü korur.",
+      "as_friend_tr": "Sadık, destekleyici ve her durumda yanınızda olacak bir dost olurdu.",
+      "as_partner_tr": "İlişkide dürüst ve sevgi dolu olurdu, ancak bazen duygusal karmaşıklıkları anlayamaması sorun yaratabilir.",
+      "career_dna_tr": "Günümüzde, bir sosyal hizmet görevlisi veya motivasyon konuşmacısı olarak parlayabilirdi. Doğal empatisi ve içtenliği bu alanlarda güçlü bir etki yaratır.",
+      "growth_arc_tr": "Kendi değerini ve zekasını kabul ederek, başkalarının yargılarına karşı daha dirençli olmayı öğrenmesi gerekir.",
+      "if_you_are_tr": "Sen bir iyimser ve saf kalpliysen, Forrest'in hayata karşı duruşunu benimse. Ancak, kendi kapasiteni küçümsememek için dikkat etmelisin."
     },
     {
       "id": "film_harrypotter_hermione",
@@ -874,7 +1072,16 @@
         "control": 8,
         "sensitivity": 6
       },
-      "symbol": "📚"
+      "symbol": "📚",
+      "famous_quote_tr": "Kitaplar ve zeka önemli",
+      "depth_tr": "Hermione Granger, bilgiye olan tutkusuyla ve adalet duygusuyla hareket eder. Mantıklı ve analitik düşünce yapısı, onu her zaman bir adım öne taşır.",
+      "shadow_tr": "Mükemmeliyetçiliği, başkalarıyla olan ilişkilerinde mesafe yaratabilir ve duygusal anları kaçırmasına neden olabilir.",
+      "challenge_tr": "Sürekli olarak kendini kanıtlama ihtiyacı duyar, bu da bazen onu yorabilir ve stres altında hissettirebilir.",
+      "as_friend_tr": "Sadık, destekleyici ve her zaman bilgi ve tavsiyeleriyle yanınızda olacak bir dost olurdu.",
+      "as_partner_tr": "İlişkide güvenilir ve sevgi dolu olurdu, ancak bazen aşırı analitik düşüncesi duygusal bağları zorlayabilir.",
+      "career_dna_tr": "Günümüzde, akademisyen veya avukat olarak parlayabilirdi. Detaycılığı ve adalet tutkusu bu alanlarda onu başarılı kılar.",
+      "growth_arc_tr": "Duygusal zekasını geliştirerek, mükemmeliyetçiliğini dengelemeyi ve anın tadını çıkarmayı öğrenmesi gerekir.",
+      "if_you_are_tr": "Sen bir bilgi aşığı ve mükemmeliyetçiysen, Hermione'nin dengesizliğine dikkat et. Bilgi kadar duygusal bağlar da önemlidir."
     },
     {
       "id": "film_starwars_leia",
@@ -911,7 +1118,16 @@
         "control": 7,
         "sensitivity": 5
       },
-      "symbol": "👸"
+      "symbol": "👸",
+      "famous_quote_tr": "İsyan için direnmek",
+      "depth_tr": "Leia Organa, liderlik vasfı ve stratejik zekasıyla tanınır. Ailesinin mirası ve direniş ruhu, onu kararlı ve güçlü bir lider yapar.",
+      "shadow_tr": "Kontrolü kaybetme korkusu, onu duygusal yakınlıklardan uzaklaştırabilir ve yalnız hissettirebilir.",
+      "challenge_tr": "Kendi duygularını bastırma eğiliminde olup, liderlik görevleri altında ezilebilir.",
+      "as_friend_tr": "Sadık ve güçlü bir arkadaş olur, ancak bazen kendi sorunlarıyla meşgulken duygusal olarak mesafeli olabilir.",
+      "as_partner_tr": "İlişkide sadık ve koruyucu olurdu, ancak işine ve görevlerine olan bağlılığı, duygusal uzaklık yaratabilir.",
+      "career_dna_tr": "Günümüzde, bir politikacı veya sivil toplum lideri olarak parlayabilirdi. Stratejik zekası ve liderliği, onu bu alanlarda etkili kılar.",
+      "growth_arc_tr": "Duygusal bağlar kurarak, kontrolü kaybetme korkusunu yenmesi ve daha açık bir iletişim geliştirmesi gerekir.",
+      "if_you_are_tr": "Sen bir lider ve stratejistsen, Leia'nın duygusal mesafesine dikkat et. Liderliğin kadar duygusal bağların da seni güçlü kılar."
     },
     {
       "id": "film_godfather_michael",
@@ -948,7 +1164,16 @@
         "control": 10,
         "sensitivity": 4
       },
-      "symbol": "🍷"
+      "symbol": "🍷",
+      "famous_quote_tr": "Aile her şeydir",
+      "depth_tr": "Michael Corleone'nin psikolojik derinliği, genç yaşta ailesine olan sadakati ve bunun getirdiği yükümlülükler arasında sıkışmış olmasıdır. Babasının gölgesinde büyüyen Michael, kendi kimliğini bulmakla aile işlerini yürütmek arasında bir denge kurmaya çalışır.",
+      "shadow_tr": "Michael, içindeki şiddet potansiyelini ve duygusal bağlarını, kontrol ve güç arayışı uğruna yok sayar.",
+      "challenge_tr": "En büyük zorluğu, ailesine karşı duyduğu sadakatle kendi etik değerleri arasında kalmasıdır.",
+      "as_friend_tr": "Soğukkanlı ve stratejik bir arkadaş olur, ancak duygusal destek beklememek gerekir.",
+      "as_partner_tr": "Partner olarak güvenilir olur, ancak duygusal yakınlık kurmakta zorlanabilir, mesafeli kalabilir.",
+      "career_dna_tr": "Günümüzde olsa, uluslararası bir iş yöneticisi olarak başarılı olurdu; stratejik düşünme ve liderlik yeteneğiyle.",
+      "growth_arc_tr": "Michael'in iç yolculuğu, güç ve kontrol yerine duygusal bağlara ve kendi kimliğine öncelik vermeyi öğrenmektir.",
+      "if_you_are_tr": "Sen bir Michael'san, aileye olan bağlılığın seni tanımlıyor olabilir ancak kendi sesini bulmak için içindeki duygusal derinlikleri keşfetmen gerek."
     },
     {
       "id": "film_shawshank_andy",
@@ -985,7 +1210,16 @@
         "control": 8,
         "sensitivity": 5
       },
-      "symbol": "🏢"
+      "symbol": "🏢",
+      "famous_quote_tr": "Umudun iyi bir şey olduğunu düşünüyorum",
+      "depth_tr": "Andy Dufresne'nin psikolojik derinliği, haksız yere suçlanmış olmasına rağmen umudunu asla kaybetmemesi ve bunun getirdiği içsel dayanıklılıktan gelir. Zorluklar karşısında sakinliğini koruyarak sistemin içinde kendine bir çıkış yolu yaratır.",
+      "shadow_tr": "Andy, içindeki yalnızlık duygusunu ve haksızlığa uğramış olmanın getirdiği acıyı bastırır.",
+      "challenge_tr": "Onu en çok zorlayan şey, özgürlüğe ve adalete duyduğu özlemle hapishane duvarları arasında sıkışmış hissetmesidir.",
+      "as_friend_tr": "Güvenilir ve sabırlı bir arkadaş olur, her zaman destek olur ve çözüm odaklı yaklaşır.",
+      "as_partner_tr": "Partner olarak, sadakatiyle öne çıkar, ancak duygusal açıdan mesafeli kalabilir.",
+      "career_dna_tr": "Günümüzde olsa, bir finans danışmanı veya analitik bir pozisyonda başarılı olurdu; sistematik düşünme ve sabırla detayları çözme yeteneğiyle.",
+      "growth_arc_tr": "Andy'nin iç yolculuğu, içsel özgürlüğünü dışsal koşullarından bağımsız olarak bulabilmesidir.",
+      "if_you_are_tr": "Sen bir Andy'sen, zorluklar karşısında umudunu kaybetmezsin ama belki de içindeki yalnızlıkla yüzleşmelisin."
     },
     {
       "id": "film_matrix_neo",
@@ -1022,7 +1256,16 @@
         "control": 5,
         "sensitivity": 7
       },
-      "symbol": "🕶️"
+      "symbol": "🕶️",
+      "famous_quote_tr": "Gerçek nedir?",
+      "depth_tr": "Neo'nun psikolojik derinliği, gerçeklik algısını sorgulaması ve kendini keşfetme yolculuğundaki arayışından kaynaklanır. İçsel olarak anlam arayışı içindedir ve bu onu sistemin dışına çıkmaya iter.",
+      "shadow_tr": "Neo, kendi gücünü ve potansiyelini yeterince fark edemeyebilir, bu da tereddüt yaratır.",
+      "challenge_tr": "En büyük zorluğu, hangi gerçekliğe ait olduğunu ve kim olduğunu anlamaya çalışmaktır.",
+      "as_friend_tr": "Derin düşünen ve sorgulayan bir arkadaş olur, ama bazen kendi dünyasında kaybolabilir.",
+      "as_partner_tr": "Partner olarak, destekleyici ve koruyucu olur, ancak sürekli sorgulaması duygusal dengeyi zorlayabilir.",
+      "career_dna_tr": "Günümüzde bir teknoloji uzmanı veya veri analisti olarak başarılı olurdu; karmaşık sistemleri çözme yeteneğiyle.",
+      "growth_arc_tr": "Neo'nun iç yolculuğu, kendine ve başkalarına olan inancını güçlendirmek ve gerçekliğin sınırlarını aşmaktır.",
+      "if_you_are_tr": "Sen bir Neo'san, gerçeği sorgulaman seni farklı kılar ama içsel gücünü ve potansiyelini kabul etmelisin."
     },
     {
       "id": "film_alien_ripley",
@@ -1059,7 +1302,16 @@
         "control": 7,
         "sensitivity": 5
       },
-      "symbol": "👽"
+      "symbol": "👽",
+      "famous_quote_tr": "Burada kimse çığlığını duyamaz",
+      "depth_tr": "Ellen Ripley'nin psikolojik derinliği, yaşam mücadelesi ve kriz anlarında gösterdiği dayanıklılıktan gelir. Sıkıntılar karşısında güçlü durarak, hayatta kalma içgüdüsüyle hareket eder.",
+      "shadow_tr": "Ripley, korkularını ve duygusal kırılganlıklarını bastırarak, her zaman güçlü olmak zorundaymış gibi hisseder.",
+      "challenge_tr": "En büyük zorluğu, sürekli tehlike altında yaşarken duygusal dengesini korumaktır.",
+      "as_friend_tr": "Sadık ve koruyucu bir arkadaş olur, kriz anlarında güvenilir bir destek sağlar.",
+      "as_partner_tr": "Partner olarak, güvenilir ve dürüst olur, ancak duygusal yakınlık kurmakta zorlanabilir.",
+      "career_dna_tr": "Günümüzde bir acil durum yönetimi uzmanı olarak başarılı olurdu; kriz anlarında hızlı ve etkili kararlar alabilme yeteneğiyle.",
+      "growth_arc_tr": "Ripley'nin iç yolculuğu, duygusal zayıflıklarını kabul etmek ve yalnızca hayatta kalmak yerine gerçek anlamda yaşamaktır.",
+      "if_you_are_tr": "Sen bir Ripley'sen, zor zamanlarda güçlü kalırsın ama duygusal zayıflıklarını kabul etmek seni daha da güçlü kılacaktır."
     },
     {
       "id": "film_silence_clarice",
@@ -1096,7 +1348,16 @@
         "control": 8,
         "sensitivity": 6
       },
-      "symbol": "🔪"
+      "symbol": "🔪",
+      "famous_quote_tr": "Kuzular sustu mu?",
+      "depth_tr": "Clarice Starling'in psikolojik derinliği, travmatik geçmişi ve adalet arayışıyla şekillenir. Kendi korkularıyla yüzleşerek, başkalarına yardım etme isteğiyle hareket eder.",
+      "shadow_tr": "Clarice, kendi korkularını ve travmalarını tamamen bastırarak, sürekli güçlü görünmeye çalışır.",
+      "challenge_tr": "Onu en çok zorlayan şey, geçmiş travmalarıyla yüzleşmek ve onları aşmaktır.",
+      "as_friend_tr": "Duyarlı ve anlayışlı bir arkadaş olur, dinlemeyi ve destek olmayı bilir.",
+      "as_partner_tr": "Partner olarak, empatik ve destekleyici olur, ancak duygusal yüklerini paylaşmakta zorlanabilir.",
+      "career_dna_tr": "Günümüzde bir kriminal psikolog veya dedektif olarak başarılı olurdu; analitik ve empatik yaklaşımıyla.",
+      "growth_arc_tr": "Clarice'in iç yolculuğu, korkularıyla yüzleşip onları aşarak kendini gerçekleştirmektir.",
+      "if_you_are_tr": "Sen bir Clarice'sen, adalet ve empati senin yol göstericin ama kendi korkularınla yüzleşmekten kaçınma."
     },
     {
       "id": "film_lotr_aragorn",
@@ -1133,7 +1394,16 @@
         "control": 6,
         "sensitivity": 6
       },
-      "symbol": "⚔️"
+      "symbol": "⚔️",
+      "famous_quote_tr": "Beni kral yapmaya çalışmayın",
+      "depth_tr": "Aragorn'un psikolojik derinliği, soylu bir geçmişten gelmesine rağmen alçakgönüllü ve sorumluluk sahibi bir lider olmasından kaynaklanır. İçsel olarak kendine ve başkalarına olan inancı, onu karanlık zamanlarda bile güçlü kılar.",
+      "shadow_tr": "Aragorn, kendi değeri ve liderlik kapasitesi konusunda zaman zaman şüphe duyabilir, bu da tereddüt yaratır.",
+      "challenge_tr": "En büyük zorluğu, gerçek potansiyelini kabul etmek ve liderlik rolünü benimsemektir.",
+      "as_friend_tr": "Sadık ve güvenilir bir arkadaş olur, her zaman destek olur ve yol gösterir.",
+      "as_partner_tr": "Partner olarak, koruyucu ve sadık olur, ancak kendini geri planda tutma eğilimi duygusal mesafe yaratabilir.",
+      "career_dna_tr": "Günümüzde bir sosyal lider veya çevre savunucusu olarak başarılı olurdu; adalet ve doğa sevgisiyle.",
+      "growth_arc_tr": "Aragorn'un iç yolculuğu, kendi liderlik potansiyelini kabul ederek bu rolü güvenle üstlenmektir.",
+      "if_you_are_tr": "Sen bir Aragorn'san, alçakgönüllülüğün seni farklı kılar ama liderlik yeteneklerini kabullenmekten çekinme."
     },
     {
       "id": "film_gladiator_maximus",
@@ -1170,7 +1440,16 @@
         "control": 6,
         "sensitivity": 6
       },
-      "symbol": "🏆"
+      "symbol": "🏆",
+      "famous_quote_tr": "Kendimizin efendisi olmalıyız",
+      "depth_tr": "Maximus'un kökleri onur ve sadakate dayanır. Ailesine ve Roma'ya olan bağlılığı, onu adalet peşinde koşan bir savaşçı yapar.",
+      "shadow_tr": "Duygusal derinliğine rağmen, intikam arzusu onu körleştirebilir. Geçmişin ağırlığı altında ezilme riski taşır.",
+      "challenge_tr": "En büyük zorluğu, kayıplarıyla başa çıkmak ve kaybettiği her şeyin yasını tutmaktır.",
+      "as_friend_tr": "Sadık, güvenilir ve koruyucu bir arkadaş olurdu. Her zaman yanında olur, seni korur ve desteklerdi.",
+      "as_partner_tr": "İlişkide derin bir sadakat sunardı, ancak intikam ve adalet peşinde koşarken duygusal mesafeler yaratabilir.",
+      "career_dna_tr": "Günümüzde olsaydı, muhtemelen bir askeri lider veya stratejist olarak parlayabilirdi. Kararlılığı ve liderlik yeteneği tam da bu alanlara uygun.",
+      "growth_arc_tr": "Gerçek huzuru bulmak için intikamdan vazgeçmeli ve geçmişin yükünü serbest bırakmalıdır.",
+      "if_you_are_tr": "Sen bir onur savaşçısıysan, adalet ve sadakat senin için her şeydir. Ancak, duygusal yüklerin altında ezilmemeye dikkat etmelisin."
     },
     {
       "id": "film_lalaland_mia",
@@ -1207,7 +1486,16 @@
         "control": 5,
         "sensitivity": 8
       },
-      "symbol": "🎤"
+      "symbol": "🎤",
+      "famous_quote_tr": "Hayatta ya hayallerini takip et ya da hayallerinden vazgeç",
+      "depth_tr": "Mia'nın derinliği, çocukluktan bu yana biriktirdiği hayallerden beslenir. Sanat dünyasında kendini ifade etme arzusu, onu her zaman ileriye taşır.",
+      "shadow_tr": "Kendi değerini başkalarının onayına bağlama eğilimindedir. Başarıya ulaşmak için öz değerini feda edebilir.",
+      "challenge_tr": "En büyük zorluğu, hayallerine ulaşmak için cesur adımlar atmak ve başarısızlık korkusunu yenmektir.",
+      "as_friend_tr": "İlham verici ve destekleyici bir arkadaş olurdu. Hayallerini paylaşman ve birlikte büyümen için seni cesaretlendirirdi.",
+      "as_partner_tr": "Tutkulu ve destekleyici bir partner olurdu, ancak kariyer hırsı ilişkisini ikinci plana atmasına neden olabilir.",
+      "career_dna_tr": "Günümüzde olsaydı, oyuncu veya sanat yönetmeni olarak parlayabilirdi. Yaratıcılığı ve tutkusu bu mesleklerde öne çıkmasını sağlar.",
+      "growth_arc_tr": "Kendi değerini içsel olarak kabul etmeli ve başkalarının onayından bağımsız olarak kendi yolunu bulmalıdır.",
+      "if_you_are_tr": "Sen bir hayalperestsen, tutkuların seni her zaman ileriye taşır. Ancak, gerçekliğin ağırlığı seni hayallerinden uzaklaştırmasın."
     },
     {
       "id": "film_amelie_amelie",
@@ -1244,7 +1532,16 @@
         "control": 4,
         "sensitivity": 9
       },
-      "symbol": "🌼"
+      "symbol": "🌼",
+      "famous_quote_tr": "Küçük şeyler büyük mutluluklar getirir",
+      "depth_tr": "Amélie'nin derinliği, çocukluğunda yaşadığı yalnızlıktan kaynaklanır. İçsel dünyasında yarattığı zengin hayal gücü, onu başkalarının hayatlarına dokunmaya iter.",
+      "shadow_tr": "Kendi mutluluğunu göz ardı edebilir ve başkalarının mutluluğunu önceliklendirme eğilimindedir.",
+      "challenge_tr": "En büyük zorluğu, kendi duygusal ihtiyaçlarını tanımak ve onları karşılamaktır.",
+      "as_friend_tr": "Nazik ve düşünceli bir arkadaş olurdu. Küçük jestlerle hayatına renk katar ve seni gülümsetirdi.",
+      "as_partner_tr": "Duygusal ve samimi bir partner olurdu, ancak kendi duygularını ifade etmekte zorlanabilir.",
+      "career_dna_tr": "Günümüzde olsaydı, yaratıcı bir yazar veya sanatçı olarak parlayabilirdi. Hayal gücü ve empatisi bu alanlarda onu öne çıkarır.",
+      "growth_arc_tr": "Kendi iç dünyasına dönmeli ve kendi mutluluğunu başkalarınınkine kurban etmemelidir.",
+      "if_you_are_tr": "Sen bir ince ruhsan, başkalarının hayatlarına dokunmak seni mutlu eder. Ancak, kendi duygusal ihtiyaçlarını da göz ardı etmemelisin."
     },
     {
       "id": "film_blackswan_nina",
@@ -1281,7 +1578,16 @@
         "control": 10,
         "sensitivity": 10
       },
-      "symbol": "🦢"
+      "symbol": "🦢",
+      "famous_quote_tr": "Mükemmellik her şeydir",
+      "depth_tr": "Nina'nın kökleri, annesinin baskıcı sevgisi ve kendi mükemmellik arayışından beslenir. Bu, onu hem sahnede hem de hayatında sınırları zorlamaya iter.",
+      "shadow_tr": "Kendi karanlık tarafını bastırır ve bu da içsel çatışmalara yol açar. Gerçek benliğini kabul etmekte zorlanır.",
+      "challenge_tr": "En büyük zorluğu, kendini aşırı eleştirmek ve mükemmellik için kendini tüketmektir.",
+      "as_friend_tr": "İçine kapanık ve zorlu bir arkadaş olabilir. Duygusal derinliklerine inmek zaman alır, ama sadakati güçlüdür.",
+      "as_partner_tr": "İlişkide yoğun ve talepkar olurdu, kendi iç çatışmaları nedeniyle duygusal dalgalanmalar yaratabilir.",
+      "career_dna_tr": "Günümüzde olsaydı, başarılı bir balerin ya da dans eğitmeni olarak parlayabilirdi. Disiplini ve sanata olan adanmışlığı bu alanlarda öne çıkar.",
+      "growth_arc_tr": "Kendi içsel çatışmalarını kabul etmeli ve mükemmellik yerine kendini kabullenmeyi öğrenmelidir.",
+      "if_you_are_tr": "Sen bir mükemmeliyetçiysen, hedeflerine ulaşmak için her şeyi yaparsın. Ancak, kendi iç huzurunu kaybetmemeye dikkat etmelisin."
     },
     {
       "id": "film_eternalsunshine_clementine",
@@ -1318,7 +1624,16 @@
         "control": 2,
         "sensitivity": 9
       },
-      "symbol": "💔"
+      "symbol": "💔",
+      "famous_quote_tr": "Hafızalarımız bizi biz yapar",
+      "depth_tr": "Clementine'in derinliği, spontan doğası ve duygusal yoğunluğundan kaynaklanır. Anıların ve duyguların gücü, onun hayatını şekillendirir.",
+      "shadow_tr": "Kendi duygusal kararsızlığını ve bağımsızlık ihtiyacını kabul etmez, bu da ilişkilerinde çatışmalara yol açar.",
+      "challenge_tr": "En büyük zorluğu, duygusal iniş çıkışlarını dengelemek ve geçmişin anılarına teslim olmamaktır.",
+      "as_friend_tr": "Eğlenceli ve enerjik bir arkadaş olurdu. Her anı dolu dolu yaşar ve seni de peşinden sürüklerdi.",
+      "as_partner_tr": "Tutkulu ama değişken bir partner olurdu, duygusal dalgalanmalar ilişkide zorluklar yaratabilir.",
+      "career_dna_tr": "Günümüzde olsaydı, yaratıcı bir terapist veya yazarlık alanında parlayabilirdi. Duygusal derinliği ve yaratıcılığı bu mesleklerde öne çıkar.",
+      "growth_arc_tr": "Kendi duygusal dengesini bulmalı ve geçmişin izlerini bırakmayı öğrenmelidir.",
+      "if_you_are_tr": "Sen bir spontane kalpsen, anıların duygusal derinliğinde kaybolursun. Ancak, geçmişin izlerinden bağımsız olarak geleceğe bakmayı unutmamalısın."
     },
     {
       "id": "film_martian_watney",
@@ -1355,7 +1670,16 @@
         "control": 6,
         "sensitivity": 5
       },
-      "symbol": "🚀"
+      "symbol": "🚀",
+      "famous_quote_tr": "Hayatta kalmanın yolu, sorunları çözmektir",
+      "depth_tr": "Mark Watney'in derinliği, zorluklar karşısındaki çözüm odaklı yaklaşımından gelir. Bilim ve mantık, onun hayatta kalma mücadelesinin temel taşlarıdır.",
+      "shadow_tr": "Duygusal derinliğini pek göstermeyen bir yanı var. Çevresindeki insanlara duygusal açıdan mesafeli kalabilir.",
+      "challenge_tr": "En büyük zorluğu, yalnızlık ve izolasyonla başa çıkmaktır. Kendi iç sesini dinlemek zorunda kalır.",
+      "as_friend_tr": "Mizah dolu, zeki ve destekleyici bir arkadaş olurdu. Sorunlarını çözmene yardımcı olur ve her zaman bir çözüm bulurdu.",
+      "as_partner_tr": "Pratik ve mantıklı bir partner olurdu, ancak duygusal derinlik eksikliği ilişkide sorun yaratabilir.",
+      "career_dna_tr": "Günümüzde olsaydı, mühendis veya bilim insanı olarak parlayabilirdi. Problem çözme yeteneği ve bilimsel bilgisi bu alanlara uygundur.",
+      "growth_arc_tr": "Duygusal tarafını keşfetmeli ve yalnızlıkla başa çıkarken içsel huzuru bulmayı öğrenmelidir.",
+      "if_you_are_tr": "Sen bir problem çözücüysen, her zorluğu mantıkla aşarsın. Ancak, duygusal bağlarını güçlendirmeyi ihmal etmemelisin."
     },
     {
       "id": "film_madmax_furiosa",
@@ -1392,7 +1716,16 @@
         "control": 7,
         "sensitivity": 5
       },
-      "symbol": "🚗"
+      "symbol": "🚗",
+      "famous_quote_tr": "Beni unuttular ama ben vazgeçmedim",
+      "depth_tr": "İmparator Furiosa, geçmişte yaşadığı travmalar ve hüsranlarla dolu bir dünyada hayatta kalmaya çalışırken, adalet ve özgürlük arayışının peşinden gitmektedir. Hayatta kalma güdüsü ve başkalarına yardım etme arzusu, onu tehlikeli ve acımasız bir lider haline getirmiştir.",
+      "shadow_tr": "Furiosa'nın karanlık yanı, empati eksikliği ve duygu yoksunluğunda saklıdır. Bu, onu bazen çevresindekilere karşı mesafeli ve acımasız kılar.",
+      "challenge_tr": "En büyük zorluğu, insanlara güvenmek ve onların yardımını kabul etmektir. Tek başına mücadele etmeye alışkın olduğu için, işbirliği yapmayı zayıflık olarak görebilir.",
+      "as_friend_tr": "Bir arkadaş olarak, sadık ama mesafeli olurdu. Zor zamanlarda yanınızda olur, ancak duygusal desteğe ihtiyaç duyduğunuzda biraz eksik kalabilir.",
+      "as_partner_tr": "Bir partner olarak, koruyucu ama duygusal anlamda kapalı olabilir. İlişkideki risk, duygusal yakınlık kurmakta zorlanmasında yatar.",
+      "career_dna_tr": "Günümüzde bir özgürlük aktivisti veya sivil toplum lideri olarak parlayabilirdi. Adalet arayışı ve liderlik yetenekleri, onu toplumsal değişim için mükemmel bir aday yapar.",
+      "growth_arc_tr": "Furiosa'nın iç yolculuğu, duygusal bağlar kurmayı ve başkalarına güvenmeyi öğrenmekten geçer. Bu, onun liderliğini daha insancıl ve etkili kılacaktır.",
+      "if_you_are_tr": "Sen bir savaşçı ruha sahipsen, Furiosa gibi engelleri aşmaya kararlısın. Ancak unutmamalısın ki, bazen duygusal bağlar da bir savaş stratejisinin parçasıdır."
     },
     {
       "id": "film_terminator_sarah",
@@ -1429,7 +1762,16 @@
         "control": 7,
         "sensitivity": 6
       },
-      "symbol": "🤖"
+      "symbol": "🤖",
+      "famous_quote_tr": "Gelecek henüz yazılmadı",
+      "depth_tr": "Sarah Connor, kendisine yüklenen büyük sorumluluklar ve geleceğin belirsizliğiyle şekillenmiştir. Annelik içgüdüsü ve dünyayı kurtarma misyonu, onu çelik gibi sert ve kararlı yapmıştır.",
+      "shadow_tr": "Sarah'nın karanlık yanı, duygusal bağları keskin bir şekilde reddetmesidir. Bu, onu yalnız ve izole kılabilir, zira duygularını bir zayıflık olarak görme eğilimindedir.",
+      "challenge_tr": "En büyük zorluğu, hayatta kalmak için sürekli tetikte olmak zorunda olmasıdır. Bu, sürekli bir stres hali yaratır ve duygusal olarak tükenmesine neden olabilir.",
+      "as_friend_tr": "Bir arkadaş olarak, sadık ama biraz içine kapanık olurdu. Sizi korumak için elinden geleni yapar, ancak duygusal destek konusunda yetersiz kalabilir.",
+      "as_partner_tr": "Bir partner olarak, koruyucu ama duygusal anlamda mesafeli olabilir. İlişkinin riski, sürekli bir tehdit algısını paylaşmaktan kaynaklanır.",
+      "career_dna_tr": "Günümüzde bir güvenlik uzmanı veya kriz yönetimi danışmanı olarak parlayabilirdi. Tehlikeleri öngörebilme ve hızlı karar alma yetenekleri bu alanda başarı getirebilir.",
+      "growth_arc_tr": "Sarah'nın iç yolculuğu, korkuları aşmayı ve duygusal bağlar kurmayı öğrenmekten geçer. Bu, onun hem kişisel hem de liderlik gelişimi için önemlidir.",
+      "if_you_are_tr": "Sen geleceğe dair endişeler taşıyan biriysen, Sarah gibi dirençli ve kararlısın. Ancak unutmamalısın ki, hayatın keyfini çıkarmak da bir kahramanlık gerektirir."
     },
     {
       "id": "film_erinbrockovich_erin",
@@ -1466,7 +1808,16 @@
         "control": 6,
         "sensitivity": 7
       },
-      "symbol": "🧑‍⚖️"
+      "symbol": "🧑‍⚖️",
+      "famous_quote_tr": "Haklıysan, seni kimse susturamaz",
+      "depth_tr": "Erin Brockovich, zor koşullarda hayatta kalma mücadelesi verirken, adalet arayışını asla bırakmamış bir karakterdir. Haksızlığa karşı olan öfkesi, onu cesur ve inatçı bir savaşçı yapar.",
+      "shadow_tr": "Erin'in karanlık yanı, bazen öfkesinin onun objektifliğini ve empati yeteneğini gölgelemesidir. Bu, çevresindekilere karşı zaman zaman sert ve anlayışsız olmasına neden olabilir.",
+      "challenge_tr": "En büyük zorluğu, sistemin adaletsizliğine karşı savaşırken tükenmemek ve umudunu yitirmemektir. Sürekli mücadele içinde olmak, onu yıpratabilir.",
+      "as_friend_tr": "Bir arkadaş olarak, sadık ve destekleyici olurdu. Sizi motive eder ve her zaman arkanızda durur, ancak bazen kendi fikirlerinin doğruluğuna fazla güvenebilir.",
+      "as_partner_tr": "Bir partner olarak, tutkulu ama zaman zaman baskın olabilir. İlişkinin riski, tartışmalarda kendi haklılığını savunma isteğinden kaynaklanabilir.",
+      "career_dna_tr": "Günümüzde bir insan hakları avukatı veya sosyal adalet aktivisti olarak parlayabilirdi. Hakkını arama ve insanları savunma konusundaki kararlılığı, bu mesleklerde fark yaratmasını sağlar.",
+      "growth_arc_tr": "Erin'in tamamlaması gereken yolculuk, öfkesini yapıcı bir şekilde kanalize etmek ve empatiyi daha sık kullanmayı öğrenmektir.",
+      "if_you_are_tr": "Sen bir adalet savaşçısıysan, Erin gibi asla pes etmezsin. Ancak unutma, bazen daha sakin bir yaklaşım da zaferin anahtarı olabilir."
     },
     {
       "id": "film_devilwearsprada_miranda",
@@ -1503,7 +1854,16 @@
         "control": 10,
         "sensitivity": 4
       },
-      "symbol": "👠"
+      "symbol": "👠",
+      "famous_quote_tr": "Detaylar her şeydir",
+      "depth_tr": "Miranda Priestly, mükemmeliyetçilik ve yüksek standartlar ile kariyerinde zirveye ulaşmış bir karakterdir. Güçlü bir iş disiplini ve başarı hırsı, onun en belirgin özellikleridir.",
+      "shadow_tr": "Miranda'nın karanlık yanı, empati eksikliği ve başkalarının duygularını anlamakta zorlanmasında yatar. Bu, onu soğuk ve erişilmez biri yapabilir.",
+      "challenge_tr": "En büyük zorluğu, başkalarıyla duygusal bağlar kurmak ve insani zafiyetleri kabul etmektir. İşine olan bağlılığı, kişisel ilişkilerini zayıflatabilir.",
+      "as_friend_tr": "Bir arkadaş olarak, destekleyici ama talepkar olurdu. Sizi motive eder, ancak kendi standartlarına ulaşmanızı bekleyebilir.",
+      "as_partner_tr": "Bir partner olarak, etkileyici ama duygusal anlamda mesafeli olabilir. İlişkinin riski, işine olan aşırı bağlılığından kaynaklanır.",
+      "career_dna_tr": "Günümüzde bir moda dergisi editörü veya üst düzey yönetici olarak parlayabilirdi. Detaylara olan dikkati ve mükemmeliyetçiliği, onu bu alanda eşsiz kılar.",
+      "growth_arc_tr": "Miranda'nın iç yolculuğu, empati geliştirmek ve insan ilişkilerini derinleştirmekten geçer. Bu, onun kişisel mutluluğu için önemlidir.",
+      "if_you_are_tr": "Sen yüksek standartlara ve detaylara önem veriyorsan, Miranda gibi kararlı ve etkilisin. Ancak unutmamalısın ki, bazen biraz empati, başarı kadar değerlidir."
     },
     {
       "id": "film_hungergames_katniss",
@@ -1540,7 +1900,16 @@
         "control": 6,
         "sensitivity": 7
       },
-      "symbol": "🏹"
+      "symbol": "🏹",
+      "famous_quote_tr": "Ateşle oynuyorsun",
+      "depth_tr": "Katniss Everdeen, yoksulluk ve adaletsizlikle dolu bir dünyada hayatta kalma becerilerini geliştirmiştir. Kardeşine duyduğu sevgi ve koruma içgüdüsü, onun en temel motivasyon kaynaklarından biridir.",
+      "shadow_tr": "Katniss'in karanlık yanı, başkalarına güvenmekte zorlanması ve duygusal bağlardan kaçınmaya çalışmasıdır. Bu, onu yalnız ve izole bir figür haline getirebilir.",
+      "challenge_tr": "En büyük zorluğu, sürekli bir hayatta kalma mücadelesi içinde duygusal dengelerini korumaktır. Stres ve güvensizlik, onun üzerinde ağır bir baskı yaratır.",
+      "as_friend_tr": "Bir arkadaş olarak, sadık ama içine kapanık olurdu. Sizi korur ve destekler, ancak kendi duygularını paylaşmakta zorlanabilir.",
+      "as_partner_tr": "Bir partner olarak, koruyucu ama duygusal anlamda mesafeli olabilir. İlişkinin riski, güven sorunlarından kaynaklanır.",
+      "career_dna_tr": "Günümüzde bir doğa rehberi veya hayatta kalma uzmanı olarak parlayabilirdi. Doğa koşullarında hayatta kalma becerileri ve liderlik yetenekleri, bu mesleklerde başarılı olmasını sağlar.",
+      "growth_arc_tr": "Katniss'in iç yolculuğu, güven duygusunu yeniden inşa etmek ve başkalarıyla daha derin bağlar kurmayı öğrenmekten geçer.",
+      "if_you_are_tr": "Sen hayatta kalma içgüdüsü güçlü biriysen, Katniss gibi dirençlisin. Ancak unutmamalısın ki, güven ve sevgi de birer hayatta kalma stratejisidir."
     },
     {
       "id": "film_mulan_mulan",
@@ -1577,7 +1946,16 @@
         "control": 6,
         "sensitivity": 6
       },
-      "symbol": "🏯"
+      "symbol": "🏯",
+      "famous_quote_tr": "Cesaret, içindeki gücü bulmaktır",
+      "depth_tr": "Mulan, ailesine duyduğu derin sevgi ve sorumluluk duygusuyla hareket eden bir karakterdir. Gelenekleri sorgulama cesareti ve kimliğini bulma arayışı, onu sıradışı bir kahraman yapar.",
+      "shadow_tr": "Mulan'ın karanlık yanı, bazen kendi kimliğini bulma sürecinde kendine olan güvenini sorgulamasıdır. Bu, onun cesaretiyle çatışabilir ve içsel bir çekişme yaratabilir.",
+      "challenge_tr": "En büyük zorluğu, toplumsal beklentiler ve kendi arzuları arasında denge kurmaktır. Ailevi sorumluluklar ve kişisel kimlik arayışı arasında sıkışabilir.",
+      "as_friend_tr": "Bir arkadaş olarak, sadık ve destekleyici olurdu. Her zaman yanınızda olur ve sizi cesaretlendirir, ancak kendi sorunlarını anlatmakta tereddüt edebilir.",
+      "as_partner_tr": "Bir partner olarak, sevgi dolu ama biraz bağımsız olabilir. İlişkinin riski, kendi kimliğini bulma yolculuğunda yalnız kalma isteğinden kaynaklanabilir.",
+      "career_dna_tr": "Günümüzde bir asker veya liderlik koçu olarak parlayabilirdi. Cesareti ve liderlik yetenekleri, bu alanlarda fark yaratmasını sağlar.",
+      "growth_arc_tr": "Mulan'ın iç yolculuğu, kendi kimliğini bulmak ve içsel cesaretini daha fazla keşfetmekten geçer.",
+      "if_you_are_tr": "Sen bir kimlik arayışındaysan, Mulan gibi cesur ve sorgulayıcısın. Ancak unutma, gerçek güç, içindeki sesi dinlemekle başlar."
     },
     {
       "id": "film_insideout_joy",
@@ -1614,7 +1992,16 @@
         "control": 4,
         "sensitivity": 6
       },
-      "symbol": "😊"
+      "symbol": "😊",
+      "famous_quote_tr": "Her şeyin bir çözümü vardır",
+      "depth_tr": "Joy, Riley'nin mutluluğunu koruma görevine kendini adamıştır çünkü o, çocukluğun masumiyetini ve saf neşesini temsil eder. Hayatın karmaşıklığını ve değişimin kaçınılmazlığını tam anlamıyla kavrayamaz, çünkü tek görevi mutluluk üretmektir.",
+      "shadow_tr": "Joy, diğer duyguların, özellikle de üzüntünün önemini göz ardı eder. Geçici mutsuzlukların da kişisel büyümeye katkı sağladığını fark edemez.",
+      "challenge_tr": "Joy, kontrol edemediği durumlarla başa çıkmakta zorlanır ve her zaman pozitif kalmanın mümkün olmadığını kabul etmekte direnç gösterir.",
+      "as_friend_tr": "Joy, her zaman enerjik ve pozitif bir arkadaş olurdu; neşesi bulaşıcıdır ve moraliniz bozuk olduğunda yanınızda olmak ister.",
+      "as_partner_tr": "Joy, ilişkide sürekli pozitifliği korumaya çalışırdı fakat duygusal derinlik gerektiren anlarda yüzeyde kalabilir. Bu durum, zamanla partneri için yorucu olabilir.",
+      "career_dna_tr": "Joy, bir yaşam koçu veya motivasyon konuşmacısı olarak parlayabilirdi. İnsanlara ilham vermek ve pozitif bir bakış açısı aşılamak onun doğasında var.",
+      "growth_arc_tr": "Joy'un yolculuğu, diğer duyguların değerini ve dengenin önemini anlamaktan geçer. Üzüntüye de yer açmanın kişisel gelişime katkı sağladığını öğrenmelidir.",
+      "if_you_are_tr": "Sen bir Joy'san, her zaman çevreni aydınlatmak istersin, ancak bazen karanlıkların da aydınlatıcı olabileceğini unutmamalısın. Hayatın tüm renklerini kucaklamak seni daha da zenginleştirecektir."
     },
     {
       "id": "film_indianajones_indiana",
@@ -1651,7 +2038,16 @@
         "control": 4,
         "sensitivity": 4
       },
-      "symbol": "🎒"
+      "symbol": "🎒",
+      "famous_quote_tr": "Kayıp hazinelerin peşinden gitmek",
+      "depth_tr": "Indiana Jones, tarih ve macera aşkıyla dolup taşan, meraklı bir arkeologdur. Babasından aldığı etkiler ve akademik kariyerindeki baskılar, onu hem bilgi peşinde koşmaya hem de tehlikeyi göze almaya itmiştir.",
+      "shadow_tr": "Indiana'nın, duygusal bağlardan kaçınma eğilimi vardır. Onun için macera ve keşif, kişisel ilişkilerin önüne geçer.",
+      "challenge_tr": "Indiana'nın en büyük zorluğu, dengeyi bulmak ve kişisel hayatını, maceraperest doğasıyla uyumlu bir hale getirmektir. Sürekli tehlikeyle yüzleşmek, onu içsel huzurdan uzaklaştırabilir.",
+      "as_friend_tr": "Indiana, maceracı bir arkadaş olarak sizi sıradışı deneyimlere sürüklerdi. Ancak, duygusal destek gerektiğinde uzak kalabilir.",
+      "as_partner_tr": "Indiana romantik bir partner olabilir fakat bağımsızlığı ve macera tutkusu, uzun vadeli bir ilişkide sorun yaratabilir. Partneri, onun sürekli hareket halinde olmasını kabul etmeli.",
+      "career_dna_tr": "Indiana, tarih veya arkeoloji profesörü olarak akademik dünyada iz bırakabilir. Bilgiye olan tutkusu ve macera aşkı, onu benzersiz bir öğretmen yapar.",
+      "growth_arc_tr": "Indiana'nın yolculuğu, kişisel ilişkilerine daha fazla önem vermeyi ve kariyer ile özel hayat arasında denge kurmayı öğrenmeyi içerir.",
+      "if_you_are_tr": "Sen bir Indiana'san, keşfetme tutkun seni ileriye taşır, ancak arada sırada durup etrafındaki insanlara da odaklanmalısın. Onlarla derin bağlar kurmak, hayatını daha anlamlı kılabilir."
     },
     {
       "id": "film_missionimpossible_ethan",
@@ -1688,7 +2084,16 @@
         "control": 6,
         "sensitivity": 4
       },
-      "symbol": "🕶️"
+      "symbol": "🕶️",
+      "famous_quote_tr": "Görev başarısızlığa uğradı",
+      "depth_tr": "Ethan Hunt, görev bilinci yüksek bir ajan olarak, aşırı tehlike altında bile soğukkanlılığını koruyabilen biridir. Geçmişte yaşadığı travmalar ve kayıplar, onu görevine daha da bağlı hale getirmiştir.",
+      "shadow_tr": "Ethan'ın en karanlık yanı, duygusal derinliklere inememesi ve kişisel hayatını ikinci plana atmasıdır. Empati ve duygusal bağlarda zorlanır.",
+      "challenge_tr": "Ethan, kişisel hayatı ile profesyonel görevleri arasında denge kurmakta zorlanır. Görev bilinci, kişisel mutluluğunun önüne geçer.",
+      "as_friend_tr": "Ethan, zor zamanlarda yanınızda olacak güvenilir bir dosttur, ancak duygusal paylaşımlarda zayıf kalabilir.",
+      "as_partner_tr": "Ethan, ilişkisinde sadık ve koruyucu olsa da, işine olan bağlılığı romantik hayatında sorun yaratabilir. Partneri, onun önceliklerini kabul etmeli.",
+      "career_dna_tr": "Ethan, günümüzde güvenlik danışmanı veya stratejik planlayıcı olarak başarılı olabilir. Zorlu durumları yönetme yeteneği ve analitik zekası, onu bu alanda öne çıkarır.",
+      "growth_arc_tr": "Ethan'ın içsel yolculuğu, duygusal bağlar kurmayı ve kişisel mutluluğu görev bilinciyle dengelemeyi öğrenmeyi içerir.",
+      "if_you_are_tr": "Sen bir Ethan'san, görevlerin ve sorumlulukların önceliğin olabilir ancak kendi duygusal ihtiyaçlarını da göz ardı etmemelisin. İç huzurunu bulmak, seni daha güçlü kılacaktır."
     },
     {
       "id": "film_legallyblonde_elle",
@@ -1725,7 +2130,16 @@
         "control": 5,
         "sensitivity": 7
       },
-      "symbol": "💖"
+      "symbol": "💖",
+      "famous_quote_tr": "Asla pes etme",
+      "depth_tr": "Elle Woods, dış görünüşüne olan önyargılarla savaşarak kendi zekasını ve kararlılığını kanıtlamak ister. İçindeki azim ve inanç, onu toplumun dayattığı kalıpları kırmaya yönlendirir.",
+      "shadow_tr": "Elle, bazen yüzeysel algılara ve toplumun beklentilerine göre hareket etme eğilimindedir. Bunların ötesine geçip kendi iç sesine daha fazla güvenmesi gerekir.",
+      "challenge_tr": "Elle, ciddiye alınmak ve önyargıları yıkmak için sürekli çaba sarf eder. Başkalarının görüşleri onun için engelleyici olabilir.",
+      "as_friend_tr": "Elle, neşeli ve destekleyici bir arkadaş olurdu; sizin potansiyelinizi görmenize yardımcı olur.",
+      "as_partner_tr": "Elle, partnerine karşı sevgi dolu ve destekleyici olur fakat kariyerine olan bağlılığı, ilişkide öncelik çatışmaları yaratabilir.",
+      "career_dna_tr": "Elle, bir avukat veya halkla ilişkiler uzmanı olarak parlayabilirdi. İletişim becerileri ve insanları etkileme yeteneği, bu alanlarda başarılı olmasını sağlar.",
+      "growth_arc_tr": "Elle'nin yolculuğu, başkalarının beklentilerinden bağımsız olarak kendi değerini ve yeteneklerini tam anlamıyla benimsemekten geçer.",
+      "if_you_are_tr": "Sen bir Elle'sen, başkalarının seni nasıl gördüğünden çok kendi içsel değerine odaklanmalısın. Kendi potansiyelini fark ettiğinde, engelleri aşman daha kolay olacaktır."
     },
     {
       "id": "film_prideprejudice_elizabeth",
@@ -1762,7 +2176,16 @@
         "control": 5,
         "sensitivity": 7
       },
-      "symbol": "📜"
+      "symbol": "📜",
+      "famous_quote_tr": "Önyargılar bizi yanıltır",
+      "depth_tr": "Elizabeth Bennet, zekası ve keskin gözlemleriyle toplumun yüzeysel değerlerine meydan okur. Ailesinin ve çevresinin beklentileriyle çatışırken, kendi bağımsızlığını ve özgürlüğünü savunmaya çalışır.",
+      "shadow_tr": "Elizabeth, bazen kendi önyargılarının ve gururunun onu yanıltabileceğini fark etmez. İnsanları ve durumları yüzeysel değerlendirme tuzağına düşebilir.",
+      "challenge_tr": "Elizabeth, toplumsal normlarla uyum sağlama baskısı altında kendi kimliğini korumakta zorlanır. Ailevi ve sosyal beklentilerle çatışması, içsel bir gerilim yaratır.",
+      "as_friend_tr": "Elizabeth, zeki ve esprili bir arkadaştır; derinlemesine sohbetler yapabilir ve size yeni bakış açıları sunar.",
+      "as_partner_tr": "Elizabeth, ilişkide sadık ve sevgi doludur fakat partnerine karşı eleştirel olabilir. Onun bağımsız ruhunu anlamak önemlidir.",
+      "career_dna_tr": "Elizabeth, günümüzde bir yazar veya eleştirmen olarak parlayabilirdi. Toplumsal normları sorgulama yeteneği, fikirlerini ifade etmede güç kazandırır.",
+      "growth_arc_tr": "Elizabeth'in yolculuğu, kendi önyargılarını ve gururunu aşarak daha derin ve empatik bir bakış açısı geliştirmekten geçer.",
+      "if_you_are_tr": "Sen bir Elizabeth'sen, bağımsızlığın ve zekan sana güç verir fakat önyargıların seni yanıltabilir. Açık fikirli olmak, büyümeni ve daha derin ilişkiler kurmanı sağlayabilir."
     },
     {
       "id": "film_lesmis_valjean",
@@ -1799,7 +2222,16 @@
         "control": 6,
         "sensitivity": 8
       },
-      "symbol": "🏴"
+      "symbol": "🏴",
+      "famous_quote_tr": "İkinci bir şans her şeyi değiştirir",
+      "depth_tr": "Jean Valjean, geçmişte yaptığı hataların kefaretini ödemeye çalışırken, merhamet ve vicdanla dolu bir yaşam sürmeye kararlıdır. Onun için en önemli şey, başkalarına yardım ederek kendini affedebilmektir.",
+      "shadow_tr": "Valjean, geçmişin izlerini sürekli üzerinde taşır ve kendini tamamen affetmekte zorlanır. Geçmişteki hatalarının gölgesi, özgürlüğünü kısıtlayabilir.",
+      "challenge_tr": "Valjean, sürekli olarak geçmişiyle savaşır ve yeni bir kimlik altında huzur bulmakta zorlanır. İç barışa ulaşmak onun için en büyük mücadeledir.",
+      "as_friend_tr": "Valjean, fedakar ve sadık bir dosttur. Daima yardım eli uzatır ve sizin mutluluğunuz için çaba gösterir.",
+      "as_partner_tr": "Valjean, ilişkide güvenilir ve koruyucudur fakat kendi iç çatışmaları nedeniyle duygusal olarak mesafeli olabilir.",
+      "career_dna_tr": "Valjean, sosyal hizmet uzmanı veya hayır kurumları yöneticisi olarak başarılı olabilirdi. Başkalarına yardım etme arzusu, bu alanlarda fark yaratmasını sağlar.",
+      "growth_arc_tr": "Valjean'ın yolculuğu, kendini affetmek ve geçmişin yüklerinden kurtularak gerçek huzura ulaşmaktan geçer.",
+      "if_you_are_tr": "Sen bir Valjean'san, vicdanın ve merhametin seni yönlendirir fakat kendine karşı daha nazik olmayı öğrenmelisin. Geçmişinle barışarak, gerçekten özgürleşebilirsin."
     },
     {
       "id": "film_leon_mathilda",
@@ -1836,7 +2268,16 @@
         "control": 4,
         "sensitivity": 9
       },
-      "symbol": "🌸"
+      "symbol": "🌸",
+      "famous_quote_tr": "Hayat her zaman bu kadar mı zor, yoksa sadece çocukken mi?",
+      "depth_tr": "Mathilda'nın çocukluğu, şiddet ve kayıtsızlıkla dolu bir evde geçmiştir. Bu ortam onu hayatta kalmak için erken yaşta olgunlaşmaya zorlamıştır.",
+      "shadow_tr": "Mathilda, intikam duygusunun yönlendirdiği karanlık bir tarafı görmezden gelir. Bu duygu onu tehlikeli durumlara çekebilir.",
+      "challenge_tr": "Duygusal olarak bağlandığı insanları kaybetme korkusuyla mücadele eder. Güvensizlik ve yalnızlık en büyük sınavıdır.",
+      "as_friend_tr": "Sadık ve koruyucu bir arkadaş olurdu. Ancak, duygusal yükünü paylaşmakta zorlanabilirdi.",
+      "as_partner_tr": "İlişkide yoğun ve tutkulu olurdu, ancak geçmiş travmaları nedeniyle güven sorunları yaşayabilirdi.",
+      "career_dna_tr": "Mathilda, günümüzde bir dedektif veya gazeteci olarak parlayabilirdi. Merakı ve adalet arayışı bu mesleklerde ona başarı getirebilirdi.",
+      "growth_arc_tr": "Mathilda'nın içsel yolculuğu, intikamdan vazgeçerek barış ve affetmenin gücünü keşfetmekten geçer.",
+      "if_you_are_tr": "Sen bir Mathilda'san, hayatta erken yaşta karşılaştığın zorluklar seni olgunlaştırmış olabilir. Ancak, kalbini iyileştirmek ve başkalarına güvenmeyi öğrenmek senin için önemli bir yolculuk."
     },
     {
       "id": "film_schindler_oskar",
@@ -1873,7 +2314,16 @@
         "control": 6,
         "sensitivity": 6
       },
-      "symbol": "🕊️"
+      "symbol": "🕊️",
+      "famous_quote_tr": "Bir hayat kurtaran, tüm dünyayı kurtarır.",
+      "depth_tr": "Oskar Schindler, başlangıçta kişisel çıkarlarını gözeten bir iş adamı olsa da, savaşın gerçek yüzünü gördükçe vicdanı ağır basar. İnsanlığın acılarını paylaşma kapasitesi, onu tarihsel bir figür haline getirir.",
+      "shadow_tr": "Oskar, mükemmeliyetçi yapısıyla kendine karşı acımasız olabilir. Zaman zaman içsel huzursuzluğunu bastırmakta zorlanabilir.",
+      "challenge_tr": "Kendi çıkarları ile vicdanı arasında denge kurmakta zorlanır. Bu ikilem, onu sürekli bir iç çatışmaya sürükler.",
+      "as_friend_tr": "Cömert ve etkileyici bir arkadaş olurdu. Ancak, zaman zaman kendi iç dünyasına çekilebilir ve ulaşılmaz hale gelebilirdi.",
+      "as_partner_tr": "İlişkide etkileyici ve cömert olurdu, ancak işkolik yapısı nedeniyle duygusal mesafe yaratabilir.",
+      "career_dna_tr": "Oskar, günümüzde bir girişimci veya insan hakları savunucusu olarak öne çıkabilirdi. Karizması ve liderlik yetenekleri bu alanlarda parlamasını sağlardı.",
+      "growth_arc_tr": "Schindler'in büyüme yolculuğu, kendi çıkarları yerine başkalarının hayatlarına değer vermeyi öğrenmekten geçer.",
+      "if_you_are_tr": "Sen bir Oskar Schindler'sen, karizman ve liderlik yeteneklerinle etrafındaki insanları etkileyebilirsin. Ancak, vicdanının sesine kulak vermek ve başkalarına yardım etmek seni daha anlamlı bir yaşam yoluna yönlendirebilir."
     },
     {
       "id": "film_mononoke_san",
@@ -1910,7 +2360,16 @@
         "control": 4,
         "sensitivity": 7
       },
-      "symbol": "🌳"
+      "symbol": "🌳",
+      "famous_quote_tr": "İnsanlar ve doğa aynı dünyada yaşayamaz mı?",
+      "depth_tr": "San, insan toplumundan kopmuş ve doğayla derin bir bağ kurmuş bir karakterdir. Onu bu kadar savaşçı ve tutkulu yapan, doğanın korunması için duyduğu derin bağlılıktır.",
+      "shadow_tr": "İnsanlara olan güvensizliği, ona zarar verebilecek bir ön yargı haline gelebilir. Kendi duygusal yaralarını görmekte zorlanır.",
+      "challenge_tr": "İnsanlar ve doğa arasında bir denge kurmaya çalışırken, kendi kimliğini ve aidiyet hissini bulmakta zorlanır.",
+      "as_friend_tr": "Sadık ve güçlü bir arkadaş olurdu. Ancak, doğa konusundaki hassasiyeti nedeniyle anlaşılmayı beklerdi.",
+      "as_partner_tr": "İlişkide tutkulu ve koruyucu olurdu, ancak doğa sevgisi nedeniyle duygusal mesafeler yaratabilir.",
+      "career_dna_tr": "San, günümüzde bir çevre aktivisti veya biyolog olarak parlayabilirdi. Doğaya olan sevgisi ve bağlılığı bu alanlarda ona başarı getirebilirdi.",
+      "growth_arc_tr": "San'ın içsel yolculuğu, insanlarla olan ön yargılarını aşarak, doğa ve insan arasında bir denge kurmayı öğrenmekten geçer.",
+      "if_you_are_tr": "Sen bir San'san, doğayla kurduğun derin bağ seni eşsiz kılar. Ancak, insanlarla olan ilişkilerinde daha açık olmak ve ön yargılarını aşmak, seni daha güçlü bir birey yapabilir."
     },
     {
       "id": "film_spiderman_peter",
@@ -1947,7 +2406,16 @@
         "control": 4,
         "sensitivity": 7
       },
-      "symbol": "🕷️"
+      "symbol": "🕷️",
+      "famous_quote_tr": "Büyük güç, büyük sorumluluk getirir.",
+      "depth_tr": "Peter Parker'ın hayatı, sıradan bir genç olarak başladığı halde, bir örümcek ısırığı sonrası değişmiştir. Bu değişim, ona güç ve sorumluluk arasındaki ince çizgiyi öğretir.",
+      "shadow_tr": "Peter, kendi ihtiyaçlarını sıklıkla ihmal eder. Bu, onun tükenmesine ve yalnız hissetmesine neden olabilir.",
+      "challenge_tr": "Kişisel yaşamı ile süper kahraman sorumlulukları arasında denge kurmakta zorlanır. Bu da sürekli bir içsel çatışmaya yol açar.",
+      "as_friend_tr": "Güvenilir ve fedakar bir arkadaş olurdu. Ancak, zaman zaman kendi problemleriyle boğuşurken uzaklaşabilir.",
+      "as_partner_tr": "İlişkide sevgi dolu ve destekleyici olurdu, ancak süper kahraman kimliği nedeniyle zaman ve enerji kısıtlamaları olabilirdi.",
+      "career_dna_tr": "Peter, günümüzde bir bilim insanı ya da mühendis olarak parlayabilirdi. Merakı ve zekası bu alanlarda ona başarı getirebilirdi.",
+      "growth_arc_tr": "Peter'ın büyüme yolculuğu, kişisel mutluluğunu ve sorumluluklarını dengelemeyi öğrenmekten geçer.",
+      "if_you_are_tr": "Sen bir Peter Parker'san, kahramanlık ve sorumluluk arasında sürekli bir denge kurmaya çalışıyorsun. Ancak, kendi mutluluğunu da dikkate almak ve dengeyi bulmak senin için önemlidir."
     },
     {
       "id": "film_wonderwoman_diana",
@@ -1984,7 +2452,16 @@
         "control": 6,
         "sensitivity": 6
       },
-      "symbol": "🛡️"
+      "symbol": "🛡️",
+      "famous_quote_tr": "Sevgi, dünyayı kurtarabilir.",
+      "depth_tr": "Diana, tanrısal kökenleri olan ve insan dünyasına merhamet getirmek isteyen bir savaşçıdır. Onu güçlü kılan, merhamet ve adalet duygularıdır.",
+      "shadow_tr": "Kendini başkalarına adadığı için, kendi duygusal ihtiyaçlarını ihmal edebilir. Bu, içsel bir boşluk yaratabilir.",
+      "challenge_tr": "Kendi dünyası ile insan dünyası arasındaki farklılıklarla başa çıkmakta zorlanır. Sevgi ve savaş arasında sıkışır.",
+      "as_friend_tr": "Koruyucu ve destekleyici bir arkadaş olurdu. Ancak, zaman zaman kendi içsel çatışmalarına çekilebilir.",
+      "as_partner_tr": "İlişkide sadık ve sevgi dolu olurdu, ancak savaşçı kimliği nedeniyle duygusal mesafeler yaratabilir.",
+      "career_dna_tr": "Diana, günümüzde bir diplomat veya insan hakları savunucusu olarak parlayabilirdi. Adalet arayışı ve liderlik yetenekleri bu alanlarda ona başarı getirebilirdi.",
+      "growth_arc_tr": "Diana'nın içsel yolculuğu, sevginin ve barışın gücünü keşfederek, savaşçı kimliğini dengelemeyi öğrenmekten geçer.",
+      "if_you_are_tr": "Sen bir Diana Prenses'sen, içindeki savaşçı ruhu ve merhamet duygusu seni eşsiz yapıyor. Ancak, kendi duygusal ihtiyaçlarını da göz ardı etmemek, içsel dengen için önemlidir."
     },
     {
       "id": "film_killbill_bride",
@@ -2021,7 +2498,16 @@
         "control": 7,
         "sensitivity": 5
       },
-      "symbol": "🥷"
+      "symbol": "🥷",
+      "famous_quote_tr": "Ölüm listemde yer alıyorsun.",
+      "depth_tr": "Beatrix Kiddo, ihanet ve kayıplarla dolu geçmişi nedeniyle intikam yoluna baş koymuştur. Onu bu kadar kararlı yapan, adalet ve hesaplaşma arayışıdır.",
+      "shadow_tr": "İntikam arzusu, onu kendi insanlığından uzaklaştırabilir. Bu karanlık tarafını görmekte zorlanır.",
+      "challenge_tr": "Geçmiş travmaları ve intikam arzusu ile barışmakta zorlanır. Bu, onu sürekli bir döngüye hapseder.",
+      "as_friend_tr": "Sadık ve güçlü bir arkadaş olurdu, ancak geçmişinin gölgesi zaman zaman ilişkileri zorlayabilir.",
+      "as_partner_tr": "İlişkide tutkulu ve kararlı olurdu, ancak intikam yolculuğu nedeniyle duygusal mesafeler yaratabilir.",
+      "career_dna_tr": "Beatrix, günümüzde bir özel dedektif veya güvenlik uzmanı olarak parlayabilirdi. Kararlılığı ve analitik yetenekleri bu alanlarda ona başarı getirebilirdi.",
+      "growth_arc_tr": "Beatrix'in büyüme yolculuğu, intikamdan vazgeçerek içsel huzuru bulmak ve yeni bir başlangıç yapmak üzerine kuruludur.",
+      "if_you_are_tr": "Sen bir Beatrix Kiddo'san, intikam ve hesaplaşma arzusu seni yönlendirebilir. Ancak, içsel huzuru bulmak ve geçmişinle barışmak, yeni başlangıçlara kapı açabilir."
     },
     {
       "id": "film_tr_eskiya_baran",
@@ -2058,7 +2544,16 @@
         "control": 5,
         "sensitivity": 7
       },
-      "symbol": "🔫"
+      "symbol": "🔫",
+      "famous_quote_tr": "Beni bu dağlarda unutun",
+      "depth_tr": "Baran'ın derinliği, geçmişin yıkıcı ağırlığı ve kaybedilen onurlu bir yaşamın izlerini taşımasından gelir. Gençliğinde ihanete uğramış ve sevgilisini kaybetmiş biri olarak, intikam ve kaybolan yıllarının ardından yeniden var olma mücadelesi verir.",
+      "shadow_tr": "Baran, öfkesinin ardında sakladığı derin bir kırgınlık ve kaybetme korkusunu göremez. Geçmişe olan bağlılığı, kendini affetmesine engel olur.",
+      "challenge_tr": "Baran, geçmişin zincirlerinden kurtulmakta zorlanır ve geçmişteki ihanetin gölgesinden çıkmakta güçlük çeker.",
+      "as_friend_tr": "Baran, dostlarına sadık ve güvenilir bir arkadaş olur, gerektiğinde kendini feda etmekten çekinmez.",
+      "as_partner_tr": "Baran duygusal derinliği ile yoğun bir partner olur, ancak geçmişin hayaletleri ilişkide huzursuzluk yaratabilir.",
+      "career_dna_tr": "Bugünün dünyasında Baran, bir kriminal psikolog ya da güvenlik uzmanı olarak parlayabilir; çünkü insan doğasının karanlık yönlerini anlama kapasitesine sahiptir.",
+      "growth_arc_tr": "Baran'ın iç yolculuğu, geçmişin yüklerinden kurtulup affetmeyi öğrenmek üzerine kuruludur.",
+      "if_you_are_tr": "Sen bir Baran'san, geçmişin yaraları seni zaman zaman esir alabilir fakat onurlu duruşunla her zaman ayakta kalmayı başarırsın. Affetmeyi öğrenmek, senin özgürlüğün için anahtar olabilir."
     },
     {
       "id": "film_tr_mustang_lale",
@@ -2095,7 +2590,16 @@
         "control": 3,
         "sensitivity": 7
       },
-      "symbol": "🌹"
+      "symbol": "🌹",
+      "famous_quote_tr": "Özgürlüğümü rüzgar gibi hissediyorum",
+      "depth_tr": "Lale'nin derinliği, içinde yetiştiği baskıcı çevreye rağmen özgürlüğe duyduğu bitmek bilmeyen arzudan gelir. Genç yaşına rağmen, bağımsızlık ve adalet arayışıyla sınırları zorlar.",
+      "shadow_tr": "Lale, özgürlük arzusunun getirdiği tehlikeleri ve başkalarına zarar verebileceğini göremeyebilir. Kendi özgürlüğü için başkalarının duygularını ihmal edebilir.",
+      "challenge_tr": "Lale, çevresindeki baskılara karşı koymakta ve kendi sesini duyurmakta zorlanır.",
+      "as_friend_tr": "Lale, arkadaşlarına ilham veren ve onları cesaretlendiren bir arkadaş olur. Her zaman yenilik ve macera doludur.",
+      "as_partner_tr": "Lale, özgürlüğüne düşkün bir partner olur; bağımsızlık ihtiyacı nedeniyle ilişkide mesafeli görünebilir.",
+      "career_dna_tr": "Günümüzde Lale, bir insan hakları aktivisti veya gazeteci olarak parlayabilir; çünkü özgürlük ve adalet için mücadele etmeyi doğal bir görev olarak görür.",
+      "growth_arc_tr": "Lale'nin yolculuğu, özgürlüğünü bulurken başkalarının da özgürlüğüne saygı duymayı öğrenmek üzerine kuruludur.",
+      "if_you_are_tr": "Sen bir Lale'sen, özgür ruhun seni yerinde duramaz hale getirir. Cesaretinle çevrendekilere ilham olursun, ancak başkalarının sınırlarına da dikkat etmelisin."
     },
     {
       "id": "film_tr_babamoglum_sadik",
@@ -2132,7 +2636,16 @@
         "control": 6,
         "sensitivity": 9
       },
-      "symbol": "👨‍👦"
+      "symbol": "👨‍👦",
+      "famous_quote_tr": "Vicdanımın peşinden koştum",
+      "depth_tr": "Sadık'ın derinliği, vicdanı ve idealizmi arasındaki çatışmadan doğar. Hayatındaki kırılmalar, onu hem ailesine hem de kendine karşı dürüst olmaya zorlar.",
+      "shadow_tr": "Sadık, ideallerinin peşinden giderken kaybettiği ilişkiler ve pişmanlıkları görmezden gelebilir. Duygusal yüklerini taşımakta zorlanır.",
+      "challenge_tr": "Sadık, ailesiyle ve geçmişiyle yüzleşmekte zorlanır, özellikle de seçimlerinin sonuçlarına katlanmakta.",
+      "as_friend_tr": "Sadık, dürüst ve destekleyici bir arkadaş olur, her zaman iyi niyetle hareket eder.",
+      "as_partner_tr": "Sadık, duygusal derinliğiyle sevgi dolu bir partner olur, ancak geçmişin izleri ilişkide sancılar yaratabilir.",
+      "career_dna_tr": "Günümüzde Sadık, bir sosyal çalışmacı veya öğretmen olarak parlayabilir; çünkü başkalarının hayatlarına anlam katmak onun için önemlidir.",
+      "growth_arc_tr": "Sadık'ın yolculuğu, kendi ideallerini gerçekleştirmeye çalışırken ailesiyle barışmayı ve affetmeyi öğrenmektir.",
+      "if_you_are_tr": "Sen bir Sadık'san, ideallerin için mücadele ederken hayatın gerçekleriyle yüzleşmek zorunda kalabilirsin. Duygusal yüklerini hafifletmek için kendine ve sevdiklerine karşı daha açık olmalısın."
     },
     {
       "id": "film_tr_gora_arif",
@@ -2169,7 +2682,16 @@
         "control": 3,
         "sensitivity": 4
       },
-      "symbol": "🌌"
+      "symbol": "🌌",
+      "famous_quote_tr": "Ben bu işi kıvırırım",
+      "depth_tr": "Arif'in derinliği, her durumda bir çıkış yolu bulma yeteneğinden gelir. Hayat karşısındaki esnek ve eğlenceli tavrı, onu her zorluğun üstesinden gelebilecek bir lider yapar.",
+      "shadow_tr": "Arif, hayatı fazla hafife alabilir ve bu durum, bazı ciddi durumları gözden kaçırmasına neden olabilir. Derin duygusal ilişkilerde yüzeyde kalabilir.",
+      "challenge_tr": "Arif, bazen ciddiyeti elden bırakmakta ve sorumluluk almaktan kaçınmakta zorlanır.",
+      "as_friend_tr": "Arif, arkadaş çevresinde neşe kaynağı olur ve her zaman şakalarıyla ortamı yumuşatır.",
+      "as_partner_tr": "Arif, eğlenceli ve spontane bir partner olur, ancak duygusal derinlik arayanlar için yüzeysel kalabilir.",
+      "career_dna_tr": "Günümüzde Arif, bir komedyen veya yaratıcı reklamcı olarak parlayabilir; çünkü mizah yeteneği ve yaratıcılığı sınırsızdır.",
+      "growth_arc_tr": "Arif'in yolculuğu, hayata karşı ciddiyet ve sorumluluk duygusunu geliştirerek daha derin ilişkiler kurmayı öğrenmektir.",
+      "if_you_are_tr": "Sen bir Arif'sen, hayatı ciddiye almadan yaşar ve her durumdan bir mizah çıkarırsın. Ancak, bazen derinleşmek ve sorumluluk almak da gerekir."
     },
     {
       "id": "film_tr_kisuykusu_aydin",
@@ -2206,7 +2728,16 @@
         "control": 8,
         "sensitivity": 7
       },
-      "symbol": "📖"
+      "symbol": "📖",
+      "famous_quote_tr": "Düşüncelerimle baş başayım",
+      "depth_tr": "Aydın'ın derinliği, entelektüel arayışları ve kendini sorgulayan doğasından gelir. Yalnızlık içinde düşünceleriyle boğuşur, ancak bu onu gerçek dünyadan uzaklaştırır.",
+      "shadow_tr": "Aydın, kendi içsel dünyasında kaybolmayı ve çevresindekilerin duygusal ihtiyaçlarını ihmal etmeyi göremez. Bu durum, onu yalnızlaştırır.",
+      "challenge_tr": "Aydın, duygusal yakınlık kurmakta ve çevresindeki insanlarla gerçek bağlar oluşturmakta zorlanır.",
+      "as_friend_tr": "Aydın, entelektüel sohbetlerle dolu bir arkadaş olur, ancak duygusal destek konusunda yetersiz kalabilir.",
+      "as_partner_tr": "Aydın, düşünceli bir partner olur; ancak duygusal açıdan mesafeli ve eleştirel olabilir, bu da ilişkide soğukluk yaratabilir.",
+      "career_dna_tr": "Günümüzde Aydın, bir yazar veya akademisyen olarak parlayabilir; çünkü düşünsel derinliği ve analiz yeteneği yüksektir.",
+      "growth_arc_tr": "Aydın'ın yolculuğu, duygusal bağlar kurmayı öğrenerek yalnızlığını aşmak ve çevresine daha fazla açılmaktır.",
+      "if_you_are_tr": "Sen bir Aydın'san, düşüncelerinle kendini kaybedebilir ve çevrenden kopabilirsin. Duygusal bağlar kurmayı öğrenmek, iç huzurunu bulmana yardımcı olabilir."
     },
     {
       "id": "film_tr_ahlat_sinan",
@@ -2243,7 +2774,16 @@
         "control": 6,
         "sensitivity": 9
       },
-      "symbol": "🌳"
+      "symbol": "🌳",
+      "famous_quote_tr": "Kendi yolumu bulmalıyım",
+      "depth_tr": "Sinan'ın derinliği, içsel çatışmaları ve varoluşsal arayışlarından kaynaklanır. Babasının gölgesinde kalmış biri olarak, kendi kimliğini bulma yolculuğundadır.",
+      "shadow_tr": "Sinan, kendi arayışının getirdiği yalnızlığı göremez ve bu durum, çevresindeki insanları uzaklaştırır. Kendi içsel huzursuzluğunu başkalarına yansıtabilir.",
+      "challenge_tr": "Sinan, kendine bir yer bulmak ve içsel çatışmalarını çözmekte zorlanır.",
+      "as_friend_tr": "Sinan, sorgulayıcı ve düşündürücü bir arkadaş olur, ancak zaman zaman yalnızlığı tercih edebilir.",
+      "as_partner_tr": "Sinan, derin düşünceleriyle etkileyici bir partner olur; ancak duygusal dalgalanmaları ilişkide karmaşa yaratabilir.",
+      "career_dna_tr": "Günümüzde Sinan, bir sanatçı veya filozof olarak parlayabilir; çünkü derin düşünceleri ve sorgulayıcı yapısı, yaratıcı süreçlere ilham verir.",
+      "growth_arc_tr": "Sinan'ın yolculuğu, kendi kimliğini bulup kabul ederek içsel barışa ulaşmak üzerine kuruludur.",
+      "if_you_are_tr": "Sen bir Sinan'san, derin düşüncelerin ve sorgulamalarla dolu zihnin seni yalnız kılabilir. Kendi kimliğini bulup kabullenmek, seni gerçek huzura götürebilir."
     }
   ]
 }

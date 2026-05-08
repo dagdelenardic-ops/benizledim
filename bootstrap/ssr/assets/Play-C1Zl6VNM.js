@@ -681,6 +681,59 @@ const _sfc_main$1 = {
           size: 18
         }, null, _parent));
         _push(` Paylaş </button></div></div></div>`);
+        if (character.value.famous_quote_tr) {
+          _push(`<div class="qz-section qz-quote-feature"><div class="qz-kicker">// ${ssrInterpolate(character.value.name.toUpperCase())} DİYOR Kİ //</div><blockquote class="qz-quote-big"><span class="qz-quote-mark">&quot;</span>${ssrInterpolate(character.value.famous_quote_tr)}<span class="qz-quote-mark">&quot;</span></blockquote><div class="qz-kicker" style="${ssrRenderStyle({ color: "var(--qz-ink-soft)", textAlign: "right" })}"> — ${ssrInterpolate(character.value.work)} (${ssrInterpolate(character.value.year)}) </div></div>`);
+        } else {
+          _push(`<!---->`);
+        }
+        if (character.value.if_you_are_tr) {
+          _push(`<div class="qz-section qz-section--narrative"><div class="qz-kicker">// SEN VE BU KARAKTER //</div><p class="qz-narrative-body">${ssrInterpolate(character.value.if_you_are_tr)}</p></div>`);
+        } else {
+          _push(`<!---->`);
+        }
+        _push(`<div class="qz-section"><h3>Karakterin haritası</h3><div class="qz-kicker" style="${ssrRenderStyle({ marginBottom: "18px" })}">${ssrInterpolate(character.value.name)} hangi köklerden besleniyor — neyin altında ezilebiliyor? </div><div class="qz-map-grid">`);
+        if (character.value.depth_tr) {
+          _push(`<div class="qz-map-card qz-map-card--depth"><div class="qz-map-label">DERİNLİK · KÖKLERİ</div><p>${ssrInterpolate(character.value.depth_tr)}</p></div>`);
+        } else {
+          _push(`<!---->`);
+        }
+        if (character.value.shadow_tr) {
+          _push(`<div class="qz-map-card qz-map-card--shadow"><div class="qz-map-label">GÖRMEDİĞİ KARANLIK</div><p>${ssrInterpolate(character.value.shadow_tr)}</p></div>`);
+        } else {
+          _push(`<!---->`);
+        }
+        if (character.value.challenge_tr) {
+          _push(`<div class="qz-map-card qz-map-card--challenge"><div class="qz-map-label">EN ZORLANDIĞI YER</div><p>${ssrInterpolate(character.value.challenge_tr)}</p></div>`);
+        } else {
+          _push(`<!---->`);
+        }
+        if (character.value.growth_arc_tr) {
+          _push(`<div class="qz-map-card qz-map-card--growth"><div class="qz-map-label">İÇ YOLCULUĞU</div><p>${ssrInterpolate(character.value.growth_arc_tr)}</p></div>`);
+        } else {
+          _push(`<!---->`);
+        }
+        _push(`</div></div>`);
+        if (character.value.as_friend_tr || character.value.as_partner_tr) {
+          _push(`<div class="qz-section qz-twocol">`);
+          if (character.value.as_friend_tr) {
+            _push(`<div class="qz-rel-card"><div class="qz-rel-icon" style="${ssrRenderStyle({ background: "var(--qz-yellow)" })}">★</div><div class="qz-rel-title">ARKADAŞ OLARAK</div><p>${ssrInterpolate(character.value.as_friend_tr)}</p></div>`);
+          } else {
+            _push(`<!---->`);
+          }
+          if (character.value.as_partner_tr) {
+            _push(`<div class="qz-rel-card"><div class="qz-rel-icon" style="${ssrRenderStyle({ background: "var(--qz-pink)" })}">♥</div><div class="qz-rel-title">PARTNER OLARAK</div><p>${ssrInterpolate(character.value.as_partner_tr)}</p></div>`);
+          } else {
+            _push(`<!---->`);
+          }
+          _push(`</div>`);
+        } else {
+          _push(`<!---->`);
+        }
+        if (character.value.career_dna_tr) {
+          _push(`<div class="qz-section"><h3>Bugün yaşasaydı…</h3><div class="qz-kicker" style="${ssrRenderStyle({ marginBottom: "14px" })}"> Karakterin DNA&#39;sı modern bir ofiste / serbest hayatta nasıl çalışırdı — </div><div class="qz-modern-card"><p>${ssrInterpolate(character.value.career_dna_tr)}</p></div></div>`);
+        } else {
+          _push(`<!---->`);
+        }
         if (superpower.value) {
           _push(`<div class="qz-section qz-twocol"><div class="qz-card-feature qz-card-feature--bright"><div class="qz-kicker">// SÜPER GÜCÜN //</div><h2 class="qz-display qz-chroma" style="${ssrRenderStyle({ fontSize: "clamp(38px, 5vw, 64px)", lineHeight: "0.9", margin: "8px 0 12px" })}">${ssrInterpolate(superpower.value.title)}</h2><p class="qz-feature-body">${ssrInterpolate(superpower.value.body)}</p>`);
           if (superpower.value.combo) {
@@ -1012,14 +1065,20 @@ const _sfc_main = {
   },
   setup(__props) {
     const props = __props;
+    const FORMAT_BY_ID = {
+      q05: "cards",
+      q10: "cards",
+      q14: "cards",
+      q19: "cards",
+      q23: "cards",
+      q08: "vs",
+      q16: "vs",
+      q21: "vs",
+      q12: "slider",
+      q25: "slider"
+    };
     const questionFormats = computed(() => {
-      return props.questions.map((q, i) => {
-        if (q.format) return q.format;
-        if ([4, 9, 13, 18, 22].includes(i)) return "cards";
-        if ([7, 15, 20].includes(i)) return "vs";
-        if ([11, 24].includes(i)) return "slider";
-        return "text";
-      });
+      return props.questions.map((q) => q.format || FORMAT_BY_ID[q.id] || "text");
     });
     const phase = ref("start");
     const idx = ref(0);

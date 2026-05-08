@@ -366,6 +366,73 @@ const characterTags = computed(() => {
             </div>
         </div>
 
+        <!-- Karakterin ünlü repliği -->
+        <div v-if="character.famous_quote_tr" class="qz-section qz-quote-feature">
+            <div class="qz-kicker">// {{ character.name.toUpperCase() }} DİYOR Kİ //</div>
+            <blockquote class="qz-quote-big">
+                <span class="qz-quote-mark">"</span>{{ character.famous_quote_tr }}<span class="qz-quote-mark">"</span>
+            </blockquote>
+            <div class="qz-kicker" :style="{ color: 'var(--qz-ink-soft)', textAlign: 'right' }">
+                — {{ character.work }} ({{ character.year }})
+            </div>
+        </div>
+
+        <!-- Sen & karakter — kişiselleştirilmiş anlatı -->
+        <div v-if="character.if_you_are_tr" class="qz-section qz-section--narrative">
+            <div class="qz-kicker">// SEN VE BU KARAKTER //</div>
+            <p class="qz-narrative-body">{{ character.if_you_are_tr }}</p>
+        </div>
+
+        <!-- Derinlik + Karanlık + Sınanma -->
+        <div class="qz-section">
+            <h3>Karakterin haritası</h3>
+            <div class="qz-kicker" :style="{ marginBottom: '18px' }">
+                {{ character.name }} hangi köklerden besleniyor — neyin altında ezilebiliyor?
+            </div>
+            <div class="qz-map-grid">
+                <div v-if="character.depth_tr" class="qz-map-card qz-map-card--depth">
+                    <div class="qz-map-label">DERİNLİK · KÖKLERİ</div>
+                    <p>{{ character.depth_tr }}</p>
+                </div>
+                <div v-if="character.shadow_tr" class="qz-map-card qz-map-card--shadow">
+                    <div class="qz-map-label">GÖRMEDİĞİ KARANLIK</div>
+                    <p>{{ character.shadow_tr }}</p>
+                </div>
+                <div v-if="character.challenge_tr" class="qz-map-card qz-map-card--challenge">
+                    <div class="qz-map-label">EN ZORLANDIĞI YER</div>
+                    <p>{{ character.challenge_tr }}</p>
+                </div>
+                <div v-if="character.growth_arc_tr" class="qz-map-card qz-map-card--growth">
+                    <div class="qz-map-label">İÇ YOLCULUĞU</div>
+                    <p>{{ character.growth_arc_tr }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- İlişkilerinde + Modern dünyada -->
+        <div class="qz-section qz-twocol" v-if="character.as_friend_tr || character.as_partner_tr">
+            <div v-if="character.as_friend_tr" class="qz-rel-card">
+                <div class="qz-rel-icon" :style="{ background: 'var(--qz-yellow)' }">★</div>
+                <div class="qz-rel-title">ARKADAŞ OLARAK</div>
+                <p>{{ character.as_friend_tr }}</p>
+            </div>
+            <div v-if="character.as_partner_tr" class="qz-rel-card">
+                <div class="qz-rel-icon" :style="{ background: 'var(--qz-pink)' }">♥</div>
+                <div class="qz-rel-title">PARTNER OLARAK</div>
+                <p>{{ character.as_partner_tr }}</p>
+            </div>
+        </div>
+
+        <div class="qz-section" v-if="character.career_dna_tr">
+            <h3>Bugün yaşasaydı…</h3>
+            <div class="qz-kicker" :style="{ marginBottom: '14px' }">
+                Karakterin DNA'sı modern bir ofiste / serbest hayatta nasıl çalışırdı —
+            </div>
+            <div class="qz-modern-card">
+                <p>{{ character.career_dna_tr }}</p>
+            </div>
+        </div>
+
         <!-- Süper Güç + Karanlık Taraf -->
         <div class="qz-section qz-twocol" v-if="superpower">
             <div class="qz-card-feature qz-card-feature--bright">

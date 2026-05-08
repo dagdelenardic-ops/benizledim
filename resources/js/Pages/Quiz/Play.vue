@@ -16,14 +16,13 @@ const props = defineProps({
     characters: { type: Array, required: true },
 });
 
+const FORMAT_BY_ID = {
+    q05: 'cards', q10: 'cards', q14: 'cards', q19: 'cards', q23: 'cards',
+    q08: 'vs', q16: 'vs', q21: 'vs',
+    q12: 'slider', q25: 'slider',
+};
 const questionFormats = computed(() => {
-    return props.questions.map((q, i) => {
-        if (q.format) return q.format;
-        if ([4, 9, 13, 18, 22].includes(i)) return 'cards';
-        if ([7, 15, 20].includes(i)) return 'vs';
-        if ([11, 24].includes(i)) return 'slider';
-        return 'text';
-    });
+    return props.questions.map(q => q.format || FORMAT_BY_ID[q.id] || 'text');
 });
 
 const phase = ref('start');
