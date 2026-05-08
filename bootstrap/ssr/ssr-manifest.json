@@ -133,6 +133,27 @@
   "resources/js/Components/Post/WatchLogCard.vue": [
     "/build/assets/WatchLogCard-ppBRc7-H.js"
   ],
+  "resources/js/Components/Quiz/QuizIcon.vue": [
+    "/build/assets/Play-BDodAAMH.js"
+  ],
+  "resources/js/Components/Quiz/QuizMarquee.vue": [
+    "/build/assets/Play-BDodAAMH.js"
+  ],
+  "resources/js/Components/Quiz/QuizPosterArt.vue": [
+    "/build/assets/Play-BDodAAMH.js"
+  ],
+  "resources/js/Components/Quiz/QuizQuestion.vue": [
+    "/build/assets/Play-BDodAAMH.js"
+  ],
+  "resources/js/Components/Quiz/QuizResult.vue": [
+    "/build/assets/Play-BDodAAMH.js"
+  ],
+  "resources/js/Components/Quiz/QuizStart.vue": [
+    "/build/assets/Play-BDodAAMH.js"
+  ],
+  "resources/js/Components/Quiz/QuizTopBar.vue": [
+    "/build/assets/Play-BDodAAMH.js"
+  ],
   "resources/js/Components/Recommend/ConversationHistory.vue": [
     "/build/assets/Index-Mu7c1otp.js",
     "/build/assets/Index-6hxdgyyZ.css"
@@ -180,6 +201,12 @@
   "resources/js/Composables/usePushSubscription.js": [
     "/build/assets/AppLayout-wsaIx5jc.js",
     "/build/assets/AppLayout-Cx1-k5-H.css"
+  ],
+  "resources/js/Composables/useQuizAudio.js": [
+    "/build/assets/Play-BDodAAMH.js"
+  ],
+  "resources/js/Composables/useQuizScoring.js": [
+    "/build/assets/Play-BDodAAMH.js"
   ],
   "resources/js/Extensions/EmbedExtension.js": [
     "/build/assets/RichTextEditor-B1ICi6UT.js",
@@ -288,6 +315,9 @@
   ],
   "resources/js/Pages/Profile/Show.vue": [
     "/build/assets/Show-C6Aiktmu.js"
+  ],
+  "resources/js/Pages/Quiz/Play.vue": [
+    "/build/assets/Play-BDodAAMH.js"
   ],
   "resources/js/Pages/Recommend/Index.vue": [
     "/build/assets/Index-Mu7c1otp.js",

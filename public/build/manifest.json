@@ -423,7 +423,7 @@
     ]
   },
   "resources/js/Pages/Cinema/Index.vue": {
-    "file": "assets/Index-9T_x8cyS.js",
+    "file": "assets/Index-DiqYa-kP.js",
     "name": "Index",
     "src": "resources/js/Pages/Cinema/Index.vue",
     "isDynamicEntry": true,
@@ -589,6 +589,19 @@
       "_useDate-Dg76ZUot.js"
     ]
   },
+  "resources/js/Pages/Quiz/Play.vue": {
+    "file": "assets/Play-DLg132Bm.js",
+    "name": "Play",
+    "src": "resources/js/Pages/Quiz/Play.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_AppLayout-B2vGqucX.js",
+      "_vendor-vue-DJqlaWIa.js",
+      "_vendor-inertia-Cq771Yxq.js",
+      "_vendor-6Uh9O7aq.js",
+      "_vendor-axios-CV_kDJ8B.js"
+    ]
+  },
   "resources/js/Pages/Recommend/Index.vue": {
     "file": "assets/Index-CkF3-F0_.js",
     "name": "Index",
@@ -651,7 +664,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-iaSbLTUm.js",
+    "file": "assets/app-CLP-iOkf.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -690,12 +703,14 @@
       "resources/js/Pages/Post/Index.vue",
       "resources/js/Pages/Post/Show.vue",
       "resources/js/Pages/Profile/Show.vue",
+      "resources/js/Pages/Quiz/Play.vue",
       "resources/js/Pages/Recommend/Index.vue",
       "resources/js/Pages/Search/Index.vue",
       "resources/js/Pages/Tag/Show.vue",
       "resources/js/Pages/Watchlist/Index.vue"
     ],
     "css": [
+      "assets/app-Bfz_enEZ.css",
       "assets/app-CZXNITwp.css"
     ]
   }

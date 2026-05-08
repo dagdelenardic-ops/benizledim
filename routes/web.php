@@ -41,6 +41,7 @@ use App\Http\Controllers\RssFeedController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\WatchlistController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\WixRedirectController;
 use Illuminate\Support\Facades\Route;
 
@@ -138,6 +139,9 @@ Route::post('/api/push/subscribe', [PushSubscriptionController::class, 'store'])
 Route::delete('/api/push/subscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
 Route::get('/api/push/vapid', [PushSubscriptionController::class, 'vapidKey'])->name('push.vapid');
 Route::post('/api/push/test', [PushSubscriptionController::class, 'test'])->name('push.test');
+
+// Quiz
+Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
 
 // Statik Sayfalar
 Route::get('/sayfa/{page:slug}', [PageController::class, 'show'])->name('pages.show');
