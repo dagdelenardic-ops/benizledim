@@ -276,6 +276,13 @@ export default {
 
             <div class="flex flex-wrap items-center gap-3 lg:justify-end">
                 <Link
+                    href="/quiz"
+                    class="quiz-cta-button inline-flex min-h-11 items-center justify-center gap-1.5 px-3 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] bi-mono lg:hidden"
+                >
+                    <span class="quiz-cta-emoji">🎭</span>
+                    <span>Quiz</span>
+                </Link>
+                <Link
                     href="/ne-izlesem"
                     class="ne-izlesem-nav-button inline-flex min-h-11 items-center justify-center px-3 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-white bi-mono lg:hidden"
                 >
@@ -347,12 +354,17 @@ export default {
                 >
                     {{ cat.name }}
                 </Link>
-                <Link href="/quiz" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Quiz</Link>
                 <Link href="/festival" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Festival</Link>
             </div>
-            <Link href="/ne-izlesem" class="ne-izlesem-nav-button inline-flex min-h-12 min-w-[132px] items-center justify-center px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-white bi-mono">
-                Ne İzlesem?
-            </Link>
+            <div class="flex items-stretch">
+                <Link href="/quiz" class="quiz-cta-button inline-flex min-h-12 min-w-[132px] items-center justify-center gap-2 px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] bi-mono">
+                    <span class="quiz-cta-emoji">🎭</span>
+                    <span>Hangi Karaktersin?</span>
+                </Link>
+                <Link href="/ne-izlesem" class="ne-izlesem-nav-button inline-flex min-h-12 min-w-[132px] items-center justify-center px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-white bi-mono">
+                    Ne İzlesem?
+                </Link>
+            </div>
         </nav>
 
         <Transition
@@ -493,5 +505,64 @@ export default {
 @keyframes ne-izlesem-button-shift {
     0%, 49.999% { background-position: 0% 50%; }
     50%, 100% { background-position: 100% 50%; }
+}
+
+.quiz-cta-button {
+    color: #161410;
+    background: linear-gradient(135deg, #ffd23f 0%, #ff7ab6 50%, #c9b6ff 100%);
+    background-size: 220% 220%;
+    border: 2px solid #161410;
+    box-shadow: 3px 3px 0 #161410;
+    text-shadow: none;
+    position: relative;
+    overflow: hidden;
+    animation: quiz-cta-gradient 4.5s ease-in-out infinite;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.quiz-cta-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: quiz-cta-shimmer 3.6s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.quiz-cta-button:hover {
+    transform: translate(-1px, -2px) rotate(-0.6deg);
+    box-shadow: 5px 5px 0 #161410;
+}
+
+.quiz-cta-button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #161410;
+}
+
+.quiz-cta-emoji {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1;
+    animation: quiz-cta-wiggle 2.4s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes quiz-cta-gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+@keyframes quiz-cta-shimmer {
+    0%      { transform: translateX(-100%); }
+    35%     { transform: translateX(100%); }
+    100%    { transform: translateX(100%); }
+}
+
+@keyframes quiz-cta-wiggle {
+    0%, 60%, 100% { transform: rotate(0deg) scale(1); }
+    70%           { transform: rotate(-12deg) scale(1.1); }
+    80%           { transform: rotate(10deg) scale(1.1); }
+    90%           { transform: rotate(-6deg) scale(1.05); }
 }
 </style>
