@@ -283,6 +283,12 @@ const _sfc_main$2 = {
     function pad(n) {
       return String(n).padStart(2, "0");
     }
+    const cardImageUrl = (optIdx) => {
+      const qid = props.question?.id;
+      const oid = props.question?.options?.[optIdx]?.id;
+      if (!qid || !oid) return null;
+      return `/images/quiz/cards/${qid}_${oid}.webp`;
+    };
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: "qz-stage qz-fade-in",
@@ -297,7 +303,13 @@ const _sfc_main$2 = {
       } else if (__props.format === "cards") {
         _push(`<div class="qz-answers-cards"><!--[-->`);
         ssrRenderList(__props.question.options, (opt, i) => {
-          _push(`<button class="${ssrRenderClass(["qz-answer-card", __props.picked === i ? "is-picked" : ""])}"><div class="qz-acard-art" style="${ssrRenderStyle({ background: cardColors[i % cardColors.length].bg })}"><svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style="${ssrRenderStyle({ "position": "absolute", "inset": "0" })}"><circle cx="50" cy="50" r="22"${ssrRenderAttr("fill", cardColors[i % cardColors.length].accent)} opacity=".7"></circle></svg></div><div class="qz-acard-cap"><span>${ssrInterpolate(opt.text_tr)}</span><small>Seçenek ${ssrInterpolate(letters[i])}</small></div></button>`);
+          _push(`<button class="${ssrRenderClass(["qz-answer-card", __props.picked === i ? "is-picked" : ""])}"><div class="qz-acard-art" style="${ssrRenderStyle({ background: cardColors[i % cardColors.length].bg })}">`);
+          if (cardImageUrl(i)) {
+            _push(`<img${ssrRenderAttr("src", cardImageUrl(i))}${ssrRenderAttr("alt", opt.text_tr)} class="qz-acard-img" loading="lazy">`);
+          } else {
+            _push(`<!---->`);
+          }
+          _push(`<svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style="${ssrRenderStyle({ "position": "absolute", "inset": "0", "pointer-events": "none" })}"><circle cx="50" cy="50" r="22"${ssrRenderAttr("fill", cardColors[i % cardColors.length].accent)} opacity=".15"></circle></svg></div><div class="qz-acard-cap"><span>${ssrInterpolate(opt.text_tr)}</span><small>Seçenek ${ssrInterpolate(letters[i])}</small></div></button>`);
         });
         _push(`<!--]--></div>`);
       } else if (__props.format === "vs") {

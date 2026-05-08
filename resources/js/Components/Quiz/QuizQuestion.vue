@@ -64,6 +64,13 @@ const vsColors = [
 function pad(n) {
     return String(n).padStart(2, '0');
 }
+
+const cardImageUrl = (optIdx) => {
+    const qid = props.question?.id;
+    const oid = props.question?.options?.[optIdx]?.id;
+    if (!qid || !oid) return null;
+    return `/images/quiz/cards/${qid}_${oid}.webp`;
+};
 </script>
 
 <template>
@@ -95,8 +102,16 @@ function pad(n) {
                 @click="onPick(i)"
             >
                 <div class="qz-acard-art" :style="{ background: cardColors[i % cardColors.length].bg }">
-                    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; inset: 0;">
-                        <circle cx="50" cy="50" r="22" :fill="cardColors[i % cardColors.length].accent" opacity=".7" />
+                    <img
+                        v-if="cardImageUrl(i)"
+                        :src="cardImageUrl(i)"
+                        :alt="opt.text_tr"
+                        class="qz-acard-img"
+                        loading="lazy"
+                        @error="(e) => e.target.style.display = 'none'"
+                    />
+                    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; inset: 0; pointer-events: none;">
+                        <circle cx="50" cy="50" r="22" :fill="cardColors[i % cardColors.length].accent" opacity=".15" />
                     </svg>
                 </div>
                 <div class="qz-acard-cap">
