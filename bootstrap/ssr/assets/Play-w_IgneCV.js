@@ -1,4 +1,4 @@
-import { mergeProps, useSSRContext, withCtx, createVNode, toDisplayString, computed, ref, watch, onMounted, onUnmounted, unref, openBlock, createBlock, createCommentVNode, nextTick } from "vue";
+import { mergeProps, useSSRContext, withCtx, openBlock, createBlock, Fragment, renderList, createVNode, toDisplayString, computed, ref, watch, onMounted, onUnmounted, unref, createCommentVNode, nextTick } from "vue";
 import { ssrRenderAttrs, ssrRenderAttr, ssrRenderStyle, ssrInterpolate, ssrRenderList, ssrRenderClass, ssrRenderComponent, ssrRenderSlot, ssrIncludeBooleanAttr } from "vue/server-renderer";
 import { a as _export_sfc, A as AppLayout } from "./AppLayout-ogTCebx3.js";
 import "@inertiajs/vue3";
@@ -166,7 +166,8 @@ const _sfc_main$3 = {
   __ssrInlineRender: true,
   props: {
     totalQuestions: { type: Number, default: 25 },
-    totalCharacters: { type: Number, default: 60 }
+    totalCharacters: { type: Number, default: 60 },
+    characters: { type: Array, default: () => [] }
   },
   emits: ["start"],
   setup(__props, { emit: __emit }) {
@@ -188,7 +189,7 @@ const _sfc_main$3 = {
         name: "play",
         size: 22
       }, null, _parent));
-      _push(` Quiz&#39;e başla </button></div><div class="qz-start__meta"><span class="qz-sticker" style="${ssrRenderStyle({ background: "var(--qz-paper)" })}"><span class="qz-dot" style="${ssrRenderStyle({ background: "var(--qz-pink)" })}"></span> 47.382 kişi çözdü </span><span class="qz-sticker" style="${ssrRenderStyle({ background: "var(--qz-lilac)" })}">● BU HAFTA #2</span><span class="qz-sticker" style="${ssrRenderStyle({ background: "var(--qz-yellow)" })}">★ 4.8 ortalama</span></div><div class="qz-start__how"><!--[-->`);
+      _push(` Quiz&#39;e başla </button></div><div class="qz-start__how"><!--[-->`);
       ssrRenderList(steps, (s) => {
         _push(`<div class="qz-card-hard" style="${ssrRenderStyle({ "padding": "16px" })}"><div class="qz-kicker" style="${ssrRenderStyle({ "margin-bottom": "8px" })}">ADIM ${ssrInterpolate(s.n)}</div><div style="${ssrRenderStyle({ fontFamily: "var(--qz-display)", fontSize: "22px", textTransform: "uppercase", lineHeight: 1, marginBottom: "6px" })}">${ssrInterpolate(s.t)}</div><div style="${ssrRenderStyle({ fontSize: "14px", lineHeight: 1.4, color: "var(--qz-ink-soft)" })}">${ssrInterpolate(s.d)}</div></div>`);
       });
@@ -210,19 +211,21 @@ const _sfc_main$3 = {
       _push(ssrRenderComponent(QuizMarquee, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<span${_scopeId}>★</span><span${_scopeId}>VHS · 2026</span><span${_scopeId}>★</span><span${_scopeId}>BENİZLEDİM PRESENTS</span><span${_scopeId}>★</span><span${_scopeId}>HANGİ FİLM KARAKTERİSİN</span><span${_scopeId}>★</span><span${_scopeId}>${ssrInterpolate(__props.totalQuestions)} SORU · ${ssrInterpolate(__props.totalCharacters)} KARAKTER</span><span${_scopeId}>★</span><span${_scopeId}>SİNEMA KULÜBÜNE HOŞ GELDİN</span>`);
+            _push2(`<!--[-->`);
+            ssrRenderList(__props.characters, (c) => {
+              _push2(`<!--[--><span${_scopeId}>${ssrInterpolate(c.symbol || "★")}</span><span${_scopeId}>${ssrInterpolate(c.name.toUpperCase())}</span><!--]-->`);
+            });
+            _push2(`<!--]-->`);
           } else {
             return [
-              createVNode("span", null, "★"),
-              createVNode("span", null, "VHS · 2026"),
-              createVNode("span", null, "★"),
-              createVNode("span", null, "BENİZLEDİM PRESENTS"),
-              createVNode("span", null, "★"),
-              createVNode("span", null, "HANGİ FİLM KARAKTERİSİN"),
-              createVNode("span", null, "★"),
-              createVNode("span", null, toDisplayString(__props.totalQuestions) + " SORU · " + toDisplayString(__props.totalCharacters) + " KARAKTER", 1),
-              createVNode("span", null, "★"),
-              createVNode("span", null, "SİNEMA KULÜBÜNE HOŞ GELDİN")
+              (openBlock(true), createBlock(Fragment, null, renderList(__props.characters, (c) => {
+                return openBlock(), createBlock(Fragment, {
+                  key: c.id
+                }, [
+                  createVNode("span", null, toDisplayString(c.symbol || "★"), 1),
+                  createVNode("span", null, toDisplayString(c.name.toUpperCase()), 1)
+                ], 64);
+              }), 128))
             ];
           }
         }),
@@ -1126,6 +1129,7 @@ const _sfc_main = {
               _push2(ssrRenderComponent(_sfc_main$3, {
                 "total-questions": total.value,
                 "total-characters": __props.characters.length,
+                characters: __props.characters,
                 onStart: start
               }, null, _parent2, _scopeId));
             } else {
@@ -1175,8 +1179,9 @@ const _sfc_main = {
                   key: 0,
                   "total-questions": total.value,
                   "total-characters": __props.characters.length,
+                  characters: __props.characters,
                   onStart: start
-                }, null, 8, ["total-questions", "total-characters"])) : createCommentVNode("", true),
+                }, null, 8, ["total-questions", "total-characters", "characters"])) : createCommentVNode("", true),
                 phase.value === "question" ? (openBlock(), createBlock(_sfc_main$2, {
                   key: idx.value,
                   question: currentQuestion.value,

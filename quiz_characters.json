@@ -59,7 +59,8 @@
         "resilience": 8,
         "control": 10,
         "sensitivity": 4
-      }
+      },
+      "symbol": "⚗️"
     },
     {
       "id": "series_got_daenerys",
@@ -95,7 +96,8 @@
         "resilience": 9,
         "control": 7,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🐉"
     },
     {
       "id": "series_muhtesemyuzyil_hurrem",
@@ -131,7 +133,8 @@
         "resilience": 9,
         "control": 9,
         "sensitivity": 6
-      }
+      },
+      "symbol": "👑"
     },
     {
       "id": "series_askimemnu_bihter",
@@ -167,7 +170,8 @@
         "resilience": 4,
         "control": 5,
         "sensitivity": 10
-      }
+      },
+      "symbol": "💔"
     },
     {
       "id": "series_ezel_ezel",
@@ -203,7 +207,8 @@
         "resilience": 8,
         "control": 9,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🔫"
     },
     {
       "id": "series_behzatc_behzat",
@@ -239,7 +244,8 @@
         "resilience": 8,
         "control": 6,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🕵️‍♂️"
     },
     {
       "id": "series_sahsiyet_agah",
@@ -275,7 +281,8 @@
         "resilience": 8,
         "control": 7,
         "sensitivity": 7
-      }
+      },
+      "symbol": "📜"
     },
     {
       "id": "series_birbaskadir_meryem",
@@ -311,7 +318,8 @@
         "resilience": 8,
         "control": 5,
         "sensitivity": 9
-      }
+      },
+      "symbol": "🌌"
     },
     {
       "id": "series_leylailemecnun_mecnun",
@@ -347,7 +355,8 @@
         "resilience": 5,
         "control": 2,
         "sensitivity": 10
-      }
+      },
+      "symbol": "💞"
     },
     {
       "id": "series_bettercallsaul_kim",
@@ -383,7 +392,8 @@
         "resilience": 8,
         "control": 9,
         "sensitivity": 6
-      }
+      },
+      "symbol": "⚖️"
     },
     {
       "id": "series_sherlock_sherlock",
@@ -419,7 +429,8 @@
         "resilience": 7,
         "control": 8,
         "sensitivity": 4
-      }
+      },
+      "symbol": "🔍"
     },
     {
       "id": "series_house_house",
@@ -455,7 +466,8 @@
         "resilience": 7,
         "control": 6,
         "sensitivity": 5
-      }
+      },
+      "symbol": "🩺"
     },
     {
       "id": "series_strangerthings_eleven",
@@ -491,7 +503,8 @@
         "resilience": 8,
         "control": 4,
         "sensitivity": 9
-      }
+      },
+      "symbol": "⚡"
     },
     {
       "id": "series_lacasa_professor",
@@ -527,7 +540,8 @@
         "resilience": 7,
         "control": 10,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🎭"
     },
     {
       "id": "series_queensgambit_beth",
@@ -563,7 +577,8 @@
         "resilience": 6,
         "control": 8,
         "sensitivity": 7
-      }
+      },
+      "symbol": "♟️"
     },
     {
       "id": "series_mrrobot_elliot",
@@ -599,7 +614,8 @@
         "resilience": 5,
         "control": 7,
         "sensitivity": 9
-      }
+      },
+      "symbol": "💻"
     },
     {
       "id": "series_peaky_tommy",
@@ -635,7 +651,8 @@
         "resilience": 9,
         "control": 9,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🎩"
     },
     {
       "id": "series_fleabag_fleabag",
@@ -671,7 +688,8 @@
         "resilience": 5,
         "control": 3,
         "sensitivity": 9
-      }
+      },
+      "symbol": "🐾"
     },
     {
       "id": "film_ironman_tony",
@@ -707,7 +725,8 @@
         "resilience": 7,
         "control": 6,
         "sensitivity": 5
-      }
+      },
+      "symbol": "🤖"
     },
     {
       "id": "film_darkknight_batman",
@@ -743,7 +762,8 @@
         "resilience": 10,
         "control": 8,
         "sensitivity": 4
-      }
+      },
+      "symbol": "🦇"
     },
     {
       "id": "film_pirates_jack",
@@ -779,7 +799,8 @@
         "resilience": 7,
         "control": 2,
         "sensitivity": 4
-      }
+      },
+      "symbol": "🏴‍☠️"
     },
     {
       "id": "film_forrestgump_forrest",
@@ -815,7 +836,8 @@
         "resilience": 9,
         "control": 4,
         "sensitivity": 7
-      }
+      },
+      "symbol": "🏃‍♂️"
     },
     {
       "id": "film_harrypotter_hermione",
@@ -851,7 +873,8 @@
         "resilience": 7,
         "control": 8,
         "sensitivity": 6
-      }
+      },
+      "symbol": "📚"
     },
     {
       "id": "film_starwars_leia",
@@ -887,7 +910,8 @@
         "resilience": 9,
         "control": 7,
         "sensitivity": 5
-      }
+      },
+      "symbol": "👸"
     },
     {
       "id": "film_godfather_michael",
@@ -923,7 +947,8 @@
         "resilience": 9,
         "control": 10,
         "sensitivity": 4
-      }
+      },
+      "symbol": "🍷"
     },
     {
       "id": "film_shawshank_andy",
@@ -959,7 +984,8 @@
         "resilience": 10,
         "control": 8,
         "sensitivity": 5
-      }
+      },
+      "symbol": "🏢"
     },
     {
       "id": "film_matrix_neo",
@@ -995,7 +1021,8 @@
         "resilience": 8,
         "control": 5,
         "sensitivity": 7
-      }
+      },
+      "symbol": "🕶️"
     },
     {
       "id": "film_alien_ripley",
@@ -1031,7 +1058,8 @@
         "resilience": 10,
         "control": 7,
         "sensitivity": 5
-      }
+      },
+      "symbol": "👽"
     },
     {
       "id": "film_silence_clarice",
@@ -1067,7 +1095,8 @@
         "resilience": 9,
         "control": 8,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🔪"
     },
     {
       "id": "film_lotr_aragorn",
@@ -1103,7 +1132,8 @@
         "resilience": 9,
         "control": 6,
         "sensitivity": 6
-      }
+      },
+      "symbol": "⚔️"
     },
     {
       "id": "film_gladiator_maximus",
@@ -1139,7 +1169,8 @@
         "resilience": 10,
         "control": 6,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🏆"
     },
     {
       "id": "film_lalaland_mia",
@@ -1175,7 +1206,8 @@
         "resilience": 6,
         "control": 5,
         "sensitivity": 8
-      }
+      },
+      "symbol": "🎤"
     },
     {
       "id": "film_amelie_amelie",
@@ -1211,7 +1243,8 @@
         "resilience": 6,
         "control": 4,
         "sensitivity": 9
-      }
+      },
+      "symbol": "🌼"
     },
     {
       "id": "film_blackswan_nina",
@@ -1247,7 +1280,8 @@
         "resilience": 4,
         "control": 10,
         "sensitivity": 10
-      }
+      },
+      "symbol": "🦢"
     },
     {
       "id": "film_eternalsunshine_clementine",
@@ -1283,7 +1317,8 @@
         "resilience": 5,
         "control": 2,
         "sensitivity": 9
-      }
+      },
+      "symbol": "💔"
     },
     {
       "id": "film_martian_watney",
@@ -1319,7 +1354,8 @@
         "resilience": 9,
         "control": 6,
         "sensitivity": 5
-      }
+      },
+      "symbol": "🚀"
     },
     {
       "id": "film_madmax_furiosa",
@@ -1355,7 +1391,8 @@
         "resilience": 10,
         "control": 7,
         "sensitivity": 5
-      }
+      },
+      "symbol": "🚗"
     },
     {
       "id": "film_terminator_sarah",
@@ -1391,7 +1428,8 @@
         "resilience": 10,
         "control": 7,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🤖"
     },
     {
       "id": "film_erinbrockovich_erin",
@@ -1427,7 +1465,8 @@
         "resilience": 8,
         "control": 6,
         "sensitivity": 7
-      }
+      },
+      "symbol": "🧑‍⚖️"
     },
     {
       "id": "film_devilwearsprada_miranda",
@@ -1463,7 +1502,8 @@
         "resilience": 8,
         "control": 10,
         "sensitivity": 4
-      }
+      },
+      "symbol": "👠"
     },
     {
       "id": "film_hungergames_katniss",
@@ -1499,7 +1539,8 @@
         "resilience": 9,
         "control": 6,
         "sensitivity": 7
-      }
+      },
+      "symbol": "🏹"
     },
     {
       "id": "film_mulan_mulan",
@@ -1535,7 +1576,8 @@
         "resilience": 9,
         "control": 6,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🏯"
     },
     {
       "id": "film_insideout_joy",
@@ -1571,7 +1613,8 @@
         "resilience": 7,
         "control": 4,
         "sensitivity": 6
-      }
+      },
+      "symbol": "😊"
     },
     {
       "id": "film_indianajones_indiana",
@@ -1607,7 +1650,8 @@
         "resilience": 8,
         "control": 4,
         "sensitivity": 4
-      }
+      },
+      "symbol": "🎒"
     },
     {
       "id": "film_missionimpossible_ethan",
@@ -1643,7 +1687,8 @@
         "resilience": 9,
         "control": 6,
         "sensitivity": 4
-      }
+      },
+      "symbol": "🕶️"
     },
     {
       "id": "film_legallyblonde_elle",
@@ -1679,7 +1724,8 @@
         "resilience": 7,
         "control": 5,
         "sensitivity": 7
-      }
+      },
+      "symbol": "💖"
     },
     {
       "id": "film_prideprejudice_elizabeth",
@@ -1715,7 +1761,8 @@
         "resilience": 7,
         "control": 5,
         "sensitivity": 7
-      }
+      },
+      "symbol": "📜"
     },
     {
       "id": "film_lesmis_valjean",
@@ -1751,7 +1798,8 @@
         "resilience": 9,
         "control": 6,
         "sensitivity": 8
-      }
+      },
+      "symbol": "🏴"
     },
     {
       "id": "film_leon_mathilda",
@@ -1787,7 +1835,8 @@
         "resilience": 7,
         "control": 4,
         "sensitivity": 9
-      }
+      },
+      "symbol": "🌸"
     },
     {
       "id": "film_schindler_oskar",
@@ -1823,7 +1872,8 @@
         "resilience": 8,
         "control": 6,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🕊️"
     },
     {
       "id": "film_mononoke_san",
@@ -1859,7 +1909,8 @@
         "resilience": 9,
         "control": 4,
         "sensitivity": 7
-      }
+      },
+      "symbol": "🌳"
     },
     {
       "id": "film_spiderman_peter",
@@ -1895,7 +1946,8 @@
         "resilience": 8,
         "control": 4,
         "sensitivity": 7
-      }
+      },
+      "symbol": "🕷️"
     },
     {
       "id": "film_wonderwoman_diana",
@@ -1931,7 +1983,8 @@
         "resilience": 9,
         "control": 6,
         "sensitivity": 6
-      }
+      },
+      "symbol": "🛡️"
     },
     {
       "id": "film_killbill_bride",
@@ -1967,7 +2020,8 @@
         "resilience": 10,
         "control": 7,
         "sensitivity": 5
-      }
+      },
+      "symbol": "🥷"
     },
     {
       "id": "film_tr_eskiya_baran",
@@ -2003,7 +2057,8 @@
         "resilience": 9,
         "control": 5,
         "sensitivity": 7
-      }
+      },
+      "symbol": "🔫"
     },
     {
       "id": "film_tr_mustang_lale",
@@ -2039,7 +2094,8 @@
         "resilience": 8,
         "control": 3,
         "sensitivity": 7
-      }
+      },
+      "symbol": "🌹"
     },
     {
       "id": "film_tr_babamoglum_sadik",
@@ -2075,7 +2131,8 @@
         "resilience": 6,
         "control": 6,
         "sensitivity": 9
-      }
+      },
+      "symbol": "👨‍👦"
     },
     {
       "id": "film_tr_gora_arif",
@@ -2111,7 +2168,8 @@
         "resilience": 7,
         "control": 3,
         "sensitivity": 4
-      }
+      },
+      "symbol": "🌌"
     },
     {
       "id": "film_tr_kisuykusu_aydin",
@@ -2147,7 +2205,8 @@
         "resilience": 6,
         "control": 8,
         "sensitivity": 7
-      }
+      },
+      "symbol": "📖"
     },
     {
       "id": "film_tr_ahlat_sinan",
@@ -2183,7 +2242,8 @@
         "resilience": 5,
         "control": 6,
         "sensitivity": 9
-      }
+      },
+      "symbol": "🌳"
     }
   ]
 }

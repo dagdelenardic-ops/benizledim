@@ -423,7 +423,7 @@
     ]
   },
   "resources/js/Pages/Cinema/Index.vue": {
-    "file": "assets/Index-BN-cLvZi.js",
+    "file": "assets/Index-dDCjMN6G.js",
     "name": "Index",
     "src": "resources/js/Pages/Cinema/Index.vue",
     "isDynamicEntry": true,
@@ -590,7 +590,7 @@
     ]
   },
   "resources/js/Pages/Quiz/Play.vue": {
-    "file": "assets/Play-BgUtFe1L.js",
+    "file": "assets/Play-H-_DoqZx.js",
     "name": "Play",
     "src": "resources/js/Pages/Quiz/Play.vue",
     "isDynamicEntry": true,
@@ -664,7 +664,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-DgnGxMjp.js",
+    "file": "assets/app-RFJoxbqy.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

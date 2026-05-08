@@ -6,6 +6,7 @@ import QuizMarquee from './QuizMarquee.vue';
 const props = defineProps({
     totalQuestions: { type: Number, default: 25 },
     totalCharacters: { type: Number, default: 60 },
+    characters: { type: Array, default: () => [] },
 });
 
 const emit = defineEmits(['start']);
@@ -48,14 +49,6 @@ const steps = [
                     Quiz'e başla
                 </button>
             </div>
-            <div class="qz-start__meta">
-                <span class="qz-sticker" :style="{ background: 'var(--qz-paper)' }">
-                    <span class="qz-dot" :style="{ background: 'var(--qz-pink)' }" /> 47.382 kişi çözdü
-                </span>
-                <span class="qz-sticker" :style="{ background: 'var(--qz-lilac)' }">● BU HAFTA #2</span>
-                <span class="qz-sticker" :style="{ background: 'var(--qz-yellow)' }">★ 4.8 ortalama</span>
-            </div>
-
             <div class="qz-start__how">
                 <div v-for="s in steps" :key="s.n" class="qz-card-hard" style="padding: 16px;">
                     <div class="qz-kicker" style="margin-bottom: 8px;">ADIM {{ s.n }}</div>
@@ -87,10 +80,8 @@ const steps = [
     </div>
 
     <QuizMarquee>
-        <span>★</span><span>VHS · 2026</span>
-        <span>★</span><span>BENİZLEDİM PRESENTS</span>
-        <span>★</span><span>HANGİ FİLM KARAKTERİSİN</span>
-        <span>★</span><span>{{ totalQuestions }} SORU · {{ totalCharacters }} KARAKTER</span>
-        <span>★</span><span>SİNEMA KULÜBÜNE HOŞ GELDİN</span>
+        <template v-for="c in characters" :key="c.id">
+            <span>{{ c.symbol || '★' }}</span><span>{{ c.name.toUpperCase() }}</span>
+        </template>
     </QuizMarquee>
 </template>

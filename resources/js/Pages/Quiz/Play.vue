@@ -147,6 +147,7 @@ onUnmounted(() => {
                 v-if="phase === 'start'"
                 :total-questions="total"
                 :total-characters="characters.length"
+                :characters="characters"
                 @start="start"
             />
 

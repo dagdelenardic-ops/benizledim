@@ -52,6 +52,7 @@ Route::get('/up', function () {
     ]);
 })->name('health.up');
 
+
 Route::get('/img/variant', [ImageVariantController::class, 'show'])->name('image.variant');
 
 // Sitemap & RSS
