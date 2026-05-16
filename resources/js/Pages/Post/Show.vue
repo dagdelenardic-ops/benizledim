@@ -98,11 +98,19 @@ const analyzeContent = (html = '') => {
         return `<${tag}${cleanedAttrs} id="${id}">${inner}</${tag}>`;
     });
 
-    // Inline content images were imported with raw "/storage/..." paths, which are
-    // not publicly served on the shared host (no working storage symlink). The rest
-    // of the site serves images through the /img/variant proxy; mirror that here so
-    // body images render (and get responsive WebP variants) like cover images do.
-    const htmlWithImages = processedHtml.replace(/<img\b[^>]*>/gi, (tag) => {
+    // Inline content images + CSS background images were imported with raw
+    // "/storage/..." paths, which are not publicly served on the shared host
+    // (no working storage symlink). The rest of the site serves images through
+    // the /img/variant proxy; mirror that here. For formats the proxy cannot
+    // process (avif -> 404, some webp -> 500) fall back to the original file on
+    // Wix's CDN, since every imported content filename is its Wix media id.
+    const WIX_CDN = 'https://static.wixstatic.com/media/';
+    const wixOriginal = (storagePath) => {
+        const file = (storagePath.split('/').pop() || '').split('?')[0];
+        return /(~mv2|^[0-9a-f]{4,8}_[0-9a-f]{16,})/i.test(file) ? WIX_CDN + file : '';
+    };
+
+    let htmlWithImages = processedHtml.replace(/<img\b[^>]*>/gi, (tag) => {
         const srcMatch = tag.match(/\ssrc\s*=\s*(["'])(.*?)\1/i);
 
         if (!srcMatch) {
@@ -121,17 +129,35 @@ const analyzeContent = (html = '') => {
             sizes: '(max-width: 768px) 100vw, 750px',
         });
 
+        const fallback = wixOriginal(rawSrc);
+
         let rebuilt = tag
             .replace(/\ssrcset\s*=\s*(["']).*?\1/i, '')
             .replace(/\ssizes\s*=\s*(["']).*?\1/i, '')
+            .replace(/\sonerror\s*=\s*(["']).*?\1/i, '')
             .replace(/\ssrc\s*=\s*(["']).*?\1/i, () => ` src="${responsive.src}"`);
 
+        const onError = fallback
+            ? ` onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${fallback}'"`
+            : '';
+
         const injected = ` srcset="${responsive.srcset}" sizes="${responsive.sizes}"`
+            + onError
             + (/\sloading\s*=/i.test(rebuilt) ? '' : ' loading="lazy"')
             + (/\sdecoding\s*=/i.test(rebuilt) ? '' : ' decoding="async"');
 
         return rebuilt.replace(/<img\b/i, () => `<img${injected}`);
     });
+
+    // CSS background-image: url(/storage/...) — same root cause; the <img>
+    // rewrite above does not touch inline-style backgrounds.
+    htmlWithImages = htmlWithImages.replace(
+        /background-image\s*:\s*url\(\s*(['"]?)((?:https?:\/\/(?:www\.)?benizledim\.com)?\/storage\/[^'")]+)\1\s*\)/gi,
+        (match, quote, url) => {
+            const path = url.replace(/^https?:\/\/(www\.)?benizledim\.com/i, '');
+            return `background-image:url(/img/variant?path=${encodeURIComponent(path)}&w=1280)`;
+        }
+    );
 
     const wordCount = stripHtml(html).split(/\s+/).filter(Boolean).length;
 

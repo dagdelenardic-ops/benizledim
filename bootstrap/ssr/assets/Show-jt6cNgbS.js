@@ -975,7 +975,12 @@ const _sfc_main = {
         });
         return `<${tag}${cleanedAttrs} id="${id}">${inner}</${tag}>`;
       });
-      const htmlWithImages = processedHtml.replace(/<img\b[^>]*>/gi, (tag) => {
+      const WIX_CDN = "https://static.wixstatic.com/media/";
+      const wixOriginal = (storagePath) => {
+        const file = (storagePath.split("/").pop() || "").split("?")[0];
+        return /(~mv2|^[0-9a-f]{4,8}_[0-9a-f]{16,})/i.test(file) ? WIX_CDN + file : "";
+      };
+      let htmlWithImages = processedHtml.replace(/<img\b[^>]*>/gi, (tag) => {
         const srcMatch = tag.match(/\ssrc\s*=\s*(["'])(.*?)\1/i);
         if (!srcMatch) {
           return tag;
@@ -989,10 +994,19 @@ const _sfc_main = {
           fallbackWidth: 1280,
           sizes: "(max-width: 768px) 100vw, 750px"
         });
-        let rebuilt = tag.replace(/\ssrcset\s*=\s*(["']).*?\1/i, "").replace(/\ssizes\s*=\s*(["']).*?\1/i, "").replace(/\ssrc\s*=\s*(["']).*?\1/i, () => ` src="${responsive.src}"`);
-        const injected = ` srcset="${responsive.srcset}" sizes="${responsive.sizes}"` + (/\sloading\s*=/i.test(rebuilt) ? "" : ' loading="lazy"') + (/\sdecoding\s*=/i.test(rebuilt) ? "" : ' decoding="async"');
+        const fallback = wixOriginal(rawSrc);
+        let rebuilt = tag.replace(/\ssrcset\s*=\s*(["']).*?\1/i, "").replace(/\ssizes\s*=\s*(["']).*?\1/i, "").replace(/\sonerror\s*=\s*(["']).*?\1/i, "").replace(/\ssrc\s*=\s*(["']).*?\1/i, () => ` src="${responsive.src}"`);
+        const onError = fallback ? ` onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${fallback}'"` : "";
+        const injected = ` srcset="${responsive.srcset}" sizes="${responsive.sizes}"` + onError + (/\sloading\s*=/i.test(rebuilt) ? "" : ' loading="lazy"') + (/\sdecoding\s*=/i.test(rebuilt) ? "" : ' decoding="async"');
         return rebuilt.replace(/<img\b/i, () => `<img${injected}`);
       });
+      htmlWithImages = htmlWithImages.replace(
+        /background-image\s*:\s*url\(\s*(['"]?)((?:https?:\/\/(?:www\.)?benizledim\.com)?\/storage\/[^'")]+)\1\s*\)/gi,
+        (match, quote, url) => {
+          const path = url.replace(/^https?:\/\/(www\.)?benizledim\.com/i, "");
+          return `background-image:url(/img/variant?path=${encodeURIComponent(path)}&w=1280)`;
+        }
+      );
       const wordCount = stripHtml(html).split(/\s+/).filter(Boolean).length;
       return {
         html: htmlWithImages,

@@ -423,7 +423,7 @@
     ]
   },
   "resources/js/Pages/Cinema/Index.vue": {
-    "file": "assets/Index-CuFKBDZn.js",
+    "file": "assets/Index-Cx99asjq.js",
     "name": "Index",
     "src": "resources/js/Pages/Cinema/Index.vue",
     "isDynamicEntry": true,
@@ -567,7 +567,7 @@
     ]
   },
   "resources/js/Pages/Post/Show.vue": {
-    "file": "assets/Show-D1XUbsQf.js",
+    "file": "assets/Show-BW7pV9Vx.js",
     "name": "Show",
     "src": "resources/js/Pages/Post/Show.vue",
     "isDynamicEntry": true,
@@ -677,7 +677,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-B9VRJQWK.js",
+    "file": "assets/app-BoWLgqdl.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
