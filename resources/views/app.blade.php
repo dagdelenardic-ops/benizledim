@@ -2,12 +2,16 @@
 <html lang="tr">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#dc2626">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Ben/İzledim">
-    <link rel="apple-touch-icon" href="/icons/192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/180.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/512.png">
     <link rel="manifest" href="/build/manifest.webmanifest">
     @php
         $canonical = 'https://benizledim.com' . preg_replace('#/+$#', '', request()->getRequestUri());

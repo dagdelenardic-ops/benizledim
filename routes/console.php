@@ -66,11 +66,9 @@ Schedule::command('letterboxd:sync')
     ->withoutOverlapping()
     ->appendOutputTo(storage_path('logs/scheduler.log'));
 
-Schedule::command('push:daily-digest')
-    ->dailyAt('19:00')
-    ->timezone('Europe/Istanbul')
-    ->withoutOverlapping()
-    ->appendOutputTo(storage_path('logs/push.log'));
+// NOT: Flash digest artık production cron'unda DEĞİL. Lokal Mac'teki LaunchAgent
+// (com.benizledim.flashdigest) 21:00'de claude -p (Sonnet, Claude Max aboneliği)
+// ile özet üretip /api/flashnews/digest-send endpoint'ine basar. API key kullanılmaz.
 
 // One-shot: guest_push_subscribers migration'ını tetikle, marker yazılınca tekrar çalışmaz.
 Schedule::call(function () {
@@ -110,6 +108,20 @@ Schedule::call(function () {
     \Illuminate\Support\Facades\Artisan::call('view:clear');
     @file_put_contents($marker, now()->toIso8601String());
 })->name('one-shot-analytics-migrate')->everyMinute();
+
+// One-shot: içerikteki taşınamamış Wix görsellerini orijinal çözünürlükte yeniden indir.
+// SSH olmadığı için cron tetikler; marker yazılınca tekrar çalışmaz. Komut idempotent.
+Schedule::call(function () {
+    $marker = storage_path('app/.rehydrate_content_done');
+    if (file_exists($marker)) {
+        return;
+    }
+    \Illuminate\Support\Facades\Artisan::call('wix:rehydrate-hires', ['--content-only' => true]);
+    @file_put_contents($marker, now()->toIso8601String());
+})->name('one-shot-rehydrate-content')
+    ->everyMinute()
+    ->withoutOverlapping(1440)
+    ->appendOutputTo(storage_path('logs/rehydrate.log'));
 
 Schedule::command('stats:aggregate')
     ->dailyAt('00:15')

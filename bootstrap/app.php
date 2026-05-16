@@ -52,6 +52,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
+        // Token korumalı server-to-server flash news endpoint'leri CSRF'ten muaf
+        // (lokal Mac rutini cron'dan POST eder; oturum/cookie yok).
+        $middleware->validateCsrfTokens(except: [
+            'api/flashnews/*',
+            'api/posts/cover-candidates',
+            'api/posts/set-cover',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -63,10 +63,21 @@ Route::get('/rss', [RssFeedController::class, 'index']);
 Route::get('/', [HomeController::class, 'index']);
 
 // Flash News
+Route::get('/haberler', [FlashNewsController::class, 'index'])->name('flashnews.index');
 Route::get('/haber/{slug}', [FlashNewsController::class, 'show'])->name('flashnews.show');
 // Fetch endpoint (token korumalı, cron tarafından tetiklenir)
 Route::match(['get', 'post'], '/api/flashnews/fetch', [FlashNewsController::class, 'fetch'])
     ->name('flashnews.fetch');
+// Digest: lokal Mac rutini bugünün haberlerini çeker (source) ve özeti basar (send). Token korumalı.
+Route::get('/api/flashnews/digest-source', [FlashNewsController::class, 'digestSource'])
+    ->name('flashnews.digest.source');
+Route::post('/api/flashnews/digest-send', [FlashNewsController::class, 'digestSend'])
+    ->name('flashnews.digest.send');
+// Kapak görseli backfill: lokal Mac rutini görselsiz yazıları çeker, TMDB poster basar. Token korumalı.
+Route::get('/api/posts/cover-candidates', [\App\Http\Controllers\Api\PostCoverBackfillController::class, 'candidates'])
+    ->name('posts.cover.candidates');
+Route::post('/api/posts/set-cover', [\App\Http\Controllers\Api\PostCoverBackfillController::class, 'setCover'])
+    ->name('posts.cover.set');
 
 // Yazı listesi (kategori/tag filtreleme)
 Route::get('/yazilar', [PostController::class, 'index'])->name('posts.index');

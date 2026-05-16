@@ -98,10 +98,45 @@ const analyzeContent = (html = '') => {
         return `<${tag}${cleanedAttrs} id="${id}">${inner}</${tag}>`;
     });
 
+    // Inline content images were imported with raw "/storage/..." paths, which are
+    // not publicly served on the shared host (no working storage symlink). The rest
+    // of the site serves images through the /img/variant proxy; mirror that here so
+    // body images render (and get responsive WebP variants) like cover images do.
+    const htmlWithImages = processedHtml.replace(/<img\b[^>]*>/gi, (tag) => {
+        const srcMatch = tag.match(/\ssrc\s*=\s*(["'])(.*?)\1/i);
+
+        if (!srcMatch) {
+            return tag;
+        }
+
+        const rawSrc = srcMatch[2].trim().replace(/^https?:\/\/(www\.)?benizledim\.com/i, '');
+
+        if (!rawSrc.startsWith('/storage/')) {
+            return tag;
+        }
+
+        const responsive = buildResponsiveImage(rawSrc, {
+            widths: [768, 960, 1280, 1600],
+            fallbackWidth: 1280,
+            sizes: '(max-width: 768px) 100vw, 750px',
+        });
+
+        let rebuilt = tag
+            .replace(/\ssrcset\s*=\s*(["']).*?\1/i, '')
+            .replace(/\ssizes\s*=\s*(["']).*?\1/i, '')
+            .replace(/\ssrc\s*=\s*(["']).*?\1/i, () => ` src="${responsive.src}"`);
+
+        const injected = ` srcset="${responsive.srcset}" sizes="${responsive.sizes}"`
+            + (/\sloading\s*=/i.test(rebuilt) ? '' : ' loading="lazy"')
+            + (/\sdecoding\s*=/i.test(rebuilt) ? '' : ' decoding="async"');
+
+        return rebuilt.replace(/<img\b/i, () => `<img${injected}`);
+    });
+
     const wordCount = stripHtml(html).split(/\s+/).filter(Boolean).length;
 
     return {
-        html: processedHtml,
+        html: htmlWithImages,
         items,
         wordCount,
     };

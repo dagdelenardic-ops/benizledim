@@ -19,6 +19,7 @@ class SitemapController extends Controller
         $flashNews = collect();
         try {
             $flashNews = FlashNews::published()
+                ->whereNotNull('image_url')
                 ->select('slug', 'published_at', 'updated_at')
                 ->latest('published_at')
                 ->limit(500)

@@ -8,14 +8,14 @@ const ready = ref(false);
 const busy = ref(false);
 
 const storageKey = 'pwa_install_prompt_dismissed_at';
-const sevenDays = 7 * 24 * 60 * 60 * 1000;
-const visibilityDelayMs = 8000;
+const dismissWindowMs = 2 * 24 * 60 * 60 * 1000;
+const visibilityDelayMs = 3000;
 
 let revealTimer = null;
 
 onMounted(() => {
     const dismissedAt = Number(localStorage.getItem(storageKey) || 0);
-    dismissed.value = dismissedAt > 0 && Date.now() - dismissedAt < sevenDays;
+    dismissed.value = dismissedAt > 0 && Date.now() - dismissedAt < dismissWindowMs;
 
     revealTimer = setTimeout(() => {
         ready.value = true;
@@ -26,13 +26,17 @@ onBeforeUnmount(() => {
     if (revealTimer) clearTimeout(revealTimer);
 });
 
+// beforeinstallprompt çoğu Android tarayıcısında geç/hiç gelmez; o durumda
+// manuel kurulum talimatı göstermek için canInstall şartını kaldırdık.
 const shouldShow = computed(() => {
     return ready.value
         && isMobile.value
         && !installed.value
-        && !dismissed.value
-        && (canInstall.value || isIOS.value);
+        && !dismissed.value;
 });
+
+// Native prompt yoksa (ve iOS değilse) elle kurulum talimatı göster.
+const showManualAndroid = computed(() => !isIOS.value && !canInstall.value);
 
 const dismiss = () => {
     localStorage.setItem(storageKey, String(Date.now()));
@@ -61,14 +65,14 @@ const handleInstall = async () => {
             <div class="flex items-start justify-between gap-4">
                 <div class="flex-1">
                     <h2 id="pwa-install-title" class="text-sm font-black text-[var(--bi-ink)]">
-                        Uygulama gibi kullan
+                        📲 Telefonuna uygulama olarak ekle
                     </h2>
                     <p class="mt-1 text-xs leading-5 text-[var(--bi-muted)]">
                         <template v-if="isIOS">
-                            Ben/İzledim'i ana ekranına ekle, tek dokunuşla aç ve yeni yazılarda bildirim al.
+                            Ben/İzledim'i ana ekranına ekle; tarayıcısız tek dokunuşla aç, yeni yazılarda bildirim al.
                         </template>
                         <template v-else>
-                            Ben/İzledim'i ana ekranına ekle, tarayıcısız tek dokunuşla aç.
+                            Ben/İzledim'i ana ekranına ekle; tarayıcısız tek dokunuşla aç, bildirim al.
                         </template>
                     </p>
                 </div>
@@ -95,13 +99,28 @@ const handleInstall = async () => {
             </div>
 
             <button
-                v-else
+                v-else-if="canInstall"
                 type="button"
-                :disabled="busy || !canInstall"
+                :disabled="busy"
                 @click="handleInstall"
                 class="mt-4 w-full bg-red-700 px-4 py-3 text-sm font-black text-white transition hover:bg-red-800 disabled:opacity-50"
             >
-                {{ busy ? 'Açılıyor...' : 'Ana Ekrana Ekle' }}
+                {{ busy ? 'Yükleniyor...' : 'Uygulamayı Yükle' }}
             </button>
+
+            <div v-else class="mt-4 space-y-2 border-t border-[var(--bi-ink)]/10 pt-3">
+                <div class="flex items-center gap-2 text-xs text-[var(--bi-ink)]">
+                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-700 text-[10px] font-black text-white">1</span>
+                    <span>Tarayıcı menüsünü aç</span>
+                    <svg class="h-4 w-4 text-red-700" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="5" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="12" cy="19" r="2" />
+                    </svg>
+                    <span>(sağ üst)</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-[var(--bi-ink)]">
+                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-700 text-[10px] font-black text-white">2</span>
+                    <span><span class="font-semibold">"Uygulamayı yükle"</span> ya da <span class="font-semibold">"Ana ekrana ekle"</span>ye dokun</span>
+                </div>
+            </div>
         </aside>
 </template>

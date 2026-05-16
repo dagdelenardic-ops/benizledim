@@ -11,6 +11,11 @@
         <priority>0.9</priority>
     </url>
     <url>
+        <loc>https://benizledim.com/haberler</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://benizledim.com/podcast</loc>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>

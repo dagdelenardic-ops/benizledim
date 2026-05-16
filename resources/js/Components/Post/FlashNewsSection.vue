@@ -37,7 +37,12 @@ const formatDate = (date) => {
                         <h2 class="bi-serif mt-1 text-3xl font-bold text-[var(--bi-ink)] md:text-4xl">Flash Haberler</h2>
                     </div>
                 </div>
-                <span class="hidden text-xs uppercase tracking-[0.08em] text-[var(--bi-muted)] bi-mono md:inline">Yabancı & yerli kaynaklardan</span>
+                <Link
+                    href="/haberler"
+                    class="hidden items-center gap-1 border border-[var(--bi-ink)] bg-[var(--bi-paper)] px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.08em] text-[var(--bi-ink)] transition hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono md:inline-flex"
+                >
+                    Tüm haberler →
+                </Link>
             </div>
 
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -76,6 +81,15 @@ const formatDate = (date) => {
                             <span class="text-red-700 group-hover:text-red-900">Devamını oku →</span>
                         </div>
                     </div>
+                </Link>
+            </div>
+
+            <div class="mt-6 flex justify-center md:hidden">
+                <Link
+                    href="/haberler"
+                    class="inline-flex items-center gap-1 border border-[var(--bi-ink)] bg-[var(--bi-paper)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--bi-ink)] transition hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono"
+                >
+                    Tüm haberler →
                 </Link>
             </div>
         </div>

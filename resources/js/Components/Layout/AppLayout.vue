@@ -354,6 +354,7 @@ export default {
                 >
                     {{ cat.name }}
                 </Link>
+                <Link href="/haberler" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Haberler</Link>
                 <Link href="/festival" class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono">Festival</Link>
             </div>
             <div class="flex items-stretch">
@@ -382,6 +383,7 @@ export default {
                         {{ cat.name }}
                     </Link>
                     <Link href="/quiz" class="bi-chip" @click="showMobileMenu = false">Quiz</Link>
+                    <Link href="/haberler" class="bi-chip" @click="showMobileMenu = false">Haberler</Link>
                     <Link href="/festival" class="bi-chip" @click="showMobileMenu = false">Festival</Link>
                     <Link href="/sinemalar" class="bi-chip" @click="showMobileMenu = false">Sinemalar</Link>
                     <Link href="/ne-izlesem" class="bi-chip" @click="showMobileMenu = false">Ne İzlesem?</Link>

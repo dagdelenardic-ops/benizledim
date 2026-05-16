@@ -69,7 +69,14 @@ class FlashNewsFetchService
 
     public function fetchAndStore(int $maxSeconds = 90): array
     {
-        $stats = ['fetched' => 0, 'created' => 0, 'skipped' => 0, 'errors' => 0, 'stopped_by_budget' => false];
+        $stats = [
+            'fetched' => 0,
+            'created' => 0,
+            'skipped' => 0,
+            'skipped_no_image' => 0,
+            'errors' => 0,
+            'stopped_by_budget' => false,
+        ];
         $deadline = microtime(true) + $maxSeconds;
 
         $sources = self::SOURCES;
@@ -109,7 +116,17 @@ class FlashNewsFetchService
                         continue;
                     }
 
-                    $articleBody = $this->fetchArticleBody($item['link']);
+                    $article = $this->fetchArticleData($item['link']);
+                    $articleBody = $article['body'];
+
+                    $imageUrl = $item['image'] ?: $article['image'];
+                    if (! $imageUrl) {
+                        $stats['skipped_no_image']++;
+
+                        continue;
+                    }
+                    $imageUrl = $this->cleanImageUrl($imageUrl);
+
                     $titleTr = $item['title'];
                     $summaryTr = $item['summary'];
                     $contentTr = $articleBody ?: $item['summary'];
@@ -137,7 +154,7 @@ class FlashNewsFetchService
                         'content_tr' => $contentTr,
                         'source_url' => $item['link'],
                         'source_name' => $source['name'],
-                        'image_url' => $item['image'],
+                        'image_url' => $imageUrl,
                         'original_language' => $source['lang'],
                         'source_published_at' => $item['pubDate'],
                         'published_at' => now(),
@@ -155,8 +172,6 @@ class FlashNewsFetchService
                 $stats['errors']++;
             }
         }
-
-        FlashNews::where('published_at', '<', now()->subDays(14))->delete();
 
         return $stats;
     }
@@ -322,8 +337,10 @@ class FlashNewsFetchService
         }
     }
 
-    private function fetchArticleBody(string $url): ?string
+    private function fetchArticleData(string $url): array
     {
+        $empty = ['body' => null, 'image' => null];
+
         try {
             $response = Http::timeout(10)
                 ->withHeaders([
@@ -334,10 +351,11 @@ class FlashNewsFetchService
                 ->get($url);
 
             if (! $response->ok()) {
-                return null;
+                return $empty;
             }
 
             $html = $response->body();
+            $image = $this->extractImageFromHtml($html, $url);
 
             if (preg_match('/<article\b[^>]*>(.*?)<\/article>/is', $html, $m)) {
                 $chunk = $m[1];
@@ -364,14 +382,145 @@ class FlashNewsFetchService
                 }
             }
 
-            if (! $paragraphs) {
-                return null;
-            }
+            $body = $paragraphs ? Str::limit(implode("\n\n", $paragraphs), 8000, '') : null;
 
-            return Str::limit(implode("\n\n", $paragraphs), 8000, '');
+            return ['body' => $body, 'image' => $image];
         } catch (\Throwable $e) {
+            return $empty;
+        }
+    }
+
+    private function extractImageFromHtml(string $html, string $pageUrl): ?string
+    {
+        // 1. og:image (en güvenilir)
+        if (preg_match('/<meta[^>]+property=["\']og:image(?::secure_url)?["\'][^>]+content=["\']([^"\']+)["\']/i', $html, $m)) {
+            return $this->absoluteUrl($m[1], $pageUrl);
+        }
+        if (preg_match('/<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image(?::secure_url)?["\']/i', $html, $m)) {
+            return $this->absoluteUrl($m[1], $pageUrl);
+        }
+
+        // 2. twitter:image
+        if (preg_match('/<meta[^>]+name=["\']twitter:image(?::src)?["\'][^>]+content=["\']([^"\']+)["\']/i', $html, $m)) {
+            return $this->absoluteUrl($m[1], $pageUrl);
+        }
+        if (preg_match('/<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:image(?::src)?["\']/i', $html, $m)) {
+            return $this->absoluteUrl($m[1], $pageUrl);
+        }
+
+        // 3. JSON-LD "image"
+        if (preg_match_all('/<script[^>]+type=["\']application\/ld\+json["\'][^>]*>(.*?)<\/script>/is', $html, $blocks)) {
+            foreach ($blocks[1] as $block) {
+                $data = json_decode(trim($block), true);
+                if (! is_array($data)) {
+                    continue;
+                }
+                $found = $this->findJsonLdImage($data);
+                if ($found) {
+                    return $this->absoluteUrl($found, $pageUrl);
+                }
+            }
+        }
+
+        // 4. <article> içindeki ilk büyük <img>
+        if (preg_match('/<article\b[^>]*>(.*?)<\/article>/is', $html, $m)) {
+            if (preg_match_all('/<img\b[^>]+>/i', $m[1], $imgs)) {
+                foreach ($imgs[0] as $tag) {
+                    if (preg_match('/\b(width|height)\s*=\s*["\']?(\d+)/i', $tag, $dim) && (int) $dim[2] < 200) {
+                        continue;
+                    }
+                    if (preg_match('/\bsrc=["\']([^"\']+)["\']/i', $tag, $src)) {
+                        $url = $src[1];
+                        if (str_starts_with($url, 'data:')) {
+                            continue;
+                        }
+
+                        return $this->absoluteUrl($url, $pageUrl);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function findJsonLdImage($data): ?string
+    {
+        if (! is_array($data)) {
             return null;
         }
+        if (isset($data['image'])) {
+            $img = $data['image'];
+            if (is_string($img)) {
+                return $img;
+            }
+            if (is_array($img)) {
+                if (isset($img['url']) && is_string($img['url'])) {
+                    return $img['url'];
+                }
+                foreach ($img as $entry) {
+                    if (is_string($entry)) {
+                        return $entry;
+                    }
+                    if (is_array($entry) && isset($entry['url']) && is_string($entry['url'])) {
+                        return $entry['url'];
+                    }
+                }
+            }
+        }
+        if (isset($data['@graph']) && is_array($data['@graph'])) {
+            foreach ($data['@graph'] as $node) {
+                $found = $this->findJsonLdImage($node);
+                if ($found) {
+                    return $found;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function absoluteUrl(string $url, string $base): string
+    {
+        $url = trim($url);
+        if (preg_match('#^https?://#i', $url)) {
+            return $url;
+        }
+        if (str_starts_with($url, '//')) {
+            return 'https:'.$url;
+        }
+        $parts = parse_url($base);
+        if (! $parts || empty($parts['scheme']) || empty($parts['host'])) {
+            return $url;
+        }
+        $origin = $parts['scheme'].'://'.$parts['host'];
+        if (str_starts_with($url, '/')) {
+            return $origin.$url;
+        }
+        $path = $parts['path'] ?? '/';
+        $dir = rtrim(substr($path, 0, strrpos($path, '/') + 1), '/');
+
+        return $origin.$dir.'/'.$url;
+    }
+
+    private function cleanImageUrl(string $url): string
+    {
+        $parts = parse_url($url);
+        if (! $parts || empty($parts['query'])) {
+            return $url;
+        }
+        parse_str($parts['query'], $params);
+        $strip = ['w', 'h', 'width', 'height', 'resize', 'fit', 'crop', 'quality'];
+        foreach ($strip as $k) {
+            unset($params[$k]);
+        }
+        $query = http_build_query($params);
+        $rebuilt = ($parts['scheme'] ?? 'https').'://'.($parts['host'] ?? '').($parts['path'] ?? '');
+        if ($query !== '') {
+            $rebuilt .= '?'.$query;
+        }
+
+        return $rebuilt;
     }
 
     private function extractJsonField(string $text, string $field): ?string

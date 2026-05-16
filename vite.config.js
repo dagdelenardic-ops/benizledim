@@ -38,9 +38,10 @@ export default defineConfig({
                 background_color: '#ffffff',
                 lang: 'tr',
                 icons: [
-                    { src: '/icons/192.png', sizes: '192x192', type: 'image/png' },
-                    { src: '/icons/512.png', sizes: '512x512', type: 'image/png' },
-                    { src: '/icons/192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' }
+                    { src: '/icons/192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+                    { src: '/icons/512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+                    { src: '/icons/192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+                    { src: '/icons/512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
                 ],
                 shortcuts: [
                     { name: 'Hızlı Not', url: '/yazar?action=log', icons: [{ src: '/icons/192.png', sizes: '192x192' }] }
