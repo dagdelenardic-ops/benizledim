@@ -1,6 +1,6 @@
 import { mergeProps, useSSRContext } from "vue";
 import { ssrRenderAttrs, ssrRenderList, ssrRenderComponent } from "vue/server-renderer";
-import { _ as _sfc_main$1 } from "./PostCard-Cja5HPWV.js";
+import { _ as _sfc_main$1 } from "./PostCard-CO9kh5rs.js";
 const _sfc_main = {
   __name: "PostGrid",
   __ssrInlineRender: true,

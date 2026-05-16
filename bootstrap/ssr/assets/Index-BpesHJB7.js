@@ -2,10 +2,10 @@ import { computed, mergeProps, withCtx, unref, createTextVNode, toDisplayString,
 import { ssrRenderComponent, ssrInterpolate, ssrRenderList } from "vue/server-renderer";
 import { Link } from "@inertiajs/vue3";
 import { a as _export_sfc, A as AppLayout } from "./AppLayout-BH4qZStO.js";
-import { _ as _sfc_main$1 } from "./PostGrid-WzhBsF3W.js";
+import { _ as _sfc_main$1 } from "./PostGrid-BQ4oui2l.js";
 import "@headlessui/vue";
 import "axios";
-import "./PostCard-Cja5HPWV.js";
+import "./PostCard-CO9kh5rs.js";
 import "./useDate-CbchC0lg.js";
 const _sfc_main = {
   __name: "Index",

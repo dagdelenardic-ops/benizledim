@@ -2,12 +2,12 @@ import { computed, mergeProps, withCtx, unref, createVNode, openBlock, createBlo
 import { ssrRenderComponent, ssrRenderAttr, ssrInterpolate, ssrRenderClass, ssrRenderList } from "vue/server-renderer";
 import { usePage, Link, router } from "@inertiajs/vue3";
 import { A as AppLayout } from "./AppLayout-BH4qZStO.js";
-import { _ as _sfc_main$3 } from "./PostGrid-WzhBsF3W.js";
+import { _ as _sfc_main$3 } from "./PostGrid-BQ4oui2l.js";
 import { _ as _sfc_main$2, a as _sfc_main$4 } from "./WatchLogCard-ppBRc7-H.js";
 import { _ as _sfc_main$1 } from "./FollowButton-B1R8OU26.js";
 import "@headlessui/vue";
 import "axios";
-import "./PostCard-Cja5HPWV.js";
+import "./PostCard-CO9kh5rs.js";
 import "./useDate-CbchC0lg.js";
 const _sfc_main = {
   __name: "Show",

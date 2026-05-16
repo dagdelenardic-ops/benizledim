@@ -26,6 +26,17 @@ const buildResponsiveImage = (path, options = {}) => {
       sizes: options.sizes || ""
     };
   }
+  const ytMatch = String(path).match(
+    /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/i
+  );
+  if (ytMatch) {
+    const thumb = `https://i.ytimg.com/vi/${ytMatch[1]}/maxresdefault.jpg`;
+    return {
+      src: thumb,
+      srcset: "",
+      sizes: options.sizes || ""
+    };
+  }
   if (!path.startsWith(LOCAL_STORAGE_PREFIX)) {
     if (path.startsWith(WIX_CDN_PREFIX)) {
       const widths2 = options.widths || [480, 768, 960, 1280];

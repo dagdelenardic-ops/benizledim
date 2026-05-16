@@ -2,7 +2,7 @@ import { mergeProps, useSSRContext, ref, computed, unref, withCtx, createTextVNo
 import { ssrRenderAttrs, ssrRenderList, ssrRenderComponent, ssrRenderAttr, ssrIncludeBooleanAttr, ssrInterpolate, ssrRenderClass, ssrLooseContain, ssrRenderStyle } from "vue/server-renderer";
 import { usePage, useForm, Link } from "@inertiajs/vue3";
 import { a as _export_sfc, A as AppLayout, _ as _sfc_main$h } from "./AppLayout-BH4qZStO.js";
-import { _ as _sfc_main$g, b as buildResponsiveImage } from "./PostCard-Cja5HPWV.js";
+import { _ as _sfc_main$g, b as buildResponsiveImage } from "./PostCard-CO9kh5rs.js";
 import { u as useDate } from "./useDate-CbchC0lg.js";
 import DOMPurify from "dompurify";
 import "@headlessui/vue";
