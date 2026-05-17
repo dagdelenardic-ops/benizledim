@@ -33,10 +33,25 @@ class PostController extends Controller
         $posts = $query->paginate(12);
         $categories = Category::withCount('posts')->get();
 
+        $listTitle = 'Tüm Yazılar';
+        $listDescription = 'Ben İzledim arşivindeki tüm film, dizi ve belgesel yazıları.';
+        if ($request->filled('category')) {
+            $filterCategory = $categories->firstWhere('slug', $request->category);
+            if ($filterCategory) {
+                $listTitle = $filterCategory->name . ' Yazıları';
+                $listDescription = $filterCategory->name . ' kategorisindeki film, dizi ve belgesel yazıları.';
+            }
+        } elseif ($request->filled('tag')) {
+            $listTitle = 'Etiket: ' . $request->tag;
+            $listDescription = $request->tag . ' etiketiyle işaretlenmiş Ben İzledim yazıları.';
+        }
+
         return Inertia::render('Post/Index', [
             'posts' => $posts,
             'categories' => $categories,
             'filters' => $request->only(['category', 'tag']),
+            'title' => $listTitle,
+            'description' => $listDescription,
         ]);
     }
 
@@ -55,6 +70,9 @@ class PostController extends Controller
             'posts' => $posts,
             'categories' => $categories,
             'filters' => ['category' => $category->slug],
+            'title' => $category->name . ' Yazıları',
+            'description' => $category->name . ' kategorisindeki film, dizi ve belgesel eleştiri ve tavsiye yazıları.',
+            'canonicalUrl' => 'https://benizledim.com/yazilar/' . $category->slug,
         ]);
     }
 

@@ -37,6 +37,9 @@ class AuthorDirectoryController extends Controller
         return Inertia::render('Author/Index', [
             'authors' => $authors,
             'filters' => ['q' => $request->query('q', '')],
+            'title' => 'Yazarlar',
+            'description' => 'Ben İzledim yazar kadrosu: film, dizi ve belgesel üzerine yazan eleştirmenler ve katkıda bulunanlar.',
+            'canonicalUrl' => 'https://benizledim.com/yazarlar',
         ]);
     }
 

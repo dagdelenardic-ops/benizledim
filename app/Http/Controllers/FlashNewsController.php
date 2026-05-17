@@ -31,6 +31,9 @@ class FlashNewsController extends Controller
 
         return Inertia::render('FlashNews/Index', [
             'items' => $items,
+            'title' => 'Sinema ve Dizi Haberleri',
+            'description' => 'Güncel film, dizi ve sinema haberleri; vizyon, festival ve platform gelişmeleri - Ben İzledim.',
+            'canonicalUrl' => 'https://benizledim.com/haberler',
         ]);
     }
 

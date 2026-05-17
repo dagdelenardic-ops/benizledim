@@ -39,6 +39,9 @@ class AiRecommendationController extends Controller
             'messages' => $conversation?->messages ?? collect(),
             'conversationId' => $conversation?->id,
             'conversations' => $conversations,
+            'title' => 'Ne İzlesem?',
+            'description' => 'Ruh haline göre yapay zekâ destekli film ve dizi önerileri al, ardından ilgili Ben İzledim yazılarına geç.',
+            'canonicalUrl' => 'https://benizledim.com/ne-izlesem',
         ]);
     }
 

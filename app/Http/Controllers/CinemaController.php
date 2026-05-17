@@ -30,6 +30,9 @@ class CinemaController extends Controller
             'cinemas' => $cinemas,
             'districts' => $districts,
             'filters' => $request->only(['district']),
+            'title' => 'Sinemalar',
+            'description' => 'İstanbul ve çevresindeki sinema salonları, gösterimler ve izleyici yorumları - Ben İzledim.',
+            'canonicalUrl' => 'https://benizledim.com/sinemalar',
         ]);
     }
 
@@ -50,6 +53,9 @@ class CinemaController extends Controller
             'cinema' => $cinema,
             'averageRating' => $cinema->averageRating(),
             'userReview' => $userReview,
+            'title' => $cinema->name,
+            'description' => $cinema->name . ' sinema salonu: gösterimler, seans bilgileri ve izleyici yorumları - Ben İzledim.',
+            'canonicalUrl' => 'https://benizledim.com/sinema/' . $cinema->getRouteKey(),
         ]);
     }
 }

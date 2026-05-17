@@ -12,6 +12,8 @@ class PageController extends Controller
     {
         return Inertia::render('Page/Show', [
             'page' => $page,
+            'title' => $page->title,
+            'canonicalUrl' => 'https://benizledim.com/sayfa/' . $page->slug,
         ]);
     }
 }

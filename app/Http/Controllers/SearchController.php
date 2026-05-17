@@ -31,6 +31,10 @@ class SearchController extends Controller
         return Inertia::render('Search/Index', [
             'posts' => $posts,
             'query' => $query,
+            'title' => $query !== '' ? '"' . $query . '" için arama sonuçları' : 'Arama',
+            'description' => $query !== ''
+                ? '"' . $query . '" için Ben İzledim film, dizi ve belgesel yazılarında arama sonuçları.'
+                : 'Ben İzledim arşivinde film, dizi ve belgesel yazılarında arama yap.',
         ]);
     }
 }

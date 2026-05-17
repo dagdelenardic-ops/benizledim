@@ -14,6 +14,9 @@ class FestivalController extends Controller
 
         return Inertia::render('Festival/Index', [
             'events' => $events,
+            'title' => 'İstanbul Film Festivali',
+            'description' => 'İstanbul Film Festivali seçkileri, gösterim notları ve hangi etkinlik neden önemli rehberi - Ben İzledim.',
+            'canonicalUrl' => 'https://benizledim.com/festival',
         ]);
     }
 }

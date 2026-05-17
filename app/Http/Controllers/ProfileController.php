@@ -49,6 +49,11 @@ class ProfileController extends Controller
             'activeTab' => $format,
             'stats' => $this->stats->forUser($user),
             'posts' => $posts,
+            'title' => $user->name,
+            'description' => $user->bio
+                ? \Illuminate\Support\Str::limit(strip_tags($user->bio), 155)
+                : $user->name . ' - Ben İzledim yazarının film, dizi ve belgesel yazıları.',
+            'canonicalUrl' => 'https://benizledim.com/profile/' . $user->getRouteKey(),
         ]);
     }
 }
