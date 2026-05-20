@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { Head, usePage, router, Link, useForm } from '@inertiajs/vue3';
 import LoginModal from '@/Components/Auth/LoginModal.vue';
 import SearchBar from '@/Components/UI/SearchBar.vue';
-import AuthorBottomNav from '@/Components/Layout/AuthorBottomNav.vue';
+import MobileBottomNav from '@/Components/Layout/MobileBottomNav.vue';
 import QuickLogModal from '@/Components/Author/QuickLogModal.vue';
 import InstallAppPrompt from '@/Components/PWA/InstallAppPrompt.vue';
 import PushOptInPrompt from '@/Components/PWA/PushOptInPrompt.vue';
@@ -121,7 +121,8 @@ const refreshAfterQuickLog = () => {
 };
 
 const shouldOpenQuickLog = (url) => {
-    return new URLSearchParams(url.split('?')[1] || '').get('action') === 'log';
+    const params = new URLSearchParams((url || '').split('?')[1] || '');
+    return params.get('action') === 'log';
 };
 
 const handleQuickLogEvent = () => openQuickLog();
@@ -483,7 +484,7 @@ export default {
     <PushOptInPrompt />
 
     <!-- Mobile Bottom Nav -->
-    <AuthorBottomNav v-if="authUser" @quick-log="openQuickLog" />
+    <MobileBottomNav @quick-log="openQuickLog" @login="openLoginModal" />
 
     <QuickLogModal v-if="authUser" ref="quickLogModal" @submitted="refreshAfterQuickLog" />
 

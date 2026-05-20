@@ -8,8 +8,8 @@ const ready = ref(false);
 const busy = ref(false);
 
 const storageKey = 'pwa_install_prompt_dismissed_at';
-const dismissWindowMs = 2 * 24 * 60 * 60 * 1000;
-const visibilityDelayMs = 3000;
+const dismissWindowMs = 7 * 24 * 60 * 60 * 1000;
+const visibilityDelayMs = 5000;
 
 let revealTimer = null;
 

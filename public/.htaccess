@@ -70,4 +70,18 @@
     </FilesMatch>
 </IfModule>
 
+# PWA manifest & well-known MIME types
+<IfModule mod_mime.c>
+    AddType application/manifest+json .webmanifest
+    AddType application/json .json
+</IfModule>
+
+# Service worker: no cache
+<Files "sw.js">
+    <IfModule mod_headers.c>
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Service-Worker-Allowed "/"
+    </IfModule>
+</Files>
+
 FileETag None

@@ -4,14 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#dc2626">
+    <meta name="color-scheme" content="light">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Ben/İzledim">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/180.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="/icons/192.png">
+    <meta name="application-name" content="Ben/İzledim">
+    <meta name="msapplication-TileColor" content="#dc2626">
+    <meta name="msapplication-TileImage" content="/icons/144.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/icons/512.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/152.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/144.png">
     <link rel="manifest" href="/build/manifest.webmanifest">
     @php
         use Illuminate\Support\Str;

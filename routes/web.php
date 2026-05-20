@@ -62,6 +62,20 @@ Route::get('/rss', [RssFeedController::class, 'index']);
 
 Route::get('/', [HomeController::class, 'index']);
 
+Route::get('/share-target', function (\Illuminate\Http\Request $request) {
+    $title = $request->query('title', '');
+    $text = $request->query('text', '');
+    $url = $request->query('url', '');
+    $search = trim("$title $text");
+    if ($url && !str_contains($search, $url)) {
+        $search = trim("$search $url");
+    }
+    if ($search !== '') {
+        return redirect()->route('search', ['q' => $search]);
+    }
+    return redirect('/');
+})->name('share-target');
+
 // Flash News
 Route::get('/haberler', [FlashNewsController::class, 'index'])->name('flashnews.index');
 Route::get('/haber/{slug}', [FlashNewsController::class, 'show'])->name('flashnews.show');
