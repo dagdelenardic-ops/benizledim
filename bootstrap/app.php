@@ -41,6 +41,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(prepend: [
+            // Runs first on the request: 301 redirects "?page=1" to the bare
+            // path so Google doesn't see two URLs serving the same first page.
+            \App\Http\Middleware\CanonicalQueryRedirect::class,
             // Runs LAST on the response (LIFO) so it overrides the
             // "no-cache, private" header set by the session middleware.
             \App\Http\Middleware\PublicHtmlCache::class,

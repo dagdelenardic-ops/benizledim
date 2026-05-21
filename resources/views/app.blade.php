@@ -285,6 +285,30 @@
                         </ul>
                     @endif
                 </main>
+            @elseif ($component === 'Profile/Show' && ! empty($props['author']))
+                @php $a = $props['author']; @endphp
+                <main>
+                    <h1>{{ $clean($a['name'] ?? 'Yazar') }}</h1>
+                    @if (! empty($a['bio']))
+                        <p>{{ $clean($a['bio']) }}</p>
+                    @endif
+                    @php $authorPosts = $props['posts']['data'] ?? ($props['posts'] ?? []); @endphp
+                    @if (! empty($authorPosts))
+                        <section>
+                            <h2>{{ $clean($a['name'] ?? '') }} Yazıları</h2>
+                            <ul>
+                                @foreach ($authorPosts as $p)
+                                    <li>
+                                        <a href="{{ $base }}/yazi/{{ $p['slug'] ?? '' }}"><strong>{{ $clean($p['title'] ?? '') }}</strong></a>
+                                        @if (! empty($p['excerpt']))
+                                            <p>{{ $clean($p['excerpt'], 180) }}</p>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </section>
+                    @endif
+                </main>
             @elseif ($component === 'Home')
                 <main>
                     <h1>Ben İzledim</h1>
