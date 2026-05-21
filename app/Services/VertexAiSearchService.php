@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Google\Auth\ApplicationDefaultCredentials;
+use Google\Auth\CredentialsLoader;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -263,16 +263,37 @@ class VertexAiSearchService
 
     private function accessToken(): ?string
     {
+        $cached = Cache::get('vertex_ai_search_token');
+        if (is_string($cached) && $cached !== '') {
+            return $cached;
+        }
+
         try {
-            return Cache::remember('vertex_ai_search_token', now()->addMinutes(50), function () {
-                $creds = ApplicationDefaultCredentials::getCredentials(
-                    'https://www.googleapis.com/auth/cloud-platform'
-                );
-                $token = $creds->fetchAuthToken();
-                return $token['access_token'] ?? null;
-            });
+            $path = config('services.gcp.credentials_path') ?: env('GOOGLE_APPLICATION_CREDENTIALS');
+            if (!$path || !file_exists($path)) {
+                Log::error('Vertex AI credentials file missing', ['path' => (string) $path]);
+                return null;
+            }
+
+            $json = json_decode((string) file_get_contents($path), true);
+            if (!is_array($json)) {
+                Log::error('Vertex AI credentials JSON invalid', ['path' => $path]);
+                return null;
+            }
+
+            $creds = CredentialsLoader::makeCredentials(
+                'https://www.googleapis.com/auth/cloud-platform',
+                $json
+            );
+            $token = $creds->fetchAuthToken();
+            $accessToken = $token['access_token'] ?? null;
+
+            if ($accessToken) {
+                Cache::put('vertex_ai_search_token', $accessToken, now()->addMinutes(50));
+            }
+            return $accessToken;
         } catch (\Throwable $e) {
-            Log::error('Vertex AI Search token fetch failed', ['error' => $e->getMessage()]);
+            Log::error('Vertex AI token fetch failed', ['error' => $e->getMessage()]);
             return null;
         }
     }
