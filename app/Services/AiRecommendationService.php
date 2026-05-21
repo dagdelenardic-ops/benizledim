@@ -31,6 +31,16 @@ class AiRecommendationService
         $userTurns = (int) $conversation->messages()->where('role', 'user')->count();
         $postContext = $this->buildPostContext($userMessage);
 
+        // Birincil yol: Vertex AI Search Discovery Engine (Gemini API kotası bittikten sonra)
+        if (config('services.gcp.search_enabled')) {
+            $vertexResult = $this->vertexChat($conversation, $userMessage, $postContext, $userTurns);
+            if ($vertexResult !== null) {
+                return $vertexResult;
+            }
+            // Vertex çağrısı boş dönerse fallback'e düş
+            return $this->createFallbackResponse($conversation, $userMessage, $postContext, $userTurns);
+        }
+
         if (blank($this->apiKey)) {
             return $this->createFallbackResponse($conversation, $userMessage, $postContext, $userTurns);
         }
@@ -76,6 +86,88 @@ class AiRecommendationService
         } catch (\Exception $e) {
             Log::error('AI recommendation error', ['error' => $e->getMessage()]);
             return $this->createFallbackResponse($conversation, $userMessage, $postContext, $userTurns);
+        }
+    }
+
+    /**
+     * Vertex AI Search Discovery Engine ile grounded cevap üret.
+     * AiMessage create eder, Vue'nun beklediği shape döner.
+     * Vertex tamamen başarısızsa null döner (fallback'e bırak).
+     */
+    private function vertexChat(AiConversation $conversation, string $userMessage, array $postContext, int $userTurns): ?array
+    {
+        try {
+            // Çoklu turn için session sürekliliği: ilk assistant mesajındaki meta'da saklı
+            $sessionId = optional(
+                $conversation->messages()->where('role', 'assistant')->whereNotNull('meta')->latest()->first()
+            )?->meta['vertex_session'] ?? null;
+
+            $vertex = app(\App\Services\VertexAiSearchService::class);
+            $result = $vertex->answer($userMessage, $sessionId);
+
+            $answerText = trim((string) ($result['answer'] ?? ''));
+            if ($answerText === '') {
+                return null;
+            }
+
+            // Citations → site_posts (id, slug, title)
+            $citationIds = collect($result['citations'] ?? [])
+                ->pluck('id')
+                ->filter()
+                ->map(fn ($id) => (int) $id)
+                ->unique()
+                ->values()
+                ->all();
+
+            $sitePosts = [];
+            $recommendedIds = [];
+            if (!empty($citationIds)) {
+                $posts = Post::whereIn('id', $citationIds)
+                    ->published()
+                    ->get(['id', 'slug', 'title', 'excerpt'])
+                    ->keyBy('id');
+
+                foreach ($citationIds as $cid) {
+                    if (!$posts->has($cid)) {
+                        continue;
+                    }
+                    $p = $posts->get($cid);
+                    $sitePosts[] = [
+                        'id' => $p->id,
+                        'slug' => $p->slug,
+                        'title' => $p->title,
+                        'excerpt' => $p->excerpt,
+                    ];
+                    $recommendedIds[] = $p->id;
+                }
+            }
+
+            // Vue UI follow-up önerileri bekliyor — mevcut helper'la üret
+            $followUps = $this->defaultFollowUpOptions($userMessage);
+
+            $meta = [
+                'site_posts' => $sitePosts,
+                'external_suggestions' => [], // Vertex external önermez, sadece grounding
+                'follow_up_options' => $followUps,
+                'engine' => 'vertex',
+                'vertex_session' => $result['session'] ?? $sessionId,
+            ];
+
+            $assistantMsg = $conversation->messages()->create([
+                'role' => 'assistant',
+                'content' => $answerText,
+                'recommended_post_ids' => $recommendedIds ?: null,
+                'meta' => $meta,
+                'created_at' => now(),
+            ]);
+
+            return [
+                'message' => $assistantMsg,
+                'recommended_posts' => $sitePosts,
+            ];
+        } catch (\Throwable $e) {
+            Log::error('Vertex chat failed in Ne İzlesem', ['error' => $e->getMessage()]);
+            return null;
         }
     }
 
