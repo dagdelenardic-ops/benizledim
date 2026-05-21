@@ -17,16 +17,15 @@ class AdminSettingsController extends Controller
 
         return Inertia::render('Admin/Settings/Index', [
             'settings' => [
-                'gemini_text_model' => (string) config('services.gemini.text_model', 'gemini-2.5-flash'),
                 'google_redirect_uri' => (string) config('services.google.redirect', ''),
                 'facebook_redirect_uri' => (string) config('services.facebook.redirect', ''),
             ],
             'status' => [
-                'gemini_api_key' => filled(config('services.gemini.api_key')),
                 'google_client_id' => filled(config('services.google.client_id')),
                 'google_client_secret' => filled(config('services.google.client_secret')),
                 'facebook_client_id' => filled(config('services.facebook.client_id')),
                 'facebook_client_secret' => filled(config('services.facebook.client_secret')),
+                'vertex_ai' => (bool) config('services.gcp.search_enabled'),
             ],
         ]);
     }
@@ -36,8 +35,6 @@ class AdminSettingsController extends Controller
         abort_unless(auth()->user()?->isAdmin(), 403, 'Ayar yönetimi sadece admin için açıktır.');
 
         $validated = $request->validate([
-            'gemini_api_key' => 'nullable|string|max:500',
-            'gemini_text_model' => 'required|string|max:120',
             'google_client_id' => 'nullable|string|max:255',
             'google_client_secret' => 'nullable|string|max:255',
             'google_redirect_uri' => 'nullable|url|max:255',
@@ -47,12 +44,11 @@ class AdminSettingsController extends Controller
         ]);
 
         $updates = [
-            'GEMINI_TEXT_MODEL' => $validated['gemini_text_model'],
             'GOOGLE_REDIRECT_URI' => $validated['google_redirect_uri'] ?? '',
             'FACEBOOK_REDIRECT_URI' => $validated['facebook_redirect_uri'] ?? '',
         ];
 
-        foreach (['gemini_api_key', 'google_client_id', 'google_client_secret', 'facebook_client_id', 'facebook_client_secret'] as $secretKey) {
+        foreach (['google_client_id', 'google_client_secret', 'facebook_client_id', 'facebook_client_secret'] as $secretKey) {
             if (filled($validated[$secretKey] ?? null)) {
                 $updates[strtoupper($secretKey)] = (string) $validated[$secretKey];
             }

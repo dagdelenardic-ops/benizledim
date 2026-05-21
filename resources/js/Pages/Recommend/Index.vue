@@ -172,7 +172,7 @@ onBeforeUnmount(() => {
                     <h1 class="ne-izlesem__title">Ne İzlesem?</h1>
                     <p class="ne-izlesem__subtitle">
                         Ruh haline, zamanına ve tercihlerine göre sana özel film &amp; dizi önerileri.
-                        <span class="ne-izlesem__badge">Gemini AI</span>
+                        <span class="ne-izlesem__badge">Vertex AI</span>
                     </p>
                 </div>
             </header>

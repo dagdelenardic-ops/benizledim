@@ -14,8 +14,6 @@ const props = defineProps({
 });
 
 const form = useForm({
-    gemini_api_key: '',
-    gemini_text_model: props.settings.gemini_text_model || 'gemini-2.5-flash',
     google_client_id: '',
     google_client_secret: '',
     google_redirect_uri: props.settings.google_redirect_uri || '',
@@ -43,29 +41,17 @@ const submit = () => {
 
             <form @submit.prevent="submit" class="space-y-6 border-2 border-[var(--bi-ink)] bg-white p-5">
                 <section class="space-y-4">
-                    <h2 class="text-xl font-black text-[var(--bi-ink)]">Gemini</h2>
+                    <h2 class="text-xl font-black text-[var(--bi-ink)]">AI: Vertex AI Search</h2>
                     <div class="rounded border border-[var(--bi-ink)] bg-[var(--bi-paper)] px-4 py-3 text-sm font-bold text-[var(--bi-ink)]">
-                        API Key Durumu: {{ status.gemini_api_key ? 'Configured' : 'Missing' }}
+                        Durum: {{ status.vertex_ai ? 'Aktif (Discovery Engine bağlı)' : 'Kapalı' }}
                     </div>
-                    <div>
-                        <label class="mb-2 block text-sm font-bold text-[var(--bi-ink)]">GEMINI_API_KEY</label>
-                        <input
-                            v-model="form.gemini_api_key"
-                            type="password"
-                            autocomplete="off"
-                            placeholder="Yeni key gir (opsiyonel)"
-                            class="w-full border border-[var(--bi-ink)] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-700/20"
-                        />
-                    </div>
-                    <div>
-                        <label class="mb-2 block text-sm font-bold text-[var(--bi-ink)]">GEMINI_TEXT_MODEL</label>
-                        <input
-                            v-model="form.gemini_text_model"
-                            type="text"
-                            class="w-full border border-[var(--bi-ink)] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-700/20"
-                        />
-                        <p v-if="form.errors.gemini_text_model" class="mt-1 text-sm text-red-700">{{ form.errors.gemini_text_model }}</p>
-                    </div>
+                    <p class="text-sm text-[var(--bi-muted)] leading-6">
+                        Yapay zekâ destekli arama, "Ne İzlesem?" asistanı ve ilgili yazılar
+                        <strong>Google Cloud Vertex AI Search</strong> üzerinden çalışıyor.
+                        Konfigürasyon <code>.env</code> içinde <code>GCP_PROJECT_ID</code>,
+                        <code>GCP_DATASTORE_ID</code> ve <code>GOOGLE_APPLICATION_CREDENTIALS</code>
+                        anahtarlarıyla sağlanır. Bu sayfadan değiştirilmez.
+                    </p>
                 </section>
 
                 <section class="space-y-4 border-t-2 border-[var(--bi-ink)] pt-5">
