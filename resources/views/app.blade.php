@@ -181,7 +181,145 @@
     @inertiaHead
 </head>
 <body class="font-sans antialiased bg-white text-gray-900">
-    @inertia
+    @php
+        $__inertiaSsrResponse = app(\Inertia\Ssr\Gateway::class)->dispatch($page);
+
+        $fmtDate = function ($iso) {
+            if (! $iso) return null;
+            try { return \Carbon\Carbon::parse($iso)->locale('tr')->translatedFormat('d F Y'); }
+            catch (\Throwable $e) { return null; }
+        };
+        $contentSafe = function ($html) {
+            $allowed = '<p><br><h2><h3><h4><strong><em><b><i><a><ul><ol><li><blockquote>';
+            $stripped = strip_tags((string) $html, $allowed);
+            return preg_replace('/\s+(class|style|id|onclick|onload|onerror)="[^"]*"/i', '', $stripped);
+        };
+    @endphp
+
+    @if ($__inertiaSsrResponse)
+        {!! $__inertiaSsrResponse->body !!}
+    @else
+        <div id="app" data-page="{{ json_encode($page) }}">
+            {{-- SEO fallback: bot ve JS-siz kullanıcılar için ilk-paint HTML içerik. Vue mount edince üzerine yazar. --}}
+            @if ($component === 'Post/Show' && ! empty($props['post']))
+                @php $p = $props['post']; @endphp
+                <main>
+                    <article>
+                        <h1>{{ $clean($p['title'] ?? '') }}</h1>
+                        @if (! empty($p['excerpt']))
+                            <p>{{ $clean($p['excerpt']) }}</p>
+                        @endif
+                        <p>
+                            @if (! empty($p['user']['name']))
+                                <span>Yazar: <a href="{{ $base }}/yazar/{{ $p['user']['slug'] ?? '' }}">{{ $clean($p['user']['name']) }}</a></span>
+                            @endif
+                            @if (! empty($p['published_at']) && ($d = $fmtDate($p['published_at'])))
+                                <time datetime="{{ $p['published_at'] }}">{{ $d }}</time>
+                            @endif
+                        </p>
+                        @if (! empty($p['categories']))
+                            <p>
+                                @foreach ($p['categories'] as $cat)
+                                    <a href="{{ $base }}/yazilar/{{ $cat['slug'] }}">{{ $clean($cat['name']) }}</a>
+                                @endforeach
+                            </p>
+                        @endif
+                        @if (! empty($p['content']))
+                            <div>{!! $contentSafe($p['content']) !!}</div>
+                        @endif
+                    </article>
+                </main>
+            @elseif ($component === 'FlashNews/Show' && ! empty($props['item']))
+                @php $it = $props['item']; @endphp
+                <main>
+                    <article>
+                        <h1>{{ $clean($it['title_tr'] ?? '') }}</h1>
+                        @if (! empty($it['published_at']) && ($d = $fmtDate($it['published_at'])))
+                            <p><time datetime="{{ $it['published_at'] }}">{{ $d }}</time>@if (! empty($it['source_name'])) — Kaynak: {{ $clean($it['source_name']) }}@endif</p>
+                        @endif
+                        @if (! empty($it['summary_tr']))
+                            <p>{{ $clean($it['summary_tr']) }}</p>
+                        @endif
+                        @if (! empty($it['content_tr']))
+                            <div>{!! $contentSafe($it['content_tr']) !!}</div>
+                        @endif
+                    </article>
+                </main>
+            @elseif ($component === 'Post/Index')
+                <main>
+                    <h1>{{ $clean($props['title'] ?? 'Yazılar') }}</h1>
+                    @if (! empty($props['description']))
+                        <p>{{ $clean($props['description']) }}</p>
+                    @endif
+                    @php $postList = $props['posts']['data'] ?? ($props['posts'] ?? []); @endphp
+                    @if (! empty($postList))
+                        <ul>
+                            @foreach ($postList as $p)
+                                <li>
+                                    <a href="{{ $base }}/yazi/{{ $p['slug'] ?? '' }}"><strong>{{ $clean($p['title'] ?? '') }}</strong></a>
+                                    @if (! empty($p['excerpt']))
+                                        <p>{{ $clean($p['excerpt'], 200) }}</p>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </main>
+            @elseif ($component === 'FlashNews/Index')
+                <main>
+                    <h1>{{ $clean($props['title'] ?? 'Sinema ve Dizi Haberleri') }}</h1>
+                    @if (! empty($props['description']))
+                        <p>{{ $clean($props['description']) }}</p>
+                    @endif
+                    @php $newsList = $props['items']['data'] ?? ($props['items'] ?? []); @endphp
+                    @if (! empty($newsList))
+                        <ul>
+                            @foreach ($newsList as $it)
+                                <li>
+                                    <a href="{{ $base }}/haber/{{ $it['slug'] ?? '' }}"><strong>{{ $clean($it['title_tr'] ?? '') }}</strong></a>
+                                    @if (! empty($it['summary_tr']))
+                                        <p>{{ $clean($it['summary_tr'], 200) }}</p>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </main>
+            @elseif ($component === 'Home')
+                <main>
+                    <h1>Ben İzledim</h1>
+                    <p>{{ $defaultDesc }}</p>
+                    @php $homePosts = $props['posts']['data'] ?? ($props['posts'] ?? []); @endphp
+                    @if (! empty($homePosts))
+                        <section>
+                            <h2>Son Yazılar</h2>
+                            <ul>
+                                @foreach (array_slice($homePosts, 0, 12) as $p)
+                                    <li>
+                                        <a href="{{ $base }}/yazi/{{ $p['slug'] ?? '' }}">{{ $clean($p['title'] ?? '') }}</a>
+                                        @if (! empty($p['excerpt']))
+                                            — {{ $clean($p['excerpt'], 140) }}
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </section>
+                    @endif
+                    @php $homeNews = $props['flashNews']['data'] ?? ($props['flashNews'] ?? []); @endphp
+                    @if (! empty($homeNews))
+                        <section>
+                            <h2>Sinema ve Dizi Haberleri</h2>
+                            <ul>
+                                @foreach (array_slice($homeNews, 0, 10) as $it)
+                                    <li><a href="{{ $base }}/haber/{{ $it['slug'] ?? '' }}">{{ $clean($it['title_tr'] ?? '') }}</a></li>
+                                @endforeach
+                            </ul>
+                        </section>
+                    @endif
+                </main>
+            @endif
+        </div>
+    @endif
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {

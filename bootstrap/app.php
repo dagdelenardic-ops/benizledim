@@ -40,6 +40,11 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(prepend: [
+            // Runs LAST on the response (LIFO) so it overrides the
+            // "no-cache, private" header set by the session middleware.
+            \App\Http\Middleware\PublicHtmlCache::class,
+        ]);
         $middleware->web(append: [
             \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\CanonicalHostMiddleware::class,
