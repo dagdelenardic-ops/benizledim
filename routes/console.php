@@ -18,6 +18,12 @@ Schedule::command('queue:prune-batches --hours=72')
     ->withoutOverlapping()
     ->appendOutputTo(storage_path('logs/scheduler.log'));
 
+// Vertex AI Search — günlük full sync (PostObserver canlı upsert yapıyor; bu failsafe).
+Schedule::command('app:vertex-sync')
+    ->dailyAt('03:30')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/scheduler.log'));
+
 if ((bool) env('RUN_QUEUE_WORKER_VIA_SCHEDULER', false)) {
     Schedule::command('queue:work --stop-when-empty --queue=default,scrapers --tries=1 --timeout=120')
         ->everyMinute()

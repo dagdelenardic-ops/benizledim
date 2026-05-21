@@ -102,6 +102,11 @@ Route::get('/yazi/{post}', [PostController::class, 'show'])->name('posts.show');
 
 // Arama
 Route::get('/ara', [SearchController::class, 'index'])->name('search');
+Route::get('/api/search/complete', [SearchController::class, 'complete'])->name('search.complete');
+
+// Asistan (Vertex AI grounded Q&A)
+Route::get('/asistan', [\App\Http\Controllers\AsistanController::class, 'index'])->name('asistan');
+Route::post('/asistan/sor', [\App\Http\Controllers\AsistanController::class, 'ask'])->name('asistan.ask');
 
 // Yorum
 Route::post('/yazi/{post}/yorum', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');

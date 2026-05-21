@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Services\VertexAiSearchService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -76,7 +77,7 @@ class PostController extends Controller
         ]);
     }
 
-    public function show(Request $request, Post $post)
+    public function show(Request $request, Post $post, VertexAiSearchService $vertex)
     {
         if (!$post->published_at || $post->status !== 'published' || $post->deletion_requested_at) {
             abort(404);
@@ -107,16 +108,7 @@ class PostController extends Controller
             ? $post->watchlistedBy()->where('users.id', auth()->id())->exists()
             : false;
 
-        $relatedPosts = Post::articles()
-            ->where('id', '!=', $post->id)
-            ->whereHas('categories', function ($q) use ($post) {
-                $q->whereIn('categories.id', $post->categories->pluck('id'));
-            })
-            ->with(['user', 'categories'])
-            ->withCount(['comments', 'likes'])
-            ->limit(4)
-            ->latest('published_at')
-            ->get();
+        $relatedPosts = $this->resolveRelatedPosts($post, $vertex);
 
         $userEntryVotes = [];
         if (auth()->check()) {
@@ -133,5 +125,45 @@ class PostController extends Controller
             'isWatchlisted' => $isWatchlisted,
             'userEntryVotes' => $userEntryVotes,
         ]);
+    }
+
+    private function resolveRelatedPosts(Post $post, VertexAiSearchService $vertex)
+    {
+        $limit = 4;
+
+        if (config('services.gcp.search_enabled')) {
+            $moodTags = is_array($post->mood_tags) ? $post->mood_tags : [];
+            $signal = trim($post->title . ' ' . implode(' ', $moodTags));
+            $hits = $vertex->search($signal, $limit + 4);
+            $ids = collect($hits)->pluck('id')->filter()->map(fn ($id) => (int) $id)
+                ->reject(fn ($id) => $id === $post->id)
+                ->take($limit)
+                ->values();
+
+            if ($ids->isNotEmpty()) {
+                $posts = Post::articles()
+                    ->whereIn('id', $ids)
+                    ->with(['user', 'categories'])
+                    ->withCount(['comments', 'likes'])
+                    ->get()
+                    ->keyBy('id');
+
+                $ordered = $ids->map(fn ($id) => $posts->get($id))->filter()->values();
+                if ($ordered->isNotEmpty()) {
+                    return $ordered;
+                }
+            }
+        }
+
+        return Post::articles()
+            ->where('id', '!=', $post->id)
+            ->whereHas('categories', function ($q) use ($post) {
+                $q->whereIn('categories.id', $post->categories->pluck('id'));
+            })
+            ->with(['user', 'categories'])
+            ->withCount(['comments', 'likes'])
+            ->limit($limit)
+            ->latest('published_at')
+            ->get();
     }
 }

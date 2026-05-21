@@ -66,3 +66,7 @@ Thumbs.db
 /.kimi-instructions.md
 /.qwen-instructions.md
 _clear_cache.php
+
+# GCP credentials
+/storage/app/google-credentials
+!/storage/app/google-credentials/.gitkeep

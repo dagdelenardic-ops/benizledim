@@ -6,6 +6,8 @@ use App\Models\Post;
 use App\Observers\Concerns\FlushesAuthorStatsCache;
 use App\Services\ActivityService;
 use App\Services\SentimentAnalyzer;
+use App\Services\VertexAiSearchService;
+use Illuminate\Support\Facades\Artisan;
 
 class PostObserver
 {
@@ -19,6 +21,7 @@ class PostObserver
     {
         $this->flushAuthorStatsCache($post->user_id);
         $this->recordPublishActivity($post);
+        $this->syncToVertex($post);
 
         if ($post->format !== 'watch_log' || blank($post->excerpt)) {
             return;
@@ -33,6 +36,42 @@ class PostObserver
         $meta['excerpt_sentiment'] = $this->sentimentAnalyzer->analyze($post->excerpt);
 
         $post->forceFill(['meta' => $meta])->saveQuietly();
+    }
+
+    public function deleted(Post $post): void
+    {
+        if (!config('services.gcp.search_enabled')) {
+            return;
+        }
+        try {
+            app(VertexAiSearchService::class)->deleteDocument($post->id);
+        } catch (\Throwable $e) {
+            // log only — don't break delete flow
+            \Log::warning('Vertex delete failed', ['post_id' => $post->id, 'error' => $e->getMessage()]);
+        }
+    }
+
+    private function syncToVertex(Post $post): void
+    {
+        if (!config('services.gcp.search_enabled')) {
+            return;
+        }
+        if ($post->status !== 'published') {
+            return;
+        }
+        if (!$post->wasChanged(['title', 'excerpt', 'content', 'status', 'mood_tags', 'duration_category', 'intensity_level', 'published_at'])
+            && !$post->wasRecentlyCreated) {
+            return;
+        }
+
+        // Run in background so save() returns immediately.
+        dispatch(function () use ($post) {
+            try {
+                Artisan::call('app:vertex-sync', ['--post-id' => $post->id]);
+            } catch (\Throwable $e) {
+                \Log::warning('Vertex sync dispatch failed', ['post_id' => $post->id, 'error' => $e->getMessage()]);
+            }
+        })->afterResponse();
     }
 
     private function recordPublishActivity(Post $post): void

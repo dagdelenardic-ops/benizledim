@@ -84,4 +84,12 @@ return [
         'image_model' => env('XAI_IMAGE_MODEL', 'grok-imagine-image-pro'),
     ],
 
+    'gcp' => [
+        'project_id' => env('GCP_PROJECT_ID'),
+        'location' => env('GCP_LOCATION', 'global'),
+        'datastore_id' => env('GCP_DATASTORE_ID'),
+        'serving_config_id' => env('GCP_SERVING_CONFIG_ID', 'default_serving_config'),
+        'search_enabled' => filter_var(env('GCP_SEARCH_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
+    ],
+
 ];
