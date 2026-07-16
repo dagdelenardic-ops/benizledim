@@ -20,7 +20,7 @@ class PostController extends Controller
                 $routeParameters['page'] = $request->integer('page');
             }
 
-            return redirect()->route('posts.category', $routeParameters, 301);
+            return redirect()->away(route('posts.category', $routeParameters, false), 301);
         }
 
         $query = Post::articles()

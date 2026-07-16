@@ -32,7 +32,7 @@ class SeoCanonicalTest extends TestCase
         $response->assertRedirect(route('posts.category', [
             'category' => $category,
             'page' => 2,
-        ]));
+        ], false));
     }
 
     #[Test]
