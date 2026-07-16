@@ -132,6 +132,8 @@ textarea {
 }
 
 .bi-post-card {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-rows: auto 1fr;
     min-height: 100%;
@@ -141,6 +143,7 @@ textarea {
 }
 
 .bi-post-card:hover {
+    z-index: 5;
     border-color: var(--bi-red);
     box-shadow: 8px 8px 0 var(--bi-ink);
     transform: translate(-2px, -2px);

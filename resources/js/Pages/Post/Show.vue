@@ -15,8 +15,10 @@ import VisualEssayView from '../../Components/Post/VisualEssayView.vue';
 import LoginModal from '../../Components/Auth/LoginModal.vue';
 import ArticleBody from '../../Components/Article/ArticleBody.vue';
 import WatchlistButton from '../../Components/Social/WatchlistButton.vue';
+import PullQuote from '../../Components/Post/PullQuote.vue';
 import { useDate } from '@/Composables/useDate';
 import { buildResponsiveImage } from '@/Utils/responsiveImage';
+import { getAuthorAvatar } from '@/Utils/authorAvatars';
 
 const props = defineProps({
     post: {
@@ -45,6 +47,7 @@ const { formatDate, timeAgo } = useDate();
 const showLoginModal = ref(false);
 const page = usePage();
 const authUser = computed(() => page.props.auth?.user);
+const authorAvatar = computed(() => props.post.user?.avatar || getAuthorAvatar(props.post.user?.name || ''));
 const readingProgress = ref(0);
 const articleBody = ref(null);
 let readingProgressFrame = null;
@@ -62,6 +65,15 @@ const toAbsoluteUrl = (value) => {
 };
 
 const stripHtml = (value = '') => value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+const seoDescription = computed(() => {
+    const value = stripHtml(props.post.excerpt || '');
+    const fallback = 'Film, dizi ve belgesel eleştirileri - Ben İzledim';
+
+    if (!value) return fallback;
+    if (value.length <= 160) return value;
+
+    return `${value.slice(0, 159).trimEnd()}…`;
+});
 
 const slugifyHeading = (value = '') => value
     .toLocaleLowerCase('tr-TR')
@@ -72,7 +84,26 @@ const slugifyHeading = (value = '') => value
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 
-const analyzeContent = (html = '') => {
+// Imported Wix posts may end with a legacy interaction footer and begin with
+// empty wrapper elements. Remove only those known artifacts before rendering.
+const stripWixArtifacts = (html = '') => {
+    let cleaned = html
+        .replace(/<footer\b[\s\S]*?<\/footer>\s*$/gi, '');
+
+    // Repeat because empty wrappers can be nested. Elements with attributes are
+    // preserved so image containers and other meaningful blocks remain intact.
+    const emptyBlock = /<(section|div|p)>(?:\s|&nbsp;|<br\s*\/?>)*<\/\1>/gi;
+    for (let i = 0; i < 6; i += 1) {
+        const next = cleaned.replace(emptyBlock, '');
+        if (next === cleaned) break;
+        cleaned = next;
+    }
+
+    return cleaned.trim();
+};
+
+const analyzeContent = (rawHtml = '') => {
+    const html = stripWixArtifacts(rawHtml);
     const seen = new Map();
     const items = [];
 
@@ -107,7 +138,9 @@ const analyzeContent = (html = '') => {
     const WIX_CDN = 'https://static.wixstatic.com/media/';
     const wixOriginal = (storagePath) => {
         const file = (storagePath.split('/').pop() || '').split('?')[0];
-        return /(~mv2|^[0-9a-f]{4,8}_[0-9a-f]{16,})/i.test(file) ? WIX_CDN + file : '';
+        return /(~mv2|^[0-9a-f]{4,8}_[0-9a-f]{16,})/i.test(file)
+            ? WIX_CDN + encodeURIComponent(file)
+            : '';
     };
 
     let htmlWithImages = processedHtml.replace(/<img\b[^>]*>/gi, (tag) => {
@@ -137,12 +170,12 @@ const analyzeContent = (html = '') => {
             .replace(/\sonerror\s*=\s*(["']).*?\1/i, '')
             .replace(/\ssrc\s*=\s*(["']).*?\1/i, () => ` src="${responsive.src}"`);
 
-        const onError = fallback
-            ? ` onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${fallback}'"`
+        const fallbackAttribute = fallback
+            ? ` data-fallback-src="${fallback}"`
             : '';
 
         const injected = ` srcset="${responsive.srcset}" sizes="${responsive.sizes}"`
-            + onError
+            + fallbackAttribute
             + (/\sloading\s*=/i.test(rebuilt) ? '' : ' loading="lazy"')
             + (/\sdecoding\s*=/i.test(rebuilt) ? '' : ' decoding="async"');
 
@@ -171,6 +204,26 @@ const analyzeContent = (html = '') => {
 const contentAnalysis = computed(() => analyzeContent(props.post.content || ''));
 const processedContent = computed(() => contentAnalysis.value.html);
 const tocItems = computed(() => contentAnalysis.value.items);
+
+// Wix taşımasında excerpt çoğu yazıda içeriğin ilk cümlelerinin birebir kopyası
+// olarak üretilmiş. Bunu italik lede olarak göstermek hem tekrara hem de yazının
+// başında gereksiz boşluğa yol açıyor. Excerpt gerçekten farklı bir özetse göster;
+// gövdenin açılışını tekrarlıyorsa gizle.
+const showExcerpt = computed(() => {
+    const excerpt = (props.post.excerpt || '').trim();
+    if (!excerpt) return false;
+
+    const normalize = (value = '') => value
+        .toLocaleLowerCase('tr-TR')
+        .replace(/[^\p{L}\p{N}\s]/gu, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const probe = normalize(excerpt).slice(0, 60);
+    if (!probe) return false;
+
+    return !normalize(stripHtml(processedContent.value)).startsWith(probe);
+});
 const shouldShowToc = computed(() => {
     const isStandardPost = !props.post.format || props.post.format === 'standard';
 
@@ -182,7 +235,7 @@ const articleSchema = computed(() => {
         '@context': 'https://schema.org',
         '@type': 'Article',
         'headline': props.post.title,
-        'description': props.post.excerpt || '',
+        'description': seoDescription.value,
         'image': [toAbsoluteUrl(props.post.cover_image)],
         'datePublished': props.post.published_at,
         'dateModified': props.post.updated_at || props.post.published_at,
@@ -276,7 +329,7 @@ onBeforeUnmount(() => {
 <template>
     <AppLayout
         :title="post.title"
-        :description="post.excerpt || 'Film, Dizi ve Belgesel eleştirileri - Ben İzledim'"
+        :description="seoDescription"
         :og-image="post.cover_image || '/images/og-default.png'"
         :canonical-url="canonicalUrl"
         og-type="article"
@@ -320,7 +373,7 @@ onBeforeUnmount(() => {
                         <Link
                             v-for="category in post.categories.slice(0, 3)"
                             :key="category.id"
-                            :href="`/yazilar?category=${category.slug}`"
+                            :href="`/yazilar/${category.slug}`"
                             class="px-3 py-1 bg-red-600 text-white text-sm font-medium rounded-full hover:bg-red-700 transition-colors"
                         >
                             {{ category.name }}
@@ -348,8 +401,8 @@ onBeforeUnmount(() => {
                             class="flex items-center gap-2 hover:text-red-600 transition-colors"
                         >
                             <img
-                                v-if="post.user.avatar"
-                                :src="post.user.avatar"
+                                v-if="authorAvatar"
+                                :src="authorAvatar"
                                 :alt="post.user.name"
                                 class="w-10 h-10 rounded-full object-cover"
                                 loading="lazy"
@@ -403,10 +456,12 @@ onBeforeUnmount(() => {
                         class="mb-8"
                     />
 
-                    <!-- Excerpt -->
-                    <div v-if="post.excerpt" class="mx-auto mb-8 max-w-[750px] text-xl leading-relaxed text-gray-600 italic">
-                        {{ post.excerpt }}
-                    </div>
+                    <!-- Excerpt → şık alıntı (yalnızca gövdeyi tekrarlamayan gerçek özetlerde) -->
+                    <PullQuote
+                        v-if="showExcerpt"
+                        :text="post.excerpt"
+                        :author-name="post.user?.name || ''"
+                    />
 
                     <!-- Content: Standard Format -->
                     <div v-if="!post.format || post.format === 'standard'" class="lg:grid lg:grid-cols-[minmax(0,750px)_240px] lg:items-start lg:gap-10">

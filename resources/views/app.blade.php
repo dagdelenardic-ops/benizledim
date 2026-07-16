@@ -61,6 +61,7 @@
         $ogType = 'website';
         $authorName = null;
         $publishedTime = null;
+        $robots = $props['robots'] ?? 'index, follow, max-image-preview:large, max-snippet:-1';
 
         $schema = [[
             '@context' => 'https://schema.org',
@@ -137,7 +138,7 @@
                 $title = $clean($props['title']) . ' - Ben İzledim';
             }
             if (! empty($props['description'])) {
-                $desc = $clean($props['description'], 200);
+                $desc = $clean($props['description'], 160);
             }
             if (! empty($props['ogImage'])) {
                 $image = $abs($props['ogImage']) ?: $defaultImage;
@@ -151,49 +152,46 @@
             return str_replace('</', '<\/', json_encode($node, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         };
     @endphp
-    <title>{{ $title }}</title>
-    <meta name="description" content="{{ $desc }}">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-    <meta name="googlebot" content="index, follow">
-    <link rel="canonical" href="{{ $canonical }}">
-    <meta property="og:site_name" content="Ben İzledim">
-    <meta property="og:locale" content="tr_TR">
-    <meta property="og:type" content="{{ $ogType }}">
-    <meta property="og:title" content="{{ $title }}">
-    <meta property="og:description" content="{{ $desc }}">
-    <meta property="og:url" content="{{ $canonical }}">
-    <meta property="og:image" content="{{ $image }}">
+    @inertiaHead
+    @if (! $__inertiaSsrResponse)
+    {{-- Server-rendered fallback. AppLayout replaces these nodes after client mount. --}}
+    <title data-bi-seo-fallback>{{ $title }}</title>
+    <meta data-bi-seo-fallback name="description" content="{{ $desc }}">
+    <meta data-bi-seo-fallback name="robots" content="{{ $robots }}">
+    <meta data-bi-seo-fallback name="googlebot" content="{{ $robots }}">
+    <link data-bi-seo-fallback rel="canonical" href="{{ $canonical }}">
+    <meta data-bi-seo-fallback property="og:site_name" content="Ben İzledim">
+    <meta data-bi-seo-fallback property="og:locale" content="tr_TR">
+    <meta data-bi-seo-fallback property="og:type" content="{{ $ogType }}">
+    <meta data-bi-seo-fallback property="og:title" content="{{ $title }}">
+    <meta data-bi-seo-fallback property="og:description" content="{{ $desc }}">
+    <meta data-bi-seo-fallback property="og:url" content="{{ $canonical }}">
+    <meta data-bi-seo-fallback property="og:image" content="{{ $image }}">
     @if($ogType === 'article' && $publishedTime)
-    <meta property="article:published_time" content="{{ $publishedTime }}">
+    <meta data-bi-seo-fallback property="article:published_time" content="{{ $publishedTime }}">
     @endif
     @if($authorName)
-    <meta name="author" content="{{ $authorName }}">
+    <meta data-bi-seo-fallback name="author" content="{{ $authorName }}">
     @endif
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $title }}">
-    <meta name="twitter:description" content="{{ $desc }}">
-    <meta name="twitter:image" content="{{ $image }}">
+    <meta data-bi-seo-fallback name="twitter:card" content="summary_large_image">
+    <meta data-bi-seo-fallback name="twitter:title" content="{{ $title }}">
+    <meta data-bi-seo-fallback name="twitter:description" content="{{ $desc }}">
+    <meta data-bi-seo-fallback name="twitter:image" content="{{ $image }}">
     @foreach($schema as $node)
-    <script type="application/ld+json">{!! $jsonLd($node) !!}</script>
+    <script data-bi-seo-fallback type="application/ld+json">{!! $jsonLd($node) !!}</script>
     @endforeach
+    @endif
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=fraunces:400i,500i,600i,700i&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @inertiaHead
 </head>
 <body class="font-sans antialiased bg-white text-gray-900">
     @php
-        $__inertiaSsrResponse = app(\Inertia\Ssr\Gateway::class)->dispatch($page);
-
         $fmtDate = function ($iso) {
             if (! $iso) return null;
             try { return \Carbon\Carbon::parse($iso)->locale('tr')->translatedFormat('d F Y'); }
             catch (\Throwable $e) { return null; }
-        };
-        $contentSafe = function ($html) {
-            $allowed = '<p><br><h2><h3><h4><strong><em><b><i><a><ul><ol><li><blockquote>';
-            $stripped = strip_tags((string) $html, $allowed);
-            return preg_replace('/\s+(class|style|id|onclick|onload|onerror)="[^"]*"/i', '', $stripped);
         };
     @endphp
 
@@ -226,7 +224,7 @@
                             </p>
                         @endif
                         @if (! empty($p['content']))
-                            <div>{!! $contentSafe($p['content']) !!}</div>
+                            <div>{{ $clean($p['content']) }}</div>
                         @endif
                     </article>
                 </main>
@@ -242,7 +240,7 @@
                             <p>{{ $clean($it['summary_tr']) }}</p>
                         @endif
                         @if (! empty($it['content_tr']))
-                            <div>{!! $contentSafe($it['content_tr']) !!}</div>
+                            <div>{{ $clean($it['content_tr']) }}</div>
                         @endif
                     </article>
                 </main>

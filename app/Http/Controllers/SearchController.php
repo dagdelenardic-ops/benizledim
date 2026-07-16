@@ -13,20 +13,21 @@ class SearchController extends Controller
     public function complete(Request $request, VertexAiSearchService $vertex): \Illuminate\Http\JsonResponse
     {
         $q = trim((string) $request->input('q', ''));
-        if (strlen($q) < 2 || !config('services.gcp.search_enabled')) {
+        if (mb_strlen($q) < 2 || ! config('services.gcp.search_enabled')) {
             return response()->json(['suggestions' => []]);
         }
         $suggestions = $vertex->complete($q, 6);
+
         return response()->json(['suggestions' => $suggestions]);
     }
 
     public function index(Request $request, VertexAiSearchService $vertex)
     {
-        $query = $request->input('q', '');
+        $query = trim((string) $request->input('q', ''));
         $posts = collect();
         $engine = 'mysql';
 
-        if (strlen($query) >= 2) {
+        if (mb_strlen($query) >= 2) {
             if (config('services.gcp.search_enabled')) {
                 $vertexResults = $this->vertexSearch($vertex, $query, $request);
                 if ($vertexResults !== null) {
@@ -44,10 +45,12 @@ class SearchController extends Controller
             'posts' => $posts,
             'query' => $query,
             'engine' => $engine,
-            'title' => $query !== '' ? '"' . $query . '" için arama sonuçları' : 'Arama',
+            'title' => $query !== '' ? '"'.$query.'" için arama sonuçları' : 'Arama',
             'description' => $query !== ''
-                ? '"' . $query . '" için Ben İzledim film, dizi ve belgesel yazılarında arama sonuçları.'
+                ? '"'.$query.'" için Ben İzledim film, dizi ve belgesel yazılarında arama sonuçları.'
                 : 'Ben İzledim arşivinde film, dizi ve belgesel yazılarında arama yap.',
+            'canonicalUrl' => 'https://benizledim.com/ara',
+            'robots' => 'noindex, follow',
         ]);
     }
 
@@ -99,8 +102,8 @@ class SearchController extends Controller
         return Post::articles()
             ->where(function ($q) use ($escaped) {
                 $q->where('title', 'like', "%{$escaped}%")
-                  ->orWhere('excerpt', 'like', "%{$escaped}%")
-                  ->orWhere('content', 'like', "%{$escaped}%");
+                    ->orWhere('excerpt', 'like', "%{$escaped}%")
+                    ->orWhere('content', 'like', "%{$escaped}%");
             })
             ->with(['user', 'categories'])
             ->withCount(['comments', 'likes'])

@@ -55,7 +55,6 @@ const formatReadingTime = (minutes) => {
         </div>
 
         <div class="bi-post-card__body">
-            <span class="bi-kicker">{{ post.categories?.[0]?.name || 'Yazı' }}</span>
             <h3 class="bi-post-card__title line-clamp-2 group-hover:text-red-700 transition-colors">
                 {{ post.title }}
             </h3>

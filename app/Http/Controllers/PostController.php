@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use App\Models\Category;
+use App\Models\Post;
 use App\Services\VertexAiSearchService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,39 +12,52 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
+        if ($request->filled('category')) {
+            $category = Category::where('slug', (string) $request->query('category'))->firstOrFail();
+            $routeParameters = ['category' => $category];
+
+            if ($request->integer('page', 1) > 1) {
+                $routeParameters['page'] = $request->integer('page');
+            }
+
+            return redirect()->route('posts.category', $routeParameters, 301);
+        }
+
         $query = Post::articles()
             ->with(['user', 'categories', 'tags'])
             ->withCount(['comments', 'likes'])
             ->latest('published_at');
 
-        // Kategori filtresi
-        if ($request->has('category')) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('slug', $request->category);
-            });
-        }
-
         // Tag filtresi
-        if ($request->has('tag')) {
+        if ($request->filled('tag')) {
             $query->whereHas('tags', function ($q) use ($request) {
-                $q->where('slug', $request->tag);
+                $q->where('slug', (string) $request->query('tag'));
             });
         }
 
-        $posts = $query->paginate(12);
+        $posts = $query
+            ->paginate(12)
+            ->appends($request->only('tag'));
         $categories = Category::withCount('posts')->get();
 
         $listTitle = 'Tüm Yazılar';
         $listDescription = 'Ben İzledim arşivindeki tüm film, dizi ve belgesel yazıları.';
-        if ($request->filled('category')) {
-            $filterCategory = $categories->firstWhere('slug', $request->category);
-            if ($filterCategory) {
-                $listTitle = $filterCategory->name . ' Yazıları';
-                $listDescription = $filterCategory->name . ' kategorisindeki film, dizi ve belgesel yazıları.';
-            }
-        } elseif ($request->filled('tag')) {
-            $listTitle = 'Etiket: ' . $request->tag;
-            $listDescription = $request->tag . ' etiketiyle işaretlenmiş Ben İzledim yazıları.';
+        if ($request->filled('tag')) {
+            $listTitle = 'Etiket: '.$request->tag;
+            $listDescription = $request->tag.' etiketiyle işaretlenmiş Ben İzledim yazıları.';
+        }
+
+        $canonicalParameters = [];
+        if ($request->filled('tag')) {
+            $canonicalParameters['tag'] = (string) $request->query('tag');
+        }
+        if ($request->integer('page', 1) > 1) {
+            $canonicalParameters['page'] = $request->integer('page');
+        }
+
+        $canonicalUrl = 'https://benizledim.com/yazilar';
+        if ($canonicalParameters !== []) {
+            $canonicalUrl .= '?'.http_build_query($canonicalParameters, '', '&', PHP_QUERY_RFC3986);
         }
 
         return Inertia::render('Post/Index', [
@@ -53,6 +66,7 @@ class PostController extends Controller
             'filters' => $request->only(['category', 'tag']),
             'title' => $listTitle,
             'description' => $listDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 
@@ -67,25 +81,30 @@ class PostController extends Controller
 
         $categories = Category::withCount('posts')->get();
 
+        $canonicalUrl = 'https://benizledim.com/yazilar/'.$category->slug;
+        if ($request->integer('page', 1) > 1) {
+            $canonicalUrl .= '?page='.$request->integer('page');
+        }
+
         return Inertia::render('Post/Index', [
             'posts' => $posts,
             'categories' => $categories,
             'filters' => ['category' => $category->slug],
-            'title' => $category->name . ' Yazıları',
-            'description' => $category->name . ' kategorisindeki film, dizi ve belgesel eleştiri ve tavsiye yazıları.',
-            'canonicalUrl' => 'https://benizledim.com/yazilar/' . $category->slug,
+            'title' => $category->name.' Yazıları',
+            'description' => $category->name.' kategorisindeki film, dizi ve belgesel eleştiri ve tavsiye yazıları.',
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 
     public function show(Request $request, Post $post, VertexAiSearchService $vertex)
     {
-        if (!$post->published_at || $post->status !== 'published' || $post->deletion_requested_at) {
+        if (! $post->published_at || $post->status !== 'published' || $post->deletion_requested_at) {
             abort(404);
         }
 
         // View count: session-based dedup to prevent bot/refresh inflation
-        $viewKey = 'viewed_post_' . $post->id;
-        if (!$request->session()->has($viewKey)) {
+        $viewKey = 'viewed_post_'.$post->id;
+        if (! $request->session()->has($viewKey)) {
             $post->increment('view_count');
             $request->session()->put($viewKey, true);
         }
@@ -133,7 +152,7 @@ class PostController extends Controller
 
         if (config('services.gcp.search_enabled')) {
             $moodTags = is_array($post->mood_tags) ? $post->mood_tags : [];
-            $signal = trim($post->title . ' ' . implode(' ', $moodTags));
+            $signal = trim($post->title.' '.implode(' ', $moodTags));
             $hits = $vertex->search($signal, $limit + 4);
             $ids = collect($hits)->pluck('id')->filter()->map(fn ($id) => (int) $id)
                 ->reject(fn ($id) => $id === $post->id)

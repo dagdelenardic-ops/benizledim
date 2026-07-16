@@ -9,7 +9,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 createServer((page) => createInertiaApp({
     page,
     render: renderToString,
-    title: (title) => title ? `${title} | Ben İzledim` : 'Ben İzledim',
+    title: (title) => title || 'Ben İzledim',
     resolve: (name) => resolvePageComponent(
         `./Pages/${name}.vue`,
         import.meta.glob('./Pages/**/*.vue'),

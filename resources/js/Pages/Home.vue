@@ -260,7 +260,7 @@ const subscribe = () => {
                             <Link
                                 v-for="category in categories"
                                 :key="category.id"
-                                :href="`/yazilar?category=${category.slug}`"
+                                :href="`/yazilar/${category.slug}`"
                                 class="bi-chip whitespace-nowrap"
                             >
                                 {{ category.name }}

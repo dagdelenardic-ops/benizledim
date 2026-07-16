@@ -12,11 +12,11 @@ const props = defineProps({
     title: String,
     description: {
         type: String,
-        default: 'Film, Dizi ve Belgeseller hakkında eleştiri ve tavsiye yazıları - Ben İzledim',
+        default: '',
     },
     ogImage: {
         type: String,
-        default: '/images/og-default.png',
+        default: '',
     },
     canonicalUrl: {
         type: String,
@@ -34,19 +34,47 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    robots: {
+        type: String,
+        default: '',
+    },
 });
 
 const baseUrl = 'https://benizledim.com';
+const defaultDescription = 'Film, dizi ve belgeseller hakkında eleştiri ve tavsiye yazıları - Ben İzledim';
+const defaultOgImage = '/images/og-default.png';
+const defaultRobots = 'index, follow, max-image-preview:large, max-snippet:-1';
+const page = usePage();
+
+const normalizeDescription = (value = '') => {
+    const normalized = String(value).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+    if (!normalized) return defaultDescription;
+    if (normalized.length <= 160) return normalized;
+
+    return `${normalized.slice(0, 159).trimEnd()}…`;
+};
+
+const resolvedTitle = computed(() => props.title || page.props.title || '');
+const resolvedDescription = computed(() => normalizeDescription(
+    props.description || page.props.description || defaultDescription,
+));
+const resolvedRobots = computed(() => props.robots || page.props.robots || defaultRobots);
+const resolvedOgImage = computed(() => props.ogImage || page.props.ogImage || defaultOgImage);
 const currentCanonical = computed(() => {
-    if (props.canonicalUrl) return props.canonicalUrl;
-    const path = usePage().url?.split('?')[0] || '/';
+    const configuredCanonical = props.canonicalUrl || page.props.canonicalUrl;
+    if (configuredCanonical) return configuredCanonical;
+
+    const path = page.url?.split('?')[0] || '/';
     return `${baseUrl}${path}`;
 });
 const fullOgImage = computed(() => {
-    if (props.ogImage.startsWith('http')) return props.ogImage;
-    return `${baseUrl}${props.ogImage}`;
+    if (resolvedOgImage.value.startsWith('http')) return resolvedOgImage.value;
+    return `${baseUrl}${resolvedOgImage.value}`;
 });
-const fullTitle = computed(() => props.title ? `${props.title} - Ben İzledim` : 'Ben İzledim - Film, Dizi ve Belgesel Eleştiri Platformu');
+const fullTitle = computed(() => resolvedTitle.value
+    ? `${resolvedTitle.value} - Ben İzledim`
+    : 'Ben İzledim - Film, Dizi ve Belgesel Eleştiri Platformu');
 const websiteSchema = computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -63,9 +91,9 @@ const websiteSchema = computed(() => ({
 const webPageSchema = computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    'name': props.title || 'Ben İzledim',
-    'headline': props.title || 'Ben İzledim',
-    'description': props.description,
+    'name': resolvedTitle.value || 'Ben İzledim',
+    'headline': resolvedTitle.value || 'Ben İzledim',
+    'description': resolvedDescription.value,
     'url': currentCanonical.value,
     'image': fullOgImage.value,
     'inLanguage': 'tr-TR',
@@ -81,7 +109,6 @@ const resolvedSchemaNodes = computed(() => [
     ...props.schemaNodes.filter(Boolean),
 ]);
 
-const page = usePage();
 const authUser = computed(() => page.props.auth?.user);
 const newsletterMessage = computed(() => page.props.flash?.newsletter_message);
 const canAccessCms = computed(() => {
@@ -208,10 +235,12 @@ export default {
         <title>{{ fullTitle }}</title>
         <link rel="canonical" :href="currentCanonical" />
         <link rel="alternate" type="application/rss+xml" title="Ben İzledim RSS" href="https://benizledim.com/feed" />
-        <meta name="description" :content="description" />
+        <meta name="description" :content="resolvedDescription" />
+        <meta name="robots" :content="resolvedRobots" />
+        <meta name="googlebot" :content="resolvedRobots" />
         <!-- Open Graph -->
-        <meta property="og:title" :content="title || 'Ben İzledim'" />
-        <meta property="og:description" :content="description" />
+        <meta property="og:title" :content="fullTitle" />
+        <meta property="og:description" :content="resolvedDescription" />
         <meta property="og:image" :content="fullOgImage" />
         <meta property="og:url" :content="currentCanonical" />
         <meta property="og:type" :content="ogType" />
@@ -220,8 +249,8 @@ export default {
         <meta v-for="(meta, index) in extraMeta" :key="`meta-${index}`" v-bind="meta.property ? { property: meta.property } : { name: meta.name }" :content="meta.content" />
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" :content="title || 'Ben İzledim'" />
-        <meta name="twitter:description" :content="description" />
+        <meta name="twitter:title" :content="fullTitle" />
+        <meta name="twitter:description" :content="resolvedDescription" />
         <meta name="twitter:image" :content="fullOgImage" />
     </Head>
 
@@ -350,7 +379,7 @@ export default {
                 <Link
                     v-for="cat in categoryLinks"
                     :key="cat.slug"
-                    :href="`/yazilar?category=${cat.slug}`"
+                    :href="`/yazilar/${cat.slug}`"
                     class="inline-flex min-h-12 items-center border-r border-[var(--bi-rule-soft)] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] hover:bg-[var(--bi-ink)] hover:text-[var(--bi-paper)] bi-mono"
                 >
                     {{ cat.name }}
@@ -380,7 +409,7 @@ export default {
             <div v-if="showMobileMenu" class="bi-wrap border-b border-[var(--bi-ink)] py-4 lg:hidden">
                 <div class="grid gap-2">
                     <Link href="/" class="bi-chip" @click="showMobileMenu = false">Ana Sayfa</Link>
-                    <Link v-for="cat in categoryLinks" :key="cat.slug" :href="`/yazilar?category=${cat.slug}`" class="bi-chip" @click="showMobileMenu = false">
+                    <Link v-for="cat in categoryLinks" :key="cat.slug" :href="`/yazilar/${cat.slug}`" class="bi-chip" @click="showMobileMenu = false">
                         {{ cat.name }}
                     </Link>
                     <Link href="/quiz" class="bi-chip" @click="showMobileMenu = false">Quiz</Link>
@@ -420,22 +449,22 @@ export default {
                     <h4 class="bi-mono mb-4 text-xs font-bold uppercase tracking-[0.08em] text-red-300">Kategoriler</h4>
                     <ul class="space-y-2 text-sm">
                         <li>
-                            <Link href="/yazilar?category=sinema" class="text-stone-300 hover:text-white transition-colors">
+                            <Link href="/yazilar/sinema" class="text-stone-300 hover:text-white transition-colors">
                                 Sinema
                             </Link>
                         </li>
                         <li>
-                            <Link href="/yazilar?category=dizi" class="text-stone-300 hover:text-white transition-colors">
+                            <Link href="/yazilar/dizi" class="text-stone-300 hover:text-white transition-colors">
                                 Dizi
                             </Link>
                         </li>
                         <li>
-                            <Link href="/yazilar?category=belgesel" class="text-stone-300 hover:text-white transition-colors">
+                            <Link href="/yazilar/belgesel" class="text-stone-300 hover:text-white transition-colors">
                                 Belgesel
                             </Link>
                         </li>
                         <li>
-                            <Link href="/yazilar?category=film" class="text-stone-300 hover:text-white transition-colors">
+                            <Link href="/yazilar/film" class="text-stone-300 hover:text-white transition-colors">
                                 Film
                             </Link>
                         </li>

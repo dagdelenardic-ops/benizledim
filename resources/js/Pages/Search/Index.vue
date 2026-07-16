@@ -36,7 +36,7 @@ const resultCount = () => {
 </script>
 
 <template>
-    <AppLayout title="Arama">
+    <AppLayout>
         <div class="min-h-screen bg-gray-50">
             <!-- Search Header -->
             <div class="bg-white border-b border-gray-200">

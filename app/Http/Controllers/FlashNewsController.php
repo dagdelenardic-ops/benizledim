@@ -18,7 +18,6 @@ class FlashNewsController extends Controller
             ->whereNotNull('image_url')
             ->orderByDesc('published_at')
             ->paginate(24)
-            ->withQueryString()
             ->through(fn ($item) => [
                 'id' => $item->id,
                 'title_tr' => $item->title_tr,
@@ -29,11 +28,16 @@ class FlashNewsController extends Controller
                 'published_at' => $item->published_at,
             ]);
 
+        $canonicalUrl = 'https://benizledim.com/haberler';
+        if ($request->integer('page', 1) > 1) {
+            $canonicalUrl .= '?page='.$request->integer('page');
+        }
+
         return Inertia::render('FlashNews/Index', [
             'items' => $items,
             'title' => 'Sinema ve Dizi Haberleri',
             'description' => 'Güncel film, dizi ve sinema haberleri; vizyon, festival ve platform gelişmeleri - Ben İzledim.',
-            'canonicalUrl' => 'https://benizledim.com/haberler',
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 

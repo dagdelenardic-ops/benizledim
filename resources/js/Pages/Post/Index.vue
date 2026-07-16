@@ -17,6 +17,10 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    canonicalUrl: {
+        type: String,
+        required: true,
+    },
 });
 
 const getPageTitle = () => {
@@ -49,22 +53,10 @@ const pageDescription = computed(() => {
     return 'Ben İzledim arşivindeki tüm film, dizi ve belgesel yazıları.';
 });
 
-const currentCanonical = computed(() => {
-    const params = new URLSearchParams();
-
-    if (props.filters.category) params.set('category', props.filters.category);
-    if (props.filters.tag) params.set('tag', props.filters.tag);
-
-    const queryString = params.toString();
-
-    return queryString
-        ? `https://benizledim.com/yazilar?${queryString}`
-        : 'https://benizledim.com/yazilar';
-});
 </script>
 
 <template>
-    <AppLayout :title="getPageTitle()" :description="pageDescription" :canonical-url="currentCanonical">
+    <AppLayout :title="getPageTitle()" :description="pageDescription" :canonical-url="canonicalUrl">
         <div class="min-h-screen bg-[var(--bi-paper)]">
             <div class="border-b-2 border-[var(--bi-ink)]">
                 <div class="bi-wrap py-8">
@@ -95,7 +87,7 @@ const currentCanonical = computed(() => {
                         <Link
                             v-for="category in categories"
                             :key="category.id"
-                            :href="`/yazilar?category=${category.slug}`"
+                            :href="`/yazilar/${category.slug}`"
                             :class="[
                                 'bi-chip whitespace-nowrap',
                                 isActiveCategory(category.slug)

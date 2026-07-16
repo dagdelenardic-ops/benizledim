@@ -13,7 +13,10 @@ class ProfileController extends Controller
 
     public function show(Request $request, User $user)
     {
-        $format = $request->string('format')->toString() ?: 'standard';
+        $requestedFormat = $request->string('format')->toString();
+        $format = in_array($requestedFormat, ['standard', 'watch_log'], true)
+            ? $requestedFormat
+            : 'standard';
         $authUser = $request->user();
 
         $postsQuery = $user->posts()
@@ -34,7 +37,20 @@ class ProfileController extends Controller
 
         $posts = $postsQuery
             ->paginate(12)
-            ->withQueryString();
+            ->appends($format === 'watch_log' ? ['format' => $format] : []);
+
+        $canonicalParameters = [];
+        if ($format !== 'standard') {
+            $canonicalParameters['format'] = $format;
+        }
+        if ($request->integer('page', 1) > 1) {
+            $canonicalParameters['page'] = $request->integer('page');
+        }
+
+        $canonicalUrl = 'https://benizledim.com/profile/'.$user->getRouteKey();
+        if ($canonicalParameters !== []) {
+            $canonicalUrl .= '?'.http_build_query($canonicalParameters, '', '&', PHP_QUERY_RFC3986);
+        }
 
         return Inertia::render('Profile/Show', [
             'author' => [
@@ -49,11 +65,11 @@ class ProfileController extends Controller
             'activeTab' => $format,
             'stats' => $this->stats->forUser($user),
             'posts' => $posts,
-            'title' => $user->name,
+            'title' => $format === 'watch_log' ? $user->name.' Watch-Log' : $user->name,
             'description' => $user->bio
                 ? \Illuminate\Support\Str::limit(strip_tags($user->bio), 155)
-                : $user->name . ' - Ben İzledim yazarının film, dizi ve belgesel yazıları.',
-            'canonicalUrl' => 'https://benizledim.com/profile/' . $user->getRouteKey(),
+                : $user->name.' - Ben İzledim yazarının film, dizi ve belgesel yazıları.',
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 }

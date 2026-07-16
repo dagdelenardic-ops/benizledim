@@ -7,7 +7,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
 createInertiaApp({
-    title: (title) => title ? `${title} | Ben İzledim` : 'Ben İzledim',
+    title: (title) => title || 'Ben İzledim',
     resolve: (name) => resolvePageComponent(
         `./Pages/${name}.vue`,
         import.meta.glob('./Pages/**/*.vue'),
@@ -16,5 +16,9 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .mount(el);
+        el.setAttribute('data-mounted', 'true');
+        document.head
+            .querySelectorAll('[data-bi-seo-fallback]')
+            .forEach((element) => element.remove());
     },
 });

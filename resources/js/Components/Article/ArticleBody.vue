@@ -9,6 +9,18 @@ const props = defineProps({
     },
 });
 
+const handleImageError = (event) => {
+    const image = event.target;
+    const fallback = image?.getAttribute?.('data-fallback-src') || '';
+
+    if (!fallback.startsWith('https://static.wixstatic.com/media/')) return;
+
+    image.removeAttribute('data-fallback-src');
+    image.removeAttribute('srcset');
+    image.removeAttribute('sizes');
+    image.src = fallback;
+};
+
 const sanitized = computed(() => {
     if (!props.html) return '';
 
@@ -30,7 +42,7 @@ const sanitized = computed(() => {
         ],
         ALLOWED_ATTR: [
             'href', 'title', 'target', 'rel', 'name',
-            'src', 'alt', 'width', 'height', 'loading', 'srcset', 'sizes',
+            'src', 'alt', 'width', 'height', 'loading', 'srcset', 'sizes', 'data-fallback-src',
             'id', 'class',
             'colspan', 'rowspan',
             'controls', 'autoplay', 'muted', 'loop', 'poster',
@@ -46,7 +58,7 @@ const sanitized = computed(() => {
 </script>
 
 <template>
-    <div class="bi-article-body" v-html="sanitized" />
+    <div class="bi-article-body" @error.capture="handleImageError" v-html="sanitized" />
 </template>
 
 <style scoped>
@@ -94,16 +106,61 @@ const sanitized = computed(() => {
     line-height: 1.4;
 }
 
+/* Alıntılar (blockquote) — şık editoryal tasarım: kağıt arka plan, kırmızı vurgu,
+   dekoratif SVG tırnak ve avangard ama okunabilir Fraunces italik. */
 .bi-article-body :deep(blockquote) {
-    border-left: 3px solid #DC2626;
-    padding: 0.25rem 0 0.25rem 1.5rem;
+    position: relative;
+    margin: 2.5rem 0;
+    padding: 2.25rem 2rem 1.75rem 2.25rem;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(235, 227, 212, 0.35)),
+        var(--bi-paper, #f6f1e8);
+    border: 1px solid var(--bi-rule-soft, #d8cdbc);
+    border-left: 4px solid var(--bi-red, #dc2626);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 rgba(16, 16, 16, 0.04), 0 18px 40px -32px rgba(16, 16, 16, 0.5);
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    font-optical-sizing: auto;
     font-style: italic;
-    color: #374151;
-    margin: 1.75rem 0;
+    font-weight: 500;
+    font-size: clamp(1.2rem, 1rem + 0.8vw, 1.55rem);
+    line-height: 1.55;
+    color: var(--bi-ink-soft, #272727);
+}
+
+.bi-article-body :deep(blockquote)::before {
+    content: '';
+    position: absolute;
+    top: -0.6rem;
+    left: 1rem;
+    width: 84px;
+    height: 84px;
+    opacity: 0.1;
+    background: no-repeat center/contain
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23dc2626' d='M42 20C25 27 14 42 14 62c0 11 7 18 17 18 9 0 16-7 16-16 0-8-6-15-14-16-1 0-2 0-3 .3 2-8 9-15 18-19zM88 20C71 27 60 42 60 62c0 11 7 18 17 18 9 0 16-7 16-16 0-8-6-15-14-16-1 0-2 0-3 .3 2-8 9-15 18-19z'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+.bi-article-body :deep(blockquote > *) {
+    position: relative;
 }
 
 .bi-article-body :deep(blockquote p) {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.bi-article-body :deep(blockquote p:last-child) {
+    margin-bottom: 0;
+}
+
+.bi-article-body :deep(blockquote cite) {
+    display: block;
+    margin-top: 0.85rem;
+    font-family: var(--bi-mono, ui-monospace, monospace);
+    font-style: normal;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    color: var(--bi-muted, #6d655b);
 }
 
 .bi-article-body :deep(ul),

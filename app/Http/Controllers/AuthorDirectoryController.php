@@ -23,6 +23,7 @@ class AuthorDirectoryController extends Controller
             ->withCount(['posts', 'followers'])
             ->orderBy('name')
             ->paginate(24)
+            ->appends($request->only('q'))
             ->through(fn (User $user) => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -34,12 +35,20 @@ class AuthorDirectoryController extends Controller
                 'is_following' => in_array($user->id, $followingIds, true),
             ]);
 
+        $canonicalUrl = 'https://benizledim.com/yazarlar';
+        if (! $request->filled('q') && $request->integer('page', 1) > 1) {
+            $canonicalUrl .= '?page='.$request->integer('page');
+        }
+
         return Inertia::render('Author/Index', [
             'authors' => $authors,
             'filters' => ['q' => $request->query('q', '')],
             'title' => 'Yazarlar',
             'description' => 'Ben İzledim yazar kadrosu: film, dizi ve belgesel üzerine yazan eleştirmenler ve katkıda bulunanlar.',
-            'canonicalUrl' => 'https://benizledim.com/yazarlar',
+            'canonicalUrl' => $canonicalUrl,
+            'robots' => $request->filled('q')
+                ? 'noindex, follow'
+                : 'index, follow, max-image-preview:large, max-snippet:-1',
         ]);
     }
 

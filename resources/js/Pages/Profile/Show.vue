@@ -40,7 +40,7 @@ const getRoleColor = (role) => {
 </script>
 
 <template>
-    <AppLayout :title="author.name">
+    <AppLayout>
         <div class="min-h-screen bg-gray-50">
             <!-- Hero -->
             <div class="bg-gradient-to-br from-gray-100 to-gray-200 border-b border-gray-200">
