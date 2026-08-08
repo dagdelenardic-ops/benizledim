@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\PageMeta;
+use App\Support\SchemaGraph;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -43,12 +45,21 @@ class AuthorDirectoryController extends Controller
         return Inertia::render('Author/Index', [
             'authors' => $authors,
             'filters' => ['q' => $request->query('q', '')],
-            'title' => 'Yazarlar',
-            'description' => 'Ben İzledim yazar kadrosu: film, dizi ve belgesel üzerine yazan eleştirmenler ve katkıda bulunanlar.',
+            'title' => PageMeta::title('Yazarlar', $request),
+            'description' => PageMeta::description(
+                'Ben İzledim yazar kadrosu: film, dizi ve belgesel üzerine yazan eleştirmenler ve katkıda bulunanlar.',
+                $request,
+            ),
             'canonicalUrl' => $canonicalUrl,
             'robots' => $request->filled('q')
                 ? 'noindex, follow'
                 : 'index, follow, max-image-preview:large, max-snippet:-1',
+            'schemaNodes' => [
+                SchemaGraph::breadcrumbs([
+                    ['name' => 'Ana Sayfa', 'url' => SchemaGraph::BASE.'/'],
+                    ['name' => 'Yazarlar', 'url' => SchemaGraph::BASE.'/yazarlar'],
+                ]),
+            ],
         ]);
     }
 

@@ -59,11 +59,6 @@ const coverImage = computed(() => buildResponsiveImage(props.post.cover_image, {
 
 const canonicalUrl = computed(() => `https://benizledim.com/yazi/${props.post.slug}`);
 
-const toAbsoluteUrl = (value) => {
-    if (!value) return 'https://benizledim.com/images/og-default.png';
-    return value.startsWith('http') ? value : `https://benizledim.com${value}`;
-};
-
 const stripHtml = (value = '') => value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 const seoDescription = computed(() => {
     const value = stripHtml(props.post.excerpt || '');
@@ -230,46 +225,6 @@ const shouldShowToc = computed(() => {
     return isStandardPost && contentAnalysis.value.wordCount > 1500 && tocItems.value.length >= 3;
 });
 
-const articleSchema = computed(() => {
-    const schema = {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        'headline': props.post.title,
-        'description': seoDescription.value,
-        'image': [toAbsoluteUrl(props.post.cover_image)],
-        'datePublished': props.post.published_at,
-        'dateModified': props.post.updated_at || props.post.published_at,
-        'inLanguage': 'tr-TR',
-        'author': {
-            '@type': 'Person',
-            'name': props.post.user?.name || 'Ben İzledim',
-        },
-        'publisher': {
-            '@type': 'Organization',
-            'name': 'Ben İzledim',
-            'url': 'https://benizledim.com',
-        },
-        'mainEntityOfPage': {
-            '@type': 'WebPage',
-            '@id': canonicalUrl.value,
-        },
-    };
-
-    if (contentAnalysis.value?.wordCount) {
-        schema.wordCount = contentAnalysis.value.wordCount;
-    }
-
-    if (props.post.categories?.length) {
-        schema.articleSection = props.post.categories[0].name;
-    }
-
-    if (props.post.tags?.length) {
-        schema.keywords = props.post.tags.map((t) => t.name).filter(Boolean).join(', ');
-    }
-
-    return schema;
-});
-
 const articleMeta = computed(() => ([
     { property: 'article:published_time', content: props.post.published_at || '' },
     { property: 'article:modified_time', content: props.post.updated_at || props.post.published_at || '' },
@@ -333,7 +288,6 @@ onBeforeUnmount(() => {
         :og-image="post.cover_image || '/images/og-default.png'"
         :canonical-url="canonicalUrl"
         og-type="article"
-        :schema-nodes="[articleSchema]"
         :extra-meta="articleMeta"
     >
         <div class="fixed inset-x-0 top-0 z-[80] h-1 bg-black/5">

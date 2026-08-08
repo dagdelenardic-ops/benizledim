@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use App\Services\VertexAiSearchService;
+use App\Support\PageMeta;
 use App\Support\PostCard;
+use App\Support\SchemaGraph;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -63,13 +65,23 @@ class PostController extends Controller
             $canonicalUrl .= '?'.http_build_query($canonicalParameters, '', '&', PHP_QUERY_RFC3986);
         }
 
+        $trail = [['name' => 'Ana Sayfa', 'url' => SchemaGraph::BASE.'/']];
+        $trail[] = ['name' => 'Yazılar', 'url' => SchemaGraph::BASE.'/yazilar'];
+        if ($request->filled('tag')) {
+            $trail[] = ['name' => $listTitle, 'url' => $canonicalUrl];
+        }
+
         return Inertia::render('Post/Index', [
             'posts' => $posts,
             'categories' => $categories,
             'filters' => $request->only(['category', 'tag']),
-            'title' => $listTitle,
-            'description' => $listDescription,
+            'title' => PageMeta::title($listTitle, $request),
+            'description' => PageMeta::description($listDescription, $request),
             'canonicalUrl' => $canonicalUrl,
+            'schemaNodes' => [
+                SchemaGraph::breadcrumbs($trail),
+                SchemaGraph::collectionPage($listTitle, $listDescription, $canonicalUrl, self::listItems($posts)),
+            ],
         ]);
     }
 
@@ -91,13 +103,24 @@ class PostController extends Controller
             $canonicalUrl .= '?page='.$request->integer('page');
         }
 
+        $listTitle = $category->name.' Yazıları';
+        $listDescription = $category->name.' kategorisindeki film, dizi ve belgesel eleştiri ve tavsiye yazıları.';
+
         return Inertia::render('Post/Index', [
             'posts' => $posts,
             'categories' => $categories,
             'filters' => ['category' => $category->slug],
-            'title' => $category->name.' Yazıları',
-            'description' => $category->name.' kategorisindeki film, dizi ve belgesel eleştiri ve tavsiye yazıları.',
+            'title' => PageMeta::title($listTitle, $request),
+            'description' => PageMeta::description($listDescription, $request),
             'canonicalUrl' => $canonicalUrl,
+            'schemaNodes' => [
+                SchemaGraph::breadcrumbs([
+                    ['name' => 'Ana Sayfa', 'url' => SchemaGraph::BASE.'/'],
+                    ['name' => 'Yazılar', 'url' => SchemaGraph::BASE.'/yazilar'],
+                    ['name' => $category->name, 'url' => SchemaGraph::BASE.'/yazilar/'.$category->slug],
+                ]),
+                SchemaGraph::collectionPage($listTitle, $listDescription, $canonicalUrl, self::listItems($posts)),
+            ],
         ]);
     }
 
@@ -107,10 +130,14 @@ class PostController extends Controller
             abort(404);
         }
 
-        // View count: session-based dedup to prevent bot/refresh inflation
+        // View count: session-based dedup to prevent bot/refresh inflation.
+        // withoutTimestamps is essential: Eloquent's increment() bumps
+        // updated_at, so every view rewrote the article's modification date.
+        // That date feeds Article.dateModified and the sitemap's <lastmod>, so
+        // the whole archive looked freshly edited every single day.
         $viewKey = 'viewed_post_'.$post->id;
         if (! $request->session()->has($viewKey)) {
-            $post->increment('view_count');
+            Post::withoutTimestamps(fn () => $post->increment('view_count'));
             $request->session()->put($viewKey, true);
         }
 
@@ -145,13 +172,39 @@ class PostController extends Controller
                 ->toArray();
         }
 
+        $canonicalUrl = SchemaGraph::BASE.'/yazi/'.$post->slug;
+        $trail = [['name' => 'Ana Sayfa', 'url' => SchemaGraph::BASE.'/']];
+        $trail[] = ['name' => 'Yazılar', 'url' => SchemaGraph::BASE.'/yazilar'];
+        if ($category = $post->categories->first()) {
+            $trail[] = ['name' => $category->name, 'url' => SchemaGraph::BASE.'/yazilar/'.$category->slug];
+        }
+        $trail[] = ['name' => $post->title, 'url' => $canonicalUrl];
+
         return Inertia::render('Post/Show', [
             'post' => $post,
             'relatedPosts' => $relatedPosts,
             'isLiked' => $isLiked,
             'isWatchlisted' => $isWatchlisted,
             'userEntryVotes' => $userEntryVotes,
+            'schemaNodes' => [
+                SchemaGraph::article($post, $canonicalUrl),
+                SchemaGraph::breadcrumbs($trail),
+            ],
         ]);
+    }
+
+    /**
+     * @return list<array{name: string, url: string}>
+     */
+    private static function listItems($posts): array
+    {
+        return collect($posts->items())
+            ->map(fn (array $card) => [
+                'name' => $card['title'],
+                'url' => SchemaGraph::BASE.'/yazi/'.$card['slug'],
+            ])
+            ->values()
+            ->all();
     }
 
     /**

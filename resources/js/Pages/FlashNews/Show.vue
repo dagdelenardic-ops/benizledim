@@ -27,24 +27,6 @@ const formatDate = (date) => {
     } catch (e) { return ''; }
 };
 
-const articleSchema = computed(() => ({
-    '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
-    headline: props.item.title_tr,
-    description: props.item.summary_tr,
-    image: props.item.image_url ? [props.item.image_url] : undefined,
-    datePublished: props.item.published_at,
-    dateModified: props.item.updated_at || props.item.published_at,
-    author: { '@type': 'Organization', name: props.item.source_name },
-    publisher: {
-        '@type': 'Organization',
-        name: 'Ben İzledim',
-        logo: { '@type': 'ImageObject', url: 'https://benizledim.com/images/og-default.png' },
-    },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl.value },
-    isBasedOn: props.item.source_url,
-    inLanguage: 'tr-TR',
-}));
 </script>
 
 <template>
@@ -54,7 +36,6 @@ const articleSchema = computed(() => ({
         :og-image="item.image_url || '/images/og-default.png'"
         :canonical-url="canonicalUrl"
         og-type="article"
-        :schema-nodes="[articleSchema]"
     >
         <article class="bg-[var(--bi-paper)]">
             <header class="border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper-deep)]">

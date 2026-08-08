@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Services\AuthorStatsService;
+use App\Support\PageMeta;
 use App\Support\PostCard;
+use App\Support\SchemaGraph;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -69,11 +71,25 @@ class ProfileController extends Controller
             'activeTab' => $format,
             'stats' => $this->stats->forUser($user),
             'posts' => $posts,
-            'title' => $format === 'watch_log' ? $user->name.' Watch-Log' : $user->name,
-            'description' => $user->bio
-                ? \Illuminate\Support\Str::limit(strip_tags($user->bio), 155)
-                : $user->name.' - Ben İzledim yazarının film, dizi ve belgesel yazıları.',
+            'title' => PageMeta::title(
+                $format === 'watch_log' ? $user->name.' Watch-Log' : $user->name,
+                $request,
+            ),
+            'description' => PageMeta::description(
+                $user->bio
+                    ? \Illuminate\Support\Str::limit(strip_tags($user->bio), 155)
+                    : $user->name.' - Ben İzledim yazarının film, dizi ve belgesel yazıları.',
+                $request,
+            ),
             'canonicalUrl' => $canonicalUrl,
+            'schemaNodes' => [
+                SchemaGraph::profilePage($user, $canonicalUrl, $posts->total()),
+                SchemaGraph::breadcrumbs([
+                    ['name' => 'Ana Sayfa', 'url' => SchemaGraph::BASE.'/'],
+                    ['name' => 'Yazarlar', 'url' => SchemaGraph::BASE.'/yazarlar'],
+                    ['name' => $user->name, 'url' => SchemaGraph::BASE.'/profile/'.$user->getRouteKey()],
+                ]),
+            ],
         ]);
     }
 }

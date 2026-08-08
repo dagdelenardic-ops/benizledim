@@ -25,6 +25,11 @@ Options -MultiViews -Indexes
     RewriteCond %{THE_REQUEST} \s/+public(?:[/?\s]) [NC]
     RewriteRule ^public(?:/)?(.*)$ /$1 [L,R=301,NE]
 
+    # /index.php served the home page under a second URL. The canonical tag
+    # pointed at / so it was only a hint; make it a redirect.
+    RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php(?:[/?\s]) [NC]
+    RewriteRule ^(.*?)index\.php$ /$1 [L,R=301,NE]
+
     # Normalize application routes before rewriting them into public/.
     # Without this, /admin/ enters public/.htaccess and becomes /public/admin.
     RewriteCond %{REQUEST_URI} !^/public/ [NC]

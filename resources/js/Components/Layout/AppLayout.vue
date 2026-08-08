@@ -75,38 +75,31 @@ const fullOgImage = computed(() => {
 const fullTitle = computed(() => resolvedTitle.value
     ? `${resolvedTitle.value} - Ben İzledim`
     : 'Ben İzledim - Film, Dizi ve Belgesel Eleştiri Platformu');
+// Structured data is built server-side (App\Support\SchemaGraph) and arrives
+// as a page prop, so this head and the server-rendered fallback describe the
+// page identically. They used to build the Article node separately and drift.
 const websiteSchema = computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     'name': 'Ben İzledim',
     'url': baseUrl,
-    'description': 'Film, Dizi ve Belgeseller hakkında eleştiri ve tavsiye yazıları',
+    'description': 'Film, dizi ve belgeseller hakkında eleştiri, inceleme ve tavsiye yazıları. Ne izleyeceğine Ben İzledim ile karar ver.',
     'inLanguage': 'tr-TR',
+    'publisher': {
+        '@type': 'Organization',
+        'name': 'Ben İzledim',
+        'url': baseUrl,
+        'logo': { '@type': 'ImageObject', 'url': `${baseUrl}/icons/512.png` },
+    },
     'potentialAction': {
         '@type': 'SearchAction',
         'target': 'https://benizledim.com/ara?q={search_term_string}',
         'query-input': 'required name=search_term_string'
     }
 }));
-const webPageSchema = computed(() => ({
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    'name': resolvedTitle.value || 'Ben İzledim',
-    'headline': resolvedTitle.value || 'Ben İzledim',
-    'description': resolvedDescription.value,
-    'url': currentCanonical.value,
-    'image': fullOgImage.value,
-    'inLanguage': 'tr-TR',
-    'isPartOf': {
-        '@type': 'WebSite',
-        'name': 'Ben İzledim',
-        'url': baseUrl,
-    },
-}));
 const resolvedSchemaNodes = computed(() => [
     websiteSchema.value,
-    webPageSchema.value,
-    ...props.schemaNodes.filter(Boolean),
+    ...(props.schemaNodes.length ? props.schemaNodes : (page.props.schemaNodes || [])).filter(Boolean),
 ]);
 
 const authUser = computed(() => page.props.auth?.user);

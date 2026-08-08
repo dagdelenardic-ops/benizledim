@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\FlashNews;
 use App\Services\FlashNewsDigestSender;
 use App\Services\FlashNewsFetchService;
+use App\Support\PageMeta;
+use App\Support\SchemaGraph;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,11 +35,25 @@ class FlashNewsController extends Controller
             $canonicalUrl .= '?page='.$request->integer('page');
         }
 
+        $listTitle = 'Sinema ve Dizi Haberleri';
+        $listDescription = 'Güncel film, dizi ve sinema haberleri; vizyon, festival ve platform gelişmeleri - Ben İzledim.';
+
         return Inertia::render('FlashNews/Index', [
             'items' => $items,
-            'title' => 'Sinema ve Dizi Haberleri',
-            'description' => 'Güncel film, dizi ve sinema haberleri; vizyon, festival ve platform gelişmeleri - Ben İzledim.',
+            'title' => PageMeta::title($listTitle, $request),
+            'description' => PageMeta::description($listDescription, $request),
             'canonicalUrl' => $canonicalUrl,
+            'schemaNodes' => [
+                SchemaGraph::breadcrumbs([
+                    ['name' => 'Ana Sayfa', 'url' => SchemaGraph::BASE.'/'],
+                    ['name' => 'Haberler', 'url' => SchemaGraph::BASE.'/haberler'],
+                ]),
+                SchemaGraph::collectionPage($listTitle, $listDescription, $canonicalUrl, collect($items->items())
+                    ->map(fn (array $item) => [
+                        'name' => $item['title_tr'],
+                        'url' => SchemaGraph::BASE.'/haber/'.$item['slug'],
+                    ])->values()->all()),
+            ],
         ]);
     }
 
@@ -51,9 +67,19 @@ class FlashNewsController extends Controller
             ->take(6)
             ->get(['id', 'title_tr', 'slug', 'summary_tr', 'source_name', 'image_url', 'published_at']);
 
+        $canonicalUrl = SchemaGraph::BASE.'/haber/'.$item->slug;
+
         return Inertia::render('FlashNews/Show', [
             'item' => $item,
             'related' => $related,
+            'schemaNodes' => [
+                SchemaGraph::newsArticle($item, $canonicalUrl),
+                SchemaGraph::breadcrumbs([
+                    ['name' => 'Ana Sayfa', 'url' => SchemaGraph::BASE.'/'],
+                    ['name' => 'Haberler', 'url' => SchemaGraph::BASE.'/haberler'],
+                    ['name' => $item->title_tr, 'url' => $canonicalUrl],
+                ]),
+            ],
         ]);
     }
 

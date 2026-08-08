@@ -63,19 +63,14 @@
         $publishedTime = null;
         $robots = $props['robots'] ?? 'index, follow, max-image-preview:large, max-snippet:-1';
 
-        $schema = [[
-            '@context' => 'https://schema.org',
-            '@type' => 'WebSite',
-            'name' => 'Ben İzledim',
-            'url' => $base,
-            'description' => $defaultDesc,
-            'inLanguage' => 'tr-TR',
-            'potentialAction' => [
-                '@type' => 'SearchAction',
-                'target' => $base . '/ara?q={search_term_string}',
-                'query-input' => 'required name=search_term_string',
-            ],
-        ]];
+        // Structured data comes from the controller (App\Support\SchemaGraph)
+        // so this head and the head Vue installs after mount describe the page
+        // identically. They used to build the Article node separately and had
+        // already drifted apart.
+        $schema = array_merge(
+            [\App\Support\SchemaGraph::website()],
+            array_values(array_filter((array) ($props['schemaNodes'] ?? []))),
+        );
 
         if ($component === 'Post/Show' && ! empty($props['post'])) {
             $post = $props['post'];
@@ -88,25 +83,6 @@
             $ogType = 'article';
             $authorName = data_get($post, 'user.name');
             $publishedTime = $post['published_at'] ?? null;
-            $schema[] = array_filter([
-                '@context' => 'https://schema.org',
-                '@type' => 'Article',
-                'headline' => $t,
-                'description' => $ex,
-                'image' => $image ? [$image] : null,
-                'datePublished' => $post['published_at'] ?? null,
-                'dateModified' => $post['updated_at'] ?? ($post['published_at'] ?? null),
-                'inLanguage' => 'tr-TR',
-                'author' => ['@type' => 'Person', 'name' => $authorName ?: 'Ben İzledim'],
-                'publisher' => [
-                    '@type' => 'Organization',
-                    'name' => 'Ben İzledim',
-                    'url' => $base,
-                    'logo' => ['@type' => 'ImageObject', 'url' => $base . '/icons/512.png'],
-                ],
-                'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $canonical],
-                'articleSection' => data_get($post, 'categories.0.name'),
-            ], fn ($v) => $v !== null && $v !== '');
         } elseif ($component === 'FlashNews/Show' && ! empty($props['item'])) {
             $it = $props['item'];
             $t = $clean($it['title_tr'] ?? '');
@@ -117,22 +93,6 @@
             $canonical = $base . '/haber/' . ($it['slug'] ?? '');
             $ogType = 'article';
             $publishedTime = $it['published_at'] ?? null;
-            $schema[] = array_filter([
-                '@context' => 'https://schema.org',
-                '@type' => 'NewsArticle',
-                'headline' => $t,
-                'description' => $sd,
-                'image' => $image ? [$image] : null,
-                'datePublished' => $it['published_at'] ?? null,
-                'inLanguage' => 'tr-TR',
-                'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $canonical],
-                'publisher' => [
-                    '@type' => 'Organization',
-                    'name' => 'Ben İzledim',
-                    'url' => $base,
-                    'logo' => ['@type' => 'ImageObject', 'url' => $base . '/icons/512.png'],
-                ],
-            ], fn ($v) => $v !== null && $v !== '');
         } else {
             if (! empty($props['title'])) {
                 $title = $clean($props['title']) . ' - Ben İzledim';
