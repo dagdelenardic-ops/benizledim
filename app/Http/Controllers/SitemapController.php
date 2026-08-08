@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\FlashNews;
 use App\Models\Post;
+use App\Models\User;
 
 class SitemapController extends Controller
 {
@@ -15,6 +16,13 @@ class SitemapController extends Controller
             ->latest('published_at')
             ->cursor();
         $categories = Category::select('slug')->cursor();
+
+        // Author profiles are indexable and carry their own canonical, but they
+        // were reachable only through article bylines. Only list authors who
+        // actually have something published.
+        $authors = User::select('id')
+            ->whereHas('posts', fn ($q) => $q->published())
+            ->cursor();
 
         $flashNews = collect();
         try {
@@ -28,7 +36,7 @@ class SitemapController extends Controller
             // table not yet created
         }
 
-        $content = view('sitemap', compact('posts', 'categories', 'flashNews'))->render();
+        $content = view('sitemap', compact('posts', 'categories', 'authors', 'flashNews'))->render();
 
         return response($content, 200)
             ->header('Content-Type', 'text/xml');

@@ -35,6 +35,23 @@
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
+    <url>
+        <loc>https://benizledim.com/quiz</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://benizledim.com/yazarlar</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    @foreach($authors as $author)
+    <url>
+        <loc>https://benizledim.com/profile/{{ $author->id }}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    @endforeach
     @foreach($categories as $category)
     <url>
         <loc>https://benizledim.com/yazilar/{{ $category->slug }}</loc>
