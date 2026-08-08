@@ -394,25 +394,25 @@
     "/build/assets/WatchLogCard-ppBRc7-H.js"
   ],
   "resources/js/Components/Quiz/QuizIcon.vue": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Components/Quiz/QuizMarquee.vue": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Components/Quiz/QuizPosterArt.vue": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Components/Quiz/QuizQuestion.vue": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Components/Quiz/QuizResult.vue": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Components/Quiz/QuizStart.vue": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Components/Quiz/QuizTopBar.vue": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Components/Recommend/ConversationHistory.vue": [
     "/build/assets/Index-nx9Jp6F4.js",
@@ -490,10 +490,10 @@
     "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Composables/useQuizAudio.js": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Composables/useQuizScoring.js": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Extensions/EmbedExtension.js": [
     "/build/assets/RichTextEditor-B1ICi6UT.js",
@@ -557,9 +557,6 @@
   "resources/js/Pages/Author/Index.vue": [
     "/build/assets/Index-BQ4cQ1pc.js"
   ],
-  "resources/js/Pages/Category/Show.vue": [
-    "/build/assets/Show-BB23N7P5.js"
-  ],
   "resources/js/Pages/Cinema/Index.vue": [
     "/build/assets/Index-B8rgEi6n.js"
   ],
@@ -619,7 +616,7 @@
     "/build/assets/Show-CfMcxOGY.js"
   ],
   "resources/js/Pages/Quiz/Play.vue": [
-    "/build/assets/Play-D2gBYRmR.js"
+    "/build/assets/Play-Dkf2Kd2c.js"
   ],
   "resources/js/Pages/Recommend/Index.vue": [
     "/build/assets/Index-nx9Jp6F4.js",
@@ -631,9 +628,6 @@
   ],
   "resources/js/Pages/Search/Index.vue": [
     "/build/assets/Index-CugAXXFC.js"
-  ],
-  "resources/js/Pages/Tag/Show.vue": [
-    "/build/assets/Show-gaZMwSEo.js"
   ],
   "resources/js/Pages/Watchlist/Index.vue": [
     "/build/assets/Index-9ENTCzm0.js"

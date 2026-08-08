@@ -158,7 +158,7 @@
     "src": "node_modules/leaflet/dist/images/marker-icon.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BS7YrNuv.css",
+    "file": "assets/app-DmTvYJ8P.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -455,24 +455,8 @@
       "_vendor-axios-CV_kDJ8B.js"
     ]
   },
-  "resources/js/Pages/Category/Show.vue": {
-    "file": "assets/Show-CKBY7lkI.js",
-    "name": "Show",
-    "src": "resources/js/Pages/Category/Show.vue",
-    "isDynamicEntry": true,
-    "imports": [
-      "_vendor-inertia-pb8N6Md6.js",
-      "_AppLayout-WBqlb4ec.js",
-      "_PostGrid-DIlcYCjr.js",
-      "_vendor-vue-B8Bh31y4.js",
-      "_vendor-6Uh9O7aq.js",
-      "_vendor-axios-CV_kDJ8B.js",
-      "_PostCard-BcdGgKYa.js",
-      "_useDate-Dg76ZUot.js"
-    ]
-  },
   "resources/js/Pages/Cinema/Index.vue": {
-    "file": "assets/Index-awiAXEzu.js",
+    "file": "assets/Index-D91nMuoF.js",
     "name": "Index",
     "src": "resources/js/Pages/Cinema/Index.vue",
     "isDynamicEntry": true,
@@ -490,7 +474,7 @@
       "_vendor-leaflet-rHf3ThZ5.js"
     ],
     "css": [
-      "assets/app-BS7YrNuv.css"
+      "assets/app-DmTvYJ8P.css"
     ]
   },
   "resources/js/Pages/Cinema/Show.vue": {
@@ -663,7 +647,7 @@
     ]
   },
   "resources/js/Pages/Quiz/Play.vue": {
-    "file": "assets/Play-CQSJoALS.js",
+    "file": "assets/Play-DGVtm7Fz.js",
     "name": "Play",
     "src": "resources/js/Pages/Quiz/Play.vue",
     "isDynamicEntry": true,
@@ -707,22 +691,6 @@
       "_useDate-Dg76ZUot.js"
     ]
   },
-  "resources/js/Pages/Tag/Show.vue": {
-    "file": "assets/Show-DAXtDPba.js",
-    "name": "Show",
-    "src": "resources/js/Pages/Tag/Show.vue",
-    "isDynamicEntry": true,
-    "imports": [
-      "_vendor-inertia-pb8N6Md6.js",
-      "_AppLayout-WBqlb4ec.js",
-      "_PostGrid-DIlcYCjr.js",
-      "_vendor-vue-B8Bh31y4.js",
-      "_vendor-6Uh9O7aq.js",
-      "_vendor-axios-CV_kDJ8B.js",
-      "_PostCard-BcdGgKYa.js",
-      "_useDate-Dg76ZUot.js"
-    ]
-  },
   "resources/js/Pages/Watchlist/Index.vue": {
     "file": "assets/Index-D-LAt0tW.js",
     "name": "Index",
@@ -737,7 +705,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-CIYt7kEO.js",
+    "file": "assets/app-Du26IE84.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -766,7 +734,6 @@
       "resources/js/Pages/Asistan/Index.vue",
       "resources/js/Pages/Author/Home.vue",
       "resources/js/Pages/Author/Index.vue",
-      "resources/js/Pages/Category/Show.vue",
       "resources/js/Pages/Cinema/Index.vue",
       "resources/js/Pages/Cinema/Show.vue",
       "resources/js/Pages/Festival/Index.vue",
@@ -781,12 +748,11 @@
       "resources/js/Pages/Quiz/Play.vue",
       "resources/js/Pages/Recommend/Index.vue",
       "resources/js/Pages/Search/Index.vue",
-      "resources/js/Pages/Tag/Show.vue",
       "resources/js/Pages/Watchlist/Index.vue"
     ],
     "css": [
       "assets/app-DVmYU_bz.css",
-      "assets/app-BS7YrNuv.css"
+      "assets/app-DmTvYJ8P.css"
     ]
   }
 }

@@ -655,7 +655,11 @@ const _sfc_main$1 = {
         } else {
           _push(`<!---->`);
         }
-        _push(`<p class="qz-result__bio">${ssrInterpolate(character.value.result_blurb_tr)}</p>`);
+        if (character.value.result_blurb_tr) {
+          _push(`<p class="qz-result__bio">${ssrInterpolate(character.value.result_blurb_tr)}</p>`);
+        } else {
+          _push(`<!---->`);
+        }
         if (characterTags.value.length) {
           _push(`<div class="qz-row" style="${ssrRenderStyle({ gap: "6px", flexWrap: "wrap", marginTop: "10px" })}"><!--[-->`);
           ssrRenderList(characterTags.value, (tag) => {
@@ -1115,13 +1119,29 @@ const _sfc_main = {
         audio.sfx.back();
       }
     }
+    const characterCache = /* @__PURE__ */ new Map();
+    async function hydrateCharacter(result) {
+      const id = result?.character?.id;
+      if (!id) return;
+      try {
+        if (!characterCache.has(id)) {
+          const response = await fetch(`/quiz/karakter/${encodeURIComponent(id)}`, {
+            headers: { Accept: "application/json" }
+          });
+          if (!response.ok) return;
+          characterCache.set(id, await response.json());
+        }
+        Object.assign(result.character, characterCache.get(id));
+      } catch (error) {
+      }
+    }
     function goNext() {
       if (idx.value < total.value - 1) {
         idx.value++;
         audio.sfx.next();
       } else {
-        scoring.calculateResult();
         phase.value = "result";
+        hydrateCharacter(scoring.calculateResult());
         audio.sfx.rewind();
         nextTick(() => {
           window.scrollTo({ top: 0, behavior: "instant" });
