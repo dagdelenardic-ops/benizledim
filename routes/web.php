@@ -30,6 +30,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageVariantController;
 use App\Http\Controllers\LetterboxdController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\LlmsTxtController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PodcastController;
@@ -54,8 +55,9 @@ Route::get('/up', function () {
 
 Route::get('/img/variant', [ImageVariantController::class, 'show'])->name('image.variant');
 
-// Sitemap & RSS
+// Sitemap, RSS & llms.txt
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/llms.txt', [LlmsTxtController::class, 'index'])->name('llms');
 Route::get('/feed', [RssFeedController::class, 'index'])->name('feed');
 Route::get('/rss', [RssFeedController::class, 'index']);
 

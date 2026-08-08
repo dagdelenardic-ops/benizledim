@@ -2,5 +2,11 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin/*
+Disallow: /api/
+Disallow: /quiz/karakter/
+
+# /ara is deliberately crawlable: it carries a noindex meta tag, and a
+# Disallow here would stop crawlers from ever reading that tag. Same reasoning
+# for tracking-parameter URLs, which resolve through their canonical tag.
 
 Sitemap: https://benizledim.com/sitemap.xml
