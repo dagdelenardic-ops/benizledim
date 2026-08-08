@@ -18,7 +18,7 @@ const formatDuration = (minutes) => {
 </script>
 
 <template>
-    <AppLayout title="Podcast">
+    <AppLayout>
         <div class="min-h-screen bg-gray-50">
             <!-- Header -->
             <div class="bg-white border-b border-gray-200">

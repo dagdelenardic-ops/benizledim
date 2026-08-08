@@ -106,7 +106,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <AppLayout title="Sinemalar" description="İstanbul'daki bağımsız sinemalar ve gösterimleri">
+    <AppLayout>
         <div class="min-h-screen bg-gray-50">
             <!-- Header -->
             <div class="bg-white border-b border-gray-200">

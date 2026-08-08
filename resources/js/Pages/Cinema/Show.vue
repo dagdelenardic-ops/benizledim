@@ -37,7 +37,7 @@ const stars = [1, 2, 3, 4, 5];
 </script>
 
 <template>
-    <AppLayout :title="cinema.name" :description="cinema.description || cinema.name">
+    <AppLayout>
         <div class="min-h-screen bg-white">
             <!-- Header -->
             <div class="bg-gray-900 text-white">

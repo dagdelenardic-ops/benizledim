@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 import PostGrid from '../../Components/Post/PostGrid.vue';
 
@@ -17,52 +17,27 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    canonicalUrl: {
-        type: String,
-        required: true,
-    },
 });
 
-const getPageTitle = () => {
-    if (props.filters.category) {
-        const category = props.categories.find(c => c.slug === props.filters.category);
-        return category ? `${category.name} Yazıları` : 'Yazılar';
-    }
-    if (props.filters.tag) {
-        return `Etiket: ${props.filters.tag}`;
-    }
-    return 'Tüm Yazılar';
-};
+// Title, description and canonical come from the controller via page props so
+// the server-rendered head and the head Vue installs after mount agree.
+const page = usePage();
+const heading = computed(() => page.props.title || 'Yazılar');
 
 const isActiveCategory = (slug) => {
     return props.filters.category === slug;
 };
 
-const pageDescription = computed(() => {
-    if (props.filters.category) {
-        const category = props.categories.find((item) => item.slug === props.filters.category);
-        return category
-            ? `${category.name} kategorisindeki film, dizi ve belgesel yazıları.`
-            : 'Ben İzledim arşivindeki tüm yazılar.';
-    }
-
-    if (props.filters.tag) {
-        return `${props.filters.tag} etiketiyle işaretlenmiş Ben İzledim yazıları.`;
-    }
-
-    return 'Ben İzledim arşivindeki tüm film, dizi ve belgesel yazıları.';
-});
-
 </script>
 
 <template>
-    <AppLayout :title="getPageTitle()" :description="pageDescription" :canonical-url="canonicalUrl">
+    <AppLayout>
         <div class="min-h-screen bg-[var(--bi-paper)]">
             <div class="border-b-2 border-[var(--bi-ink)]">
                 <div class="bi-wrap py-8">
                     <span class="bi-kicker">Arşiv</span>
                     <h1 class="bi-serif mt-3 text-5xl font-bold leading-none text-[var(--bi-ink)] md:text-7xl">
-                        {{ getPageTitle() }}
+                        {{ heading }}
                     </h1>
                     <p class="mt-4 max-w-2xl text-[var(--bi-muted)]">
                         Film, dizi ve belgesel dünyasından eleştiri ve tavsiyeler

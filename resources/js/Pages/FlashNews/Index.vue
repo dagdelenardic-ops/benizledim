@@ -1,9 +1,8 @@
 <script setup>
-import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AppLayout from '../../Components/Layout/AppLayout.vue';
 
-const props = defineProps({
+defineProps({
     items: {
         type: Object,
         required: true,
@@ -23,21 +22,10 @@ const formatDate = (date) => {
         return '';
     }
 };
-
-const canonicalUrl = computed(() => {
-    const page = props.items?.current_page ?? 1;
-    return page > 1
-        ? `https://benizledim.com/haberler?page=${page}`
-        : 'https://benizledim.com/haberler';
-});
 </script>
 
 <template>
-    <AppLayout
-        title="Haberler"
-        description="Sinema dünyasından flash haberlerin tam arşivi — yabancı ve yerli kaynaklardan film, dizi, festival haberleri."
-        :canonical-url="canonicalUrl"
-    >
+    <AppLayout>
         <div class="min-h-screen bg-[var(--bi-paper)]">
             <div class="border-b-2 border-[var(--bi-ink)] bg-[var(--bi-paper-deep)]">
                 <div class="bi-wrap py-10">

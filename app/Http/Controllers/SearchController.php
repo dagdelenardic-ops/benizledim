@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Services\VertexAiSearchService;
+use App\Support\PostCard;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
@@ -67,8 +68,9 @@ class SearchController extends Controller
         }
 
         $posts = Post::articles()
+            ->select(PostCard::COLUMNS)
             ->whereIn('id', $ids)
-            ->with(['user', 'categories'])
+            ->with(PostCard::RELATIONS)
             ->withCount(['comments', 'likes'])
             ->get()
             ->keyBy('id');
@@ -87,7 +89,7 @@ class SearchController extends Controller
         $slice = $ordered->slice(($page - 1) * $perPage, $perPage)->values();
 
         return new LengthAwarePaginator(
-            $slice,
+            PostCard::collection($slice),
             $ordered->count(),
             $perPage,
             $page,
@@ -105,10 +107,12 @@ class SearchController extends Controller
                     ->orWhere('excerpt', 'like', "%{$escaped}%")
                     ->orWhere('content', 'like', "%{$escaped}%");
             })
-            ->with(['user', 'categories'])
+            ->select(PostCard::COLUMNS)
+            ->with(PostCard::RELATIONS)
             ->withCount(['comments', 'likes'])
             ->latest('published_at')
             ->paginate(12)
-            ->appends($request->only('q'));
+            ->appends($request->only('q'))
+            ->through(fn (Post $post) => PostCard::make($post));
     }
 }

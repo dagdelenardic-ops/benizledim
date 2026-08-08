@@ -38,9 +38,10 @@ class QuizController extends Controller
                 'top_n_suggestions' => 3,
             ],
             'characters' => $characters['characters'],
-            'title' => 'Karakter Testi',
+            'title' => 'Hangi Film Karakterisin? — Quiz',
             'description' => 'Hangi dizi/film karakterine benziyorsun? Ben İzledim karakter testini çöz, sana uygun yapımları keşfet.',
             'canonicalUrl' => 'https://benizledim.com/quiz',
+            'ogImage' => '/images/quiz-og.png',
         ]);
     }
 }

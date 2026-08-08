@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use App\Services\AuthorStatsService;
+use App\Support\PostCard;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,7 +23,8 @@ class ProfileController extends Controller
 
         $postsQuery = $user->posts()
             ->published()
-            ->with(['categories', 'tags'])
+            ->select(PostCard::COLUMNS)
+            ->with(PostCard::RELATIONS)
             ->withCount(['comments', 'likes']);
 
         if ($format === 'watch_log') {
@@ -37,7 +40,8 @@ class ProfileController extends Controller
 
         $posts = $postsQuery
             ->paginate(12)
-            ->appends($format === 'watch_log' ? ['format' => $format] : []);
+            ->appends($format === 'watch_log' ? ['format' => $format] : [])
+            ->through(fn (Post $post) => PostCard::make($post));
 
         $canonicalParameters = [];
         if ($format !== 'standard') {

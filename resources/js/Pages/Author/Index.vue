@@ -19,7 +19,7 @@ function search() {
 </script>
 
 <template>
-    <AppLayout title="Yazarlar">
+    <AppLayout>
         <section class="mx-auto max-w-6xl px-4 py-8">
             <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <h1 class="text-2xl font-black text-[var(--bi-ink)]">Yazarlar</h1>

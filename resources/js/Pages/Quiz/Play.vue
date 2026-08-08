@@ -127,11 +127,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <AppLayout
-        title="Hangi Film Karakterisin? — Quiz"
-        description="25 soru, 60 karakter. Senin içindeki film karakterini keşfet."
-        og-image="/images/quiz-og.png"
-    >
+    <AppLayout>
         <div class="quiz-shell">
             <QuizTopBar
                 :phase="phase"

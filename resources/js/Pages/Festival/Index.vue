@@ -51,7 +51,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <AppLayout title="İstanbul Film Festivali">
+    <AppLayout>
         <div class="min-h-screen bg-gray-900">
             <!-- Hero Section -->
             <div class="bg-gradient-to-br from-purple-900 via-gray-900 to-black text-white py-16">

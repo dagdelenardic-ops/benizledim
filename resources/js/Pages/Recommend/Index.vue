@@ -163,7 +163,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <AppLayout title="Ne İzlesem?" description="Ruh haline göre film ve dizi önerisi">
+    <AppLayout>
         <div class="ne-izlesem">
             <!-- Hero Header -->
             <header class="ne-izlesem__header">

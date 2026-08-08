@@ -198,7 +198,12 @@
     @if ($__inertiaSsrResponse)
         {!! $__inertiaSsrResponse->body !!}
     @else
-        <div id="app" data-page="{{ json_encode($page) }}">
+        {{-- The page object lives in a JSON script element, not a data-page
+             attribute: HTML attribute escaping turned every quote into &quot;
+             and inflated the payload by roughly 50%. Inertia's client reads
+             this element as its initial-page fallback. --}}
+        <script data-page="app" type="application/json">{!! str_replace('</', '<\/', json_encode($page, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) !!}</script>
+        <div id="app">
             {{-- SEO fallback: bot ve JS-siz kullanıcılar için ilk-paint HTML içerik. Vue mount edince üzerine yazar. --}}
             @if ($component === 'Post/Show' && ! empty($props['post']))
                 @php $p = $props['post']; @endphp
@@ -210,7 +215,13 @@
                         @endif
                         <p>
                             @if (! empty($p['user']['name']))
-                                <span>Yazar: <a href="{{ $base }}/yazar/{{ $p['user']['slug'] ?? '' }}">{{ $clean($p['user']['name']) }}</a></span>
+                                <span>Yazar:
+                                    @if (! empty($p['user']['id']))
+                                        <a href="{{ $base }}/profile/{{ $p['user']['id'] }}">{{ $clean($p['user']['name']) }}</a>
+                                    @else
+                                        {{ $clean($p['user']['name']) }}
+                                    @endif
+                                </span>
                             @endif
                             @if (! empty($p['published_at']) && ($d = $fmtDate($p['published_at'])))
                                 <time datetime="{{ $p['published_at'] }}">{{ $d }}</time>
