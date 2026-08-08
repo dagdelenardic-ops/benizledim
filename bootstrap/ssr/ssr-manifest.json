@@ -1,12 +1,129 @@
 {
   "\u0000plugin-vue:export-helper": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [
     "/build/assets/vendor-koWuargk.js"
   ],
   "resources/css/app.css": [],
+  "resources/images/authors/alphan-karabat.jpg": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/images/authors/gokce-serim.jpg": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/images/authors/gurur-sonmez.jpg": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/images/authors/humeyra-fidan.jpg": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/images/authors/huseyin-emre-sepetci.jpg": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/images/authors/iris-eryilmaz.jpg": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/images/authors/melike-zeynep-korkmaz.png": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/images/authors/muhammed-muglu.jpg": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/images/authors/su-evci.jpg": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
   "resources/js/Components/Admin/AdminIcon.vue": [
     "/build/assets/AdminLayout-CgPpPth9.js"
   ],
@@ -32,157 +149,327 @@
     "/build/assets/useLocalFormDraft-CADHagWC.js"
   ],
   "resources/js/Components/Article/ArticleBody.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
-  "resources/js/Components/Article/ArticleBody.vue?vue&type=style&index=0&scoped=c4199799&lang.css": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+  "resources/js/Components/Article/ArticleBody.vue?vue&type=style&index=0&scoped=d4039154&lang.css": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Auth/LoginModal.vue": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Components/Author/AuthorStatCard.vue": [
     "/build/assets/WatchLogCard-ppBRc7-H.js"
   ],
   "resources/js/Components/Author/LetterboxdConnectCard.vue": [
-    "/build/assets/Home-CEQHgUVh.js"
+    "/build/assets/Home-DElFY8Jr.js"
   ],
   "resources/js/Components/Author/PushOptInCard.vue": [
-    "/build/assets/Home-CEQHgUVh.js"
+    "/build/assets/Home-DElFY8Jr.js"
   ],
   "resources/js/Components/Author/QuickLogModal.vue": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Components/Comment/CommentForm.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Comment/CommentList.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Comment/WixComments.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Entry/EntryCard.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Entry/EntryForm.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Entry/EntrySection.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Layout/AppLayout.vue": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
-  "resources/js/Components/Layout/AppLayout.vue?vue&type=style&index=0&scoped=2a9636b5&lang.css": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+  "resources/js/Components/Layout/AppLayout.vue?vue&type=style&index=0&scoped=d02ce7a3&lang.css": [
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Components/Layout/MobileBottomNav.vue": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Components/PWA/InstallAppPrompt.vue": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Components/PWA/PushOptInPrompt.vue": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Components/Post/DialogueView.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Post/FlashNewsSection.vue": [
-    "/build/assets/Home-DgQPIfw9.js",
-    "/build/assets/Home-_yBpeeyR.css"
+    "/build/assets/Home-CG_hZmvB.js",
+    "/build/assets/Home-wRTLuwu-.css"
   ],
   "resources/js/Components/Post/PostCard.vue": [
-    "/build/assets/PostCard-CO9kh5rs.js"
+    "/build/assets/PostCard-C09KKzTl.js"
   ],
   "resources/js/Components/Post/PostGrid.vue": [
-    "/build/assets/PostGrid-BQ4oui2l.js"
+    "/build/assets/PostGrid-CaCaEnTH.js"
+  ],
+  "resources/js/Components/Post/PullQuote.vue": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
+  ],
+  "resources/js/Components/Post/PullQuote.vue?vue&type=style&index=0&scoped=d2789d2e&lang.css": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Post/RelatedPosts.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Post/ShareButtons.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Post/TimeCapsuleBanner.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Post/VisualEssayView.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Post/WatchLogCard.vue": [
     "/build/assets/WatchLogCard-ppBRc7-H.js"
   ],
   "resources/js/Components/Quiz/QuizIcon.vue": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Components/Quiz/QuizMarquee.vue": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Components/Quiz/QuizPosterArt.vue": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Components/Quiz/QuizQuestion.vue": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Components/Quiz/QuizResult.vue": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Components/Quiz/QuizStart.vue": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Components/Quiz/QuizTopBar.vue": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Components/Recommend/ConversationHistory.vue": [
-    "/build/assets/Index-DetlulNV.js",
-    "/build/assets/Index-6hxdgyyZ.css"
+    "/build/assets/Index-nx9Jp6F4.js",
+    "/build/assets/Index-DsX8Pcvo.css"
   ],
   "resources/js/Components/Recommend/ConversationHistory.vue?vue&type=style&index=0&scoped=d825bab5&lang.css": [
-    "/build/assets/Index-DetlulNV.js",
-    "/build/assets/Index-6hxdgyyZ.css"
+    "/build/assets/Index-nx9Jp6F4.js",
+    "/build/assets/Index-DsX8Pcvo.css"
   ],
   "resources/js/Components/Social/ActivityItem.vue": [
-    "/build/assets/Index-C3Kc2UvD.js"
+    "/build/assets/Index-Dt37rHix.js"
   ],
   "resources/js/Components/Social/FollowButton.vue": [
     "/build/assets/FollowButton-B1R8OU26.js"
   ],
   "resources/js/Components/Social/WatchlistButton.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/UI/LikeButton.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/UI/MentionTextarea.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/UI/SearchBar.vue": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Composables/useAutosave.js": [
     "/build/assets/RichTextEditor-B1ICi6UT.js",
@@ -195,18 +482,18 @@
     "/build/assets/useLocalFormDraft-CADHagWC.js"
   ],
   "resources/js/Composables/usePWAInstall.js": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Composables/usePushSubscription.js": [
-    "/build/assets/AppLayout-DJaRjmfw.js",
-    "/build/assets/AppLayout-BRdQfFwl.css"
+    "/build/assets/AppLayout-DRxfLCYb.js",
+    "/build/assets/AppLayout-BzHS_L4w.css"
   ],
   "resources/js/Composables/useQuizAudio.js": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Composables/useQuizScoring.js": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Extensions/EmbedExtension.js": [
     "/build/assets/RichTextEditor-B1ICi6UT.js",
@@ -217,7 +504,7 @@
     "/build/assets/RichTextEditor-CxgwUHLa.css"
   ],
   "resources/js/Pages/Activity/Index.vue": [
-    "/build/assets/Index-C3Kc2UvD.js"
+    "/build/assets/Index-Dt37rHix.js"
   ],
   "resources/js/Pages/Admin/Analytics/Index.vue": [
     "/build/assets/Index-BnD1Wqli.js"
@@ -253,7 +540,7 @@
     "/build/assets/Index-8k3zPmOd.js"
   ],
   "resources/js/Pages/Admin/Settings/Index.vue": [
-    "/build/assets/Index-MO3YyEnn.js"
+    "/build/assets/Index-CKn2MVA1.js"
   ],
   "resources/js/Pages/Admin/Tags/Index.vue": [
     "/build/assets/Index-7_odiOhr.js"
@@ -261,86 +548,111 @@
   "resources/js/Pages/Admin/Users/Index.vue": [
     "/build/assets/Index-RgLauznK.js"
   ],
+  "resources/js/Pages/Asistan/Index.vue": [
+    "/build/assets/Index-7PGKSvHn.js"
+  ],
   "resources/js/Pages/Author/Home.vue": [
-    "/build/assets/Home-CEQHgUVh.js"
+    "/build/assets/Home-DElFY8Jr.js"
   ],
   "resources/js/Pages/Author/Index.vue": [
-    "/build/assets/Index-c0Xej_0a.js"
+    "/build/assets/Index-BQ4cQ1pc.js"
   ],
   "resources/js/Pages/Category/Show.vue": [
-    "/build/assets/Show-B2iUucDx.js"
+    "/build/assets/Show-BB23N7P5.js"
   ],
   "resources/js/Pages/Cinema/Index.vue": [
-    "/build/assets/Index-Dp3l37_s.js"
+    "/build/assets/Index-B8rgEi6n.js"
   ],
   "resources/js/Pages/Cinema/Show.vue": [
-    "/build/assets/Show-D9Wk3v7b.js"
+    "/build/assets/Show-C3J-32fh.js"
   ],
   "resources/js/Pages/Festival/Index.vue": [
-    "/build/assets/Index-DGEdzKvL.js"
+    "/build/assets/Index-Du6AXCn1.js"
   ],
   "resources/js/Pages/FlashNews/Index.vue": [
-    "/build/assets/Index-DQnBGy-T.js"
+    "/build/assets/Index-BYCErxtj.js"
   ],
   "resources/js/Pages/FlashNews/Show.vue": [
-    "/build/assets/Show-DFplacgX.js"
+    "/build/assets/Show-C1yoXVF_.js"
   ],
   "resources/js/Pages/Home.vue": [
-    "/build/assets/Home-DgQPIfw9.js",
-    "/build/assets/Home-_yBpeeyR.css"
+    "/build/assets/Home-CG_hZmvB.js",
+    "/build/assets/Home-wRTLuwu-.css"
   ],
-  "resources/js/Pages/Home.vue?vue&type=style&index=0&scoped=5520884b&lang.css": [
-    "/build/assets/Home-DgQPIfw9.js",
-    "/build/assets/Home-_yBpeeyR.css"
+  "resources/js/Pages/Home.vue?vue&type=style&index=0&scoped=d190f609&lang.css": [
+    "/build/assets/Home-CG_hZmvB.js",
+    "/build/assets/Home-wRTLuwu-.css"
   ],
   "resources/js/Pages/Page/Show.vue": [
-    "/build/assets/Show-dcF0vw4x.js",
+    "/build/assets/Show-KS9nwnM5.js",
     "/build/assets/Show-8E3e3bwP.css"
   ],
   "resources/js/Pages/Page/Show.vue?vue&type=style&index=0&scoped=e5c83ea9&lang.css": [
-    "/build/assets/Show-dcF0vw4x.js",
+    "/build/assets/Show-KS9nwnM5.js",
     "/build/assets/Show-8E3e3bwP.css"
   ],
   "resources/js/Pages/Podcast/Index.vue": [
-    "/build/assets/Index-DJcJ2bCS.js"
+    "/build/assets/Index-D-D-aobL.js"
   ],
   "resources/js/Pages/Post/Index.vue": [
-    "/build/assets/Index-CkhDc7JF.js",
-    "/build/assets/Index-BfBAZ5vb.css"
+    "/build/assets/Index-DaDANOaF.js",
+    "/build/assets/Index-Cx873F2T.css"
   ],
-  "resources/js/Pages/Post/Index.vue?vue&type=style&index=0&scoped=dff0dbf0&lang.css": [
-    "/build/assets/Index-CkhDc7JF.js",
-    "/build/assets/Index-BfBAZ5vb.css"
+  "resources/js/Pages/Post/Index.vue?vue&type=style&index=0&scoped=4174a087&lang.css": [
+    "/build/assets/Index-DaDANOaF.js",
+    "/build/assets/Index-Cx873F2T.css"
   ],
   "resources/js/Pages/Post/Show.vue": [
-    "/build/assets/Show-BV-AQbMd.js",
-    "/build/assets/Show-CCheAIdr.css"
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Pages/Profile/Show.vue": [
-    "/build/assets/Show-Bob5imfl.js"
+    "/build/assets/Show-CfMcxOGY.js"
   ],
   "resources/js/Pages/Quiz/Play.vue": [
-    "/build/assets/Play-BMVPBAT8.js"
+    "/build/assets/Play-D2gBYRmR.js"
   ],
   "resources/js/Pages/Recommend/Index.vue": [
-    "/build/assets/Index-DetlulNV.js",
-    "/build/assets/Index-6hxdgyyZ.css"
+    "/build/assets/Index-nx9Jp6F4.js",
+    "/build/assets/Index-DsX8Pcvo.css"
   ],
-  "resources/js/Pages/Recommend/Index.vue?vue&type=style&index=0&scoped=b5999232&lang.css": [
-    "/build/assets/Index-DetlulNV.js",
-    "/build/assets/Index-6hxdgyyZ.css"
+  "resources/js/Pages/Recommend/Index.vue?vue&type=style&index=0&scoped=6dd721f0&lang.css": [
+    "/build/assets/Index-nx9Jp6F4.js",
+    "/build/assets/Index-DsX8Pcvo.css"
   ],
   "resources/js/Pages/Search/Index.vue": [
-    "/build/assets/Index-BgFWenDG.js"
+    "/build/assets/Index-CugAXXFC.js"
   ],
   "resources/js/Pages/Tag/Show.vue": [
-    "/build/assets/Show-w_apDY0Y.js"
+    "/build/assets/Show-gaZMwSEo.js"
   ],
   "resources/js/Pages/Watchlist/Index.vue": [
-    "/build/assets/Index-Dk0KIui9.js"
+    "/build/assets/Index-9ENTCzm0.js"
+  ],
+  "resources/js/Utils/authorAvatars.js": [
+    "/build/assets/Show-oJzb5SZq.js",
+    "/build/assets/Show-CSir4Dd5.css",
+    "/build/assets/gurur-sonmez-Cie7FSYk.jpg",
+    "/build/assets/iris-eryilmaz-Hd1okyfx.jpg",
+    "/build/assets/muhammed-muglu-C_-bp9-n.jpg",
+    "/build/assets/su-evci-yqXgXV2t.jpg",
+    "/build/assets/alphan-karabat-NgQU-WRf.jpg",
+    "/build/assets/humeyra-fidan-CtZklFs4.jpg",
+    "/build/assets/gokce-serim-DpbPnV8r.jpg",
+    "/build/assets/melike-zeynep-korkmaz-BBtGbnQG.png",
+    "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Utils/responsiveImage.js": [
-    "/build/assets/PostCard-CO9kh5rs.js"
+    "/build/assets/PostCard-C09KKzTl.js"
   ],
   "resources/js/ssr.js": []
 }
