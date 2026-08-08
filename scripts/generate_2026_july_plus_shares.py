@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps, ImageEnhance
 import json
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SOURCE_DIR = PROJECT_ROOT / 'public/images/releases/2026-july-plus'
+SOURCE_DIR = PROJECT_ROOT / 'storage/app/public/images/releases/2026-july-plus'
 OUTPUT_DIR = PROJECT_ROOT / 'public/instagram/2026-07-24-benizledim-2026-temmuz-sonrasi-8-film-v1'
 SLIDE_DIR = OUTPUT_DIR / 'slides'
 ASSET_DIR = OUTPUT_DIR / 'assets/final'

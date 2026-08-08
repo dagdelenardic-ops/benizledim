@@ -11,7 +11,7 @@ import json, textwrap, hashlib
 
 # ── paths ──────────────────────────────────────────────────────────────────
 PROJECT = Path(__file__).resolve().parents[1]
-SRC = PROJECT / 'public/images/releases/2026-july-plus'
+SRC = PROJECT / 'storage/app/public/images/releases/2026-july-plus'
 OUT = PROJECT / 'public/instagram/2026-07-24-benizledim-2026-temmuz-sonrasi-8-film-v2'
 SLIDES = OUT / 'slides'
 FONTS = OUT / 'assets/fonts'

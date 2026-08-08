@@ -456,7 +456,7 @@
     ]
   },
   "resources/js/Pages/Cinema/Index.vue": {
-    "file": "assets/Index-EDYw4WMm.js",
+    "file": "assets/Index-DJ89LeTx.js",
     "name": "Index",
     "src": "resources/js/Pages/Cinema/Index.vue",
     "isDynamicEntry": true,
@@ -532,7 +532,7 @@
     ]
   },
   "resources/js/Pages/Home.vue": {
-    "file": "assets/Home-I_641eN9.js",
+    "file": "assets/Home-9-Q9BVUF.js",
     "name": "Home",
     "src": "resources/js/Pages/Home.vue",
     "isDynamicEntry": true,
@@ -547,7 +547,7 @@
       "_useDate-Dg76ZUot.js"
     ],
     "css": [
-      "assets/Home-DsbJY7zB.css"
+      "assets/Home-CbYQisss.css"
     ]
   },
   "resources/js/Pages/Page/Show.vue": {
@@ -705,7 +705,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-fzIEMeFy.js",
+    "file": "assets/app-kWytB_Y6.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

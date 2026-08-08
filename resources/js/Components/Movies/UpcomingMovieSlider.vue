@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { buildResponsiveImage } from '@/Utils/responsiveImage';
 
 const sliderItems = [
   {
@@ -8,7 +9,7 @@ const sliderItems = [
     title: 'Spider-Man: Brand New Day',
     releaseDate: '31/07/2026 · TR',
     reason: 'Marvel evrenindeki güçlü marka etkisi, güçlü görsel ritim ve güçlü pazarlama potansiyeliyle bu sezonun en güçlü açılış savaşını taşıyor.',
-    image: '/images/releases/2026-july-plus/Spider-Man_Brand_New_Day.jpg?v=3',
+    image: '/storage/images/releases/2026-july-plus/Spider-Man_Brand_New_Day.jpg',
   },
   {
     id: 'aang',
@@ -16,7 +17,7 @@ const sliderItems = [
     title: 'Avatar: The Last Airbender (Aang)',
     releaseDate: '24/07/2026 · TR',
     reason: 'Nostalji + fantasy savaş stratejisi + büyük IP etkisi: gişe tarafında güvenli ama doğru çerçevede güçlü bir aday.',
-    image: '/images/releases/2026-july-plus/Avatar_Aang_The_Last_Airbender.jpg?v=3',
+    image: '/storage/images/releases/2026-july-plus/Avatar_Aang_The_Last_Airbender.jpg',
   },
   {
     id: 'resident-evil',
@@ -24,7 +25,7 @@ const sliderItems = [
     title: 'Resident Evil',
     releaseDate: '18/09/2026 · US',
     reason: 'Korku-aksiyon evreninde güçlü marka mirasını yeni kuşağa götürme avantajı olan, yüksek ilgi alanlı bir geri dönüş.',
-    image: '/images/releases/2026-july-plus/Resident_Evil.jpg?v=3',
+    image: '/storage/images/releases/2026-july-plus/Resident_Evil.jpg',
   },
   {
     id: 'dune',
@@ -32,7 +33,7 @@ const sliderItems = [
     title: 'Dune: Part Three',
     releaseDate: '18/12/2026 · TR',
     reason: 'Dune ekosistemi halen “en görsel büyük film” beklentisini taşıyor; kalite ve marka gücü aynı anda yüksek.',
-    image: '/images/releases/2026-july-plus/Dune_Part_Three.jpg?v=3',
+    image: '/storage/images/releases/2026-july-plus/Dune_Part_Three.jpg',
   },
   {
     id: 'avengers',
@@ -40,7 +41,7 @@ const sliderItems = [
     title: 'Avengers: Doomsday',
     releaseDate: '18/12/2026 · TR',
     reason: 'Franchise baskısı, global sosyal etki, fan mobilizasyonu ve pazarlama çarpanı en yüksek film adaylarından biri.',
-    image: '/images/releases/2026-july-plus/Avengers_Doomsday.jpg?v=3',
+    image: '/storage/images/releases/2026-july-plus/Avengers_Doomsday.jpg',
   },
   {
     id: 'godzilla',
@@ -48,7 +49,7 @@ const sliderItems = [
     title: 'Godzilla Minus Zero',
     releaseDate: '06/11/2026 · TR',
     reason: 'Kaos/afet fantazisi üst düzey seyirci çekiciliğini koruyor; güçlü görsel kurgularla ana akımda kalma şansı yüksek.',
-    image: '/images/releases/2026-july-plus/Godzilla_Minus_Zero.jpg?v=3',
+    image: '/storage/images/releases/2026-july-plus/Godzilla_Minus_Zero.jpg',
   },
   {
     id: 'cat-hat',
@@ -56,7 +57,7 @@ const sliderItems = [
     title: 'The Cat in the Hat',
     releaseDate: '06/11/2026 · US',
     reason: 'Aile segmentini hedefleyen nostaljik uyarlama hattında en güçlü pazarlama çağrışımlarından biri olarak öne çıkıyor.',
-    image: '/images/releases/2026-july-plus/The_Cat_in_the_Hat.jpg?v=3',
+    image: '/storage/images/releases/2026-july-plus/The_Cat_in_the_Hat.jpg',
   },
   {
     id: 'angry-birds',
@@ -64,9 +65,21 @@ const sliderItems = [
     title: 'The Angry Birds Movie 3',
     releaseDate: '23/12/2026 · US',
     reason: 'Animasyon IP’leri içinde genişleyen franchise kalıbına uygun; sezon sonu takviminde yüksek görselle etki alanına sahip.',
-    image: '/images/releases/2026-july-plus/The_Angry_Birds_Movie_3.jpg?v=3',
+    image: '/storage/images/releases/2026-july-plus/The_Angry_Birds_Movie_3.jpg',
   },
 ];
+
+// The posters are 2000-3840px wide masters, shown in a 360px-wide card. Served
+// raw they cost about 8 MB on the homepage, so they go through the same variant
+// endpoint every other cover on the site uses.
+const cards = computed(() => sliderItems.map((item) => ({
+  ...item,
+  responsive: buildResponsiveImage(item.image, {
+    widths: [480, 768],
+    sizes: 'min(86vw, 360px)',
+    fallbackWidth: 768,
+  }),
+})));
 
 const sliderRef = ref(null);
 
@@ -123,14 +136,16 @@ const moveSlider = (step) => {
         aria-label="2026 Temmuz sonrası film sliderı"
       >
         <article
-          v-for="item in sliderItems"
+          v-for="item in cards"
           :key="item.id"
           class="movie-slider-card relative flex-shrink-0 border border-[var(--bi-ink)] bg-white shadow-[8px_8px_0_rgba(16,16,16,0.10)]"
           style="width: min(86vw, 360px);"
         >
           <div class="relative h-56 overflow-hidden border-b border-[var(--bi-rule)]">
             <img
-              :src="item.image"
+              :src="item.responsive.src"
+              :srcset="item.responsive.srcset"
+              :sizes="item.responsive.sizes"
               :alt="`${item.title} görsel`"
               class="h-full w-full object-cover"
               loading="lazy"

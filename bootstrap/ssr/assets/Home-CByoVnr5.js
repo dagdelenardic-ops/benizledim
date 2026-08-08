@@ -1,4 +1,4 @@
-import { mergeProps, unref, withCtx, createTextVNode, createVNode, openBlock, createBlock, toDisplayString, useSSRContext, ref, computed, Fragment, renderList, createCommentVNode, withModifiers, withDirectives, vModelText } from "vue";
+import { mergeProps, unref, withCtx, createTextVNode, createVNode, openBlock, createBlock, toDisplayString, useSSRContext, computed, ref, Fragment, renderList, createCommentVNode, withModifiers, withDirectives, vModelText } from "vue";
 import { ssrRenderAttrs, ssrRenderComponent, ssrRenderList, ssrRenderAttr, ssrInterpolate, ssrRenderStyle, ssrRenderClass, ssrIncludeBooleanAttr } from "vue/server-renderer";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { a as _export_sfc, A as AppLayout } from "./AppLayout-xb67C027.js";
@@ -135,7 +135,7 @@ const _sfc_main$1 = {
         title: "Spider-Man: Brand New Day",
         releaseDate: "31/07/2026 · TR",
         reason: "Marvel evrenindeki güçlü marka etkisi, güçlü görsel ritim ve güçlü pazarlama potansiyeliyle bu sezonun en güçlü açılış savaşını taşıyor.",
-        image: "/images/releases/2026-july-plus/Spider-Man_Brand_New_Day.jpg?v=3"
+        image: "/storage/images/releases/2026-july-plus/Spider-Man_Brand_New_Day.jpg"
       },
       {
         id: "aang",
@@ -143,7 +143,7 @@ const _sfc_main$1 = {
         title: "Avatar: The Last Airbender (Aang)",
         releaseDate: "24/07/2026 · TR",
         reason: "Nostalji + fantasy savaş stratejisi + büyük IP etkisi: gişe tarafında güvenli ama doğru çerçevede güçlü bir aday.",
-        image: "/images/releases/2026-july-plus/Avatar_Aang_The_Last_Airbender.jpg?v=3"
+        image: "/storage/images/releases/2026-july-plus/Avatar_Aang_The_Last_Airbender.jpg"
       },
       {
         id: "resident-evil",
@@ -151,7 +151,7 @@ const _sfc_main$1 = {
         title: "Resident Evil",
         releaseDate: "18/09/2026 · US",
         reason: "Korku-aksiyon evreninde güçlü marka mirasını yeni kuşağa götürme avantajı olan, yüksek ilgi alanlı bir geri dönüş.",
-        image: "/images/releases/2026-july-plus/Resident_Evil.jpg?v=3"
+        image: "/storage/images/releases/2026-july-plus/Resident_Evil.jpg"
       },
       {
         id: "dune",
@@ -159,7 +159,7 @@ const _sfc_main$1 = {
         title: "Dune: Part Three",
         releaseDate: "18/12/2026 · TR",
         reason: "Dune ekosistemi halen “en görsel büyük film” beklentisini taşıyor; kalite ve marka gücü aynı anda yüksek.",
-        image: "/images/releases/2026-july-plus/Dune_Part_Three.jpg?v=3"
+        image: "/storage/images/releases/2026-july-plus/Dune_Part_Three.jpg"
       },
       {
         id: "avengers",
@@ -167,7 +167,7 @@ const _sfc_main$1 = {
         title: "Avengers: Doomsday",
         releaseDate: "18/12/2026 · TR",
         reason: "Franchise baskısı, global sosyal etki, fan mobilizasyonu ve pazarlama çarpanı en yüksek film adaylarından biri.",
-        image: "/images/releases/2026-july-plus/Avengers_Doomsday.jpg?v=3"
+        image: "/storage/images/releases/2026-july-plus/Avengers_Doomsday.jpg"
       },
       {
         id: "godzilla",
@@ -175,7 +175,7 @@ const _sfc_main$1 = {
         title: "Godzilla Minus Zero",
         releaseDate: "06/11/2026 · TR",
         reason: "Kaos/afet fantazisi üst düzey seyirci çekiciliğini koruyor; güçlü görsel kurgularla ana akımda kalma şansı yüksek.",
-        image: "/images/releases/2026-july-plus/Godzilla_Minus_Zero.jpg?v=3"
+        image: "/storage/images/releases/2026-july-plus/Godzilla_Minus_Zero.jpg"
       },
       {
         id: "cat-hat",
@@ -183,7 +183,7 @@ const _sfc_main$1 = {
         title: "The Cat in the Hat",
         releaseDate: "06/11/2026 · US",
         reason: "Aile segmentini hedefleyen nostaljik uyarlama hattında en güçlü pazarlama çağrışımlarından biri olarak öne çıkıyor.",
-        image: "/images/releases/2026-july-plus/The_Cat_in_the_Hat.jpg?v=3"
+        image: "/storage/images/releases/2026-july-plus/The_Cat_in_the_Hat.jpg"
       },
       {
         id: "angry-birds",
@@ -191,14 +191,22 @@ const _sfc_main$1 = {
         title: "The Angry Birds Movie 3",
         releaseDate: "23/12/2026 · US",
         reason: "Animasyon IP’leri içinde genişleyen franchise kalıbına uygun; sezon sonu takviminde yüksek görselle etki alanına sahip.",
-        image: "/images/releases/2026-july-plus/The_Angry_Birds_Movie_3.jpg?v=3"
+        image: "/storage/images/releases/2026-july-plus/The_Angry_Birds_Movie_3.jpg"
       }
     ];
+    const cards = computed(() => sliderItems.map((item) => ({
+      ...item,
+      responsive: buildResponsiveImage(item.image, {
+        widths: [480, 768],
+        sizes: "min(86vw, 360px)",
+        fallbackWidth: 768
+      })
+    })));
     ref(null);
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<section${ssrRenderAttrs(mergeProps({ class: "border-y-2 border-[var(--bi-ink)] bg-[var(--bi-paper)] text-[var(--bi-ink)]" }, _attrs))} data-v-8b41f4a9><div class="bi-wrap py-10" data-v-8b41f4a9><div class="mb-5 flex flex-col gap-3 border-b border-[var(--bi-rule-soft)] pb-5 sm:flex-row sm:items-end sm:justify-between" data-v-8b41f4a9><div data-v-8b41f4a9><span class="bi-kicker" data-v-8b41f4a9>2026 Temmuz sonrası</span><h2 class="bi-serif mt-2 text-4xl font-bold leading-tight text-[var(--bi-ink)] md:text-5xl" data-v-8b41f4a9>Vizyona Girecek 8 Büyük Film</h2><p class="mt-3 max-w-3xl text-sm leading-6 text-[var(--bi-muted)]" data-v-8b41f4a9>Görsel-odaklı slider formatı: her kart tek bir aday filmi taşır, başlık + kısa neden + çıkış tarihi ile.</p></div><div class="flex gap-2" data-v-8b41f4a9><button type="button" class="inline-flex h-12 w-12 items-center justify-center border border-[var(--bi-ink)] bg-white font-bold transition hover:bg-black hover:text-white" aria-label="Önceki kart" data-v-8b41f4a9> ‹ </button><button type="button" class="inline-flex h-12 w-12 items-center justify-center border border-[var(--bi-ink)] bg-white font-bold transition hover:bg-black hover:text-white" aria-label="Sonraki kart" data-v-8b41f4a9> › </button></div></div><div class="movie-slider-track scrollbar-hide flex snap-x snap-mandatory overflow-x-auto pb-4" role="region" aria-label="2026 Temmuz sonrası film sliderı" data-v-8b41f4a9><!--[-->`);
-      ssrRenderList(sliderItems, (item) => {
-        _push(`<article class="movie-slider-card relative flex-shrink-0 border border-[var(--bi-ink)] bg-white shadow-[8px_8px_0_rgba(16,16,16,0.10)]" style="${ssrRenderStyle({ "width": "min(86vw, 360px)" })}" data-v-8b41f4a9><div class="relative h-56 overflow-hidden border-b border-[var(--bi-rule)]" data-v-8b41f4a9><img${ssrRenderAttr("src", item.image)}${ssrRenderAttr("alt", `${item.title} görsel`)} class="h-full w-full object-cover" loading="lazy" decoding="async" data-v-8b41f4a9><div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/0" data-v-8b41f4a9></div><div class="absolute left-3 top-3 inline-flex items-center border border-black bg-white/85 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.08em] text-black" data-v-8b41f4a9>${ssrInterpolate(item.rank)}</div><div class="absolute bottom-3 right-3 rounded-sm border border-white bg-black/70 px-3 py-1 text-xs font-bold text-white" data-v-8b41f4a9>${ssrInterpolate(item.releaseDate)}</div></div><div class="p-4" data-v-8b41f4a9><h3 class="bi-serif text-2xl font-bold leading-tight text-[var(--bi-ink)]" data-v-8b41f4a9>${ssrInterpolate(item.title)}</h3><p class="mt-3 text-sm leading-6 text-[var(--bi-muted)]" data-v-8b41f4a9>${ssrInterpolate(item.reason)}</p><div class="mt-4 border-t border-[var(--bi-rule-soft)] pt-4" data-v-8b41f4a9><button type="button" class="inline-flex items-center gap-2 border border-[var(--bi-ink)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] transition hover:bg-black hover:text-white" aria-label="Detay" data-v-8b41f4a9> Detay <span aria-hidden="true" data-v-8b41f4a9>→</span></button></div></div></article>`);
+      _push(`<section${ssrRenderAttrs(mergeProps({ class: "border-y-2 border-[var(--bi-ink)] bg-[var(--bi-paper)] text-[var(--bi-ink)]" }, _attrs))} data-v-e9fe61e7><div class="bi-wrap py-10" data-v-e9fe61e7><div class="mb-5 flex flex-col gap-3 border-b border-[var(--bi-rule-soft)] pb-5 sm:flex-row sm:items-end sm:justify-between" data-v-e9fe61e7><div data-v-e9fe61e7><span class="bi-kicker" data-v-e9fe61e7>2026 Temmuz sonrası</span><h2 class="bi-serif mt-2 text-4xl font-bold leading-tight text-[var(--bi-ink)] md:text-5xl" data-v-e9fe61e7>Vizyona Girecek 8 Büyük Film</h2><p class="mt-3 max-w-3xl text-sm leading-6 text-[var(--bi-muted)]" data-v-e9fe61e7>Görsel-odaklı slider formatı: her kart tek bir aday filmi taşır, başlık + kısa neden + çıkış tarihi ile.</p></div><div class="flex gap-2" data-v-e9fe61e7><button type="button" class="inline-flex h-12 w-12 items-center justify-center border border-[var(--bi-ink)] bg-white font-bold transition hover:bg-black hover:text-white" aria-label="Önceki kart" data-v-e9fe61e7> ‹ </button><button type="button" class="inline-flex h-12 w-12 items-center justify-center border border-[var(--bi-ink)] bg-white font-bold transition hover:bg-black hover:text-white" aria-label="Sonraki kart" data-v-e9fe61e7> › </button></div></div><div class="movie-slider-track scrollbar-hide flex snap-x snap-mandatory overflow-x-auto pb-4" role="region" aria-label="2026 Temmuz sonrası film sliderı" data-v-e9fe61e7><!--[-->`);
+      ssrRenderList(cards.value, (item) => {
+        _push(`<article class="movie-slider-card relative flex-shrink-0 border border-[var(--bi-ink)] bg-white shadow-[8px_8px_0_rgba(16,16,16,0.10)]" style="${ssrRenderStyle({ "width": "min(86vw, 360px)" })}" data-v-e9fe61e7><div class="relative h-56 overflow-hidden border-b border-[var(--bi-rule)]" data-v-e9fe61e7><img${ssrRenderAttr("src", item.responsive.src)}${ssrRenderAttr("srcset", item.responsive.srcset)}${ssrRenderAttr("sizes", item.responsive.sizes)}${ssrRenderAttr("alt", `${item.title} görsel`)} class="h-full w-full object-cover" loading="lazy" decoding="async" data-v-e9fe61e7><div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/0" data-v-e9fe61e7></div><div class="absolute left-3 top-3 inline-flex items-center border border-black bg-white/85 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.08em] text-black" data-v-e9fe61e7>${ssrInterpolate(item.rank)}</div><div class="absolute bottom-3 right-3 rounded-sm border border-white bg-black/70 px-3 py-1 text-xs font-bold text-white" data-v-e9fe61e7>${ssrInterpolate(item.releaseDate)}</div></div><div class="p-4" data-v-e9fe61e7><h3 class="bi-serif text-2xl font-bold leading-tight text-[var(--bi-ink)]" data-v-e9fe61e7>${ssrInterpolate(item.title)}</h3><p class="mt-3 text-sm leading-6 text-[var(--bi-muted)]" data-v-e9fe61e7>${ssrInterpolate(item.reason)}</p><div class="mt-4 border-t border-[var(--bi-rule-soft)] pt-4" data-v-e9fe61e7><button type="button" class="inline-flex items-center gap-2 border border-[var(--bi-ink)] px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] transition hover:bg-black hover:text-white" aria-label="Detay" data-v-e9fe61e7> Detay <span aria-hidden="true" data-v-e9fe61e7>→</span></button></div></div></article>`);
       });
       _push(`<!--]--></div></div></section>`);
     };
@@ -210,7 +218,7 @@ _sfc_main$1.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Components/Movies/UpcomingMovieSlider.vue");
   return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
 };
-const UpcomingMovieSlider = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-8b41f4a9"]]);
+const UpcomingMovieSlider = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-e9fe61e7"]]);
 const _sfc_main = {
   __name: "Home",
   __ssrInlineRender: true,
