@@ -36,6 +36,11 @@ class PublicHtmlCache
             );
             $response->headers->remove('Pragma');
             $response->headers->remove('Expires');
+
+            // app.blade.php renders the SEO fallback inline for crawlers and
+            // inside <noscript> for browsers, so the body varies by user agent.
+            // Without this a shared cache could hand a crawler the browser copy.
+            $response->headers->set('Vary', 'User-Agent');
         }
 
         return $response;
