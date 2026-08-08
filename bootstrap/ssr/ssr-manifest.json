@@ -281,6 +281,14 @@
     "/build/assets/AppLayout-xb67C027.js",
     "/build/assets/AppLayout-BgV-ubtv.css"
   ],
+  "resources/js/Components/Movies/UpcomingMovieSlider.vue": [
+    "/build/assets/Home-KkMT-XJS.js",
+    "/build/assets/Home-DsbJY7zB.css"
+  ],
+  "resources/js/Components/Movies/UpcomingMovieSlider.vue?vue&type=style&index=0&scoped=8b41f4a9&lang.css": [
+    "/build/assets/Home-KkMT-XJS.js",
+    "/build/assets/Home-DsbJY7zB.css"
+  ],
   "resources/js/Components/PWA/InstallAppPrompt.vue": [
     "/build/assets/AppLayout-xb67C027.js",
     "/build/assets/AppLayout-BgV-ubtv.css"
@@ -303,8 +311,8 @@
     "/build/assets/huseyin-emre-sepetci-DZ3YGYI9.jpg"
   ],
   "resources/js/Components/Post/FlashNewsSection.vue": [
-    "/build/assets/Home-_s0EDoyK.js",
-    "/build/assets/Home-wRTLuwu-.css"
+    "/build/assets/Home-KkMT-XJS.js",
+    "/build/assets/Home-DsbJY7zB.css"
   ],
   "resources/js/Components/Post/PostCard.vue": [
     "/build/assets/PostCard-C09KKzTl.js"
@@ -573,12 +581,12 @@
     "/build/assets/Show-CUSeTDzE.js"
   ],
   "resources/js/Pages/Home.vue": [
-    "/build/assets/Home-_s0EDoyK.js",
-    "/build/assets/Home-wRTLuwu-.css"
+    "/build/assets/Home-KkMT-XJS.js",
+    "/build/assets/Home-DsbJY7zB.css"
   ],
-  "resources/js/Pages/Home.vue?vue&type=style&index=0&scoped=d190f609&lang.css": [
-    "/build/assets/Home-_s0EDoyK.js",
-    "/build/assets/Home-wRTLuwu-.css"
+  "resources/js/Pages/Home.vue?vue&type=style&index=0&scoped=86850da4&lang.css": [
+    "/build/assets/Home-KkMT-XJS.js",
+    "/build/assets/Home-DsbJY7zB.css"
   ],
   "resources/js/Pages/Page/Show.vue": [
     "/build/assets/Show-A9wk6s7f.js",
