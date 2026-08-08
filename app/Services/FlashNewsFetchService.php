@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\FlashNews;
 use Carbon\Carbon;
+use Google\Auth\CredentialsLoader;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -253,14 +255,20 @@ class FlashNewsFetchService
 
     private function translate(string $title, string $summary, ?string $body = null): ?array
     {
-        $apiKey = config('services.gemini.api_key');
-        if (! $apiKey) {
-            Log::warning('FlashNews: GEMINI_API_KEY missing');
+        // Çeviri Vertex AI Gemini üzerinden yapılır (Gemini public API'si sistemden
+        // kaldırıldı). Servis hesabı/ADC ile yetkilenir; kota Vertex'e bağlıdır.
+        $token = $this->accessToken();
+        if (! $token) {
+            Log::warning('FlashNews: Vertex access token alınamadı');
 
             return null;
         }
 
-        $model = config('services.gemini.text_model', 'gemini-2.5-flash');
+        $projectId = (string) config('services.gcp.project_id');
+        $location = (string) config('services.gcp.location', 'global');
+        $model = (string) config('services.gcp.text_model', 'gemini-2.5-flash');
+        $host = $location === 'global' ? 'aiplatform.googleapis.com' : "{$location}-aiplatform.googleapis.com";
+        $endpoint = "https://{$host}/v1/projects/{$projectId}/locations/{$location}/publishers/google/models/{$model}:generateContent";
         $bodyTrimmed = $body ? Str::limit($body, 8000, '') : '';
 
         $prompt = "Aşağıdaki sinema/dizi haberini Türkçeye çevir. Akıcı, gazete üslubunda, doğal Türkçe. Film/dizi adlarını orijinal bırak (tırnak içinde, örn. 'The Boys'). Asla İngilizce paragraf bırakma — MAKALE alanındaki HER paragrafı eksiksiz Türkçeye çevir, hiçbirini atlama, kısaltma, özetleme. Tüm metni baştan sona doğal Türkçeye geçir.\n\n".
@@ -277,12 +285,12 @@ class FlashNewsFetchService
 
         try {
             $response = Http::timeout(60)
-                ->withHeaders(['content-type' => 'application/json'])
+                ->withToken($token)
                 ->post(
-                    'https://generativelanguage.googleapis.com/v1beta/models/'.$model.':generateContent?key='.$apiKey,
+                    $endpoint,
                     [
                         'contents' => [
-                            ['parts' => [['text' => $prompt]]],
+                            ['role' => 'user', 'parts' => [['text' => $prompt]]],
                         ],
                         'generationConfig' => [
                             'temperature' => 0.3,
@@ -332,6 +340,51 @@ class FlashNewsFetchService
             return null;
         } catch (\Throwable $e) {
             Log::warning('FlashNews translate exception', ['error' => $e->getMessage()]);
+
+            return null;
+        }
+    }
+
+    /**
+     * Vertex AI için cloud-platform erişim token'ı (servis hesabı/ADC).
+     * VertexAiSearchService ile aynı kimlik bilgisi dosyasını kullanır.
+     */
+    private function accessToken(): ?string
+    {
+        $cached = Cache::get('vertex_ai_search_token');
+        if (is_string($cached) && $cached !== '') {
+            return $cached;
+        }
+
+        try {
+            $path = config('services.gcp.credentials_path') ?: env('GOOGLE_APPLICATION_CREDENTIALS');
+            if (! $path || ! file_exists($path)) {
+                Log::error('FlashNews: Vertex credentials dosyası yok', ['path' => (string) $path]);
+
+                return null;
+            }
+
+            $json = json_decode((string) file_get_contents($path), true);
+            if (! is_array($json)) {
+                Log::error('FlashNews: Vertex credentials JSON geçersiz', ['path' => $path]);
+
+                return null;
+            }
+
+            $creds = CredentialsLoader::makeCredentials(
+                'https://www.googleapis.com/auth/cloud-platform',
+                $json
+            );
+            $token = $creds->fetchAuthToken();
+            $accessToken = $token['access_token'] ?? null;
+
+            if ($accessToken) {
+                Cache::put('vertex_ai_search_token', $accessToken, now()->addMinutes(50));
+            }
+
+            return $accessToken;
+        } catch (\Throwable $e) {
+            Log::error('FlashNews: Vertex token alınamadı', ['error' => $e->getMessage()]);
 
             return null;
         }

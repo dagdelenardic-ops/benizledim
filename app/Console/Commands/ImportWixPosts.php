@@ -2,32 +2,34 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Post;
-use App\Models\User;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ImportWixPosts extends Command
 {
     protected $signature = 'wix:import-posts {file : JSON dosya yolu}';
+
     protected $description = 'Wix export JSON dosyasından yazıları import et';
 
     public function handle()
     {
         $filePath = $this->argument('file');
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             $this->error("Dosya bulunamadı: {$filePath}");
+
             return 1;
         }
 
         $data = json_decode(file_get_contents($filePath), true);
 
-        if (!$data || !isset($data['posts'])) {
+        if (! $data || ! isset($data['posts'])) {
             $this->error('Geçersiz JSON formatı. "posts" anahtarı bulunamadı.');
+
             return 1;
         }
 
@@ -42,17 +44,28 @@ class ImportWixPosts extends Command
             if (Post::where('title', $wixPost['title'])->exists()) {
                 $skipped++;
                 $bar->advance();
+
                 continue;
             }
 
-            // Yazar bul — eşleşme yoksa atla (admin fallback yok)
+            // Yazar bul — eşleşme yoksa otomatik oluştur
             $user = User::where('email', $wixPost['author_email'] ?? '')->first();
-            if (!$user) {
+            if (! $user && ! empty($wixPost['author_email'])) {
+                $user = User::create([
+                    'name' => $wixPost['author_name'] ?? 'Wix Yazar',
+                    'email' => $wixPost['author_email'],
+                    'password' => null,
+                    'role' => 'author',
+                    'provider' => 'email',
+                ]);
+            }
+            if (! $user) {
                 $email = $wixPost['author_email'] ?? '(none)';
                 $title = $wixPost['title'] ?? '(no title)';
-                $this->warn("Skipping post '{$title}' — author '{$email}' not found. Run wix:apply-author-report after import to align authors.");
+                $this->warn("Skipping post '{$title}' — author '{$email}' not found.");
                 $skipped++;
                 $bar->advance();
+
                 continue;
             }
 
@@ -76,7 +89,7 @@ class ImportWixPosts extends Command
             ]);
 
             // Kategoriler
-            if (!empty($wixPost['categories'])) {
+            if (! empty($wixPost['categories'])) {
                 $categoryIds = [];
                 foreach ($wixPost['categories'] as $catName) {
                     $category = Category::firstOrCreate(
@@ -89,7 +102,7 @@ class ImportWixPosts extends Command
             }
 
             // Taglar
-            if (!empty($wixPost['tags'])) {
+            if (! empty($wixPost['tags'])) {
                 $tagIds = [];
                 foreach ($wixPost['tags'] as $tagName) {
                     $tag = Tag::firstOrCreate(

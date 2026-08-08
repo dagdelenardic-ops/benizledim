@@ -37,11 +37,11 @@ class AuthController extends Controller
             RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
-            if ($request->header('X-Inertia') === 'true') {
-                return back(303);
-            }
-
             $target = $request->user()?->canAccessCms() ? '/admin' : '/';
+
+            if ($request->header('X-Inertia') === 'true') {
+                return redirect()->intended($target, 303);
+            }
 
             return redirect()->intended($target);
         }

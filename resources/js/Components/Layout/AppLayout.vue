@@ -152,6 +152,11 @@ const shouldOpenQuickLog = (url) => {
     return params.get('action') === 'log';
 };
 
+const shouldOpenLoginModal = (url) => {
+    const params = new URLSearchParams((url || '').split('?')[1] || '');
+    return params.get('login') === '1';
+};
+
 const handleQuickLogEvent = () => openQuickLog();
 
 const logout = () => {
@@ -194,6 +199,10 @@ onMounted(() => {
     if (shouldOpenQuickLog(page.url || '')) {
         openQuickLog();
     }
+
+    if (shouldOpenLoginModal(page.url || '')) {
+        openLoginModal();
+    }
 });
 
 onUnmounted(() => {
@@ -205,6 +214,10 @@ watch(
     (url) => {
         if (shouldOpenQuickLog(url || '')) {
             openQuickLog();
+        }
+
+        if (shouldOpenLoginModal(url || '')) {
+            openLoginModal();
         }
     },
 );

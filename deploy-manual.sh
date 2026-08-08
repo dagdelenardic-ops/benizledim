@@ -33,12 +33,17 @@ done
 [ -f public/build/manifest.json ] || { echo "⚠️  build manifest yok — npm run build çalıştırılıyor..."; npm ci --no-audit --no-fund && npm run build; }
 
 # Exclude listesi (workflow ile aynı)
+#
+# bootstrap/cache/ is excluded on purpose: those files are compiled from the
+# LOCAL .env. Uploading them makes production boot from local config (wrong
+# APP_URL, wrong credentials) while silently ignoring its own .env.
 cat > /tmp/lftp-exclude.txt << 'EOF'
 ^\.git
 ^\.github
 ^node_modules
 ^tests
 ^storage/logs
+^bootstrap/cache/
 ^database/data/.*\.sqlite$
 ^\.env$
 ^\.env\.

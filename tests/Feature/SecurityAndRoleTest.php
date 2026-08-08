@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -21,7 +21,7 @@ class SecurityAndRoleTest extends TestCase
         for ($i = 0; $i < 6; $i++) {
             $response = $this->post('/login', [
                 'email' => 'wrong@email.com',
-                'password' => 'wrongpassword'
+                'password' => 'wrongpassword',
             ]);
         }
 
@@ -64,11 +64,11 @@ class SecurityAndRoleTest extends TestCase
 
         $response = $this->actingAs($editor)->delete("/admin/posts/{$post->id}");
 
-        // For this test, we assume there's a specific route or action for requesting deletion. 
+        // For this test, we assume there's a specific route or action for requesting deletion.
         // We will just verify that if an editor tries to delete, the post remains in the database.
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'status' => 'published'
+            'status' => 'published',
         ]);
 
         // If the system works by updating 'deletion_requested_at' when delete is called, we'd check that instead
@@ -84,6 +84,14 @@ class SecurityAndRoleTest extends TestCase
         $response = $this->get('/giris');
 
         $response->assertRedirect('/login');
+    }
+
+    #[Test]
+    public function login_route_opens_the_login_modal_on_the_home_page()
+    {
+        $response = $this->get('/login');
+
+        $response->assertRedirect('/?login=1');
     }
 
     #[Test]

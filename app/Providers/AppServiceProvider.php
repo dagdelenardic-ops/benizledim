@@ -53,6 +53,20 @@ class AppServiceProvider extends ServiceProvider
             return;
         }
 
+        $canonicalHost = strtolower((string) parse_url($canonicalUrl, PHP_URL_HOST));
+        $requestHost = app()->runningInConsole()
+            ? $canonicalHost
+            : strtolower((string) request()->getHost());
+
+        // A stale or wrong APP_URL must not hijack the whole site: pinning the
+        // root URL to a host the visitor did not ask for sends every generated
+        // link — including the guest redirect to /login — to another domain.
+        // Only pin when the request really arrived on the canonical host;
+        // CanonicalHostMiddleware already 301s the known alias hosts here.
+        if ($requestHost !== '' && $requestHost !== $canonicalHost) {
+            return;
+        }
+
         URL::forceRootUrl($canonicalUrl);
 
         $scheme = parse_url($canonicalUrl, PHP_URL_SCHEME);

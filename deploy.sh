@@ -38,9 +38,17 @@ echo "📁 Storage link oluşturuluyor..."
 php artisan storage:link 2>/dev/null || true
 
 # 5. Optimizasyon
+# Only cache config/routes when this script runs ON the production server.
+# Running it locally would compile the local .env into bootstrap/cache/, and a
+# later FTP sync would make production boot from local config.
 echo ""
-echo "⚡ Optimizasyon..."
-php artisan production:optimize
+if [ "$(php -r 'echo trim((string) getenv("APP_ENV"));' 2>/dev/null)" = "production" ] || grep -qE '^APP_ENV=production' .env 2>/dev/null; then
+  echo "⚡ Optimizasyon..."
+  php artisan production:optimize
+else
+  echo "⏭️  Optimizasyon atlandı (.env production değil)."
+  echo "   Cache'i sunucuda üret: php artisan optimize:clear && php artisan production:optimize"
+fi
 
 # 6. Cache temizle (eski cache sorun çıkarmasın)
 echo ""

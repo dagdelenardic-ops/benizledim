@@ -5,7 +5,7 @@ use App\Http\Controllers\Auth\SocialAuthController;
 use Illuminate\Support\Facades\Route;
 
 // Login page route for auth redirects
-Route::get('/login', fn () => redirect('/'))->name('login');
+Route::get('/login', fn () => redirect('/?login=1'))->name('login');
 Route::get('/giris', fn () => redirect('/login', 301));
 
 // Email/Password auth

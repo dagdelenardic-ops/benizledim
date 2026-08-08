@@ -14,6 +14,19 @@ Options -MultiViews -Indexes
   RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+  # Never expose the internal public/ directory in the browser URL.
+  # THE_REQUEST prevents this from firing on Laravel's internal rewrite.
+  RewriteCond %{THE_REQUEST} \s/+public(?:[/?\s]) [NC]
+  RewriteRule ^public(?:/)?(.*)$ /$1 [L,R=301,NE]
+
+  # Normalize application routes before rewriting them into public/.
+  # Without this, /admin/ enters public/.htaccess and becomes /public/admin.
+  RewriteCond %{REQUEST_URI} !^/public/ [NC]
+  RewriteCond %{DOCUMENT_ROOT}/public/$1 !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [L,R=301,NE]
+
   # Skip rewrite when request already points to public.
   RewriteCond %{REQUEST_URI} ^/public/
   RewriteRule ^ - [L]

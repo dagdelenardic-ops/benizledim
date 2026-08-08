@@ -90,7 +90,7 @@ class AuthRateLimitTest extends TestCase
         );
     }
 
-    public function test_successful_inertia_login_redirects_back_to_current_page(): void
+    public function test_successful_inertia_reader_login_redirects_to_home(): void
     {
         User::factory()->create([
             'email' => 'reader@example.com',
@@ -106,7 +106,27 @@ class AuthRateLimitTest extends TestCase
                 'password' => 'ValidPass123!',
             ]);
 
-        $response->assertRedirect('https://benizledim.com/');
+        $response->assertRedirect('https://benizledim.com');
+        $this->assertAuthenticated();
+    }
+
+    public function test_successful_inertia_cms_login_redirects_to_intended_admin_page(): void
+    {
+        User::factory()->create([
+            'email' => 'admin@example.com',
+            'password' => Hash::make('ValidPass123!'),
+            'role' => 'admin',
+        ]);
+
+        $response = $this
+            ->withSession(['url.intended' => 'https://benizledim.com/admin'])
+            ->withHeader('X-Inertia', 'true')
+            ->post(route('login.attempt'), [
+                'email' => 'admin@example.com',
+                'password' => 'ValidPass123!',
+            ]);
+
+        $response->assertRedirect('https://benizledim.com/admin');
         $this->assertAuthenticated();
     }
 }

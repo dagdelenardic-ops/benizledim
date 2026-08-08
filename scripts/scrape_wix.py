@@ -33,6 +33,7 @@ AUTHOR_EMAIL_MAP = {
     "Su Evci": "su@benizledim.com",
     "Alphan Karabat": "alphan@benizledim.com",
     "Hümeyra Fidan": "humeyra@benizledim.com",
+    "Gökçe Serim": "gokce@benizledim.com",
     "Ben İzledim": "gurur@benizledim.com",
     "BIZSSN": "gurur@benizledim.com",
     "BİZ5SN": "gurur@benizledim.com",
@@ -43,10 +44,57 @@ def request_delay(multiplier: float = 1.0) -> None:
     time.sleep(REQUEST_DELAY_SECONDS * multiplier)
 
 
-def get_author_email(author_name: str) -> str:
-    if not author_name:
+def get_author_email(author_name: str, profile_url: str = "") -> str:
+    """Bilinen yazarı haritadan, bilinmeyeni profil/isimden sentetik e-postaya çevir.
+
+    ÖNEMLİ: Bilinmeyen yazarı 'gurur'a düşürmek eski migrasyonda 216 yazının
+    yanlışlıkla Gurur'a atanmasına yol açtı. Artık bilinmeyen yazar için
+    profil handle'ından benzersiz bir e-posta üretiyoruz.
+    """
+    name = (author_name or "").strip()
+    if name in AUTHOR_EMAIL_MAP:
+        return AUTHOR_EMAIL_MAP[name]
+
+    # Profil URL'sinden handle çıkar: .../profile/<handle>/profile
+    handle = ""
+    if profile_url:
+        parts = [p for p in profile_url.split("/") if p]
+        if "profile" in parts:
+            i = parts.index("profile")
+            if i + 1 < len(parts):
+                handle = parts[i + 1]
+
+    if not handle and name:
+        handle = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+    if not handle:
+        # İsim de yoksa son çare Gurur (site sahibi)
         return "gurur@benizledim.com"
-    return AUTHOR_EMAIL_MAP.get(author_name.strip(), "gurur@benizledim.com")
+
+    return f"wix-author+{handle}@benizledim.local"
+
+
+def extract_ldjson_blogposting(soup: BeautifulSoup) -> dict:
+    """Sayfadaki application/ld+json BlogPosting şemasını bul (yazar/tarih için altın kaynak)."""
+    import json as _json
+
+    for script in soup.find_all("script", attrs={"type": "application/ld+json"}):
+        raw = script.string or script.get_text() or ""
+        if not raw.strip():
+            continue
+        try:
+            data = _json.loads(raw)
+        except Exception:
+            continue
+        candidates = data if isinstance(data, list) else [data]
+        # @graph desteği
+        for c in list(candidates):
+            if isinstance(c, dict) and isinstance(c.get("@graph"), list):
+                candidates.extend(c["@graph"])
+        for item in candidates:
+            if isinstance(item, dict) and "BlogPosting" in str(item.get("@type", "")):
+                return item
+    return {}
 
 
 def clean_html(html: str) -> str:
@@ -140,12 +188,17 @@ def scrape_post(page, url: str) -> dict:
 
     soup = BeautifulSoup(page.content(), "html.parser")
 
+    # ld+json BlogPosting — yazar/tarih için güvenilir kaynak
+    ldjson = extract_ldjson_blogposting(soup)
+
     # Başlık
     title = ""
     title_el = soup.find("h1")
     if title_el:
         title = title_el.get_text(strip=True)
-    else:
+    if not title and ldjson.get("headline"):
+        title = str(ldjson["headline"]).strip()
+    if not title:
         meta_title = soup.find("meta", property="og:title")
         if meta_title:
             title = meta_title.get("content", "")
@@ -184,27 +237,54 @@ def scrape_post(page, url: str) -> dict:
         text = BeautifulSoup(content, "html.parser").get_text()
         excerpt = text[:200].strip()
 
-    # Yazar
+    # Yazar — öncelik: ld+json author.name, sonra DOM data-hook="user-name"
     author = ""
-    for selector in ['a[href*="/profile/"]', '[data-hook*="author"]']:
-        author_el = soup.select_one(selector)
-        if author_el:
-            author = author_el.get_text(strip=True)
-            break
+    author_profile_url = ""
+    ld_author = ldjson.get("author")
+    if isinstance(ld_author, dict):
+        author = str(ld_author.get("name", "")).strip()
+        author_profile_url = str(ld_author.get("url", "")).strip()
+    elif isinstance(ld_author, list) and ld_author:
+        first = ld_author[0]
+        if isinstance(first, dict):
+            author = str(first.get("name", "")).strip()
+            author_profile_url = str(first.get("url", "")).strip()
+        elif isinstance(first, str):
+            author = first.strip()
+    if not author:
+        for selector in ['[data-hook="user-name"]', 'a[href*="/profile/"]', '[data-hook*="author"]']:
+            author_el = soup.select_one(selector)
+            if author_el:
+                author = author_el.get_text(strip=True)
+                if not author_profile_url and author_el.has_attr("href"):
+                    author_profile_url = author_el["href"]
+                break
 
-    # Kapak görseli
+    # Kapak görseli — öncelik: ld+json image, sonra og:image
     cover_image = ""
-    og_image = soup.find("meta", property="og:image")
-    if og_image:
-        cover_image = og_image.get("content", "")
+    ld_image = ldjson.get("image")
+    if isinstance(ld_image, dict):
+        cover_image = str(ld_image.get("url", "")).strip()
+    elif isinstance(ld_image, list) and ld_image:
+        first_img = ld_image[0]
+        cover_image = (first_img.get("url", "") if isinstance(first_img, dict) else str(first_img)).strip()
+    elif isinstance(ld_image, str):
+        cover_image = ld_image.strip()
+    if not cover_image:
+        og_image = soup.find("meta", property="og:image")
+        if og_image:
+            cover_image = og_image.get("content", "")
 
-    # Tarih
+    # Tarih — öncelik: ld+json datePublished, sonra meta/time
     published_at = ""
-    for selector in ['time[datetime]', 'meta[property="article:published_time"]']:
-        element = soup.select_one(selector)
-        if element:
-            published_at = element.get("datetime", "") or element.get("content", "")
-            break
+    if ldjson.get("datePublished"):
+        published_at = str(ldjson["datePublished"]).strip()
+    if not published_at:
+        for selector in ['time[datetime]', 'meta[property="article:published_time"]']:
+            element = soup.select_one(selector)
+            if element:
+                published_at = element.get("datetime", "") or element.get("content", "")
+                break
 
     # Kategoriler
     categories: list[str] = []
@@ -225,7 +305,9 @@ def scrape_post(page, url: str) -> dict:
         "excerpt": excerpt,
         "content": content,
         "cover_image": cover_image,
-        "author_email": get_author_email(author),
+        "author_name": author,
+        "author_profile_url": author_profile_url,
+        "author_email": get_author_email(author, author_profile_url),
         "categories": sorted(set(categories)),
         "tags": sorted(set(tags)),
         "published_at": published_at,
