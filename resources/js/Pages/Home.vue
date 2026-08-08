@@ -4,6 +4,7 @@ import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AppLayout from '../Components/Layout/AppLayout.vue';
 import PostGrid from '../Components/Post/PostGrid.vue';
 import FlashNewsSection from '../Components/Post/FlashNewsSection.vue';
+import UpcomingMovieSlider from '../Components/Movies/UpcomingMovieSlider.vue';
 import { buildResponsiveImage } from '@/Utils/responsiveImage';
 
 const props = defineProps({
@@ -131,6 +132,8 @@ const subscribe = () => {
         </section>
 
         <FlashNewsSection :items="flashNews" />
+
+        <UpcomingMovieSlider />
 
         <section class="bi-wrap grid gap-8 py-8 lg:grid-cols-[1fr_320px]">
             <div>
