@@ -4,19 +4,19 @@ namespace App\Jobs;
 
 use App\Models\PageView;
 use App\Models\Post;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 
 class RecordPageView implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
+
     public int $backoff = 5;
 
     public function __construct(public array $payload) {}
@@ -47,10 +47,6 @@ class RecordPageView implements ShouldQueue
         }
 
         PageView::create($payload);
-
-        if ($payload['post_id']) {
-            DB::table('posts')->where('id', $payload['post_id'])->increment('view_count');
-        }
     }
 
     private function resolvePostId(?string $path): ?int

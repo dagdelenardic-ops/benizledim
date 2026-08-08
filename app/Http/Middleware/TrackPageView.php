@@ -3,19 +3,13 @@
 namespace App\Http\Middleware;
 
 use App\Jobs\RecordPageView;
+use App\Support\BotDetector;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrackPageView
 {
-    private const BOT_PATTERNS = [
-        'bot', 'spider', 'crawler', 'slurp', 'mediapartners',
-        'facebookexternalhit', 'whatsapp', 'telegram', 'twitterbot',
-        'linkedinbot', 'embedly', 'preview', 'pingdom', 'uptimerobot',
-        'headlesschrome', 'phantomjs', 'puppeteer', 'lighthouse',
-    ];
-
     private const IGNORED_PATH_PREFIXES = [
         '/admin',
         '/api/',
@@ -90,17 +84,7 @@ class TrackPageView
             }
         }
 
-        $ua = strtolower($request->userAgent() ?? '');
-        if ($ua === '') {
-            return false;
-        }
-        foreach (self::BOT_PATTERNS as $pattern) {
-            if (str_contains($ua, $pattern)) {
-                return false;
-            }
-        }
-
-        return true;
+        return BotDetector::isHuman($request->userAgent());
     }
 
     private function detectDevice(string $userAgent): string
@@ -112,6 +96,7 @@ class TrackPageView
         if (preg_match('/iphone|android|mobile|opera mini|iemobile/i', $ua)) {
             return 'mobile';
         }
+
         return 'desktop';
     }
 }

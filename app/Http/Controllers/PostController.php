@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use App\Services\VertexAiSearchService;
+use App\Support\BotDetector;
 use App\Support\PageMeta;
 use App\Support\PostCard;
 use App\Support\SchemaGraph;
@@ -130,13 +131,19 @@ class PostController extends Controller
             abort(404);
         }
 
-        // View count: session-based dedup to prevent bot/refresh inflation.
-        // withoutTimestamps is essential: Eloquent's increment() bumps
-        // updated_at, so every view rewrote the article's modification date.
-        // That date feeds Article.dateModified and the sitemap's <lastmod>, so
-        // the whole archive looked freshly edited every single day.
+        // The only place view_count is written. RecordPageView used to
+        // increment it too, so a first view counted twice wherever the queue
+        // runs inline, and would start doing so on production the moment a
+        // worker was enabled.
+        //
+        // Session key: dedups refreshes. BotDetector: the middleware screened
+        // crawlers out of its own tracking but this counter never consulted it,
+        // so Googlebot counted as a reader.
+        //
+        // withoutTimestamps: Eloquent's increment() bumps updated_at, and that
+        // column feeds Article.dateModified and the sitemap's <lastmod>.
         $viewKey = 'viewed_post_'.$post->id;
-        if (! $request->session()->has($viewKey)) {
+        if (! $request->session()->has($viewKey) && BotDetector::isHuman($request->userAgent())) {
             Post::withoutTimestamps(fn () => $post->increment('view_count'));
             $request->session()->put($viewKey, true);
         }
