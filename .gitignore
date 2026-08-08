@@ -38,6 +38,11 @@ nuke_cache.php
 platform_check.php
 public/_probe.php
 public/_probe.txt
+
+# Generated share assets. Reproducible from scripts/generate_*_shares*.py and
+# too heavy for history (tens of MB of PNG/JPG per batch). Ship them over FTP.
+public/instagram/
+public/images/releases/
 check_*.php
 read_*.php
 reset_*.php
