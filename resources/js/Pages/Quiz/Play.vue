@@ -67,13 +67,38 @@ function goPrev() {
     }
 }
 
+// The page ships trait vectors for all 60 characters but no prose. The winner's
+// full record is fetched here; the result screen holds a 950 ms reveal
+// animation, so it lands before any of that prose is on screen. Every prose
+// block is v-if guarded, so a failed fetch degrades instead of breaking.
+const characterCache = new Map();
+
+async function hydrateCharacter(result) {
+    const id = result?.character?.id;
+    if (!id) return;
+
+    try {
+        if (!characterCache.has(id)) {
+            const response = await fetch(`/quiz/karakter/${encodeURIComponent(id)}`, {
+                headers: { Accept: 'application/json' },
+            });
+            if (!response.ok) return;
+            characterCache.set(id, await response.json());
+        }
+
+        Object.assign(result.character, characterCache.get(id));
+    } catch (error) {
+        // Keep the scoring-only record on screen.
+    }
+}
+
 function goNext() {
     if (idx.value < total.value - 1) {
         idx.value++;
         audio.sfx.next();
     } else {
-        scoring.calculateResult();
         phase.value = 'result';
+        hydrateCharacter(scoring.calculateResult());
         audio.sfx.rewind();
         nextTick(() => {
             window.scrollTo({ top: 0, behavior: 'instant' });

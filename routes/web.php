@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\ActivityFeedController;
+use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCommentController;
-use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFestivalEventController;
 use App\Http\Controllers\Admin\AdminNewsletterController;
@@ -37,11 +37,11 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PushSubscriptionController;
 use App\Http\Controllers\QuickLogController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RssFeedController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\WatchlistController;
-use App\Http\Controllers\QuizController;
 use App\Http\Controllers\WixRedirectController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,7 +51,6 @@ Route::get('/up', function () {
         'timestamp' => now()->toIso8601String(),
     ]);
 })->name('health.up');
-
 
 Route::get('/img/variant', [ImageVariantController::class, 'show'])->name('image.variant');
 
@@ -67,12 +66,13 @@ Route::get('/share-target', function (\Illuminate\Http\Request $request) {
     $text = $request->query('text', '');
     $url = $request->query('url', '');
     $search = trim("$title $text");
-    if ($url && !str_contains($search, $url)) {
+    if ($url && ! str_contains($search, $url)) {
         $search = trim("$search $url");
     }
     if ($search !== '') {
         return redirect()->route('search', ['q' => $search]);
     }
+
     return redirect('/');
 })->name('share-target');
 
@@ -173,6 +173,9 @@ Route::post('/api/push/test', [PushSubscriptionController::class, 'test'])->name
 
 // Quiz
 Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
+Route::get('/quiz/karakter/{character}', [QuizController::class, 'character'])
+    ->where('character', '[A-Za-z0-9_-]+')
+    ->name('quiz.character');
 
 // Statik Sayfalar
 Route::get('/sayfa/{page:slug}', [PageController::class, 'show'])->name('pages.show');

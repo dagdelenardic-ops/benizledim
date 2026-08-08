@@ -343,7 +343,7 @@ const characterTags = computed(() => {
                     "{{ character.summary_tr }}"
                 </div>
 
-                <p class="qz-result__bio">{{ character.result_blurb_tr }}</p>
+                <p v-if="character.result_blurb_tr" class="qz-result__bio">{{ character.result_blurb_tr }}</p>
 
                 <div v-if="characterTags.length" class="qz-row" :style="{ gap: '6px', flexWrap: 'wrap', marginTop: '10px' }">
                     <span v-for="tag in characterTags" :key="tag" class="qz-sticker" :style="{ background: 'var(--qz-paper)', fontSize: '11px', padding: '4px 10px' }">
