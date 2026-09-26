@@ -449,6 +449,15 @@ export default {
                         Film, Dizi ve Belgeseller hakkında eleştiri ve tavsiye yazılarının yer aldığı
                         bir medya ve eğlence platformudur.
                     </p>
+                    <p class="mt-4 max-w-md text-sm leading-relaxed text-stone-300">
+                        Kardeş proje:
+                        <a
+                            href="https://tekrartarih.info/"
+                            class="font-bold text-white underline decoration-red-400 underline-offset-4 transition-colors hover:decoration-white"
+                            title="Tekrar Tarih — Türkiye Tarih Atlası"
+                        >Tekrar Tarih</a>
+                        — 1808'den bugüne Türkiye tarihini tekrar eden desenleriyle okuyan interaktif atlas.
+                    </p>
                 </div>
 
                 <div>
